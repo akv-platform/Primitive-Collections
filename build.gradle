@@ -1,7 +1,6 @@
 plugins {
     id 'java-library'
     id "jacoco"
-	id "org.sonarqube" version "3.3"
 }
 
 tasks.withType(JavaCompile) {
@@ -102,14 +101,6 @@ test {
 	}
 	useJUnit()
 	maxHeapSize = "1024m"
-}
-
-sonarqube {
-  properties {
-    property "sonar.projectKey", "Speiger_Primitive-Collections"
-    property "sonar.organization", "speiger"
-    property "sonar.host.url", "https://sonarcloud.io"
-  }
 }
 
 jacocoTestReport {

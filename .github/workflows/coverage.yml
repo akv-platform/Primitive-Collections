@@ -20,7 +20,7 @@ jobs:
       - name: Build and analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-        run: ./gradlew build jacocoTestReport --info
+        run: ./gradlew test jacocoTestReport --info
       - name: Upload to CodeCov
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
