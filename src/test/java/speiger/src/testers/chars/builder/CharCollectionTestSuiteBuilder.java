@@ -23,6 +23,16 @@ import speiger.src.testers.chars.tests.collection.CharCollectionRemoveIfTester;
 import speiger.src.testers.chars.tests.collection.CharCollectionStreamTester;
 import speiger.src.testers.chars.tests.collection.CharCollectionRetainAllTester;
 import speiger.src.testers.chars.tests.collection.CharCollectionToArrayTester;
+import speiger.src.testers.chars.tests.iterable.CharIterableCountTester;
+import speiger.src.testers.chars.tests.iterable.CharIterableDistinctTester;
+import speiger.src.testers.chars.tests.iterable.CharIterableFilterTester;
+import speiger.src.testers.chars.tests.iterable.CharIterableFindFirstTester;
+import speiger.src.testers.chars.tests.iterable.CharIterableLimitTester;
+import speiger.src.testers.chars.tests.iterable.CharIterableMapTester;
+import speiger.src.testers.chars.tests.iterable.CharIterableMatchesTester;
+import speiger.src.testers.chars.tests.iterable.CharIterablePeekTester;
+import speiger.src.testers.chars.tests.iterable.CharIterableReduceTester;
+import speiger.src.testers.chars.tests.iterable.CharIterableSortedTester;
 
 @SuppressWarnings("javadoc")
 public class CharCollectionTestSuiteBuilder extends CollectionTestSuiteBuilder<Character> {
@@ -34,6 +44,16 @@ public class CharCollectionTestSuiteBuilder extends CollectionTestSuiteBuilder<C
 	@SuppressWarnings("rawtypes")
 	protected List<Class<? extends AbstractTester>> getTesters() {
 		List<Class<? extends AbstractTester>> testers = Helpers.copyToList(super.getTesters());
+		testers.add(CharIterableMapTester.class);
+		testers.add(CharIterableFilterTester.class);
+		testers.add(CharIterableDistinctTester.class);
+		testers.add(CharIterableLimitTester.class);
+		testers.add(CharIterableSortedTester.class);
+		testers.add(CharIterableMatchesTester.class);
+		testers.add(CharIterablePeekTester.class);
+		testers.add(CharIterableReduceTester.class);
+		testers.add(CharIterableCountTester.class);
+		testers.add(CharIterableFindFirstTester.class);
 		testers.add(CharCollectionAddAllTester.class);
 		testers.add(CharCollectionAddAllArrayTester.class);
 		testers.add(CharCollectionAddTester.class);

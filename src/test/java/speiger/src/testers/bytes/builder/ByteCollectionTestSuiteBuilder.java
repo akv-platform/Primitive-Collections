@@ -23,6 +23,16 @@ import speiger.src.testers.bytes.tests.collection.ByteCollectionRemoveIfTester;
 import speiger.src.testers.bytes.tests.collection.ByteCollectionStreamTester;
 import speiger.src.testers.bytes.tests.collection.ByteCollectionRetainAllTester;
 import speiger.src.testers.bytes.tests.collection.ByteCollectionToArrayTester;
+import speiger.src.testers.bytes.tests.iterable.ByteIterableCountTester;
+import speiger.src.testers.bytes.tests.iterable.ByteIterableDistinctTester;
+import speiger.src.testers.bytes.tests.iterable.ByteIterableFilterTester;
+import speiger.src.testers.bytes.tests.iterable.ByteIterableFindFirstTester;
+import speiger.src.testers.bytes.tests.iterable.ByteIterableLimitTester;
+import speiger.src.testers.bytes.tests.iterable.ByteIterableMapTester;
+import speiger.src.testers.bytes.tests.iterable.ByteIterableMatchesTester;
+import speiger.src.testers.bytes.tests.iterable.ByteIterablePeekTester;
+import speiger.src.testers.bytes.tests.iterable.ByteIterableReduceTester;
+import speiger.src.testers.bytes.tests.iterable.ByteIterableSortedTester;
 
 @SuppressWarnings("javadoc")
 public class ByteCollectionTestSuiteBuilder extends CollectionTestSuiteBuilder<Byte> {
@@ -34,6 +44,16 @@ public class ByteCollectionTestSuiteBuilder extends CollectionTestSuiteBuilder<B
 	@SuppressWarnings("rawtypes")
 	protected List<Class<? extends AbstractTester>> getTesters() {
 		List<Class<? extends AbstractTester>> testers = Helpers.copyToList(super.getTesters());
+		testers.add(ByteIterableMapTester.class);
+		testers.add(ByteIterableFilterTester.class);
+		testers.add(ByteIterableDistinctTester.class);
+		testers.add(ByteIterableLimitTester.class);
+		testers.add(ByteIterableSortedTester.class);
+		testers.add(ByteIterableMatchesTester.class);
+		testers.add(ByteIterablePeekTester.class);
+		testers.add(ByteIterableReduceTester.class);
+		testers.add(ByteIterableCountTester.class);
+		testers.add(ByteIterableFindFirstTester.class);
 		testers.add(ByteCollectionAddAllTester.class);
 		testers.add(ByteCollectionAddAllArrayTester.class);
 		testers.add(ByteCollectionAddTester.class);

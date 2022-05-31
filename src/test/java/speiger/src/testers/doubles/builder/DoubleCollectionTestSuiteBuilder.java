@@ -23,6 +23,16 @@ import speiger.src.testers.doubles.tests.collection.DoubleCollectionRemoveIfTest
 import speiger.src.testers.doubles.tests.collection.DoubleCollectionStreamTester;
 import speiger.src.testers.doubles.tests.collection.DoubleCollectionRetainAllTester;
 import speiger.src.testers.doubles.tests.collection.DoubleCollectionToArrayTester;
+import speiger.src.testers.doubles.tests.iterable.DoubleIterableCountTester;
+import speiger.src.testers.doubles.tests.iterable.DoubleIterableDistinctTester;
+import speiger.src.testers.doubles.tests.iterable.DoubleIterableFilterTester;
+import speiger.src.testers.doubles.tests.iterable.DoubleIterableFindFirstTester;
+import speiger.src.testers.doubles.tests.iterable.DoubleIterableLimitTester;
+import speiger.src.testers.doubles.tests.iterable.DoubleIterableMapTester;
+import speiger.src.testers.doubles.tests.iterable.DoubleIterableMatchesTester;
+import speiger.src.testers.doubles.tests.iterable.DoubleIterablePeekTester;
+import speiger.src.testers.doubles.tests.iterable.DoubleIterableReduceTester;
+import speiger.src.testers.doubles.tests.iterable.DoubleIterableSortedTester;
 
 @SuppressWarnings("javadoc")
 public class DoubleCollectionTestSuiteBuilder extends CollectionTestSuiteBuilder<Double> {
@@ -34,6 +44,16 @@ public class DoubleCollectionTestSuiteBuilder extends CollectionTestSuiteBuilder
 	@SuppressWarnings("rawtypes")
 	protected List<Class<? extends AbstractTester>> getTesters() {
 		List<Class<? extends AbstractTester>> testers = Helpers.copyToList(super.getTesters());
+		testers.add(DoubleIterableMapTester.class);
+		testers.add(DoubleIterableFilterTester.class);
+		testers.add(DoubleIterableDistinctTester.class);
+		testers.add(DoubleIterableLimitTester.class);
+		testers.add(DoubleIterableSortedTester.class);
+		testers.add(DoubleIterableMatchesTester.class);
+		testers.add(DoubleIterablePeekTester.class);
+		testers.add(DoubleIterableReduceTester.class);
+		testers.add(DoubleIterableCountTester.class);
+		testers.add(DoubleIterableFindFirstTester.class);
 		testers.add(DoubleCollectionAddAllTester.class);
 		testers.add(DoubleCollectionAddAllArrayTester.class);
 		testers.add(DoubleCollectionAddTester.class);

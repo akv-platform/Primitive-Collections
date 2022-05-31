@@ -22,6 +22,16 @@ import speiger.src.testers.objects.tests.collection.ObjectCollectionRemoveAllTes
 import speiger.src.testers.objects.tests.collection.ObjectCollectionRemoveIfTester;
 import speiger.src.testers.objects.tests.collection.ObjectCollectionRetainAllTester;
 import speiger.src.testers.objects.tests.collection.ObjectCollectionToArrayTester;
+import speiger.src.testers.objects.tests.iterable.ObjectIterableCountTester;
+import speiger.src.testers.objects.tests.iterable.ObjectIterableDistinctTester;
+import speiger.src.testers.objects.tests.iterable.ObjectIterableFilterTester;
+import speiger.src.testers.objects.tests.iterable.ObjectIterableFindFirstTester;
+import speiger.src.testers.objects.tests.iterable.ObjectIterableLimitTester;
+import speiger.src.testers.objects.tests.iterable.ObjectIterableMapTester;
+import speiger.src.testers.objects.tests.iterable.ObjectIterableMatchesTester;
+import speiger.src.testers.objects.tests.iterable.ObjectIterablePeekTester;
+import speiger.src.testers.objects.tests.iterable.ObjectIterableReduceTester;
+import speiger.src.testers.objects.tests.iterable.ObjectIterableSortedTester;
 
 @SuppressWarnings("javadoc")
 public class ObjectCollectionTestSuiteBuilder<T> extends CollectionTestSuiteBuilder<T> {
@@ -33,6 +43,16 @@ public class ObjectCollectionTestSuiteBuilder<T> extends CollectionTestSuiteBuil
 	@SuppressWarnings("rawtypes")
 	protected List<Class<? extends AbstractTester>> getTesters() {
 		List<Class<? extends AbstractTester>> testers = Helpers.copyToList(super.getTesters());
+		testers.add(ObjectIterableMapTester.class);
+		testers.add(ObjectIterableFilterTester.class);
+		testers.add(ObjectIterableDistinctTester.class);
+		testers.add(ObjectIterableLimitTester.class);
+		testers.add(ObjectIterableSortedTester.class);
+		testers.add(ObjectIterableMatchesTester.class);
+		testers.add(ObjectIterablePeekTester.class);
+		testers.add(ObjectIterableReduceTester.class);
+		testers.add(ObjectIterableCountTester.class);
+		testers.add(ObjectIterableFindFirstTester.class);
 		testers.add(ObjectCollectionAddAllTester.class);
 		testers.add(ObjectCollectionAddAllArrayTester.class);
 		testers.add(ObjectCollectionAddTester.class);

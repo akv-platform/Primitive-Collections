@@ -23,6 +23,16 @@ import speiger.src.testers.longs.tests.collection.LongCollectionRemoveIfTester;
 import speiger.src.testers.longs.tests.collection.LongCollectionStreamTester;
 import speiger.src.testers.longs.tests.collection.LongCollectionRetainAllTester;
 import speiger.src.testers.longs.tests.collection.LongCollectionToArrayTester;
+import speiger.src.testers.longs.tests.iterable.LongIterableCountTester;
+import speiger.src.testers.longs.tests.iterable.LongIterableDistinctTester;
+import speiger.src.testers.longs.tests.iterable.LongIterableFilterTester;
+import speiger.src.testers.longs.tests.iterable.LongIterableFindFirstTester;
+import speiger.src.testers.longs.tests.iterable.LongIterableLimitTester;
+import speiger.src.testers.longs.tests.iterable.LongIterableMapTester;
+import speiger.src.testers.longs.tests.iterable.LongIterableMatchesTester;
+import speiger.src.testers.longs.tests.iterable.LongIterablePeekTester;
+import speiger.src.testers.longs.tests.iterable.LongIterableReduceTester;
+import speiger.src.testers.longs.tests.iterable.LongIterableSortedTester;
 
 @SuppressWarnings("javadoc")
 public class LongCollectionTestSuiteBuilder extends CollectionTestSuiteBuilder<Long> {
@@ -34,6 +44,16 @@ public class LongCollectionTestSuiteBuilder extends CollectionTestSuiteBuilder<L
 	@SuppressWarnings("rawtypes")
 	protected List<Class<? extends AbstractTester>> getTesters() {
 		List<Class<? extends AbstractTester>> testers = Helpers.copyToList(super.getTesters());
+		testers.add(LongIterableMapTester.class);
+		testers.add(LongIterableFilterTester.class);
+		testers.add(LongIterableDistinctTester.class);
+		testers.add(LongIterableLimitTester.class);
+		testers.add(LongIterableSortedTester.class);
+		testers.add(LongIterableMatchesTester.class);
+		testers.add(LongIterablePeekTester.class);
+		testers.add(LongIterableReduceTester.class);
+		testers.add(LongIterableCountTester.class);
+		testers.add(LongIterableFindFirstTester.class);
 		testers.add(LongCollectionAddAllTester.class);
 		testers.add(LongCollectionAddAllArrayTester.class);
 		testers.add(LongCollectionAddTester.class);
