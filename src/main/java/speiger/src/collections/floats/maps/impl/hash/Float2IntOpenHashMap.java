@@ -831,7 +831,7 @@ public class Float2IntOpenHashMap extends AbstractFloat2IntMap implements ITrimm
 				state = new BasicEntry(keys[nullIndex], values[nullIndex]);
 				empty = false;
 			}
-			for(int i = 0;i<size;i++) {
+			for(int i = nullIndex-1;i>=0;i--) {
 				if(Float.floatToIntBits(keys[i]) == 0) continue;
 				if(empty) {
 					empty = false;
@@ -1028,7 +1028,7 @@ public class Float2IntOpenHashMap extends AbstractFloat2IntMap implements ITrimm
 				state = keys[nullIndex];
 				empty = false;
 			}
-			for(int i = 0;i<size;i++) {
+			for(int i = nullIndex-1;i>=0;i--) {
 				if(Float.floatToIntBits(keys[i]) == 0) continue;
 				if(empty) {
 					empty = false;
@@ -1161,7 +1161,7 @@ public class Float2IntOpenHashMap extends AbstractFloat2IntMap implements ITrimm
 				state = values[nullIndex];
 				empty = false;
 			}
-			for(int i = 0;i<size;i++) {
+			for(int i = nullIndex-1;i>=0;i--) {
 				if(Float.floatToIntBits(keys[i]) == 0) continue;
 				if(empty) {
 					empty = false;

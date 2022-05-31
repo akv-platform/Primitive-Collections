@@ -800,7 +800,7 @@ public class Byte2ObjectOpenHashMap<V> extends AbstractByte2ObjectMap<V> impleme
 				state = new BasicEntry<>(keys[nullIndex], values[nullIndex]);
 				empty = false;
 			}
-			for(int i = 0;i<size;i++) {
+			for(int i = nullIndex-1;i>=0;i--) {
 				if(keys[i] == (byte)0) continue;
 				if(empty) {
 					empty = false;
@@ -997,7 +997,7 @@ public class Byte2ObjectOpenHashMap<V> extends AbstractByte2ObjectMap<V> impleme
 				state = keys[nullIndex];
 				empty = false;
 			}
-			for(int i = 0;i<size;i++) {
+			for(int i = nullIndex-1;i>=0;i--) {
 				if(keys[i] == (byte)0) continue;
 				if(empty) {
 					empty = false;
@@ -1130,7 +1130,7 @@ public class Byte2ObjectOpenHashMap<V> extends AbstractByte2ObjectMap<V> impleme
 				state = values[nullIndex];
 				empty = false;
 			}
-			for(int i = 0;i<size;i++) {
+			for(int i = nullIndex-1;i>=0;i--) {
 				if(keys[i] == (byte)0) continue;
 				if(empty) {
 					empty = false;

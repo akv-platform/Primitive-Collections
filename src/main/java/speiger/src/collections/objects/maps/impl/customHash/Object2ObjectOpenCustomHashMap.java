@@ -746,7 +746,7 @@ public class Object2ObjectOpenCustomHashMap<T, V> extends AbstractObject2ObjectM
 				state = new BasicEntry<>(keys[nullIndex], values[nullIndex]);
 				empty = false;
 			}
-			for(int i = 0;i<size;i++) {
+			for(int i = nullIndex-1;i>=0;i--) {
 				if(strategy.equals(keys[i], null)) continue;
 				if(empty) {
 					empty = false;
@@ -944,7 +944,7 @@ public class Object2ObjectOpenCustomHashMap<T, V> extends AbstractObject2ObjectM
 				state = keys[nullIndex];
 				empty = false;
 			}
-			for(int i = 0;i<size;i++) {
+			for(int i = nullIndex-1;i>=0;i--) {
 				if(strategy.equals(keys[i], null)) continue;
 				if(empty) {
 					empty = false;
@@ -1077,7 +1077,7 @@ public class Object2ObjectOpenCustomHashMap<T, V> extends AbstractObject2ObjectM
 				state = values[nullIndex];
 				empty = false;
 			}
-			for(int i = 0;i<size;i++) {
+			for(int i = nullIndex-1;i>=0;i--) {
 				if(strategy.equals(keys[i], null)) continue;
 				if(empty) {
 					empty = false;

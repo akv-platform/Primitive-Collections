@@ -14,7 +14,7 @@ public class ObjectIterableDistinctTester<T> extends AbstractObjectCollectionTes
 	@CollectionSize.Require(CollectionSize.SEVERAL)
 	public void testDistinct()
 	{
-		ArrayWithDuplicate duplicate = createArrayWithDuplicateElement();
+		ArrayWithDuplicate<T> duplicate = createArrayWithDuplicateElement();
 		resetContainer(primitiveGenerator.create(duplicate.elements));
 		ObjectList<T> list = collection.distinct().pourAsList();
 		assertEquals("Distinct should remove duplicate elements", list.indexOf(duplicate.duplicate), list.lastIndexOf(duplicate.duplicate));

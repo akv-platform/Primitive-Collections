@@ -1,7 +1,5 @@
 package speiger.src.testers.ints.tests.iterable;
 
-import java.util.Objects;
-
 import org.junit.Ignore;
 
 import speiger.src.testers.ints.tests.base.AbstractIntCollectionTester;

@@ -861,7 +861,7 @@ public class Int2CharOpenCustomHashMap extends AbstractInt2CharMap implements IT
 				state = new BasicEntry(keys[nullIndex], values[nullIndex]);
 				empty = false;
 			}
-			for(int i = 0;i<size;i++) {
+			for(int i = nullIndex-1;i>=0;i--) {
 				if(strategy.equals(keys[i], 0)) continue;
 				if(empty) {
 					empty = false;
@@ -1060,7 +1060,7 @@ public class Int2CharOpenCustomHashMap extends AbstractInt2CharMap implements IT
 				state = keys[nullIndex];
 				empty = false;
 			}
-			for(int i = 0;i<size;i++) {
+			for(int i = nullIndex-1;i>=0;i--) {
 				if(strategy.equals(keys[i], 0)) continue;
 				if(empty) {
 					empty = false;
@@ -1193,7 +1193,7 @@ public class Int2CharOpenCustomHashMap extends AbstractInt2CharMap implements IT
 				state = values[nullIndex];
 				empty = false;
 			}
-			for(int i = 0;i<size;i++) {
+			for(int i = nullIndex-1;i>=0;i--) {
 				if(strategy.equals(keys[i], 0)) continue;
 				if(empty) {
 					empty = false;

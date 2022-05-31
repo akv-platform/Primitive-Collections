@@ -27,7 +27,7 @@ public class ObjectIterableReduceTester<T> extends AbstractObjectCollectionTeste
 	}
 	
 	public void testIterableReduce() {
-		assertEquals("The sum of the collection should match", getSum(), collection.reduce(this::sum));
+		assertEquals("The sum of the collection should match", getObjectSum(), collection.reduce(this::sum));
 	}
 	
 	public void testIterableExtraReduce() {

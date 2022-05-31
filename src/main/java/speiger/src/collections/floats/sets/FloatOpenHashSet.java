@@ -389,7 +389,7 @@ public class FloatOpenHashSet extends AbstractFloatSet implements ITrimmable
 			state = keys[nullIndex];
 			empty = false;
 		}
-		for(int i = 0;i<size;i++) {
+		for(int i = nullIndex-1;i>=0;i--) {
 			if(Float.floatToIntBits(keys[i]) == 0) continue;
 			if(empty) {
 				empty = false;

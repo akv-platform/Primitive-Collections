@@ -507,7 +507,7 @@ public class DoubleOpenCustomHashSet extends AbstractDoubleSet implements ITrimm
 			state = keys[nullIndex];
 			empty = false;
 		}
-		for(int i = 0;i<size;i++) {
+		for(int i = nullIndex-1;i>=0;i--) {
 			if(strategy.equals(keys[i], 0D)) continue;
 			if(empty) {
 				empty = false;

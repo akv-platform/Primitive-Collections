@@ -809,7 +809,7 @@ public class Byte2BooleanOpenHashMap extends AbstractByte2BooleanMap implements 
 				state = new BasicEntry(keys[nullIndex], values[nullIndex]);
 				empty = false;
 			}
-			for(int i = 0;i<size;i++) {
+			for(int i = nullIndex-1;i>=0;i--) {
 				if(keys[i] == (byte)0) continue;
 				if(empty) {
 					empty = false;
@@ -1006,7 +1006,7 @@ public class Byte2BooleanOpenHashMap extends AbstractByte2BooleanMap implements 
 				state = keys[nullIndex];
 				empty = false;
 			}
-			for(int i = 0;i<size;i++) {
+			for(int i = nullIndex-1;i>=0;i--) {
 				if(keys[i] == (byte)0) continue;
 				if(empty) {
 					empty = false;
@@ -1139,7 +1139,7 @@ public class Byte2BooleanOpenHashMap extends AbstractByte2BooleanMap implements 
 				state = values[nullIndex];
 				empty = false;
 			}
-			for(int i = 0;i<size;i++) {
+			for(int i = nullIndex-1;i>=0;i--) {
 				if(keys[i] == (byte)0) continue;
 				if(empty) {
 					empty = false;

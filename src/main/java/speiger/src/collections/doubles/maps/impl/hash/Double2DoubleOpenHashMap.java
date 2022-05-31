@@ -826,7 +826,7 @@ public class Double2DoubleOpenHashMap extends AbstractDouble2DoubleMap implement
 				state = new BasicEntry(keys[nullIndex], values[nullIndex]);
 				empty = false;
 			}
-			for(int i = 0;i<size;i++) {
+			for(int i = nullIndex-1;i>=0;i--) {
 				if(Double.doubleToLongBits(keys[i]) == 0) continue;
 				if(empty) {
 					empty = false;
@@ -1023,7 +1023,7 @@ public class Double2DoubleOpenHashMap extends AbstractDouble2DoubleMap implement
 				state = keys[nullIndex];
 				empty = false;
 			}
-			for(int i = 0;i<size;i++) {
+			for(int i = nullIndex-1;i>=0;i--) {
 				if(Double.doubleToLongBits(keys[i]) == 0) continue;
 				if(empty) {
 					empty = false;
@@ -1156,7 +1156,7 @@ public class Double2DoubleOpenHashMap extends AbstractDouble2DoubleMap implement
 				state = values[nullIndex];
 				empty = false;
 			}
-			for(int i = 0;i<size;i++) {
+			for(int i = nullIndex-1;i>=0;i--) {
 				if(Double.doubleToLongBits(keys[i]) == 0) continue;
 				if(empty) {
 					empty = false;

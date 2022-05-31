@@ -1,7 +1,5 @@
 package speiger.src.testers.shorts.tests.iterable;
 
-import java.util.Objects;
-
 import org.junit.Ignore;
 
 import speiger.src.testers.shorts.tests.base.AbstractShortCollectionTester;

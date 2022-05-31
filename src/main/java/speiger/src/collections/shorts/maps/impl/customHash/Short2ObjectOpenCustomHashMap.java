@@ -830,7 +830,7 @@ public class Short2ObjectOpenCustomHashMap<V> extends AbstractShort2ObjectMap<V>
 				state = new BasicEntry<>(keys[nullIndex], values[nullIndex]);
 				empty = false;
 			}
-			for(int i = 0;i<size;i++) {
+			for(int i = nullIndex-1;i>=0;i--) {
 				if(strategy.equals(keys[i], (short)0)) continue;
 				if(empty) {
 					empty = false;
@@ -1029,7 +1029,7 @@ public class Short2ObjectOpenCustomHashMap<V> extends AbstractShort2ObjectMap<V>
 				state = keys[nullIndex];
 				empty = false;
 			}
-			for(int i = 0;i<size;i++) {
+			for(int i = nullIndex-1;i>=0;i--) {
 				if(strategy.equals(keys[i], (short)0)) continue;
 				if(empty) {
 					empty = false;
@@ -1162,7 +1162,7 @@ public class Short2ObjectOpenCustomHashMap<V> extends AbstractShort2ObjectMap<V>
 				state = values[nullIndex];
 				empty = false;
 			}
-			for(int i = 0;i<size;i++) {
+			for(int i = nullIndex-1;i>=0;i--) {
 				if(strategy.equals(keys[i], (short)0)) continue;
 				if(empty) {
 					empty = false;

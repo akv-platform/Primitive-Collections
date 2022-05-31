@@ -1,7 +1,5 @@
 package speiger.src.testers.bytes.tests.iterable;
 
-import java.util.Objects;
-
 import org.junit.Ignore;
 
 import speiger.src.testers.bytes.tests.base.AbstractByteCollectionTester;

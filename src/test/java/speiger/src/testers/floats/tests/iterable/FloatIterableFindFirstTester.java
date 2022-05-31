@@ -25,7 +25,7 @@ public class FloatIterableFindFirstTester extends AbstractFloatCollectionTester
 	}
 	
 	public void testIterableFindFirst_FindNothing() {
-		assertEquals("No element should be found", 0, container.findFirst(T -> Float.floatToIntBits(T) == Float.floatToIntBits(e4())));
+		assertEquals("No element should be found", 0F, container.findFirst(T -> Float.floatToIntBits(T) == Float.floatToIntBits(e4())));
 	}
 	
 	@CollectionSize.Require(CollectionSize.SEVERAL)

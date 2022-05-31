@@ -861,7 +861,7 @@ public class Float2DoubleOpenCustomHashMap extends AbstractFloat2DoubleMap imple
 				state = new BasicEntry(keys[nullIndex], values[nullIndex]);
 				empty = false;
 			}
-			for(int i = 0;i<size;i++) {
+			for(int i = nullIndex-1;i>=0;i--) {
 				if(strategy.equals(keys[i], 0F)) continue;
 				if(empty) {
 					empty = false;
@@ -1060,7 +1060,7 @@ public class Float2DoubleOpenCustomHashMap extends AbstractFloat2DoubleMap imple
 				state = keys[nullIndex];
 				empty = false;
 			}
-			for(int i = 0;i<size;i++) {
+			for(int i = nullIndex-1;i>=0;i--) {
 				if(strategy.equals(keys[i], 0F)) continue;
 				if(empty) {
 					empty = false;
@@ -1193,7 +1193,7 @@ public class Float2DoubleOpenCustomHashMap extends AbstractFloat2DoubleMap imple
 				state = values[nullIndex];
 				empty = false;
 			}
-			for(int i = 0;i<size;i++) {
+			for(int i = nullIndex-1;i>=0;i--) {
 				if(strategy.equals(keys[i], 0F)) continue;
 				if(empty) {
 					empty = false;

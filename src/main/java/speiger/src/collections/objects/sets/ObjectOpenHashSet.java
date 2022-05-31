@@ -363,7 +363,7 @@ public class ObjectOpenHashSet<T> extends AbstractObjectSet<T> implements ITrimm
 			state = keys[nullIndex];
 			empty = false;
 		}
-		for(int i = 0;i<size;i++) {
+		for(int i = nullIndex-1;i>=0;i--) {
 			if(keys[i] == null) continue;
 			if(empty) {
 				empty = false;

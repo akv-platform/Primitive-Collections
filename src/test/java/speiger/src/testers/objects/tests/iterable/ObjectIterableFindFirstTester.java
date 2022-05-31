@@ -27,7 +27,7 @@ public class ObjectIterableFindFirstTester<T> extends AbstractObjectCollectionTe
 	}
 	
 	public void testIterableFindFirst_FindNothing() {
-		assertEquals("No element should be found", 0, container.findFirst(T -> Objects.equals(T, e4())));
+		assertEquals("No element should be found", null, container.findFirst(T -> Objects.equals(T, e4())));
 	}
 	
 	@CollectionSize.Require(CollectionSize.SEVERAL)

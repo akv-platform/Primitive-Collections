@@ -25,7 +25,7 @@ public class ByteIterableFindFirstTester extends AbstractByteCollectionTester
 	}
 	
 	public void testIterableFindFirst_FindNothing() {
-		assertEquals("No element should be found", 0, container.findFirst(T -> T == e4()));
+		assertEquals("No element should be found", (byte)0, container.findFirst(T -> T == e4()));
 	}
 	
 	@CollectionSize.Require(CollectionSize.SEVERAL)

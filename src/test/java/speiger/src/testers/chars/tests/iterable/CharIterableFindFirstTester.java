@@ -25,7 +25,7 @@ public class CharIterableFindFirstTester extends AbstractCharCollectionTester
 	}
 	
 	public void testIterableFindFirst_FindNothing() {
-		assertEquals("No element should be found", 0, container.findFirst(T -> T == e4()));
+		assertEquals("No element should be found", (char)0, container.findFirst(T -> T == e4()));
 	}
 	
 	@CollectionSize.Require(CollectionSize.SEVERAL)

@@ -830,7 +830,7 @@ public class Double2ObjectOpenCustomHashMap<V> extends AbstractDouble2ObjectMap<
 				state = new BasicEntry<>(keys[nullIndex], values[nullIndex]);
 				empty = false;
 			}
-			for(int i = 0;i<size;i++) {
+			for(int i = nullIndex-1;i>=0;i--) {
 				if(strategy.equals(keys[i], 0D)) continue;
 				if(empty) {
 					empty = false;
@@ -1029,7 +1029,7 @@ public class Double2ObjectOpenCustomHashMap<V> extends AbstractDouble2ObjectMap<
 				state = keys[nullIndex];
 				empty = false;
 			}
-			for(int i = 0;i<size;i++) {
+			for(int i = nullIndex-1;i>=0;i--) {
 				if(strategy.equals(keys[i], 0D)) continue;
 				if(empty) {
 					empty = false;
@@ -1162,7 +1162,7 @@ public class Double2ObjectOpenCustomHashMap<V> extends AbstractDouble2ObjectMap<
 				state = values[nullIndex];
 				empty = false;
 			}
-			for(int i = 0;i<size;i++) {
+			for(int i = nullIndex-1;i>=0;i--) {
 				if(strategy.equals(keys[i], 0D)) continue;
 				if(empty) {
 					empty = false;

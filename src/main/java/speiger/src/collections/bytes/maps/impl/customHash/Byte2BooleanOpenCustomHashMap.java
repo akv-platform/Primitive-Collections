@@ -839,7 +839,7 @@ public class Byte2BooleanOpenCustomHashMap extends AbstractByte2BooleanMap imple
 				state = new BasicEntry(keys[nullIndex], values[nullIndex]);
 				empty = false;
 			}
-			for(int i = 0;i<size;i++) {
+			for(int i = nullIndex-1;i>=0;i--) {
 				if(strategy.equals(keys[i], (byte)0)) continue;
 				if(empty) {
 					empty = false;
@@ -1038,7 +1038,7 @@ public class Byte2BooleanOpenCustomHashMap extends AbstractByte2BooleanMap imple
 				state = keys[nullIndex];
 				empty = false;
 			}
-			for(int i = 0;i<size;i++) {
+			for(int i = nullIndex-1;i>=0;i--) {
 				if(strategy.equals(keys[i], (byte)0)) continue;
 				if(empty) {
 					empty = false;
@@ -1171,7 +1171,7 @@ public class Byte2BooleanOpenCustomHashMap extends AbstractByte2BooleanMap imple
 				state = values[nullIndex];
 				empty = false;
 			}
-			for(int i = 0;i<size;i++) {
+			for(int i = nullIndex-1;i>=0;i--) {
 				if(strategy.equals(keys[i], (byte)0)) continue;
 				if(empty) {
 					empty = false;

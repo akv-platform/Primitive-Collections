@@ -1,7 +1,10 @@
 package speiger.src.testers.objects.tests.iterable;
 
+import java.util.Objects;
+
 import org.junit.Ignore;
 
+import speiger.src.collections.chars.utils.CharArrays;
 import speiger.src.collections.objects.lists.ObjectArrayList;
 import speiger.src.collections.objects.lists.ObjectList;
 import speiger.src.testers.objects.tests.base.AbstractObjectCollectionTester;
@@ -16,30 +19,25 @@ public class ObjectIterableMapTester<T> extends AbstractObjectCollectionTester<T
 	}
 	
 	public void testIterableMap_Collection() {
-		ObjectList<Integer> result = new ObjectArrayList<>();
+		ObjectList<Character> result = new ObjectArrayList<>();
 		for(T entry : getOrderedElements())
 		{
-			result.addAll(toRange((int)entry));
+			result.addAll(toRange(entry));
 		}
-		assertEquals(result, collection.flatMap(T -> ObjectArrayList.wrap(toRange((int)T))).pourAsList());
+		ObjectHelpers.assertEqualIgnoringOrder(result, collection.flatMap(T -> ObjectArrayList.wrap(toRange(T))).pourAsList());
 	}
-	
+
 	public void testIterableMap_Array() {
-		ObjectList<Integer> result = new ObjectArrayList<>();
+		ObjectList<Character> result = new ObjectArrayList<>();
 		for(T entry : getOrderedElements())
 		{
-			result.addAll(toRange((int)entry));
+			result.addAll(toRange(entry));
 		}
-		assertEquals(result, collection.arrayflatMap(T -> toRange((int)T)).pourAsList());
+		ObjectHelpers.assertEqualIgnoringOrder(result, collection.arrayflatMap(this::toRange).pourAsList());
 	}
-	
-	private Integer[] toRange(int range)
+
+	private Character[] toRange(T obj)
 	{
-		Integer[] result = new Integer[range];
-		for(int i = 0;i<range;i++)
-		{
-			result[i] = Integer.valueOf(i);
-		}
-		return result;
+		return CharArrays.wrap(Objects.toString(obj).toCharArray());
 	}
 }

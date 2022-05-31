@@ -25,7 +25,7 @@ public class DoubleIterableFindFirstTester extends AbstractDoubleCollectionTeste
 	}
 	
 	public void testIterableFindFirst_FindNothing() {
-		assertEquals("No element should be found", 0, container.findFirst(T -> Double.doubleToLongBits(T) == Double.doubleToLongBits(e4())));
+		assertEquals("No element should be found", 0D, container.findFirst(T -> Double.doubleToLongBits(T) == Double.doubleToLongBits(e4())));
 	}
 	
 	@CollectionSize.Require(CollectionSize.SEVERAL)
