@@ -115,6 +115,7 @@ task testBytes(type: Test) {
 	}
 	useJUnit()
 	maxHeapSize = "1024m"
+	maxParallelForks = 2
 }
 
 task testShorts(type: Test) {
@@ -126,6 +127,7 @@ task testShorts(type: Test) {
 	}
 	useJUnit()
 	maxHeapSize = "1024m"
+	maxParallelForks = 2
 }
 
 task testChars(type: Test) {
@@ -137,6 +139,7 @@ task testChars(type: Test) {
 	}
 	useJUnit()
 	maxHeapSize = "1024m"
+	maxParallelForks = 2
 }
 
 task testInts(type: Test) {
@@ -148,6 +151,7 @@ task testInts(type: Test) {
 	}
 	useJUnit()
 	maxHeapSize = "1024m"
+	maxParallelForks = 2
 }
 
 task testLongs(type: Test) {
@@ -159,6 +163,7 @@ task testLongs(type: Test) {
 	}
 	useJUnit()
 	maxHeapSize = "1024m"
+	maxParallelForks = 2
 }
 
 task testFloats(type: Test) {
@@ -170,6 +175,7 @@ task testFloats(type: Test) {
 	}
 	useJUnit()
 	maxHeapSize = "1024m"
+	maxParallelForks = 2
 }
 
 task testDoubles(type: Test) {
@@ -181,6 +187,7 @@ task testDoubles(type: Test) {
 	}
 	useJUnit()
 	maxHeapSize = "1024m"
+	maxParallelForks = 2
 }
 
 task testObjects(type: Test) {
@@ -192,28 +199,30 @@ task testObjects(type: Test) {
 	}
 	useJUnit()
 	maxHeapSize = "1024m"
+	maxParallelForks = 2
 }
 
-//test.dependsOn testBooleans
-//test.dependsOn testBytes
-//test.dependsOn testShorts
-//test.dependsOn testChars
-//test.dependsOn testInts
-//test.dependsOn testLongs
-//test.dependsOn testFloats
-//test.dependsOn testDoubles
-//test.dependsOn testObjects
+test.dependsOn testBooleans
+test.dependsOn testBytes
+test.dependsOn testShorts
+test.dependsOn testChars
+test.dependsOn testInts
+test.dependsOn testLongs
+test.dependsOn testFloats
+test.dependsOn testDoubles
+test.dependsOn testObjects
 
 test {
 	filter {
 		excludeTestsMatching "speiger.src.testers.**.*"
-//		excludeTestsMatching "speiger.src.tests.**.*"
+		excludeTestsMatching "speiger.src.tests.**.*"
 	}
 	useJUnit()
 	maxHeapSize = "1024m"
 }
 
 jacocoTestReport {
+    executionData fileTree(project.buildDir.absolutePath).include("jacoco/*.exec")
     reports {
         xml.enabled true
         html.enabled = true
