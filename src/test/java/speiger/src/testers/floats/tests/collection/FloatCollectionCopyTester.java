@@ -20,4 +20,16 @@ public class FloatCollectionCopyTester extends AbstractFloatCollectionTester
 		Assert.assertFalse("Copied Collection shouldn't match", copy == collection);
 		Assert.assertTrue("Copied Collection contents should match", copy.equals(collection));
 	}
+
+	@CollectionFeature.Require(absent = {CollectionFeature.SUBSET_VIEW, CollectionFeature.DESCENDING_VIEW})
+	@SpecialFeature.Require(absent = SpecialFeature.COPYING)
+	public void testEqualsFail() {
+		try {
+			assertNull(collection.copy());
+			fail("If Copying isn't supported it should throw a UnsupportedOperationException");
+		}
+		catch(UnsupportedOperationException e) {
+			//Success
+		}
+	}
 }

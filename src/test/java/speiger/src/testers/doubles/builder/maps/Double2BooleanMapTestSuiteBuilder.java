@@ -27,6 +27,7 @@ import speiger.src.testers.doubles.tests.maps.Double2BooleanMapClearTester;
 import speiger.src.testers.doubles.tests.maps.Double2BooleanMapComputeIfAbsentTester;
 import speiger.src.testers.doubles.tests.maps.Double2BooleanMapComputeIfPresentTester;
 import speiger.src.testers.doubles.tests.maps.Double2BooleanMapComputeTester;
+import speiger.src.testers.doubles.tests.maps.Double2BooleanMapCopyTester;
 import speiger.src.testers.doubles.tests.maps.Double2BooleanMapContainsKeyTester;
 import speiger.src.testers.doubles.tests.maps.Double2BooleanMapContainsValueTester;
 import speiger.src.testers.doubles.tests.maps.Double2BooleanMapEntrySetTester;
@@ -73,6 +74,7 @@ public class Double2BooleanMapTestSuiteBuilder extends MapTestSuiteBuilder<Doubl
 		testers.add(Double2BooleanMapComputeIfAbsentTester.class);
 		testers.add(Double2BooleanMapComputeIfPresentTester.class);
 		testers.add(Double2BooleanMapSupplyIfAbsentTester.class);
+		testers.add(Double2BooleanMapCopyTester.class);
 		testers.add(Double2BooleanMapContainsKeyTester.class);
 		testers.add(Double2BooleanMapContainsValueTester.class);
 		testers.add(Double2BooleanMapEntrySetTester.class);

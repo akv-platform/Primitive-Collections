@@ -1,11 +1,14 @@
 package speiger.src.tests.objects.collections;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.function.Function;
 import java.util.Comparator;
 import java.util.Objects;
 
 import com.google.common.collect.testing.features.CollectionSize;
 import com.google.common.collect.testing.features.SetFeature;
+import com.google.common.collect.testing.features.Feature;
 import com.google.common.collect.testing.features.CollectionFeature;
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -21,12 +24,10 @@ import speiger.src.collections.objects.sets.ObjectOpenHashSet;
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.objects.sets.ObjectRBTreeSet;
 import speiger.src.collections.objects.sets.ObjectSet;
-import speiger.src.collections.objects.sets.ObjectSortedSet;
 import speiger.src.collections.objects.utils.ObjectStrategy;
 import speiger.src.testers.objects.builder.ObjectNavigableSetTestSuiteBuilder;
 import speiger.src.testers.objects.builder.ObjectOrderedSetTestSuiteBuilder;
 import speiger.src.testers.objects.builder.ObjectSetTestSuiteBuilder;
-import speiger.src.testers.objects.builder.ObjectSortedSetTestSuiteBuilder;
 import speiger.src.testers.objects.impl.SimpleObjectTestGenerator;
 import speiger.src.testers.utils.SpecialFeature;
 import speiger.src.testers.objects.utils.ObjectSamples;
@@ -43,51 +44,33 @@ public class ObjectSetTests extends TestCase
 	}
 	
 	public static void suite(TestSuite suite) {
-		suite.addTest(setSuite("ObjectOpenHashSet", ObjectOpenHashSet::new));
-		suite.addTest(orderedSetSuite("ObjectLinkedOpenHashSet", ObjectLinkedOpenHashSet::new));
-		suite.addTest(setSuite("ObjectOpenCustomHashSet", T -> new ObjectOpenCustomHashSet<>(T, HashStrategy.INSTANCE)));
-		suite.addTest(orderedSetSuite("ObjectLinkedOpenCustomHashSet", T -> new ObjectLinkedOpenCustomHashSet<>(T, HashStrategy.INSTANCE)));
-		suite.addTest(immutableOrderedSetSuite("ImmutableObjectOpenHashSet", ImmutableObjectOpenHashSet::new));
-		suite.addTest(setSuite("ObjectArraySet", ObjectArraySet::new));
-		suite.addTest(navigableSetSuite("ObjectRBTreeSet", ObjectRBTreeSet::new, false));
-		suite.addTest(navigableSetSuite("ObjectAVLTreeSet", ObjectAVLTreeSet::new, false));
-		suite.addTest(navigableSetSuite("ObjectRBTreeSet_Null", T -> new ObjectRBTreeSet<>(T, Comparator.nullsFirst(Comparator.naturalOrder())), true));
-		suite.addTest(navigableSetSuite("ObjectAVLTreeSet_Null", T -> new ObjectAVLTreeSet<>(T, Comparator.nullsFirst(Comparator.naturalOrder())), true));
+		suite.addTest(setSuite("ObjectOpenHashSet", ObjectOpenHashSet::new, getFeatures()));
+		suite.addTest(orderedSetSuite("ObjectLinkedOpenHashSet", ObjectLinkedOpenHashSet::new, getFeatures()));
+		suite.addTest(setSuite("ObjectOpenCustomHashSet", T -> new ObjectOpenCustomHashSet<>(T, HashStrategy.INSTANCE), getFeatures()));
+		suite.addTest(orderedSetSuite("ObjectLinkedOpenCustomHashSet", T -> new ObjectLinkedOpenCustomHashSet<>(T, HashStrategy.INSTANCE), getFeatures()));
+		suite.addTest(orderedSetSuite("ImmutableObjectOpenHashSet", ImmutableObjectOpenHashSet::new, getImmutableFeatures()));
+		suite.addTest(setSuite("ObjectArraySet", ObjectArraySet::new, getFeatures()));
+		suite.addTest(navigableSetSuite("ObjectRBTreeSet", ObjectRBTreeSet::new, getFeatures(), false));
+		suite.addTest(navigableSetSuite("ObjectAVLTreeSet", ObjectAVLTreeSet::new, getFeatures(), false));
+		suite.addTest(navigableSetSuite("ObjectRBTreeSet_Null", T -> new ObjectRBTreeSet<>(T, Comparator.nullsFirst(Comparator.naturalOrder())), getFeatures(), true));
+		suite.addTest(navigableSetSuite("ObjectAVLTreeSet_Null", T -> new ObjectAVLTreeSet<>(T, Comparator.nullsFirst(Comparator.naturalOrder())), getFeatures(), true));
+		suite.addTest(navigableSetSuite("Synchronized ObjectRBTreeSet", T -> new ObjectRBTreeSet<>(T).synchronize(), getFeatures(), false));
+		suite.addTest(navigableSetSuite("Unmodifiable ObjectRBTreeSet", T -> new ObjectRBTreeSet<>(T).unmodifiable(), getImmutableFeatures(), false));
 	}
 		
-	public static Test setSuite(String name, Function<String[], ObjectSet<String>> factory) {
+	public static Test setSuite(String name, Function<String[], ObjectSet<String>> factory, Collection<Feature<?>> features) {
 		return ObjectSetTestSuiteBuilder.using(new SimpleObjectTestGenerator.Sets<>(factory, createStrings())).named(name)
-			.withFeatures(CollectionSize.ANY, SetFeature.GENERAL_PURPOSE, CollectionFeature.ALLOWS_NULL_VALUES, SpecialFeature.COPYING)
-			.createTestSuite();
+			.withFeatures(CollectionSize.ANY, CollectionFeature.ALLOWS_NULL_VALUES).withFeatures(features).createTestSuite();
 	}
 
-	public static Test setImmutableSuite(String name, Function<String[], ObjectSet<String>> factory) {
-		return ObjectSetTestSuiteBuilder.using(new SimpleObjectTestGenerator.Sets<>(factory, createStrings())).named(name)
-			.withFeatures(CollectionSize.ANY, CollectionFeature.ALLOWS_NULL_VALUES, SpecialFeature.COPYING)
-			.createTestSuite();
-	}
-
-	public static Test orderedSetSuite(String name, Function<String[], ObjectOrderedSet<String>> factory) {
+	public static Test orderedSetSuite(String name, Function<String[], ObjectOrderedSet<String>> factory, Collection<Feature<?>> features) {
 		return ObjectOrderedSetTestSuiteBuilder.using(new SimpleObjectTestGenerator.OrderedSets<>(factory, createStrings())).named(name)
-			.withFeatures(CollectionSize.ANY, SetFeature.GENERAL_PURPOSE, CollectionFeature.ALLOWS_NULL_VALUES, SpecialFeature.COPYING)
-			.createTestSuite();
+			.withFeatures(CollectionSize.ANY, CollectionFeature.ALLOWS_NULL_VALUES).withFeatures(features).createTestSuite();
 	}
 
-	public static Test immutableOrderedSetSuite(String name, Function<String[], ObjectOrderedSet<String>> factory) {
-		return ObjectOrderedSetTestSuiteBuilder.using(new SimpleObjectTestGenerator.OrderedSets<>(factory, createStrings())).named(name)
-			.withFeatures(CollectionSize.ANY, CollectionFeature.ALLOWS_NULL_VALUES, SpecialFeature.COPYING)
-			.createTestSuite();
-	}
-
-	public static Test sortedSetSuite(String name, Function<String[], ObjectSortedSet<String>> factory) {
-		return ObjectSortedSetTestSuiteBuilder.using(new SimpleObjectTestGenerator.SortedSets<>(factory, createStrings(), "!! a", "!! b", "~~ a", "~~ b")).named(name)
-			.withFeatures(CollectionSize.ANY, SetFeature.GENERAL_PURPOSE, CollectionFeature.ALLOWS_NULL_VALUES, SpecialFeature.COPYING)
-			.createTestSuite();
-	}
-
-	public static Test navigableSetSuite(String name, Function<String[], ObjectNavigableSet<String>> factory, boolean nullValues) {
+	public static Test navigableSetSuite(String name, Function<String[], ObjectNavigableSet<String>> factory, Collection<Feature<?>> features, boolean nullValues) {
 		ObjectNavigableSetTestSuiteBuilder<String> builder = (ObjectNavigableSetTestSuiteBuilder<String>)ObjectNavigableSetTestSuiteBuilder.using(new SimpleObjectTestGenerator.NavigableSets<>(factory, createStrings(), "!! a", "!! b", "~~ a", "~~ b")).named(name)
-			.withFeatures(CollectionSize.ANY, SetFeature.GENERAL_PURPOSE, SpecialFeature.COPYING);
+			.withFeatures(CollectionSize.ANY).withFeatures(features);
 		if(nullValues) builder.withFeatures(CollectionFeature.ALLOWS_NULL_VALUES);
 			return builder.createTestSuite();
 	}
@@ -102,5 +85,13 @@ public class ObjectSetTests extends TestCase
 	
 	private static ObjectSamples<String> createStrings() {
 		return new ObjectSamples<>("b", "a", "c", "d", "e");
+	}
+
+	private static Collection<Feature<?>> getImmutableFeatures() {
+		return Arrays.asList(SpecialFeature.COPYING);
+	}
+	
+	private static Collection<Feature<?>> getFeatures() {
+		return Arrays.asList(SetFeature.GENERAL_PURPOSE, SpecialFeature.COPYING);
 	}
 }

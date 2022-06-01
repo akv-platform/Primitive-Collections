@@ -27,6 +27,7 @@ import speiger.src.testers.bytes.tests.maps.Byte2BooleanMapClearTester;
 import speiger.src.testers.bytes.tests.maps.Byte2BooleanMapComputeIfAbsentTester;
 import speiger.src.testers.bytes.tests.maps.Byte2BooleanMapComputeIfPresentTester;
 import speiger.src.testers.bytes.tests.maps.Byte2BooleanMapComputeTester;
+import speiger.src.testers.bytes.tests.maps.Byte2BooleanMapCopyTester;
 import speiger.src.testers.bytes.tests.maps.Byte2BooleanMapContainsKeyTester;
 import speiger.src.testers.bytes.tests.maps.Byte2BooleanMapContainsValueTester;
 import speiger.src.testers.bytes.tests.maps.Byte2BooleanMapEntrySetTester;
@@ -73,6 +74,7 @@ public class Byte2BooleanMapTestSuiteBuilder extends MapTestSuiteBuilder<Byte, B
 		testers.add(Byte2BooleanMapComputeIfAbsentTester.class);
 		testers.add(Byte2BooleanMapComputeIfPresentTester.class);
 		testers.add(Byte2BooleanMapSupplyIfAbsentTester.class);
+		testers.add(Byte2BooleanMapCopyTester.class);
 		testers.add(Byte2BooleanMapContainsKeyTester.class);
 		testers.add(Byte2BooleanMapContainsValueTester.class);
 		testers.add(Byte2BooleanMapEntrySetTester.class);

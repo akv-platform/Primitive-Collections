@@ -1,9 +1,12 @@
 package speiger.src.tests.bytes.collections;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.function.Function;
 
 import com.google.common.collect.testing.features.CollectionSize;
 import com.google.common.collect.testing.features.SetFeature;
+import com.google.common.collect.testing.features.Feature;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -18,12 +21,10 @@ import speiger.src.collections.bytes.sets.ByteOpenHashSet;
 import speiger.src.collections.bytes.sets.ByteOrderedSet;
 import speiger.src.collections.bytes.sets.ByteRBTreeSet;
 import speiger.src.collections.bytes.sets.ByteSet;
-import speiger.src.collections.bytes.sets.ByteSortedSet;
 import speiger.src.collections.bytes.utils.ByteStrategy;
 import speiger.src.testers.bytes.builder.ByteNavigableSetTestSuiteBuilder;
 import speiger.src.testers.bytes.builder.ByteOrderedSetTestSuiteBuilder;
 import speiger.src.testers.bytes.builder.ByteSetTestSuiteBuilder;
-import speiger.src.testers.bytes.builder.ByteSortedSetTestSuiteBuilder;
 import speiger.src.testers.bytes.impl.SimpleByteTestGenerator;
 import speiger.src.testers.utils.SpecialFeature;
 
@@ -39,50 +40,32 @@ public class ByteSetTests extends TestCase
 	}
 	
 	public static void suite(TestSuite suite) {
-		suite.addTest(setSuite("ByteOpenHashSet", ByteOpenHashSet::new));
-		suite.addTest(orderedSetSuite("ByteLinkedOpenHashSet", ByteLinkedOpenHashSet::new));
-		suite.addTest(setSuite("ByteOpenCustomHashSet", T -> new ByteOpenCustomHashSet(T, HashStrategy.INSTANCE)));
-		suite.addTest(orderedSetSuite("ByteLinkedOpenCustomHashSet", T -> new ByteLinkedOpenCustomHashSet(T, HashStrategy.INSTANCE)));
-		suite.addTest(immutableOrderedSetSuite("ImmutableByteOpenHashSet", ImmutableByteOpenHashSet::new));
-		suite.addTest(setSuite("ByteArraySet", ByteArraySet::new));
-		suite.addTest(navigableSetSuite("ByteRBTreeSet", ByteRBTreeSet::new));
-		suite.addTest(navigableSetSuite("ByteAVLTreeSet", ByteAVLTreeSet::new));
+		suite.addTest(setSuite("ByteOpenHashSet", ByteOpenHashSet::new, getFeatures()));
+		suite.addTest(orderedSetSuite("ByteLinkedOpenHashSet", ByteLinkedOpenHashSet::new, getFeatures()));
+		suite.addTest(setSuite("ByteOpenCustomHashSet", T -> new ByteOpenCustomHashSet(T, HashStrategy.INSTANCE), getFeatures()));
+		suite.addTest(orderedSetSuite("ByteLinkedOpenCustomHashSet", T -> new ByteLinkedOpenCustomHashSet(T, HashStrategy.INSTANCE), getFeatures()));
+		suite.addTest(orderedSetSuite("ImmutableByteOpenHashSet", ImmutableByteOpenHashSet::new, getImmutableFeatures()));
+		suite.addTest(setSuite("ByteArraySet", ByteArraySet::new, getFeatures()));
+		suite.addTest(navigableSetSuite("ByteRBTreeSet", ByteRBTreeSet::new, getFeatures()));
+		suite.addTest(navigableSetSuite("ByteAVLTreeSet", ByteAVLTreeSet::new, getFeatures()));
+		suite.addTest(navigableSetSuite("Synchronized ByteRBTreeSet", T -> new ByteRBTreeSet(T).synchronize(), getFeatures()));
+		suite.addTest(navigableSetSuite("Unmodifiable ByteRBTreeSet", T -> new ByteRBTreeSet(T).unmodifiable(), getImmutableFeatures()));
 	}
 		
-	public static Test setSuite(String name, Function<byte[], ByteSet> factory) {
+	public static Test setSuite(String name, Function<byte[], ByteSet> factory, Collection<Feature<?>> features) {
 		return ByteSetTestSuiteBuilder.using(new SimpleByteTestGenerator.Sets(factory)).named(name)
-			.withFeatures(CollectionSize.ANY, SetFeature.GENERAL_PURPOSE, SpecialFeature.COPYING)
-			.createTestSuite();
+			.withFeatures(CollectionSize.ANY).withFeatures(features).createTestSuite();
 	}
-
-	public static Test setImmutableSuite(String name, Function<byte[], ByteSet> factory) {
-		return ByteSetTestSuiteBuilder.using(new SimpleByteTestGenerator.Sets(factory)).named(name)
-			.withFeatures(CollectionSize.ANY, SpecialFeature.COPYING)
-			.createTestSuite();
-	}
-
-	public static Test orderedSetSuite(String name, Function<byte[], ByteOrderedSet> factory) {
+	
+	public static Test orderedSetSuite(String name, Function<byte[], ByteOrderedSet> factory, Collection<Feature<?>> features) {
 		return ByteOrderedSetTestSuiteBuilder.using(new SimpleByteTestGenerator.OrderedSets(factory)).named(name)
-			.withFeatures(CollectionSize.ANY, SetFeature.GENERAL_PURPOSE, SpecialFeature.COPYING)
-			.createTestSuite();
+			.withFeatures(CollectionSize.ANY).withFeatures(features).createTestSuite();
 	}
 
-	public static Test immutableOrderedSetSuite(String name, Function<byte[], ByteOrderedSet> factory) {
-		return ByteOrderedSetTestSuiteBuilder.using(new SimpleByteTestGenerator.OrderedSets(factory)).named(name)
-			.withFeatures(CollectionSize.ANY, SpecialFeature.COPYING)
-			.createTestSuite();
-	}
-
-	public static Test sortedSetSuite(String name, Function<byte[], ByteSortedSet> factory) {
-		return ByteSortedSetTestSuiteBuilder.using(new SimpleByteTestGenerator.SortedSets(factory)).named(name)
-			.withFeatures(CollectionSize.ANY, SetFeature.GENERAL_PURPOSE, SpecialFeature.COPYING)
-			.createTestSuite();
-	}
-
-	public static Test navigableSetSuite(String name, Function<byte[], ByteNavigableSet> factory) {
+	
+	public static Test navigableSetSuite(String name, Function<byte[], ByteNavigableSet> factory, Collection<Feature<?>> features) {
 		return ByteNavigableSetTestSuiteBuilder.using(new SimpleByteTestGenerator.NavigableSets(factory)).named(name)
-			.withFeatures(CollectionSize.ANY, SetFeature.GENERAL_PURPOSE, SpecialFeature.COPYING)
-			.createTestSuite();
+			.withFeatures(CollectionSize.ANY).withFeatures(features).createTestSuite();
 	}
 	
 	private static class HashStrategy implements ByteStrategy {
@@ -91,5 +74,13 @@ public class ByteSetTests extends TestCase
 		public int hashCode(byte o) { return Byte.hashCode(o); }
 		@Override
 		public boolean equals(byte key, byte value) { return key == value; }
+	}
+
+	private static Collection<Feature<?>> getImmutableFeatures() {
+		return Arrays.asList(SpecialFeature.COPYING);
+	}
+	
+	private static Collection<Feature<?>> getFeatures() {
+		return Arrays.asList(SetFeature.GENERAL_PURPOSE, SpecialFeature.COPYING);
 	}
 }

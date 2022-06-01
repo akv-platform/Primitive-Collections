@@ -1,9 +1,12 @@
 package speiger.src.tests.bytes.collections;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.function.Function;
 
 import com.google.common.collect.testing.features.CollectionSize;
 import com.google.common.collect.testing.features.ListFeature;
+import com.google.common.collect.testing.features.Feature;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -19,7 +22,6 @@ import speiger.src.testers.utils.SpecialFeature;
 @SuppressWarnings("javadoc")
 public class ByteListTests extends TestCase
 {
-	
 	public static Test suite() {
 		TestSuite suite = new TestSuite("ByteLists");
 		suite(suite);
@@ -28,21 +30,23 @@ public class ByteListTests extends TestCase
 	}
 
 	public static void suite(TestSuite suite) {
-		suite.addTest(listSuite("ByteArrayList", ByteArrayList::new));
-		suite.addTest(listSuite("ByteLinkedList", ByteLinkedList::new));
-		suite.addTest(listImmutableSuite("ImmutableByteList", ImmutableByteList::new));
+		suite.addTest(listSuite("ByteArrayList", ByteArrayList::new, getFeatures()));
+		suite.addTest(listSuite("ByteLinkedList", ByteLinkedList::new, getFeatures()));
+		suite.addTest(listSuite("ImmutableByteList", ImmutableByteList::new, getImmutableFeatures()));
+		suite.addTest(listSuite("Synchronized ByteArrayList", T -> new ByteArrayList(T).synchronize(), getFeatures()));
+		suite.addTest(listSuite("Unmodifiable ByteArrayList", T -> new ByteArrayList(T).unmodifiable(), getImmutableFeatures()));
 	}
 	
-	private static Test listSuite(String name, Function<byte[], ByteList> factory) {
+	private static Test listSuite(String name, Function<byte[], ByteList> factory, Collection<Feature<?>> features) {
 		return ByteListTestSuiteBuilder.using(new SimpleByteTestGenerator.Lists(factory)).named(name)
-				.withFeatures(ListFeature.GENERAL_PURPOSE, CollectionSize.ANY, SpecialFeature.COPYING)
-				.createTestSuite();
+				.withFeatures(CollectionSize.ANY).withFeatures(features).createTestSuite();
 	}
 	
-	private static Test listImmutableSuite(String name, Function<byte[], ByteList> factory) {
-		return ByteListTestSuiteBuilder.using(new SimpleByteTestGenerator.Lists(factory)).named(name)
-				.withFeatures(CollectionSize.ANY, SpecialFeature.COPYING)
-				.createTestSuite();
+	private static Collection<Feature<?>> getImmutableFeatures() {
+		return Arrays.asList(SpecialFeature.COPYING);
 	}
-	
+
+	private static Collection<Feature<?>> getFeatures() {
+		return Arrays.asList(ListFeature.GENERAL_PURPOSE, SpecialFeature.COPYING);
+	}
 }

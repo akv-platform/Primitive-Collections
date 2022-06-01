@@ -1,9 +1,12 @@
 package speiger.src.tests.floats.collections;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.function.Function;
 
 import com.google.common.collect.testing.features.CollectionSize;
 import com.google.common.collect.testing.features.ListFeature;
+import com.google.common.collect.testing.features.Feature;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -19,7 +22,6 @@ import speiger.src.testers.utils.SpecialFeature;
 @SuppressWarnings("javadoc")
 public class FloatListTests extends TestCase
 {
-	
 	public static Test suite() {
 		TestSuite suite = new TestSuite("FloatLists");
 		suite(suite);
@@ -28,21 +30,23 @@ public class FloatListTests extends TestCase
 	}
 
 	public static void suite(TestSuite suite) {
-		suite.addTest(listSuite("FloatArrayList", FloatArrayList::new));
-		suite.addTest(listSuite("FloatLinkedList", FloatLinkedList::new));
-		suite.addTest(listImmutableSuite("ImmutableFloatList", ImmutableFloatList::new));
+		suite.addTest(listSuite("FloatArrayList", FloatArrayList::new, getFeatures()));
+		suite.addTest(listSuite("FloatLinkedList", FloatLinkedList::new, getFeatures()));
+		suite.addTest(listSuite("ImmutableFloatList", ImmutableFloatList::new, getImmutableFeatures()));
+		suite.addTest(listSuite("Synchronized FloatArrayList", T -> new FloatArrayList(T).synchronize(), getFeatures()));
+		suite.addTest(listSuite("Unmodifiable FloatArrayList", T -> new FloatArrayList(T).unmodifiable(), getImmutableFeatures()));
 	}
 	
-	private static Test listSuite(String name, Function<float[], FloatList> factory) {
+	private static Test listSuite(String name, Function<float[], FloatList> factory, Collection<Feature<?>> features) {
 		return FloatListTestSuiteBuilder.using(new SimpleFloatTestGenerator.Lists(factory)).named(name)
-				.withFeatures(ListFeature.GENERAL_PURPOSE, CollectionSize.ANY, SpecialFeature.COPYING)
-				.createTestSuite();
+				.withFeatures(CollectionSize.ANY).withFeatures(features).createTestSuite();
 	}
 	
-	private static Test listImmutableSuite(String name, Function<float[], FloatList> factory) {
-		return FloatListTestSuiteBuilder.using(new SimpleFloatTestGenerator.Lists(factory)).named(name)
-				.withFeatures(CollectionSize.ANY, SpecialFeature.COPYING)
-				.createTestSuite();
+	private static Collection<Feature<?>> getImmutableFeatures() {
+		return Arrays.asList(SpecialFeature.COPYING);
 	}
-	
+
+	private static Collection<Feature<?>> getFeatures() {
+		return Arrays.asList(ListFeature.GENERAL_PURPOSE, SpecialFeature.COPYING);
+	}
 }

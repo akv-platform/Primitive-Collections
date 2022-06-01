@@ -28,6 +28,7 @@ import speiger.src.testers.chars.tests.maps.Char2FloatMapClearTester;
 import speiger.src.testers.chars.tests.maps.Char2FloatMapComputeIfAbsentTester;
 import speiger.src.testers.chars.tests.maps.Char2FloatMapComputeIfPresentTester;
 import speiger.src.testers.chars.tests.maps.Char2FloatMapComputeTester;
+import speiger.src.testers.chars.tests.maps.Char2FloatMapCopyTester;
 import speiger.src.testers.chars.tests.maps.Char2FloatMapContainsKeyTester;
 import speiger.src.testers.chars.tests.maps.Char2FloatMapContainsValueTester;
 import speiger.src.testers.chars.tests.maps.Char2FloatMapEntrySetTester;
@@ -74,6 +75,7 @@ public class Char2FloatMapTestSuiteBuilder extends MapTestSuiteBuilder<Character
 		testers.add(Char2FloatMapComputeIfAbsentTester.class);
 		testers.add(Char2FloatMapComputeIfPresentTester.class);
 		testers.add(Char2FloatMapSupplyIfAbsentTester.class);
+		testers.add(Char2FloatMapCopyTester.class);
 		testers.add(Char2FloatMapContainsKeyTester.class);
 		testers.add(Char2FloatMapContainsValueTester.class);
 		testers.add(Char2FloatMapEntrySetTester.class);

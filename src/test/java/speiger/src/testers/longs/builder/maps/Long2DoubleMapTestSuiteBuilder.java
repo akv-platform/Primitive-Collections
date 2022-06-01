@@ -28,6 +28,7 @@ import speiger.src.testers.longs.tests.maps.Long2DoubleMapClearTester;
 import speiger.src.testers.longs.tests.maps.Long2DoubleMapComputeIfAbsentTester;
 import speiger.src.testers.longs.tests.maps.Long2DoubleMapComputeIfPresentTester;
 import speiger.src.testers.longs.tests.maps.Long2DoubleMapComputeTester;
+import speiger.src.testers.longs.tests.maps.Long2DoubleMapCopyTester;
 import speiger.src.testers.longs.tests.maps.Long2DoubleMapContainsKeyTester;
 import speiger.src.testers.longs.tests.maps.Long2DoubleMapContainsValueTester;
 import speiger.src.testers.longs.tests.maps.Long2DoubleMapEntrySetTester;
@@ -74,6 +75,7 @@ public class Long2DoubleMapTestSuiteBuilder extends MapTestSuiteBuilder<Long, Do
 		testers.add(Long2DoubleMapComputeIfAbsentTester.class);
 		testers.add(Long2DoubleMapComputeIfPresentTester.class);
 		testers.add(Long2DoubleMapSupplyIfAbsentTester.class);
+		testers.add(Long2DoubleMapCopyTester.class);
 		testers.add(Long2DoubleMapContainsKeyTester.class);
 		testers.add(Long2DoubleMapContainsValueTester.class);
 		testers.add(Long2DoubleMapEntrySetTester.class);

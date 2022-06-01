@@ -28,6 +28,7 @@ import speiger.src.testers.ints.tests.maps.Int2ByteMapClearTester;
 import speiger.src.testers.ints.tests.maps.Int2ByteMapComputeIfAbsentTester;
 import speiger.src.testers.ints.tests.maps.Int2ByteMapComputeIfPresentTester;
 import speiger.src.testers.ints.tests.maps.Int2ByteMapComputeTester;
+import speiger.src.testers.ints.tests.maps.Int2ByteMapCopyTester;
 import speiger.src.testers.ints.tests.maps.Int2ByteMapContainsKeyTester;
 import speiger.src.testers.ints.tests.maps.Int2ByteMapContainsValueTester;
 import speiger.src.testers.ints.tests.maps.Int2ByteMapEntrySetTester;
@@ -74,6 +75,7 @@ public class Int2ByteMapTestSuiteBuilder extends MapTestSuiteBuilder<Integer, By
 		testers.add(Int2ByteMapComputeIfAbsentTester.class);
 		testers.add(Int2ByteMapComputeIfPresentTester.class);
 		testers.add(Int2ByteMapSupplyIfAbsentTester.class);
+		testers.add(Int2ByteMapCopyTester.class);
 		testers.add(Int2ByteMapContainsKeyTester.class);
 		testers.add(Int2ByteMapContainsValueTester.class);
 		testers.add(Int2ByteMapEntrySetTester.class);

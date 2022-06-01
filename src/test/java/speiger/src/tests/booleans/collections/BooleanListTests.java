@@ -1,15 +1,17 @@
 package speiger.src.tests.booleans.collections;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.function.Function;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import com.google.common.collect.testing.features.CollectionSize;
 import com.google.common.collect.testing.features.ListFeature;
+import com.google.common.collect.testing.features.Feature;
 import com.google.common.collect.testing.testers.CollectionAddAllTester;
 import com.google.common.collect.testing.testers.CollectionAddTester;
 import com.google.common.collect.testing.testers.CollectionContainsAllTester;
@@ -58,7 +60,6 @@ import speiger.src.testers.booleans.tests.list.BooleanListSubListTester;
 @SuppressWarnings("javadoc")
 public class BooleanListTests extends TestCase
 {
-	
 	public static Test suite() {
 		TestSuite suite = new TestSuite("BooleanLists");
 		suite(suite);
@@ -67,36 +68,21 @@ public class BooleanListTests extends TestCase
 	}
 
 	public static void suite(TestSuite suite) {
-		listSuite(suite, "BooleanArrayList", BooleanArrayList::new);
-		listSuite(suite, "BooleanLinkedList", BooleanLinkedList::new);
-		listImmutableSuite(suite, "ImmutableBooleanList", ImmutableBooleanList::new);
+		listSuite(suite, "BooleanArrayList", BooleanArrayList::new, getFeatures(), false);
+		listSuite(suite, "BooleanLinkedList", BooleanLinkedList::new, getFeatures(), false);
+		listSuite(suite, "ImmutableBooleanList", ImmutableBooleanList::new, getImmutableFeatures(), true);
+		listSuite(suite, "Synchronized BooleanArrayList", T -> new BooleanArrayList(T).synchronize(), getFeatures(), false);
+		listSuite(suite, "Unmodifiable BooleanArrayList", T -> new BooleanArrayList(T).unmodifiable(), getImmutableFeatures(), true);
 	}
 	
-	private static void listSuite(TestSuite suite, String name, Function<boolean[], BooleanList> factory) {
+	private static void listSuite(TestSuite suite, String name, Function<boolean[], BooleanList> factory, Collection<Feature<?>> features, boolean immutable) {
 		TestSuite data = new TestSuite(name);
 		data.addTest(BooleanListTestSuiteBuilder.using(new SimpleBooleanTestGenerator.Lists(factory))
-			.named(name+" [collection size: zero]").withFeatures(ListFeature.GENERAL_PURPOSE, CollectionSize.ZERO, SpecialFeature.COPYING).suppressing(getSurpression(CollectionSize.ZERO, false))
-			.createTestSuite());
+			.named(name+" [collection size: zero]").withFeatures(CollectionSize.ZERO).withFeatures(features).suppressing(getSurpression(CollectionSize.ZERO, immutable)).createTestSuite());
 		data.addTest(BooleanListTestSuiteBuilder.using(new SimpleBooleanTestGenerator.Lists(factory))
-			.named(name+" [collection size: one]").withFeatures(ListFeature.GENERAL_PURPOSE, CollectionSize.ONE, SpecialFeature.COPYING).suppressing(getSurpression(CollectionSize.ONE, false))
-			.createTestSuite());
+			.named(name+" [collection size: one]").withFeatures(CollectionSize.ONE).withFeatures(features).suppressing(getSurpression(CollectionSize.ONE, immutable)).createTestSuite());
 		data.addTest(BooleanListTestSuiteBuilder.using(new SimpleBooleanTestGenerator.Lists(factory)).named(name)
-			.named(name+" [collection size: several]").withFeatures(ListFeature.GENERAL_PURPOSE, CollectionSize.SEVERAL, SpecialFeature.COPYING).suppressing(getSurpression(CollectionSize.SEVERAL, false))
-			.createTestSuite());
-		suite.addTest(data);
-	}
-	
-	private static void listImmutableSuite(TestSuite suite, String name, Function<boolean[], BooleanList> factory) {
-		TestSuite data = new TestSuite(name);
-		data.addTest(BooleanListTestSuiteBuilder.using(new SimpleBooleanTestGenerator.Lists(factory))
-			.named(name+" [collection size: zero]").withFeatures(CollectionSize.ZERO, SpecialFeature.COPYING).suppressing(getSurpression(CollectionSize.ZERO, true))
-			.createTestSuite());
-		data.addTest(BooleanListTestSuiteBuilder.using(new SimpleBooleanTestGenerator.Lists(factory))
-			.named(name+" [collection size: one]").withFeatures(CollectionSize.ONE, SpecialFeature.COPYING).suppressing(getSurpression(CollectionSize.ONE, true))
-			.createTestSuite());
-		data.addTest(BooleanListTestSuiteBuilder.using(new SimpleBooleanTestGenerator.Lists(factory))
-			.named(name+" [collection size: several]").withFeatures(CollectionSize.SEVERAL, SpecialFeature.COPYING).suppressing(getSurpression(CollectionSize.SEVERAL, true))
-			.createTestSuite());
+			.named(name+" [collection size: several]").withFeatures(CollectionSize.SEVERAL).withFeatures(features).suppressing(getSurpression(CollectionSize.SEVERAL, immutable)).createTestSuite());
 		suite.addTest(data);
 	}
 	
@@ -165,5 +151,13 @@ public class BooleanListTests extends TestCase
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	private static Collection<Feature<?>> getImmutableFeatures() {
+		return Arrays.asList(SpecialFeature.COPYING);
+	}
+
+	private static Collection<Feature<?>> getFeatures() {
+		return Arrays.asList(ListFeature.GENERAL_PURPOSE, SpecialFeature.COPYING);
 	}
 }

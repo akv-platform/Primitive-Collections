@@ -28,6 +28,7 @@ import speiger.src.testers.longs.tests.maps.Long2CharMapClearTester;
 import speiger.src.testers.longs.tests.maps.Long2CharMapComputeIfAbsentTester;
 import speiger.src.testers.longs.tests.maps.Long2CharMapComputeIfPresentTester;
 import speiger.src.testers.longs.tests.maps.Long2CharMapComputeTester;
+import speiger.src.testers.longs.tests.maps.Long2CharMapCopyTester;
 import speiger.src.testers.longs.tests.maps.Long2CharMapContainsKeyTester;
 import speiger.src.testers.longs.tests.maps.Long2CharMapContainsValueTester;
 import speiger.src.testers.longs.tests.maps.Long2CharMapEntrySetTester;
@@ -74,6 +75,7 @@ public class Long2CharMapTestSuiteBuilder extends MapTestSuiteBuilder<Long, Char
 		testers.add(Long2CharMapComputeIfAbsentTester.class);
 		testers.add(Long2CharMapComputeIfPresentTester.class);
 		testers.add(Long2CharMapSupplyIfAbsentTester.class);
+		testers.add(Long2CharMapCopyTester.class);
 		testers.add(Long2CharMapContainsKeyTester.class);
 		testers.add(Long2CharMapContainsValueTester.class);
 		testers.add(Long2CharMapEntrySetTester.class);

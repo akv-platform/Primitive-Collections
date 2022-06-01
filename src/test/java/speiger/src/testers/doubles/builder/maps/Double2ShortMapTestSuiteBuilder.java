@@ -28,6 +28,7 @@ import speiger.src.testers.doubles.tests.maps.Double2ShortMapClearTester;
 import speiger.src.testers.doubles.tests.maps.Double2ShortMapComputeIfAbsentTester;
 import speiger.src.testers.doubles.tests.maps.Double2ShortMapComputeIfPresentTester;
 import speiger.src.testers.doubles.tests.maps.Double2ShortMapComputeTester;
+import speiger.src.testers.doubles.tests.maps.Double2ShortMapCopyTester;
 import speiger.src.testers.doubles.tests.maps.Double2ShortMapContainsKeyTester;
 import speiger.src.testers.doubles.tests.maps.Double2ShortMapContainsValueTester;
 import speiger.src.testers.doubles.tests.maps.Double2ShortMapEntrySetTester;
@@ -74,6 +75,7 @@ public class Double2ShortMapTestSuiteBuilder extends MapTestSuiteBuilder<Double,
 		testers.add(Double2ShortMapComputeIfAbsentTester.class);
 		testers.add(Double2ShortMapComputeIfPresentTester.class);
 		testers.add(Double2ShortMapSupplyIfAbsentTester.class);
+		testers.add(Double2ShortMapCopyTester.class);
 		testers.add(Double2ShortMapContainsKeyTester.class);
 		testers.add(Double2ShortMapContainsValueTester.class);
 		testers.add(Double2ShortMapEntrySetTester.class);

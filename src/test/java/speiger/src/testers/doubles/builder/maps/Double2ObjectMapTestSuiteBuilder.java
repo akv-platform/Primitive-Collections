@@ -27,6 +27,7 @@ import speiger.src.testers.doubles.tests.maps.Double2ObjectMapClearTester;
 import speiger.src.testers.doubles.tests.maps.Double2ObjectMapComputeIfAbsentTester;
 import speiger.src.testers.doubles.tests.maps.Double2ObjectMapComputeIfPresentTester;
 import speiger.src.testers.doubles.tests.maps.Double2ObjectMapComputeTester;
+import speiger.src.testers.doubles.tests.maps.Double2ObjectMapCopyTester;
 import speiger.src.testers.doubles.tests.maps.Double2ObjectMapContainsKeyTester;
 import speiger.src.testers.doubles.tests.maps.Double2ObjectMapContainsValueTester;
 import speiger.src.testers.doubles.tests.maps.Double2ObjectMapEntrySetTester;
@@ -73,6 +74,7 @@ public class Double2ObjectMapTestSuiteBuilder<V> extends MapTestSuiteBuilder<Dou
 		testers.add(Double2ObjectMapComputeIfAbsentTester.class);
 		testers.add(Double2ObjectMapComputeIfPresentTester.class);
 		testers.add(Double2ObjectMapSupplyIfAbsentTester.class);
+		testers.add(Double2ObjectMapCopyTester.class);
 		testers.add(Double2ObjectMapContainsKeyTester.class);
 		testers.add(Double2ObjectMapContainsValueTester.class);
 		testers.add(Double2ObjectMapEntrySetTester.class);

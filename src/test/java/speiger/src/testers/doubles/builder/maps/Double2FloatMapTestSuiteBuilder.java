@@ -28,6 +28,7 @@ import speiger.src.testers.doubles.tests.maps.Double2FloatMapClearTester;
 import speiger.src.testers.doubles.tests.maps.Double2FloatMapComputeIfAbsentTester;
 import speiger.src.testers.doubles.tests.maps.Double2FloatMapComputeIfPresentTester;
 import speiger.src.testers.doubles.tests.maps.Double2FloatMapComputeTester;
+import speiger.src.testers.doubles.tests.maps.Double2FloatMapCopyTester;
 import speiger.src.testers.doubles.tests.maps.Double2FloatMapContainsKeyTester;
 import speiger.src.testers.doubles.tests.maps.Double2FloatMapContainsValueTester;
 import speiger.src.testers.doubles.tests.maps.Double2FloatMapEntrySetTester;
@@ -74,6 +75,7 @@ public class Double2FloatMapTestSuiteBuilder extends MapTestSuiteBuilder<Double,
 		testers.add(Double2FloatMapComputeIfAbsentTester.class);
 		testers.add(Double2FloatMapComputeIfPresentTester.class);
 		testers.add(Double2FloatMapSupplyIfAbsentTester.class);
+		testers.add(Double2FloatMapCopyTester.class);
 		testers.add(Double2FloatMapContainsKeyTester.class);
 		testers.add(Double2FloatMapContainsValueTester.class);
 		testers.add(Double2FloatMapEntrySetTester.class);

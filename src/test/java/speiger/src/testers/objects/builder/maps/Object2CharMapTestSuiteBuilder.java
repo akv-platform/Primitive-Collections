@@ -26,6 +26,7 @@ import speiger.src.testers.objects.tests.maps.Object2CharMapClearTester;
 import speiger.src.testers.objects.tests.maps.Object2CharMapComputeIfAbsentTester;
 import speiger.src.testers.objects.tests.maps.Object2CharMapComputeIfPresentTester;
 import speiger.src.testers.objects.tests.maps.Object2CharMapComputeTester;
+import speiger.src.testers.objects.tests.maps.Object2CharMapCopyTester;
 import speiger.src.testers.objects.tests.maps.Object2CharMapContainsKeyTester;
 import speiger.src.testers.objects.tests.maps.Object2CharMapContainsValueTester;
 import speiger.src.testers.objects.tests.maps.Object2CharMapEntrySetTester;
@@ -72,6 +73,7 @@ public class Object2CharMapTestSuiteBuilder<T> extends MapTestSuiteBuilder<T, Ch
 		testers.add(Object2CharMapComputeIfAbsentTester.class);
 		testers.add(Object2CharMapComputeIfPresentTester.class);
 		testers.add(Object2CharMapSupplyIfAbsentTester.class);
+		testers.add(Object2CharMapCopyTester.class);
 		testers.add(Object2CharMapContainsKeyTester.class);
 		testers.add(Object2CharMapContainsValueTester.class);
 		testers.add(Object2CharMapEntrySetTester.class);

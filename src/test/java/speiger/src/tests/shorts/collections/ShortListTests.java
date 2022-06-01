@@ -1,9 +1,12 @@
 package speiger.src.tests.shorts.collections;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.function.Function;
 
 import com.google.common.collect.testing.features.CollectionSize;
 import com.google.common.collect.testing.features.ListFeature;
+import com.google.common.collect.testing.features.Feature;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -19,7 +22,6 @@ import speiger.src.testers.utils.SpecialFeature;
 @SuppressWarnings("javadoc")
 public class ShortListTests extends TestCase
 {
-	
 	public static Test suite() {
 		TestSuite suite = new TestSuite("ShortLists");
 		suite(suite);
@@ -28,21 +30,23 @@ public class ShortListTests extends TestCase
 	}
 
 	public static void suite(TestSuite suite) {
-		suite.addTest(listSuite("ShortArrayList", ShortArrayList::new));
-		suite.addTest(listSuite("ShortLinkedList", ShortLinkedList::new));
-		suite.addTest(listImmutableSuite("ImmutableShortList", ImmutableShortList::new));
+		suite.addTest(listSuite("ShortArrayList", ShortArrayList::new, getFeatures()));
+		suite.addTest(listSuite("ShortLinkedList", ShortLinkedList::new, getFeatures()));
+		suite.addTest(listSuite("ImmutableShortList", ImmutableShortList::new, getImmutableFeatures()));
+		suite.addTest(listSuite("Synchronized ShortArrayList", T -> new ShortArrayList(T).synchronize(), getFeatures()));
+		suite.addTest(listSuite("Unmodifiable ShortArrayList", T -> new ShortArrayList(T).unmodifiable(), getImmutableFeatures()));
 	}
 	
-	private static Test listSuite(String name, Function<short[], ShortList> factory) {
+	private static Test listSuite(String name, Function<short[], ShortList> factory, Collection<Feature<?>> features) {
 		return ShortListTestSuiteBuilder.using(new SimpleShortTestGenerator.Lists(factory)).named(name)
-				.withFeatures(ListFeature.GENERAL_PURPOSE, CollectionSize.ANY, SpecialFeature.COPYING)
-				.createTestSuite();
+				.withFeatures(CollectionSize.ANY).withFeatures(features).createTestSuite();
 	}
 	
-	private static Test listImmutableSuite(String name, Function<short[], ShortList> factory) {
-		return ShortListTestSuiteBuilder.using(new SimpleShortTestGenerator.Lists(factory)).named(name)
-				.withFeatures(CollectionSize.ANY, SpecialFeature.COPYING)
-				.createTestSuite();
+	private static Collection<Feature<?>> getImmutableFeatures() {
+		return Arrays.asList(SpecialFeature.COPYING);
 	}
-	
+
+	private static Collection<Feature<?>> getFeatures() {
+		return Arrays.asList(ListFeature.GENERAL_PURPOSE, SpecialFeature.COPYING);
+	}
 }

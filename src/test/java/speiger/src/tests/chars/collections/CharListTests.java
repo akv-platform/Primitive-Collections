@@ -1,9 +1,12 @@
 package speiger.src.tests.chars.collections;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.function.Function;
 
 import com.google.common.collect.testing.features.CollectionSize;
 import com.google.common.collect.testing.features.ListFeature;
+import com.google.common.collect.testing.features.Feature;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -19,7 +22,6 @@ import speiger.src.testers.utils.SpecialFeature;
 @SuppressWarnings("javadoc")
 public class CharListTests extends TestCase
 {
-	
 	public static Test suite() {
 		TestSuite suite = new TestSuite("CharLists");
 		suite(suite);
@@ -28,21 +30,23 @@ public class CharListTests extends TestCase
 	}
 
 	public static void suite(TestSuite suite) {
-		suite.addTest(listSuite("CharArrayList", CharArrayList::new));
-		suite.addTest(listSuite("CharLinkedList", CharLinkedList::new));
-		suite.addTest(listImmutableSuite("ImmutableCharList", ImmutableCharList::new));
+		suite.addTest(listSuite("CharArrayList", CharArrayList::new, getFeatures()));
+		suite.addTest(listSuite("CharLinkedList", CharLinkedList::new, getFeatures()));
+		suite.addTest(listSuite("ImmutableCharList", ImmutableCharList::new, getImmutableFeatures()));
+		suite.addTest(listSuite("Synchronized CharArrayList", T -> new CharArrayList(T).synchronize(), getFeatures()));
+		suite.addTest(listSuite("Unmodifiable CharArrayList", T -> new CharArrayList(T).unmodifiable(), getImmutableFeatures()));
 	}
 	
-	private static Test listSuite(String name, Function<char[], CharList> factory) {
+	private static Test listSuite(String name, Function<char[], CharList> factory, Collection<Feature<?>> features) {
 		return CharListTestSuiteBuilder.using(new SimpleCharTestGenerator.Lists(factory)).named(name)
-				.withFeatures(ListFeature.GENERAL_PURPOSE, CollectionSize.ANY, SpecialFeature.COPYING)
-				.createTestSuite();
+				.withFeatures(CollectionSize.ANY).withFeatures(features).createTestSuite();
 	}
 	
-	private static Test listImmutableSuite(String name, Function<char[], CharList> factory) {
-		return CharListTestSuiteBuilder.using(new SimpleCharTestGenerator.Lists(factory)).named(name)
-				.withFeatures(CollectionSize.ANY, SpecialFeature.COPYING)
-				.createTestSuite();
+	private static Collection<Feature<?>> getImmutableFeatures() {
+		return Arrays.asList(SpecialFeature.COPYING);
 	}
-	
+
+	private static Collection<Feature<?>> getFeatures() {
+		return Arrays.asList(ListFeature.GENERAL_PURPOSE, SpecialFeature.COPYING);
+	}
 }

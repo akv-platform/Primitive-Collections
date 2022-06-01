@@ -1,9 +1,12 @@
 package speiger.src.tests.doubles.collections;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.function.Function;
 
 import com.google.common.collect.testing.features.CollectionSize;
 import com.google.common.collect.testing.features.ListFeature;
+import com.google.common.collect.testing.features.Feature;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -19,7 +22,6 @@ import speiger.src.testers.utils.SpecialFeature;
 @SuppressWarnings("javadoc")
 public class DoubleListTests extends TestCase
 {
-	
 	public static Test suite() {
 		TestSuite suite = new TestSuite("DoubleLists");
 		suite(suite);
@@ -28,21 +30,23 @@ public class DoubleListTests extends TestCase
 	}
 
 	public static void suite(TestSuite suite) {
-		suite.addTest(listSuite("DoubleArrayList", DoubleArrayList::new));
-		suite.addTest(listSuite("DoubleLinkedList", DoubleLinkedList::new));
-		suite.addTest(listImmutableSuite("ImmutableDoubleList", ImmutableDoubleList::new));
+		suite.addTest(listSuite("DoubleArrayList", DoubleArrayList::new, getFeatures()));
+		suite.addTest(listSuite("DoubleLinkedList", DoubleLinkedList::new, getFeatures()));
+		suite.addTest(listSuite("ImmutableDoubleList", ImmutableDoubleList::new, getImmutableFeatures()));
+		suite.addTest(listSuite("Synchronized DoubleArrayList", T -> new DoubleArrayList(T).synchronize(), getFeatures()));
+		suite.addTest(listSuite("Unmodifiable DoubleArrayList", T -> new DoubleArrayList(T).unmodifiable(), getImmutableFeatures()));
 	}
 	
-	private static Test listSuite(String name, Function<double[], DoubleList> factory) {
+	private static Test listSuite(String name, Function<double[], DoubleList> factory, Collection<Feature<?>> features) {
 		return DoubleListTestSuiteBuilder.using(new SimpleDoubleTestGenerator.Lists(factory)).named(name)
-				.withFeatures(ListFeature.GENERAL_PURPOSE, CollectionSize.ANY, SpecialFeature.COPYING)
-				.createTestSuite();
+				.withFeatures(CollectionSize.ANY).withFeatures(features).createTestSuite();
 	}
 	
-	private static Test listImmutableSuite(String name, Function<double[], DoubleList> factory) {
-		return DoubleListTestSuiteBuilder.using(new SimpleDoubleTestGenerator.Lists(factory)).named(name)
-				.withFeatures(CollectionSize.ANY, SpecialFeature.COPYING)
-				.createTestSuite();
+	private static Collection<Feature<?>> getImmutableFeatures() {
+		return Arrays.asList(SpecialFeature.COPYING);
 	}
-	
+
+	private static Collection<Feature<?>> getFeatures() {
+		return Arrays.asList(ListFeature.GENERAL_PURPOSE, SpecialFeature.COPYING);
+	}
 }
