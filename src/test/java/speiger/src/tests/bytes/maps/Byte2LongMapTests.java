@@ -12,12 +12,15 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import speiger.src.collections.bytes.maps.impl.concurrent.Byte2LongConcurrentOpenHashMap;
 import speiger.src.collections.bytes.maps.impl.hash.Byte2LongLinkedOpenHashMap;
+import speiger.src.collections.bytes.maps.impl.customHash.Byte2LongOpenCustomHashMap;
+import speiger.src.collections.bytes.maps.impl.customHash.Byte2LongLinkedOpenCustomHashMap;
 import speiger.src.collections.bytes.maps.impl.hash.Byte2LongOpenHashMap;
 import speiger.src.collections.bytes.maps.impl.misc.Byte2LongArrayMap;
 import speiger.src.collections.bytes.maps.impl.tree.Byte2LongAVLTreeMap;
 import speiger.src.collections.bytes.maps.impl.tree.Byte2LongRBTreeMap;
 import speiger.src.collections.bytes.maps.interfaces.Byte2LongMap;
 import speiger.src.collections.bytes.maps.interfaces.Byte2LongSortedMap;
+import speiger.src.collections.bytes.utils.ByteStrategy;
 import speiger.src.testers.bytes.builder.maps.Byte2LongMapTestSuiteBuilder;
 import speiger.src.testers.bytes.builder.maps.Byte2LongNavigableMapTestSuiteBuilder;
 import speiger.src.testers.bytes.impl.maps.SimpleByte2LongMapTestGenerator;
@@ -36,6 +39,8 @@ public class Byte2LongMapTests extends TestCase
 	public static void suite(TestSuite suite) {
 		suite.addTest(mapSuite("Byte2LongOpenHashMap", Byte2LongOpenHashMap::new));
 		suite.addTest(mapSuite("Byte2LongLinkedOpenHashMap", Byte2LongLinkedOpenHashMap::new));
+		suite.addTest(mapSuite("Byte2LongOpenCustomHashMap", (K, V) -> new Byte2LongOpenCustomHashMap(K, V, HashStrategy.INSTANCE)));
+		suite.addTest(mapSuite("Byte2LongLinkedOpenCustomHashMap", (K, V) -> new Byte2LongLinkedOpenCustomHashMap(K, V, HashStrategy.INSTANCE)));
 		suite.addTest(mapSuite("Byte2LongArrayMap", Byte2LongArrayMap::new));
 		suite.addTest(mapSuite("Byte2LongConcurrentOpenHashMap", Byte2LongConcurrentOpenHashMap::new));
 		suite.addTest(navigableMapSuite("Byte2LongRBTreeMap", Byte2LongRBTreeMap::new));
@@ -54,4 +59,11 @@ public class Byte2LongMapTests extends TestCase
 		return builder.named(name).createTestSuite();
 	}
 	
+	private static class HashStrategy implements ByteStrategy {
+		static final HashStrategy INSTANCE = new HashStrategy();
+		@Override
+		public int hashCode(byte o) { return Byte.hashCode(o); }
+		@Override
+		public boolean equals(byte key, byte value) { return key == value; }
+	}
 }

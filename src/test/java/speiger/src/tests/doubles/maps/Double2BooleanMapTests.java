@@ -20,12 +20,15 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import speiger.src.collections.doubles.maps.impl.concurrent.Double2BooleanConcurrentOpenHashMap;
 import speiger.src.collections.doubles.maps.impl.hash.Double2BooleanLinkedOpenHashMap;
+import speiger.src.collections.doubles.maps.impl.customHash.Double2BooleanOpenCustomHashMap;
+import speiger.src.collections.doubles.maps.impl.customHash.Double2BooleanLinkedOpenCustomHashMap;
 import speiger.src.collections.doubles.maps.impl.hash.Double2BooleanOpenHashMap;
 import speiger.src.collections.doubles.maps.impl.misc.Double2BooleanArrayMap;
 import speiger.src.collections.doubles.maps.impl.tree.Double2BooleanAVLTreeMap;
 import speiger.src.collections.doubles.maps.impl.tree.Double2BooleanRBTreeMap;
 import speiger.src.collections.doubles.maps.interfaces.Double2BooleanMap;
 import speiger.src.collections.doubles.maps.interfaces.Double2BooleanSortedMap;
+import speiger.src.collections.doubles.utils.DoubleStrategy;
 import speiger.src.testers.doubles.builder.maps.Double2BooleanMapTestSuiteBuilder;
 import speiger.src.testers.doubles.builder.maps.Double2BooleanNavigableMapTestSuiteBuilder;
 import speiger.src.testers.doubles.impl.maps.SimpleDouble2BooleanMapTestGenerator;
@@ -54,6 +57,8 @@ public class Double2BooleanMapTests extends TestCase
 	public static void suite(TestSuite suite) {
 		suite.addTest(mapSuite("Double2BooleanOpenHashMap", Double2BooleanOpenHashMap::new));
 		suite.addTest(mapSuite("Double2BooleanLinkedOpenHashMap", Double2BooleanLinkedOpenHashMap::new));
+		suite.addTest(mapSuite("Double2BooleanOpenCustomHashMap", (K, V) -> new Double2BooleanOpenCustomHashMap(K, V, HashStrategy.INSTANCE)));
+		suite.addTest(mapSuite("Double2BooleanLinkedOpenCustomHashMap", (K, V) -> new Double2BooleanLinkedOpenCustomHashMap(K, V, HashStrategy.INSTANCE)));
 		suite.addTest(mapSuite("Double2BooleanArrayMap", Double2BooleanArrayMap::new));
 		suite.addTest(mapSuite("Double2BooleanConcurrentOpenHashMap", Double2BooleanConcurrentOpenHashMap::new));
 		suite.addTest(navigableMapSuite("Double2BooleanRBTreeMap", Double2BooleanRBTreeMap::new));
@@ -74,6 +79,13 @@ public class Double2BooleanMapTests extends TestCase
 		return builder.named(name).createTestSuite();
 	}
 	
+	private static class HashStrategy implements DoubleStrategy {
+		static final HashStrategy INSTANCE = new HashStrategy();
+		@Override
+		public int hashCode(double o) { return Double.hashCode(o); }
+		@Override
+		public boolean equals(double key, double value) { return Double.doubleToLongBits(key) == Double.doubleToLongBits(value); }
+	}
 	public static List<Method> getSuppression() {
 		List<Method> list = new ArrayList<>();
 		TestUtils.getSurpession(list, Double2BooleanMapComputeTester.class, "testCompute_absentToPresent", "testCompute_presentToPresent");

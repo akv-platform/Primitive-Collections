@@ -12,12 +12,15 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import speiger.src.collections.shorts.maps.impl.concurrent.Short2ObjectConcurrentOpenHashMap;
 import speiger.src.collections.shorts.maps.impl.hash.Short2ObjectLinkedOpenHashMap;
+import speiger.src.collections.shorts.maps.impl.customHash.Short2ObjectOpenCustomHashMap;
+import speiger.src.collections.shorts.maps.impl.customHash.Short2ObjectLinkedOpenCustomHashMap;
 import speiger.src.collections.shorts.maps.impl.hash.Short2ObjectOpenHashMap;
 import speiger.src.collections.shorts.maps.impl.misc.Short2ObjectArrayMap;
 import speiger.src.collections.shorts.maps.impl.tree.Short2ObjectAVLTreeMap;
 import speiger.src.collections.shorts.maps.impl.tree.Short2ObjectRBTreeMap;
 import speiger.src.collections.shorts.maps.interfaces.Short2ObjectMap;
 import speiger.src.collections.shorts.maps.interfaces.Short2ObjectSortedMap;
+import speiger.src.collections.shorts.utils.ShortStrategy;
 import speiger.src.testers.shorts.builder.maps.Short2ObjectMapTestSuiteBuilder;
 import speiger.src.testers.shorts.builder.maps.Short2ObjectNavigableMapTestSuiteBuilder;
 import speiger.src.testers.shorts.impl.maps.SimpleShort2ObjectMapTestGenerator;
@@ -36,6 +39,8 @@ public class Short2ObjectMapTests extends TestCase
 	public static void suite(TestSuite suite) {
 		suite.addTest(mapSuite("Short2ObjectOpenHashMap", Short2ObjectOpenHashMap::new));
 		suite.addTest(mapSuite("Short2ObjectLinkedOpenHashMap", Short2ObjectLinkedOpenHashMap::new));
+		suite.addTest(mapSuite("Short2ObjectOpenCustomHashMap", (K, V) -> new Short2ObjectOpenCustomHashMap<>(K, V, HashStrategy.INSTANCE)));
+		suite.addTest(mapSuite("Short2ObjectLinkedOpenCustomHashMap", (K, V) -> new Short2ObjectLinkedOpenCustomHashMap<>(K, V, HashStrategy.INSTANCE)));
 		suite.addTest(mapSuite("Short2ObjectArrayMap", Short2ObjectArrayMap::new));
 		suite.addTest(mapSuite("Short2ObjectConcurrentOpenHashMap", Short2ObjectConcurrentOpenHashMap::new));
 		suite.addTest(navigableMapSuite("Short2ObjectRBTreeMap", Short2ObjectRBTreeMap::new));
@@ -58,6 +63,13 @@ public class Short2ObjectMapTests extends TestCase
 		return builder.named(name).createTestSuite();
 	}
 	
+	private static class HashStrategy implements ShortStrategy {
+		static final HashStrategy INSTANCE = new HashStrategy();
+		@Override
+		public int hashCode(short o) { return Short.hashCode(o); }
+		@Override
+		public boolean equals(short key, short value) { return key == value; }
+	}
 	private static String[] createValues() {
 		return new String[]{"January", "February", "March", "April", "May", "below view", "below view", "above view", "above view"};
 	}

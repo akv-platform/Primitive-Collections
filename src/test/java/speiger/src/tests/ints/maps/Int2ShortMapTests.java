@@ -12,12 +12,15 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import speiger.src.collections.ints.maps.impl.concurrent.Int2ShortConcurrentOpenHashMap;
 import speiger.src.collections.ints.maps.impl.hash.Int2ShortLinkedOpenHashMap;
+import speiger.src.collections.ints.maps.impl.customHash.Int2ShortOpenCustomHashMap;
+import speiger.src.collections.ints.maps.impl.customHash.Int2ShortLinkedOpenCustomHashMap;
 import speiger.src.collections.ints.maps.impl.hash.Int2ShortOpenHashMap;
 import speiger.src.collections.ints.maps.impl.misc.Int2ShortArrayMap;
 import speiger.src.collections.ints.maps.impl.tree.Int2ShortAVLTreeMap;
 import speiger.src.collections.ints.maps.impl.tree.Int2ShortRBTreeMap;
 import speiger.src.collections.ints.maps.interfaces.Int2ShortMap;
 import speiger.src.collections.ints.maps.interfaces.Int2ShortSortedMap;
+import speiger.src.collections.ints.utils.IntStrategy;
 import speiger.src.testers.ints.builder.maps.Int2ShortMapTestSuiteBuilder;
 import speiger.src.testers.ints.builder.maps.Int2ShortNavigableMapTestSuiteBuilder;
 import speiger.src.testers.ints.impl.maps.SimpleInt2ShortMapTestGenerator;
@@ -36,6 +39,8 @@ public class Int2ShortMapTests extends TestCase
 	public static void suite(TestSuite suite) {
 		suite.addTest(mapSuite("Int2ShortOpenHashMap", Int2ShortOpenHashMap::new));
 		suite.addTest(mapSuite("Int2ShortLinkedOpenHashMap", Int2ShortLinkedOpenHashMap::new));
+		suite.addTest(mapSuite("Int2ShortOpenCustomHashMap", (K, V) -> new Int2ShortOpenCustomHashMap(K, V, HashStrategy.INSTANCE)));
+		suite.addTest(mapSuite("Int2ShortLinkedOpenCustomHashMap", (K, V) -> new Int2ShortLinkedOpenCustomHashMap(K, V, HashStrategy.INSTANCE)));
 		suite.addTest(mapSuite("Int2ShortArrayMap", Int2ShortArrayMap::new));
 		suite.addTest(mapSuite("Int2ShortConcurrentOpenHashMap", Int2ShortConcurrentOpenHashMap::new));
 		suite.addTest(navigableMapSuite("Int2ShortRBTreeMap", Int2ShortRBTreeMap::new));
@@ -54,4 +59,11 @@ public class Int2ShortMapTests extends TestCase
 		return builder.named(name).createTestSuite();
 	}
 	
+	private static class HashStrategy implements IntStrategy {
+		static final HashStrategy INSTANCE = new HashStrategy();
+		@Override
+		public int hashCode(int o) { return Integer.hashCode(o); }
+		@Override
+		public boolean equals(int key, int value) { return key == value; }
+	}
 }

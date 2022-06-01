@@ -12,12 +12,15 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import speiger.src.collections.ints.maps.impl.concurrent.Int2ObjectConcurrentOpenHashMap;
 import speiger.src.collections.ints.maps.impl.hash.Int2ObjectLinkedOpenHashMap;
+import speiger.src.collections.ints.maps.impl.customHash.Int2ObjectOpenCustomHashMap;
+import speiger.src.collections.ints.maps.impl.customHash.Int2ObjectLinkedOpenCustomHashMap;
 import speiger.src.collections.ints.maps.impl.hash.Int2ObjectOpenHashMap;
 import speiger.src.collections.ints.maps.impl.misc.Int2ObjectArrayMap;
 import speiger.src.collections.ints.maps.impl.tree.Int2ObjectAVLTreeMap;
 import speiger.src.collections.ints.maps.impl.tree.Int2ObjectRBTreeMap;
 import speiger.src.collections.ints.maps.interfaces.Int2ObjectMap;
 import speiger.src.collections.ints.maps.interfaces.Int2ObjectSortedMap;
+import speiger.src.collections.ints.utils.IntStrategy;
 import speiger.src.testers.ints.builder.maps.Int2ObjectMapTestSuiteBuilder;
 import speiger.src.testers.ints.builder.maps.Int2ObjectNavigableMapTestSuiteBuilder;
 import speiger.src.testers.ints.impl.maps.SimpleInt2ObjectMapTestGenerator;
@@ -36,6 +39,8 @@ public class Int2ObjectMapTests extends TestCase
 	public static void suite(TestSuite suite) {
 		suite.addTest(mapSuite("Int2ObjectOpenHashMap", Int2ObjectOpenHashMap::new));
 		suite.addTest(mapSuite("Int2ObjectLinkedOpenHashMap", Int2ObjectLinkedOpenHashMap::new));
+		suite.addTest(mapSuite("Int2ObjectOpenCustomHashMap", (K, V) -> new Int2ObjectOpenCustomHashMap<>(K, V, HashStrategy.INSTANCE)));
+		suite.addTest(mapSuite("Int2ObjectLinkedOpenCustomHashMap", (K, V) -> new Int2ObjectLinkedOpenCustomHashMap<>(K, V, HashStrategy.INSTANCE)));
 		suite.addTest(mapSuite("Int2ObjectArrayMap", Int2ObjectArrayMap::new));
 		suite.addTest(mapSuite("Int2ObjectConcurrentOpenHashMap", Int2ObjectConcurrentOpenHashMap::new));
 		suite.addTest(navigableMapSuite("Int2ObjectRBTreeMap", Int2ObjectRBTreeMap::new));
@@ -58,6 +63,13 @@ public class Int2ObjectMapTests extends TestCase
 		return builder.named(name).createTestSuite();
 	}
 	
+	private static class HashStrategy implements IntStrategy {
+		static final HashStrategy INSTANCE = new HashStrategy();
+		@Override
+		public int hashCode(int o) { return Integer.hashCode(o); }
+		@Override
+		public boolean equals(int key, int value) { return key == value; }
+	}
 	private static String[] createValues() {
 		return new String[]{"January", "February", "March", "April", "May", "below view", "below view", "above view", "above view"};
 	}

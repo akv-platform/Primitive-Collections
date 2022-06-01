@@ -20,12 +20,15 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import speiger.src.collections.longs.maps.impl.concurrent.Long2BooleanConcurrentOpenHashMap;
 import speiger.src.collections.longs.maps.impl.hash.Long2BooleanLinkedOpenHashMap;
+import speiger.src.collections.longs.maps.impl.customHash.Long2BooleanOpenCustomHashMap;
+import speiger.src.collections.longs.maps.impl.customHash.Long2BooleanLinkedOpenCustomHashMap;
 import speiger.src.collections.longs.maps.impl.hash.Long2BooleanOpenHashMap;
 import speiger.src.collections.longs.maps.impl.misc.Long2BooleanArrayMap;
 import speiger.src.collections.longs.maps.impl.tree.Long2BooleanAVLTreeMap;
 import speiger.src.collections.longs.maps.impl.tree.Long2BooleanRBTreeMap;
 import speiger.src.collections.longs.maps.interfaces.Long2BooleanMap;
 import speiger.src.collections.longs.maps.interfaces.Long2BooleanSortedMap;
+import speiger.src.collections.longs.utils.LongStrategy;
 import speiger.src.testers.longs.builder.maps.Long2BooleanMapTestSuiteBuilder;
 import speiger.src.testers.longs.builder.maps.Long2BooleanNavigableMapTestSuiteBuilder;
 import speiger.src.testers.longs.impl.maps.SimpleLong2BooleanMapTestGenerator;
@@ -54,6 +57,8 @@ public class Long2BooleanMapTests extends TestCase
 	public static void suite(TestSuite suite) {
 		suite.addTest(mapSuite("Long2BooleanOpenHashMap", Long2BooleanOpenHashMap::new));
 		suite.addTest(mapSuite("Long2BooleanLinkedOpenHashMap", Long2BooleanLinkedOpenHashMap::new));
+		suite.addTest(mapSuite("Long2BooleanOpenCustomHashMap", (K, V) -> new Long2BooleanOpenCustomHashMap(K, V, HashStrategy.INSTANCE)));
+		suite.addTest(mapSuite("Long2BooleanLinkedOpenCustomHashMap", (K, V) -> new Long2BooleanLinkedOpenCustomHashMap(K, V, HashStrategy.INSTANCE)));
 		suite.addTest(mapSuite("Long2BooleanArrayMap", Long2BooleanArrayMap::new));
 		suite.addTest(mapSuite("Long2BooleanConcurrentOpenHashMap", Long2BooleanConcurrentOpenHashMap::new));
 		suite.addTest(navigableMapSuite("Long2BooleanRBTreeMap", Long2BooleanRBTreeMap::new));
@@ -74,6 +79,13 @@ public class Long2BooleanMapTests extends TestCase
 		return builder.named(name).createTestSuite();
 	}
 	
+	private static class HashStrategy implements LongStrategy {
+		static final HashStrategy INSTANCE = new HashStrategy();
+		@Override
+		public int hashCode(long o) { return Long.hashCode(o); }
+		@Override
+		public boolean equals(long key, long value) { return key == value; }
+	}
 	public static List<Method> getSuppression() {
 		List<Method> list = new ArrayList<>();
 		TestUtils.getSurpession(list, Long2BooleanMapComputeTester.class, "testCompute_absentToPresent", "testCompute_presentToPresent");

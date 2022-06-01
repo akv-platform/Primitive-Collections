@@ -12,12 +12,15 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import speiger.src.collections.chars.maps.impl.concurrent.Char2ObjectConcurrentOpenHashMap;
 import speiger.src.collections.chars.maps.impl.hash.Char2ObjectLinkedOpenHashMap;
+import speiger.src.collections.chars.maps.impl.customHash.Char2ObjectOpenCustomHashMap;
+import speiger.src.collections.chars.maps.impl.customHash.Char2ObjectLinkedOpenCustomHashMap;
 import speiger.src.collections.chars.maps.impl.hash.Char2ObjectOpenHashMap;
 import speiger.src.collections.chars.maps.impl.misc.Char2ObjectArrayMap;
 import speiger.src.collections.chars.maps.impl.tree.Char2ObjectAVLTreeMap;
 import speiger.src.collections.chars.maps.impl.tree.Char2ObjectRBTreeMap;
 import speiger.src.collections.chars.maps.interfaces.Char2ObjectMap;
 import speiger.src.collections.chars.maps.interfaces.Char2ObjectSortedMap;
+import speiger.src.collections.chars.utils.CharStrategy;
 import speiger.src.testers.chars.builder.maps.Char2ObjectMapTestSuiteBuilder;
 import speiger.src.testers.chars.builder.maps.Char2ObjectNavigableMapTestSuiteBuilder;
 import speiger.src.testers.chars.impl.maps.SimpleChar2ObjectMapTestGenerator;
@@ -36,6 +39,8 @@ public class Char2ObjectMapTests extends TestCase
 	public static void suite(TestSuite suite) {
 		suite.addTest(mapSuite("Char2ObjectOpenHashMap", Char2ObjectOpenHashMap::new));
 		suite.addTest(mapSuite("Char2ObjectLinkedOpenHashMap", Char2ObjectLinkedOpenHashMap::new));
+		suite.addTest(mapSuite("Char2ObjectOpenCustomHashMap", (K, V) -> new Char2ObjectOpenCustomHashMap<>(K, V, HashStrategy.INSTANCE)));
+		suite.addTest(mapSuite("Char2ObjectLinkedOpenCustomHashMap", (K, V) -> new Char2ObjectLinkedOpenCustomHashMap<>(K, V, HashStrategy.INSTANCE)));
 		suite.addTest(mapSuite("Char2ObjectArrayMap", Char2ObjectArrayMap::new));
 		suite.addTest(mapSuite("Char2ObjectConcurrentOpenHashMap", Char2ObjectConcurrentOpenHashMap::new));
 		suite.addTest(navigableMapSuite("Char2ObjectRBTreeMap", Char2ObjectRBTreeMap::new));
@@ -58,6 +63,13 @@ public class Char2ObjectMapTests extends TestCase
 		return builder.named(name).createTestSuite();
 	}
 	
+	private static class HashStrategy implements CharStrategy {
+		static final HashStrategy INSTANCE = new HashStrategy();
+		@Override
+		public int hashCode(char o) { return Character.hashCode(o); }
+		@Override
+		public boolean equals(char key, char value) { return key == value; }
+	}
 	private static String[] createValues() {
 		return new String[]{"January", "February", "March", "April", "May", "below view", "below view", "above view", "above view"};
 	}

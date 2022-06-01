@@ -20,12 +20,15 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import speiger.src.collections.chars.maps.impl.concurrent.Char2BooleanConcurrentOpenHashMap;
 import speiger.src.collections.chars.maps.impl.hash.Char2BooleanLinkedOpenHashMap;
+import speiger.src.collections.chars.maps.impl.customHash.Char2BooleanOpenCustomHashMap;
+import speiger.src.collections.chars.maps.impl.customHash.Char2BooleanLinkedOpenCustomHashMap;
 import speiger.src.collections.chars.maps.impl.hash.Char2BooleanOpenHashMap;
 import speiger.src.collections.chars.maps.impl.misc.Char2BooleanArrayMap;
 import speiger.src.collections.chars.maps.impl.tree.Char2BooleanAVLTreeMap;
 import speiger.src.collections.chars.maps.impl.tree.Char2BooleanRBTreeMap;
 import speiger.src.collections.chars.maps.interfaces.Char2BooleanMap;
 import speiger.src.collections.chars.maps.interfaces.Char2BooleanSortedMap;
+import speiger.src.collections.chars.utils.CharStrategy;
 import speiger.src.testers.chars.builder.maps.Char2BooleanMapTestSuiteBuilder;
 import speiger.src.testers.chars.builder.maps.Char2BooleanNavigableMapTestSuiteBuilder;
 import speiger.src.testers.chars.impl.maps.SimpleChar2BooleanMapTestGenerator;
@@ -54,6 +57,8 @@ public class Char2BooleanMapTests extends TestCase
 	public static void suite(TestSuite suite) {
 		suite.addTest(mapSuite("Char2BooleanOpenHashMap", Char2BooleanOpenHashMap::new));
 		suite.addTest(mapSuite("Char2BooleanLinkedOpenHashMap", Char2BooleanLinkedOpenHashMap::new));
+		suite.addTest(mapSuite("Char2BooleanOpenCustomHashMap", (K, V) -> new Char2BooleanOpenCustomHashMap(K, V, HashStrategy.INSTANCE)));
+		suite.addTest(mapSuite("Char2BooleanLinkedOpenCustomHashMap", (K, V) -> new Char2BooleanLinkedOpenCustomHashMap(K, V, HashStrategy.INSTANCE)));
 		suite.addTest(mapSuite("Char2BooleanArrayMap", Char2BooleanArrayMap::new));
 		suite.addTest(mapSuite("Char2BooleanConcurrentOpenHashMap", Char2BooleanConcurrentOpenHashMap::new));
 		suite.addTest(navigableMapSuite("Char2BooleanRBTreeMap", Char2BooleanRBTreeMap::new));
@@ -74,6 +79,13 @@ public class Char2BooleanMapTests extends TestCase
 		return builder.named(name).createTestSuite();
 	}
 	
+	private static class HashStrategy implements CharStrategy {
+		static final HashStrategy INSTANCE = new HashStrategy();
+		@Override
+		public int hashCode(char o) { return Character.hashCode(o); }
+		@Override
+		public boolean equals(char key, char value) { return key == value; }
+	}
 	public static List<Method> getSuppression() {
 		List<Method> list = new ArrayList<>();
 		TestUtils.getSurpession(list, Char2BooleanMapComputeTester.class, "testCompute_absentToPresent", "testCompute_presentToPresent");

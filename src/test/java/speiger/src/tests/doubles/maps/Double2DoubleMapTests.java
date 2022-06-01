@@ -12,12 +12,15 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import speiger.src.collections.doubles.maps.impl.concurrent.Double2DoubleConcurrentOpenHashMap;
 import speiger.src.collections.doubles.maps.impl.hash.Double2DoubleLinkedOpenHashMap;
+import speiger.src.collections.doubles.maps.impl.customHash.Double2DoubleOpenCustomHashMap;
+import speiger.src.collections.doubles.maps.impl.customHash.Double2DoubleLinkedOpenCustomHashMap;
 import speiger.src.collections.doubles.maps.impl.hash.Double2DoubleOpenHashMap;
 import speiger.src.collections.doubles.maps.impl.misc.Double2DoubleArrayMap;
 import speiger.src.collections.doubles.maps.impl.tree.Double2DoubleAVLTreeMap;
 import speiger.src.collections.doubles.maps.impl.tree.Double2DoubleRBTreeMap;
 import speiger.src.collections.doubles.maps.interfaces.Double2DoubleMap;
 import speiger.src.collections.doubles.maps.interfaces.Double2DoubleSortedMap;
+import speiger.src.collections.doubles.utils.DoubleStrategy;
 import speiger.src.testers.doubles.builder.maps.Double2DoubleMapTestSuiteBuilder;
 import speiger.src.testers.doubles.builder.maps.Double2DoubleNavigableMapTestSuiteBuilder;
 import speiger.src.testers.doubles.impl.maps.SimpleDouble2DoubleMapTestGenerator;
@@ -36,6 +39,8 @@ public class Double2DoubleMapTests extends TestCase
 	public static void suite(TestSuite suite) {
 		suite.addTest(mapSuite("Double2DoubleOpenHashMap", Double2DoubleOpenHashMap::new));
 		suite.addTest(mapSuite("Double2DoubleLinkedOpenHashMap", Double2DoubleLinkedOpenHashMap::new));
+		suite.addTest(mapSuite("Double2DoubleOpenCustomHashMap", (K, V) -> new Double2DoubleOpenCustomHashMap(K, V, HashStrategy.INSTANCE)));
+		suite.addTest(mapSuite("Double2DoubleLinkedOpenCustomHashMap", (K, V) -> new Double2DoubleLinkedOpenCustomHashMap(K, V, HashStrategy.INSTANCE)));
 		suite.addTest(mapSuite("Double2DoubleArrayMap", Double2DoubleArrayMap::new));
 		suite.addTest(mapSuite("Double2DoubleConcurrentOpenHashMap", Double2DoubleConcurrentOpenHashMap::new));
 		suite.addTest(navigableMapSuite("Double2DoubleRBTreeMap", Double2DoubleRBTreeMap::new));
@@ -54,4 +59,11 @@ public class Double2DoubleMapTests extends TestCase
 		return builder.named(name).createTestSuite();
 	}
 	
+	private static class HashStrategy implements DoubleStrategy {
+		static final HashStrategy INSTANCE = new HashStrategy();
+		@Override
+		public int hashCode(double o) { return Double.hashCode(o); }
+		@Override
+		public boolean equals(double key, double value) { return Double.doubleToLongBits(key) == Double.doubleToLongBits(value); }
+	}
 }

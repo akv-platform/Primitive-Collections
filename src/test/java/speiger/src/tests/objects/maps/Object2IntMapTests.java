@@ -1,5 +1,6 @@
 package speiger.src.tests.objects.maps;
 
+import java.util.Objects;
 import java.util.function.BiFunction;
 
 import com.google.common.collect.testing.features.CollectionFeature;
@@ -12,12 +13,15 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import speiger.src.collections.objects.maps.impl.concurrent.Object2IntConcurrentOpenHashMap;
 import speiger.src.collections.objects.maps.impl.hash.Object2IntLinkedOpenHashMap;
+import speiger.src.collections.objects.maps.impl.customHash.Object2IntOpenCustomHashMap;
+import speiger.src.collections.objects.maps.impl.customHash.Object2IntLinkedOpenCustomHashMap;
 import speiger.src.collections.objects.maps.impl.hash.Object2IntOpenHashMap;
 import speiger.src.collections.objects.maps.impl.misc.Object2IntArrayMap;
 import speiger.src.collections.objects.maps.impl.tree.Object2IntAVLTreeMap;
 import speiger.src.collections.objects.maps.impl.tree.Object2IntRBTreeMap;
 import speiger.src.collections.objects.maps.interfaces.Object2IntMap;
 import speiger.src.collections.objects.maps.interfaces.Object2IntSortedMap;
+import speiger.src.collections.objects.utils.ObjectStrategy;
 import speiger.src.testers.objects.builder.maps.Object2IntMapTestSuiteBuilder;
 import speiger.src.testers.objects.builder.maps.Object2IntNavigableMapTestSuiteBuilder;
 import speiger.src.testers.objects.impl.maps.SimpleObject2IntMapTestGenerator;
@@ -36,6 +40,8 @@ public class Object2IntMapTests extends TestCase
 	public static void suite(TestSuite suite) {
 		suite.addTest(mapSuite("Object2IntOpenHashMap", Object2IntOpenHashMap::new));
 		suite.addTest(mapSuite("Object2IntLinkedOpenHashMap", Object2IntLinkedOpenHashMap::new));
+		suite.addTest(mapSuite("Object2IntOpenCustomHashMap", (K, V) -> new Object2IntOpenCustomHashMap<>(K, V, HashStrategy.INSTANCE)));
+		suite.addTest(mapSuite("Object2IntLinkedOpenCustomHashMap", (K, V) -> new Object2IntLinkedOpenCustomHashMap<>(K, V, HashStrategy.INSTANCE)));
 		suite.addTest(mapSuite("Object2IntArrayMap", Object2IntArrayMap::new));
 		suite.addTest(mapSuite("Object2IntConcurrentOpenHashMap", Object2IntConcurrentOpenHashMap::new));
 		suite.addTest(navigableMapSuite("Object2IntRBTreeMap", Object2IntRBTreeMap::new));
@@ -58,6 +64,13 @@ public class Object2IntMapTests extends TestCase
 		return builder.named(name).createTestSuite();
 	}
 	
+	private static class HashStrategy implements ObjectStrategy<String> {
+		static final HashStrategy INSTANCE = new HashStrategy();
+		@Override
+		public int hashCode(String o) { return Objects.hashCode(o); }
+		@Override
+		public boolean equals(String key, String value) { return Objects.equals(key, value); }
+	}
 	private static String[] createKeys() {
 		return new String[]{"one", "two", "three", "four", "five", "!! a", "!! b", "~~ a", "~~ b"};
 	}

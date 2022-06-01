@@ -12,12 +12,15 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import speiger.src.collections.chars.maps.impl.concurrent.Char2LongConcurrentOpenHashMap;
 import speiger.src.collections.chars.maps.impl.hash.Char2LongLinkedOpenHashMap;
+import speiger.src.collections.chars.maps.impl.customHash.Char2LongOpenCustomHashMap;
+import speiger.src.collections.chars.maps.impl.customHash.Char2LongLinkedOpenCustomHashMap;
 import speiger.src.collections.chars.maps.impl.hash.Char2LongOpenHashMap;
 import speiger.src.collections.chars.maps.impl.misc.Char2LongArrayMap;
 import speiger.src.collections.chars.maps.impl.tree.Char2LongAVLTreeMap;
 import speiger.src.collections.chars.maps.impl.tree.Char2LongRBTreeMap;
 import speiger.src.collections.chars.maps.interfaces.Char2LongMap;
 import speiger.src.collections.chars.maps.interfaces.Char2LongSortedMap;
+import speiger.src.collections.chars.utils.CharStrategy;
 import speiger.src.testers.chars.builder.maps.Char2LongMapTestSuiteBuilder;
 import speiger.src.testers.chars.builder.maps.Char2LongNavigableMapTestSuiteBuilder;
 import speiger.src.testers.chars.impl.maps.SimpleChar2LongMapTestGenerator;
@@ -36,6 +39,8 @@ public class Char2LongMapTests extends TestCase
 	public static void suite(TestSuite suite) {
 		suite.addTest(mapSuite("Char2LongOpenHashMap", Char2LongOpenHashMap::new));
 		suite.addTest(mapSuite("Char2LongLinkedOpenHashMap", Char2LongLinkedOpenHashMap::new));
+		suite.addTest(mapSuite("Char2LongOpenCustomHashMap", (K, V) -> new Char2LongOpenCustomHashMap(K, V, HashStrategy.INSTANCE)));
+		suite.addTest(mapSuite("Char2LongLinkedOpenCustomHashMap", (K, V) -> new Char2LongLinkedOpenCustomHashMap(K, V, HashStrategy.INSTANCE)));
 		suite.addTest(mapSuite("Char2LongArrayMap", Char2LongArrayMap::new));
 		suite.addTest(mapSuite("Char2LongConcurrentOpenHashMap", Char2LongConcurrentOpenHashMap::new));
 		suite.addTest(navigableMapSuite("Char2LongRBTreeMap", Char2LongRBTreeMap::new));
@@ -54,4 +59,11 @@ public class Char2LongMapTests extends TestCase
 		return builder.named(name).createTestSuite();
 	}
 	
+	private static class HashStrategy implements CharStrategy {
+		static final HashStrategy INSTANCE = new HashStrategy();
+		@Override
+		public int hashCode(char o) { return Character.hashCode(o); }
+		@Override
+		public boolean equals(char key, char value) { return key == value; }
+	}
 }

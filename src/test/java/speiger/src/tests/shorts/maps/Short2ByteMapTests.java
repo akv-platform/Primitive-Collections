@@ -12,12 +12,15 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import speiger.src.collections.shorts.maps.impl.concurrent.Short2ByteConcurrentOpenHashMap;
 import speiger.src.collections.shorts.maps.impl.hash.Short2ByteLinkedOpenHashMap;
+import speiger.src.collections.shorts.maps.impl.customHash.Short2ByteOpenCustomHashMap;
+import speiger.src.collections.shorts.maps.impl.customHash.Short2ByteLinkedOpenCustomHashMap;
 import speiger.src.collections.shorts.maps.impl.hash.Short2ByteOpenHashMap;
 import speiger.src.collections.shorts.maps.impl.misc.Short2ByteArrayMap;
 import speiger.src.collections.shorts.maps.impl.tree.Short2ByteAVLTreeMap;
 import speiger.src.collections.shorts.maps.impl.tree.Short2ByteRBTreeMap;
 import speiger.src.collections.shorts.maps.interfaces.Short2ByteMap;
 import speiger.src.collections.shorts.maps.interfaces.Short2ByteSortedMap;
+import speiger.src.collections.shorts.utils.ShortStrategy;
 import speiger.src.testers.shorts.builder.maps.Short2ByteMapTestSuiteBuilder;
 import speiger.src.testers.shorts.builder.maps.Short2ByteNavigableMapTestSuiteBuilder;
 import speiger.src.testers.shorts.impl.maps.SimpleShort2ByteMapTestGenerator;
@@ -36,6 +39,8 @@ public class Short2ByteMapTests extends TestCase
 	public static void suite(TestSuite suite) {
 		suite.addTest(mapSuite("Short2ByteOpenHashMap", Short2ByteOpenHashMap::new));
 		suite.addTest(mapSuite("Short2ByteLinkedOpenHashMap", Short2ByteLinkedOpenHashMap::new));
+		suite.addTest(mapSuite("Short2ByteOpenCustomHashMap", (K, V) -> new Short2ByteOpenCustomHashMap(K, V, HashStrategy.INSTANCE)));
+		suite.addTest(mapSuite("Short2ByteLinkedOpenCustomHashMap", (K, V) -> new Short2ByteLinkedOpenCustomHashMap(K, V, HashStrategy.INSTANCE)));
 		suite.addTest(mapSuite("Short2ByteArrayMap", Short2ByteArrayMap::new));
 		suite.addTest(mapSuite("Short2ByteConcurrentOpenHashMap", Short2ByteConcurrentOpenHashMap::new));
 		suite.addTest(navigableMapSuite("Short2ByteRBTreeMap", Short2ByteRBTreeMap::new));
@@ -54,4 +59,11 @@ public class Short2ByteMapTests extends TestCase
 		return builder.named(name).createTestSuite();
 	}
 	
+	private static class HashStrategy implements ShortStrategy {
+		static final HashStrategy INSTANCE = new HashStrategy();
+		@Override
+		public int hashCode(short o) { return Short.hashCode(o); }
+		@Override
+		public boolean equals(short key, short value) { return key == value; }
+	}
 }

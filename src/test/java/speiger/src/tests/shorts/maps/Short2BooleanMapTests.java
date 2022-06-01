@@ -20,12 +20,15 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import speiger.src.collections.shorts.maps.impl.concurrent.Short2BooleanConcurrentOpenHashMap;
 import speiger.src.collections.shorts.maps.impl.hash.Short2BooleanLinkedOpenHashMap;
+import speiger.src.collections.shorts.maps.impl.customHash.Short2BooleanOpenCustomHashMap;
+import speiger.src.collections.shorts.maps.impl.customHash.Short2BooleanLinkedOpenCustomHashMap;
 import speiger.src.collections.shorts.maps.impl.hash.Short2BooleanOpenHashMap;
 import speiger.src.collections.shorts.maps.impl.misc.Short2BooleanArrayMap;
 import speiger.src.collections.shorts.maps.impl.tree.Short2BooleanAVLTreeMap;
 import speiger.src.collections.shorts.maps.impl.tree.Short2BooleanRBTreeMap;
 import speiger.src.collections.shorts.maps.interfaces.Short2BooleanMap;
 import speiger.src.collections.shorts.maps.interfaces.Short2BooleanSortedMap;
+import speiger.src.collections.shorts.utils.ShortStrategy;
 import speiger.src.testers.shorts.builder.maps.Short2BooleanMapTestSuiteBuilder;
 import speiger.src.testers.shorts.builder.maps.Short2BooleanNavigableMapTestSuiteBuilder;
 import speiger.src.testers.shorts.impl.maps.SimpleShort2BooleanMapTestGenerator;
@@ -54,6 +57,8 @@ public class Short2BooleanMapTests extends TestCase
 	public static void suite(TestSuite suite) {
 		suite.addTest(mapSuite("Short2BooleanOpenHashMap", Short2BooleanOpenHashMap::new));
 		suite.addTest(mapSuite("Short2BooleanLinkedOpenHashMap", Short2BooleanLinkedOpenHashMap::new));
+		suite.addTest(mapSuite("Short2BooleanOpenCustomHashMap", (K, V) -> new Short2BooleanOpenCustomHashMap(K, V, HashStrategy.INSTANCE)));
+		suite.addTest(mapSuite("Short2BooleanLinkedOpenCustomHashMap", (K, V) -> new Short2BooleanLinkedOpenCustomHashMap(K, V, HashStrategy.INSTANCE)));
 		suite.addTest(mapSuite("Short2BooleanArrayMap", Short2BooleanArrayMap::new));
 		suite.addTest(mapSuite("Short2BooleanConcurrentOpenHashMap", Short2BooleanConcurrentOpenHashMap::new));
 		suite.addTest(navigableMapSuite("Short2BooleanRBTreeMap", Short2BooleanRBTreeMap::new));
@@ -74,6 +79,13 @@ public class Short2BooleanMapTests extends TestCase
 		return builder.named(name).createTestSuite();
 	}
 	
+	private static class HashStrategy implements ShortStrategy {
+		static final HashStrategy INSTANCE = new HashStrategy();
+		@Override
+		public int hashCode(short o) { return Short.hashCode(o); }
+		@Override
+		public boolean equals(short key, short value) { return key == value; }
+	}
 	public static List<Method> getSuppression() {
 		List<Method> list = new ArrayList<>();
 		TestUtils.getSurpession(list, Short2BooleanMapComputeTester.class, "testCompute_absentToPresent", "testCompute_presentToPresent");

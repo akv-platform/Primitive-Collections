@@ -20,12 +20,15 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import speiger.src.collections.bytes.maps.impl.concurrent.Byte2BooleanConcurrentOpenHashMap;
 import speiger.src.collections.bytes.maps.impl.hash.Byte2BooleanLinkedOpenHashMap;
+import speiger.src.collections.bytes.maps.impl.customHash.Byte2BooleanOpenCustomHashMap;
+import speiger.src.collections.bytes.maps.impl.customHash.Byte2BooleanLinkedOpenCustomHashMap;
 import speiger.src.collections.bytes.maps.impl.hash.Byte2BooleanOpenHashMap;
 import speiger.src.collections.bytes.maps.impl.misc.Byte2BooleanArrayMap;
 import speiger.src.collections.bytes.maps.impl.tree.Byte2BooleanAVLTreeMap;
 import speiger.src.collections.bytes.maps.impl.tree.Byte2BooleanRBTreeMap;
 import speiger.src.collections.bytes.maps.interfaces.Byte2BooleanMap;
 import speiger.src.collections.bytes.maps.interfaces.Byte2BooleanSortedMap;
+import speiger.src.collections.bytes.utils.ByteStrategy;
 import speiger.src.testers.bytes.builder.maps.Byte2BooleanMapTestSuiteBuilder;
 import speiger.src.testers.bytes.builder.maps.Byte2BooleanNavigableMapTestSuiteBuilder;
 import speiger.src.testers.bytes.impl.maps.SimpleByte2BooleanMapTestGenerator;
@@ -54,6 +57,8 @@ public class Byte2BooleanMapTests extends TestCase
 	public static void suite(TestSuite suite) {
 		suite.addTest(mapSuite("Byte2BooleanOpenHashMap", Byte2BooleanOpenHashMap::new));
 		suite.addTest(mapSuite("Byte2BooleanLinkedOpenHashMap", Byte2BooleanLinkedOpenHashMap::new));
+		suite.addTest(mapSuite("Byte2BooleanOpenCustomHashMap", (K, V) -> new Byte2BooleanOpenCustomHashMap(K, V, HashStrategy.INSTANCE)));
+		suite.addTest(mapSuite("Byte2BooleanLinkedOpenCustomHashMap", (K, V) -> new Byte2BooleanLinkedOpenCustomHashMap(K, V, HashStrategy.INSTANCE)));
 		suite.addTest(mapSuite("Byte2BooleanArrayMap", Byte2BooleanArrayMap::new));
 		suite.addTest(mapSuite("Byte2BooleanConcurrentOpenHashMap", Byte2BooleanConcurrentOpenHashMap::new));
 		suite.addTest(navigableMapSuite("Byte2BooleanRBTreeMap", Byte2BooleanRBTreeMap::new));
@@ -74,6 +79,13 @@ public class Byte2BooleanMapTests extends TestCase
 		return builder.named(name).createTestSuite();
 	}
 	
+	private static class HashStrategy implements ByteStrategy {
+		static final HashStrategy INSTANCE = new HashStrategy();
+		@Override
+		public int hashCode(byte o) { return Byte.hashCode(o); }
+		@Override
+		public boolean equals(byte key, byte value) { return key == value; }
+	}
 	public static List<Method> getSuppression() {
 		List<Method> list = new ArrayList<>();
 		TestUtils.getSurpession(list, Byte2BooleanMapComputeTester.class, "testCompute_absentToPresent", "testCompute_presentToPresent");

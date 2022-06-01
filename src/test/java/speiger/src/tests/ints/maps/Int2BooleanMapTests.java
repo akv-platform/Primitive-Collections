@@ -20,12 +20,15 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import speiger.src.collections.ints.maps.impl.concurrent.Int2BooleanConcurrentOpenHashMap;
 import speiger.src.collections.ints.maps.impl.hash.Int2BooleanLinkedOpenHashMap;
+import speiger.src.collections.ints.maps.impl.customHash.Int2BooleanOpenCustomHashMap;
+import speiger.src.collections.ints.maps.impl.customHash.Int2BooleanLinkedOpenCustomHashMap;
 import speiger.src.collections.ints.maps.impl.hash.Int2BooleanOpenHashMap;
 import speiger.src.collections.ints.maps.impl.misc.Int2BooleanArrayMap;
 import speiger.src.collections.ints.maps.impl.tree.Int2BooleanAVLTreeMap;
 import speiger.src.collections.ints.maps.impl.tree.Int2BooleanRBTreeMap;
 import speiger.src.collections.ints.maps.interfaces.Int2BooleanMap;
 import speiger.src.collections.ints.maps.interfaces.Int2BooleanSortedMap;
+import speiger.src.collections.ints.utils.IntStrategy;
 import speiger.src.testers.ints.builder.maps.Int2BooleanMapTestSuiteBuilder;
 import speiger.src.testers.ints.builder.maps.Int2BooleanNavigableMapTestSuiteBuilder;
 import speiger.src.testers.ints.impl.maps.SimpleInt2BooleanMapTestGenerator;
@@ -54,6 +57,8 @@ public class Int2BooleanMapTests extends TestCase
 	public static void suite(TestSuite suite) {
 		suite.addTest(mapSuite("Int2BooleanOpenHashMap", Int2BooleanOpenHashMap::new));
 		suite.addTest(mapSuite("Int2BooleanLinkedOpenHashMap", Int2BooleanLinkedOpenHashMap::new));
+		suite.addTest(mapSuite("Int2BooleanOpenCustomHashMap", (K, V) -> new Int2BooleanOpenCustomHashMap(K, V, HashStrategy.INSTANCE)));
+		suite.addTest(mapSuite("Int2BooleanLinkedOpenCustomHashMap", (K, V) -> new Int2BooleanLinkedOpenCustomHashMap(K, V, HashStrategy.INSTANCE)));
 		suite.addTest(mapSuite("Int2BooleanArrayMap", Int2BooleanArrayMap::new));
 		suite.addTest(mapSuite("Int2BooleanConcurrentOpenHashMap", Int2BooleanConcurrentOpenHashMap::new));
 		suite.addTest(navigableMapSuite("Int2BooleanRBTreeMap", Int2BooleanRBTreeMap::new));
@@ -74,6 +79,13 @@ public class Int2BooleanMapTests extends TestCase
 		return builder.named(name).createTestSuite();
 	}
 	
+	private static class HashStrategy implements IntStrategy {
+		static final HashStrategy INSTANCE = new HashStrategy();
+		@Override
+		public int hashCode(int o) { return Integer.hashCode(o); }
+		@Override
+		public boolean equals(int key, int value) { return key == value; }
+	}
 	public static List<Method> getSuppression() {
 		List<Method> list = new ArrayList<>();
 		TestUtils.getSurpession(list, Int2BooleanMapComputeTester.class, "testCompute_absentToPresent", "testCompute_presentToPresent");

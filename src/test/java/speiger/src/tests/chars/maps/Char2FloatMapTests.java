@@ -12,12 +12,15 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import speiger.src.collections.chars.maps.impl.concurrent.Char2FloatConcurrentOpenHashMap;
 import speiger.src.collections.chars.maps.impl.hash.Char2FloatLinkedOpenHashMap;
+import speiger.src.collections.chars.maps.impl.customHash.Char2FloatOpenCustomHashMap;
+import speiger.src.collections.chars.maps.impl.customHash.Char2FloatLinkedOpenCustomHashMap;
 import speiger.src.collections.chars.maps.impl.hash.Char2FloatOpenHashMap;
 import speiger.src.collections.chars.maps.impl.misc.Char2FloatArrayMap;
 import speiger.src.collections.chars.maps.impl.tree.Char2FloatAVLTreeMap;
 import speiger.src.collections.chars.maps.impl.tree.Char2FloatRBTreeMap;
 import speiger.src.collections.chars.maps.interfaces.Char2FloatMap;
 import speiger.src.collections.chars.maps.interfaces.Char2FloatSortedMap;
+import speiger.src.collections.chars.utils.CharStrategy;
 import speiger.src.testers.chars.builder.maps.Char2FloatMapTestSuiteBuilder;
 import speiger.src.testers.chars.builder.maps.Char2FloatNavigableMapTestSuiteBuilder;
 import speiger.src.testers.chars.impl.maps.SimpleChar2FloatMapTestGenerator;
@@ -36,6 +39,8 @@ public class Char2FloatMapTests extends TestCase
 	public static void suite(TestSuite suite) {
 		suite.addTest(mapSuite("Char2FloatOpenHashMap", Char2FloatOpenHashMap::new));
 		suite.addTest(mapSuite("Char2FloatLinkedOpenHashMap", Char2FloatLinkedOpenHashMap::new));
+		suite.addTest(mapSuite("Char2FloatOpenCustomHashMap", (K, V) -> new Char2FloatOpenCustomHashMap(K, V, HashStrategy.INSTANCE)));
+		suite.addTest(mapSuite("Char2FloatLinkedOpenCustomHashMap", (K, V) -> new Char2FloatLinkedOpenCustomHashMap(K, V, HashStrategy.INSTANCE)));
 		suite.addTest(mapSuite("Char2FloatArrayMap", Char2FloatArrayMap::new));
 		suite.addTest(mapSuite("Char2FloatConcurrentOpenHashMap", Char2FloatConcurrentOpenHashMap::new));
 		suite.addTest(navigableMapSuite("Char2FloatRBTreeMap", Char2FloatRBTreeMap::new));
@@ -54,4 +59,11 @@ public class Char2FloatMapTests extends TestCase
 		return builder.named(name).createTestSuite();
 	}
 	
+	private static class HashStrategy implements CharStrategy {
+		static final HashStrategy INSTANCE = new HashStrategy();
+		@Override
+		public int hashCode(char o) { return Character.hashCode(o); }
+		@Override
+		public boolean equals(char key, char value) { return key == value; }
+	}
 }

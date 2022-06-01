@@ -12,12 +12,15 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import speiger.src.collections.longs.maps.impl.concurrent.Long2FloatConcurrentOpenHashMap;
 import speiger.src.collections.longs.maps.impl.hash.Long2FloatLinkedOpenHashMap;
+import speiger.src.collections.longs.maps.impl.customHash.Long2FloatOpenCustomHashMap;
+import speiger.src.collections.longs.maps.impl.customHash.Long2FloatLinkedOpenCustomHashMap;
 import speiger.src.collections.longs.maps.impl.hash.Long2FloatOpenHashMap;
 import speiger.src.collections.longs.maps.impl.misc.Long2FloatArrayMap;
 import speiger.src.collections.longs.maps.impl.tree.Long2FloatAVLTreeMap;
 import speiger.src.collections.longs.maps.impl.tree.Long2FloatRBTreeMap;
 import speiger.src.collections.longs.maps.interfaces.Long2FloatMap;
 import speiger.src.collections.longs.maps.interfaces.Long2FloatSortedMap;
+import speiger.src.collections.longs.utils.LongStrategy;
 import speiger.src.testers.longs.builder.maps.Long2FloatMapTestSuiteBuilder;
 import speiger.src.testers.longs.builder.maps.Long2FloatNavigableMapTestSuiteBuilder;
 import speiger.src.testers.longs.impl.maps.SimpleLong2FloatMapTestGenerator;
@@ -36,6 +39,8 @@ public class Long2FloatMapTests extends TestCase
 	public static void suite(TestSuite suite) {
 		suite.addTest(mapSuite("Long2FloatOpenHashMap", Long2FloatOpenHashMap::new));
 		suite.addTest(mapSuite("Long2FloatLinkedOpenHashMap", Long2FloatLinkedOpenHashMap::new));
+		suite.addTest(mapSuite("Long2FloatOpenCustomHashMap", (K, V) -> new Long2FloatOpenCustomHashMap(K, V, HashStrategy.INSTANCE)));
+		suite.addTest(mapSuite("Long2FloatLinkedOpenCustomHashMap", (K, V) -> new Long2FloatLinkedOpenCustomHashMap(K, V, HashStrategy.INSTANCE)));
 		suite.addTest(mapSuite("Long2FloatArrayMap", Long2FloatArrayMap::new));
 		suite.addTest(mapSuite("Long2FloatConcurrentOpenHashMap", Long2FloatConcurrentOpenHashMap::new));
 		suite.addTest(navigableMapSuite("Long2FloatRBTreeMap", Long2FloatRBTreeMap::new));
@@ -54,4 +59,11 @@ public class Long2FloatMapTests extends TestCase
 		return builder.named(name).createTestSuite();
 	}
 	
+	private static class HashStrategy implements LongStrategy {
+		static final HashStrategy INSTANCE = new HashStrategy();
+		@Override
+		public int hashCode(long o) { return Long.hashCode(o); }
+		@Override
+		public boolean equals(long key, long value) { return key == value; }
+	}
 }

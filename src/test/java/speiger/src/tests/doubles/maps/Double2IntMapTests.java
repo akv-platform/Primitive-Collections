@@ -12,12 +12,15 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import speiger.src.collections.doubles.maps.impl.concurrent.Double2IntConcurrentOpenHashMap;
 import speiger.src.collections.doubles.maps.impl.hash.Double2IntLinkedOpenHashMap;
+import speiger.src.collections.doubles.maps.impl.customHash.Double2IntOpenCustomHashMap;
+import speiger.src.collections.doubles.maps.impl.customHash.Double2IntLinkedOpenCustomHashMap;
 import speiger.src.collections.doubles.maps.impl.hash.Double2IntOpenHashMap;
 import speiger.src.collections.doubles.maps.impl.misc.Double2IntArrayMap;
 import speiger.src.collections.doubles.maps.impl.tree.Double2IntAVLTreeMap;
 import speiger.src.collections.doubles.maps.impl.tree.Double2IntRBTreeMap;
 import speiger.src.collections.doubles.maps.interfaces.Double2IntMap;
 import speiger.src.collections.doubles.maps.interfaces.Double2IntSortedMap;
+import speiger.src.collections.doubles.utils.DoubleStrategy;
 import speiger.src.testers.doubles.builder.maps.Double2IntMapTestSuiteBuilder;
 import speiger.src.testers.doubles.builder.maps.Double2IntNavigableMapTestSuiteBuilder;
 import speiger.src.testers.doubles.impl.maps.SimpleDouble2IntMapTestGenerator;
@@ -36,6 +39,8 @@ public class Double2IntMapTests extends TestCase
 	public static void suite(TestSuite suite) {
 		suite.addTest(mapSuite("Double2IntOpenHashMap", Double2IntOpenHashMap::new));
 		suite.addTest(mapSuite("Double2IntLinkedOpenHashMap", Double2IntLinkedOpenHashMap::new));
+		suite.addTest(mapSuite("Double2IntOpenCustomHashMap", (K, V) -> new Double2IntOpenCustomHashMap(K, V, HashStrategy.INSTANCE)));
+		suite.addTest(mapSuite("Double2IntLinkedOpenCustomHashMap", (K, V) -> new Double2IntLinkedOpenCustomHashMap(K, V, HashStrategy.INSTANCE)));
 		suite.addTest(mapSuite("Double2IntArrayMap", Double2IntArrayMap::new));
 		suite.addTest(mapSuite("Double2IntConcurrentOpenHashMap", Double2IntConcurrentOpenHashMap::new));
 		suite.addTest(navigableMapSuite("Double2IntRBTreeMap", Double2IntRBTreeMap::new));
@@ -54,4 +59,11 @@ public class Double2IntMapTests extends TestCase
 		return builder.named(name).createTestSuite();
 	}
 	
+	private static class HashStrategy implements DoubleStrategy {
+		static final HashStrategy INSTANCE = new HashStrategy();
+		@Override
+		public int hashCode(double o) { return Double.hashCode(o); }
+		@Override
+		public boolean equals(double key, double value) { return Double.doubleToLongBits(key) == Double.doubleToLongBits(value); }
+	}
 }

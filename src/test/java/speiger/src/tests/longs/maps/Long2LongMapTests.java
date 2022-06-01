@@ -12,12 +12,15 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import speiger.src.collections.longs.maps.impl.concurrent.Long2LongConcurrentOpenHashMap;
 import speiger.src.collections.longs.maps.impl.hash.Long2LongLinkedOpenHashMap;
+import speiger.src.collections.longs.maps.impl.customHash.Long2LongOpenCustomHashMap;
+import speiger.src.collections.longs.maps.impl.customHash.Long2LongLinkedOpenCustomHashMap;
 import speiger.src.collections.longs.maps.impl.hash.Long2LongOpenHashMap;
 import speiger.src.collections.longs.maps.impl.misc.Long2LongArrayMap;
 import speiger.src.collections.longs.maps.impl.tree.Long2LongAVLTreeMap;
 import speiger.src.collections.longs.maps.impl.tree.Long2LongRBTreeMap;
 import speiger.src.collections.longs.maps.interfaces.Long2LongMap;
 import speiger.src.collections.longs.maps.interfaces.Long2LongSortedMap;
+import speiger.src.collections.longs.utils.LongStrategy;
 import speiger.src.testers.longs.builder.maps.Long2LongMapTestSuiteBuilder;
 import speiger.src.testers.longs.builder.maps.Long2LongNavigableMapTestSuiteBuilder;
 import speiger.src.testers.longs.impl.maps.SimpleLong2LongMapTestGenerator;
@@ -36,6 +39,8 @@ public class Long2LongMapTests extends TestCase
 	public static void suite(TestSuite suite) {
 		suite.addTest(mapSuite("Long2LongOpenHashMap", Long2LongOpenHashMap::new));
 		suite.addTest(mapSuite("Long2LongLinkedOpenHashMap", Long2LongLinkedOpenHashMap::new));
+		suite.addTest(mapSuite("Long2LongOpenCustomHashMap", (K, V) -> new Long2LongOpenCustomHashMap(K, V, HashStrategy.INSTANCE)));
+		suite.addTest(mapSuite("Long2LongLinkedOpenCustomHashMap", (K, V) -> new Long2LongLinkedOpenCustomHashMap(K, V, HashStrategy.INSTANCE)));
 		suite.addTest(mapSuite("Long2LongArrayMap", Long2LongArrayMap::new));
 		suite.addTest(mapSuite("Long2LongConcurrentOpenHashMap", Long2LongConcurrentOpenHashMap::new));
 		suite.addTest(navigableMapSuite("Long2LongRBTreeMap", Long2LongRBTreeMap::new));
@@ -54,4 +59,11 @@ public class Long2LongMapTests extends TestCase
 		return builder.named(name).createTestSuite();
 	}
 	
+	private static class HashStrategy implements LongStrategy {
+		static final HashStrategy INSTANCE = new HashStrategy();
+		@Override
+		public int hashCode(long o) { return Long.hashCode(o); }
+		@Override
+		public boolean equals(long key, long value) { return key == value; }
+	}
 }

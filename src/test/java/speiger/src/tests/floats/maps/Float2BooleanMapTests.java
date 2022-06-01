@@ -20,12 +20,15 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import speiger.src.collections.floats.maps.impl.concurrent.Float2BooleanConcurrentOpenHashMap;
 import speiger.src.collections.floats.maps.impl.hash.Float2BooleanLinkedOpenHashMap;
+import speiger.src.collections.floats.maps.impl.customHash.Float2BooleanOpenCustomHashMap;
+import speiger.src.collections.floats.maps.impl.customHash.Float2BooleanLinkedOpenCustomHashMap;
 import speiger.src.collections.floats.maps.impl.hash.Float2BooleanOpenHashMap;
 import speiger.src.collections.floats.maps.impl.misc.Float2BooleanArrayMap;
 import speiger.src.collections.floats.maps.impl.tree.Float2BooleanAVLTreeMap;
 import speiger.src.collections.floats.maps.impl.tree.Float2BooleanRBTreeMap;
 import speiger.src.collections.floats.maps.interfaces.Float2BooleanMap;
 import speiger.src.collections.floats.maps.interfaces.Float2BooleanSortedMap;
+import speiger.src.collections.floats.utils.FloatStrategy;
 import speiger.src.testers.floats.builder.maps.Float2BooleanMapTestSuiteBuilder;
 import speiger.src.testers.floats.builder.maps.Float2BooleanNavigableMapTestSuiteBuilder;
 import speiger.src.testers.floats.impl.maps.SimpleFloat2BooleanMapTestGenerator;
@@ -54,6 +57,8 @@ public class Float2BooleanMapTests extends TestCase
 	public static void suite(TestSuite suite) {
 		suite.addTest(mapSuite("Float2BooleanOpenHashMap", Float2BooleanOpenHashMap::new));
 		suite.addTest(mapSuite("Float2BooleanLinkedOpenHashMap", Float2BooleanLinkedOpenHashMap::new));
+		suite.addTest(mapSuite("Float2BooleanOpenCustomHashMap", (K, V) -> new Float2BooleanOpenCustomHashMap(K, V, HashStrategy.INSTANCE)));
+		suite.addTest(mapSuite("Float2BooleanLinkedOpenCustomHashMap", (K, V) -> new Float2BooleanLinkedOpenCustomHashMap(K, V, HashStrategy.INSTANCE)));
 		suite.addTest(mapSuite("Float2BooleanArrayMap", Float2BooleanArrayMap::new));
 		suite.addTest(mapSuite("Float2BooleanConcurrentOpenHashMap", Float2BooleanConcurrentOpenHashMap::new));
 		suite.addTest(navigableMapSuite("Float2BooleanRBTreeMap", Float2BooleanRBTreeMap::new));
@@ -74,6 +79,13 @@ public class Float2BooleanMapTests extends TestCase
 		return builder.named(name).createTestSuite();
 	}
 	
+	private static class HashStrategy implements FloatStrategy {
+		static final HashStrategy INSTANCE = new HashStrategy();
+		@Override
+		public int hashCode(float o) { return Float.hashCode(o); }
+		@Override
+		public boolean equals(float key, float value) { return Float.floatToIntBits(key) == Float.floatToIntBits(value); }
+	}
 	public static List<Method> getSuppression() {
 		List<Method> list = new ArrayList<>();
 		TestUtils.getSurpession(list, Float2BooleanMapComputeTester.class, "testCompute_absentToPresent", "testCompute_presentToPresent");

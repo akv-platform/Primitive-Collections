@@ -1,5 +1,6 @@
 package speiger.src.tests.objects.maps;
 
+import java.util.Objects;
 import java.util.function.BiFunction;
 
 import com.google.common.collect.testing.features.CollectionFeature;
@@ -12,12 +13,15 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import speiger.src.collections.objects.maps.impl.concurrent.Object2CharConcurrentOpenHashMap;
 import speiger.src.collections.objects.maps.impl.hash.Object2CharLinkedOpenHashMap;
+import speiger.src.collections.objects.maps.impl.customHash.Object2CharOpenCustomHashMap;
+import speiger.src.collections.objects.maps.impl.customHash.Object2CharLinkedOpenCustomHashMap;
 import speiger.src.collections.objects.maps.impl.hash.Object2CharOpenHashMap;
 import speiger.src.collections.objects.maps.impl.misc.Object2CharArrayMap;
 import speiger.src.collections.objects.maps.impl.tree.Object2CharAVLTreeMap;
 import speiger.src.collections.objects.maps.impl.tree.Object2CharRBTreeMap;
 import speiger.src.collections.objects.maps.interfaces.Object2CharMap;
 import speiger.src.collections.objects.maps.interfaces.Object2CharSortedMap;
+import speiger.src.collections.objects.utils.ObjectStrategy;
 import speiger.src.testers.objects.builder.maps.Object2CharMapTestSuiteBuilder;
 import speiger.src.testers.objects.builder.maps.Object2CharNavigableMapTestSuiteBuilder;
 import speiger.src.testers.objects.impl.maps.SimpleObject2CharMapTestGenerator;
@@ -36,6 +40,8 @@ public class Object2CharMapTests extends TestCase
 	public static void suite(TestSuite suite) {
 		suite.addTest(mapSuite("Object2CharOpenHashMap", Object2CharOpenHashMap::new));
 		suite.addTest(mapSuite("Object2CharLinkedOpenHashMap", Object2CharLinkedOpenHashMap::new));
+		suite.addTest(mapSuite("Object2CharOpenCustomHashMap", (K, V) -> new Object2CharOpenCustomHashMap<>(K, V, HashStrategy.INSTANCE)));
+		suite.addTest(mapSuite("Object2CharLinkedOpenCustomHashMap", (K, V) -> new Object2CharLinkedOpenCustomHashMap<>(K, V, HashStrategy.INSTANCE)));
 		suite.addTest(mapSuite("Object2CharArrayMap", Object2CharArrayMap::new));
 		suite.addTest(mapSuite("Object2CharConcurrentOpenHashMap", Object2CharConcurrentOpenHashMap::new));
 		suite.addTest(navigableMapSuite("Object2CharRBTreeMap", Object2CharRBTreeMap::new));
@@ -58,6 +64,13 @@ public class Object2CharMapTests extends TestCase
 		return builder.named(name).createTestSuite();
 	}
 	
+	private static class HashStrategy implements ObjectStrategy<String> {
+		static final HashStrategy INSTANCE = new HashStrategy();
+		@Override
+		public int hashCode(String o) { return Objects.hashCode(o); }
+		@Override
+		public boolean equals(String key, String value) { return Objects.equals(key, value); }
+	}
 	private static String[] createKeys() {
 		return new String[]{"one", "two", "three", "four", "five", "!! a", "!! b", "~~ a", "~~ b"};
 	}

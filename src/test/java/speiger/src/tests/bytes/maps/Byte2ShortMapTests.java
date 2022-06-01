@@ -12,12 +12,15 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import speiger.src.collections.bytes.maps.impl.concurrent.Byte2ShortConcurrentOpenHashMap;
 import speiger.src.collections.bytes.maps.impl.hash.Byte2ShortLinkedOpenHashMap;
+import speiger.src.collections.bytes.maps.impl.customHash.Byte2ShortOpenCustomHashMap;
+import speiger.src.collections.bytes.maps.impl.customHash.Byte2ShortLinkedOpenCustomHashMap;
 import speiger.src.collections.bytes.maps.impl.hash.Byte2ShortOpenHashMap;
 import speiger.src.collections.bytes.maps.impl.misc.Byte2ShortArrayMap;
 import speiger.src.collections.bytes.maps.impl.tree.Byte2ShortAVLTreeMap;
 import speiger.src.collections.bytes.maps.impl.tree.Byte2ShortRBTreeMap;
 import speiger.src.collections.bytes.maps.interfaces.Byte2ShortMap;
 import speiger.src.collections.bytes.maps.interfaces.Byte2ShortSortedMap;
+import speiger.src.collections.bytes.utils.ByteStrategy;
 import speiger.src.testers.bytes.builder.maps.Byte2ShortMapTestSuiteBuilder;
 import speiger.src.testers.bytes.builder.maps.Byte2ShortNavigableMapTestSuiteBuilder;
 import speiger.src.testers.bytes.impl.maps.SimpleByte2ShortMapTestGenerator;
@@ -36,6 +39,8 @@ public class Byte2ShortMapTests extends TestCase
 	public static void suite(TestSuite suite) {
 		suite.addTest(mapSuite("Byte2ShortOpenHashMap", Byte2ShortOpenHashMap::new));
 		suite.addTest(mapSuite("Byte2ShortLinkedOpenHashMap", Byte2ShortLinkedOpenHashMap::new));
+		suite.addTest(mapSuite("Byte2ShortOpenCustomHashMap", (K, V) -> new Byte2ShortOpenCustomHashMap(K, V, HashStrategy.INSTANCE)));
+		suite.addTest(mapSuite("Byte2ShortLinkedOpenCustomHashMap", (K, V) -> new Byte2ShortLinkedOpenCustomHashMap(K, V, HashStrategy.INSTANCE)));
 		suite.addTest(mapSuite("Byte2ShortArrayMap", Byte2ShortArrayMap::new));
 		suite.addTest(mapSuite("Byte2ShortConcurrentOpenHashMap", Byte2ShortConcurrentOpenHashMap::new));
 		suite.addTest(navigableMapSuite("Byte2ShortRBTreeMap", Byte2ShortRBTreeMap::new));
@@ -54,4 +59,11 @@ public class Byte2ShortMapTests extends TestCase
 		return builder.named(name).createTestSuite();
 	}
 	
+	private static class HashStrategy implements ByteStrategy {
+		static final HashStrategy INSTANCE = new HashStrategy();
+		@Override
+		public int hashCode(byte o) { return Byte.hashCode(o); }
+		@Override
+		public boolean equals(byte key, byte value) { return key == value; }
+	}
 }

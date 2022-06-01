@@ -1,5 +1,6 @@
 package speiger.src.tests.objects.maps;
 
+import java.util.Objects;
 import java.util.function.BiFunction;
 
 import com.google.common.collect.testing.features.CollectionFeature;
@@ -12,12 +13,15 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import speiger.src.collections.objects.maps.impl.concurrent.Object2ObjectConcurrentOpenHashMap;
 import speiger.src.collections.objects.maps.impl.hash.Object2ObjectLinkedOpenHashMap;
+import speiger.src.collections.objects.maps.impl.customHash.Object2ObjectOpenCustomHashMap;
+import speiger.src.collections.objects.maps.impl.customHash.Object2ObjectLinkedOpenCustomHashMap;
 import speiger.src.collections.objects.maps.impl.hash.Object2ObjectOpenHashMap;
 import speiger.src.collections.objects.maps.impl.misc.Object2ObjectArrayMap;
 import speiger.src.collections.objects.maps.impl.tree.Object2ObjectAVLTreeMap;
 import speiger.src.collections.objects.maps.impl.tree.Object2ObjectRBTreeMap;
 import speiger.src.collections.objects.maps.interfaces.Object2ObjectMap;
 import speiger.src.collections.objects.maps.interfaces.Object2ObjectSortedMap;
+import speiger.src.collections.objects.utils.ObjectStrategy;
 import speiger.src.testers.objects.builder.maps.Object2ObjectMapTestSuiteBuilder;
 import speiger.src.testers.objects.builder.maps.Object2ObjectNavigableMapTestSuiteBuilder;
 import speiger.src.testers.objects.impl.maps.SimpleObject2ObjectMapTestGenerator;
@@ -36,6 +40,8 @@ public class Object2ObjectMapTests extends TestCase
 	public static void suite(TestSuite suite) {
 		suite.addTest(mapSuite("Object2ObjectOpenHashMap", Object2ObjectOpenHashMap::new));
 		suite.addTest(mapSuite("Object2ObjectLinkedOpenHashMap", Object2ObjectLinkedOpenHashMap::new));
+		suite.addTest(mapSuite("Object2ObjectOpenCustomHashMap", (K, V) -> new Object2ObjectOpenCustomHashMap<>(K, V, HashStrategy.INSTANCE)));
+		suite.addTest(mapSuite("Object2ObjectLinkedOpenCustomHashMap", (K, V) -> new Object2ObjectLinkedOpenCustomHashMap<>(K, V, HashStrategy.INSTANCE)));
 		suite.addTest(mapSuite("Object2ObjectArrayMap", Object2ObjectArrayMap::new));
 		suite.addTest(mapSuite("Object2ObjectConcurrentOpenHashMap", Object2ObjectConcurrentOpenHashMap::new));
 		suite.addTest(navigableMapSuite("Object2ObjectRBTreeMap", Object2ObjectRBTreeMap::new));
@@ -60,6 +66,13 @@ public class Object2ObjectMapTests extends TestCase
 		return builder.named(name).createTestSuite();
 	}
 	
+	private static class HashStrategy implements ObjectStrategy<String> {
+		static final HashStrategy INSTANCE = new HashStrategy();
+		@Override
+		public int hashCode(String o) { return Objects.hashCode(o); }
+		@Override
+		public boolean equals(String key, String value) { return Objects.equals(key, value); }
+	}
 	private static String[] createKeys() {
 		return new String[]{"one", "two", "three", "four", "five", "!! a", "!! b", "~~ a", "~~ b"};
 	}

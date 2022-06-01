@@ -12,12 +12,15 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import speiger.src.collections.longs.maps.impl.concurrent.Long2ObjectConcurrentOpenHashMap;
 import speiger.src.collections.longs.maps.impl.hash.Long2ObjectLinkedOpenHashMap;
+import speiger.src.collections.longs.maps.impl.customHash.Long2ObjectOpenCustomHashMap;
+import speiger.src.collections.longs.maps.impl.customHash.Long2ObjectLinkedOpenCustomHashMap;
 import speiger.src.collections.longs.maps.impl.hash.Long2ObjectOpenHashMap;
 import speiger.src.collections.longs.maps.impl.misc.Long2ObjectArrayMap;
 import speiger.src.collections.longs.maps.impl.tree.Long2ObjectAVLTreeMap;
 import speiger.src.collections.longs.maps.impl.tree.Long2ObjectRBTreeMap;
 import speiger.src.collections.longs.maps.interfaces.Long2ObjectMap;
 import speiger.src.collections.longs.maps.interfaces.Long2ObjectSortedMap;
+import speiger.src.collections.longs.utils.LongStrategy;
 import speiger.src.testers.longs.builder.maps.Long2ObjectMapTestSuiteBuilder;
 import speiger.src.testers.longs.builder.maps.Long2ObjectNavigableMapTestSuiteBuilder;
 import speiger.src.testers.longs.impl.maps.SimpleLong2ObjectMapTestGenerator;
@@ -36,6 +39,8 @@ public class Long2ObjectMapTests extends TestCase
 	public static void suite(TestSuite suite) {
 		suite.addTest(mapSuite("Long2ObjectOpenHashMap", Long2ObjectOpenHashMap::new));
 		suite.addTest(mapSuite("Long2ObjectLinkedOpenHashMap", Long2ObjectLinkedOpenHashMap::new));
+		suite.addTest(mapSuite("Long2ObjectOpenCustomHashMap", (K, V) -> new Long2ObjectOpenCustomHashMap<>(K, V, HashStrategy.INSTANCE)));
+		suite.addTest(mapSuite("Long2ObjectLinkedOpenCustomHashMap", (K, V) -> new Long2ObjectLinkedOpenCustomHashMap<>(K, V, HashStrategy.INSTANCE)));
 		suite.addTest(mapSuite("Long2ObjectArrayMap", Long2ObjectArrayMap::new));
 		suite.addTest(mapSuite("Long2ObjectConcurrentOpenHashMap", Long2ObjectConcurrentOpenHashMap::new));
 		suite.addTest(navigableMapSuite("Long2ObjectRBTreeMap", Long2ObjectRBTreeMap::new));
@@ -58,6 +63,13 @@ public class Long2ObjectMapTests extends TestCase
 		return builder.named(name).createTestSuite();
 	}
 	
+	private static class HashStrategy implements LongStrategy {
+		static final HashStrategy INSTANCE = new HashStrategy();
+		@Override
+		public int hashCode(long o) { return Long.hashCode(o); }
+		@Override
+		public boolean equals(long key, long value) { return key == value; }
+	}
 	private static String[] createValues() {
 		return new String[]{"January", "February", "March", "April", "May", "below view", "below view", "above view", "above view"};
 	}

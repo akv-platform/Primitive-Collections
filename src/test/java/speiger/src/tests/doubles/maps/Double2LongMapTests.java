@@ -12,12 +12,15 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import speiger.src.collections.doubles.maps.impl.concurrent.Double2LongConcurrentOpenHashMap;
 import speiger.src.collections.doubles.maps.impl.hash.Double2LongLinkedOpenHashMap;
+import speiger.src.collections.doubles.maps.impl.customHash.Double2LongOpenCustomHashMap;
+import speiger.src.collections.doubles.maps.impl.customHash.Double2LongLinkedOpenCustomHashMap;
 import speiger.src.collections.doubles.maps.impl.hash.Double2LongOpenHashMap;
 import speiger.src.collections.doubles.maps.impl.misc.Double2LongArrayMap;
 import speiger.src.collections.doubles.maps.impl.tree.Double2LongAVLTreeMap;
 import speiger.src.collections.doubles.maps.impl.tree.Double2LongRBTreeMap;
 import speiger.src.collections.doubles.maps.interfaces.Double2LongMap;
 import speiger.src.collections.doubles.maps.interfaces.Double2LongSortedMap;
+import speiger.src.collections.doubles.utils.DoubleStrategy;
 import speiger.src.testers.doubles.builder.maps.Double2LongMapTestSuiteBuilder;
 import speiger.src.testers.doubles.builder.maps.Double2LongNavigableMapTestSuiteBuilder;
 import speiger.src.testers.doubles.impl.maps.SimpleDouble2LongMapTestGenerator;
@@ -36,6 +39,8 @@ public class Double2LongMapTests extends TestCase
 	public static void suite(TestSuite suite) {
 		suite.addTest(mapSuite("Double2LongOpenHashMap", Double2LongOpenHashMap::new));
 		suite.addTest(mapSuite("Double2LongLinkedOpenHashMap", Double2LongLinkedOpenHashMap::new));
+		suite.addTest(mapSuite("Double2LongOpenCustomHashMap", (K, V) -> new Double2LongOpenCustomHashMap(K, V, HashStrategy.INSTANCE)));
+		suite.addTest(mapSuite("Double2LongLinkedOpenCustomHashMap", (K, V) -> new Double2LongLinkedOpenCustomHashMap(K, V, HashStrategy.INSTANCE)));
 		suite.addTest(mapSuite("Double2LongArrayMap", Double2LongArrayMap::new));
 		suite.addTest(mapSuite("Double2LongConcurrentOpenHashMap", Double2LongConcurrentOpenHashMap::new));
 		suite.addTest(navigableMapSuite("Double2LongRBTreeMap", Double2LongRBTreeMap::new));
@@ -54,4 +59,11 @@ public class Double2LongMapTests extends TestCase
 		return builder.named(name).createTestSuite();
 	}
 	
+	private static class HashStrategy implements DoubleStrategy {
+		static final HashStrategy INSTANCE = new HashStrategy();
+		@Override
+		public int hashCode(double o) { return Double.hashCode(o); }
+		@Override
+		public boolean equals(double key, double value) { return Double.doubleToLongBits(key) == Double.doubleToLongBits(value); }
+	}
 }

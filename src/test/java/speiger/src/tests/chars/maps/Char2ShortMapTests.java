@@ -12,12 +12,15 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import speiger.src.collections.chars.maps.impl.concurrent.Char2ShortConcurrentOpenHashMap;
 import speiger.src.collections.chars.maps.impl.hash.Char2ShortLinkedOpenHashMap;
+import speiger.src.collections.chars.maps.impl.customHash.Char2ShortOpenCustomHashMap;
+import speiger.src.collections.chars.maps.impl.customHash.Char2ShortLinkedOpenCustomHashMap;
 import speiger.src.collections.chars.maps.impl.hash.Char2ShortOpenHashMap;
 import speiger.src.collections.chars.maps.impl.misc.Char2ShortArrayMap;
 import speiger.src.collections.chars.maps.impl.tree.Char2ShortAVLTreeMap;
 import speiger.src.collections.chars.maps.impl.tree.Char2ShortRBTreeMap;
 import speiger.src.collections.chars.maps.interfaces.Char2ShortMap;
 import speiger.src.collections.chars.maps.interfaces.Char2ShortSortedMap;
+import speiger.src.collections.chars.utils.CharStrategy;
 import speiger.src.testers.chars.builder.maps.Char2ShortMapTestSuiteBuilder;
 import speiger.src.testers.chars.builder.maps.Char2ShortNavigableMapTestSuiteBuilder;
 import speiger.src.testers.chars.impl.maps.SimpleChar2ShortMapTestGenerator;
@@ -36,6 +39,8 @@ public class Char2ShortMapTests extends TestCase
 	public static void suite(TestSuite suite) {
 		suite.addTest(mapSuite("Char2ShortOpenHashMap", Char2ShortOpenHashMap::new));
 		suite.addTest(mapSuite("Char2ShortLinkedOpenHashMap", Char2ShortLinkedOpenHashMap::new));
+		suite.addTest(mapSuite("Char2ShortOpenCustomHashMap", (K, V) -> new Char2ShortOpenCustomHashMap(K, V, HashStrategy.INSTANCE)));
+		suite.addTest(mapSuite("Char2ShortLinkedOpenCustomHashMap", (K, V) -> new Char2ShortLinkedOpenCustomHashMap(K, V, HashStrategy.INSTANCE)));
 		suite.addTest(mapSuite("Char2ShortArrayMap", Char2ShortArrayMap::new));
 		suite.addTest(mapSuite("Char2ShortConcurrentOpenHashMap", Char2ShortConcurrentOpenHashMap::new));
 		suite.addTest(navigableMapSuite("Char2ShortRBTreeMap", Char2ShortRBTreeMap::new));
@@ -54,4 +59,11 @@ public class Char2ShortMapTests extends TestCase
 		return builder.named(name).createTestSuite();
 	}
 	
+	private static class HashStrategy implements CharStrategy {
+		static final HashStrategy INSTANCE = new HashStrategy();
+		@Override
+		public int hashCode(char o) { return Character.hashCode(o); }
+		@Override
+		public boolean equals(char key, char value) { return key == value; }
+	}
 }

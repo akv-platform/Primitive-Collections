@@ -12,12 +12,15 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import speiger.src.collections.floats.maps.impl.concurrent.Float2CharConcurrentOpenHashMap;
 import speiger.src.collections.floats.maps.impl.hash.Float2CharLinkedOpenHashMap;
+import speiger.src.collections.floats.maps.impl.customHash.Float2CharOpenCustomHashMap;
+import speiger.src.collections.floats.maps.impl.customHash.Float2CharLinkedOpenCustomHashMap;
 import speiger.src.collections.floats.maps.impl.hash.Float2CharOpenHashMap;
 import speiger.src.collections.floats.maps.impl.misc.Float2CharArrayMap;
 import speiger.src.collections.floats.maps.impl.tree.Float2CharAVLTreeMap;
 import speiger.src.collections.floats.maps.impl.tree.Float2CharRBTreeMap;
 import speiger.src.collections.floats.maps.interfaces.Float2CharMap;
 import speiger.src.collections.floats.maps.interfaces.Float2CharSortedMap;
+import speiger.src.collections.floats.utils.FloatStrategy;
 import speiger.src.testers.floats.builder.maps.Float2CharMapTestSuiteBuilder;
 import speiger.src.testers.floats.builder.maps.Float2CharNavigableMapTestSuiteBuilder;
 import speiger.src.testers.floats.impl.maps.SimpleFloat2CharMapTestGenerator;
@@ -36,6 +39,8 @@ public class Float2CharMapTests extends TestCase
 	public static void suite(TestSuite suite) {
 		suite.addTest(mapSuite("Float2CharOpenHashMap", Float2CharOpenHashMap::new));
 		suite.addTest(mapSuite("Float2CharLinkedOpenHashMap", Float2CharLinkedOpenHashMap::new));
+		suite.addTest(mapSuite("Float2CharOpenCustomHashMap", (K, V) -> new Float2CharOpenCustomHashMap(K, V, HashStrategy.INSTANCE)));
+		suite.addTest(mapSuite("Float2CharLinkedOpenCustomHashMap", (K, V) -> new Float2CharLinkedOpenCustomHashMap(K, V, HashStrategy.INSTANCE)));
 		suite.addTest(mapSuite("Float2CharArrayMap", Float2CharArrayMap::new));
 		suite.addTest(mapSuite("Float2CharConcurrentOpenHashMap", Float2CharConcurrentOpenHashMap::new));
 		suite.addTest(navigableMapSuite("Float2CharRBTreeMap", Float2CharRBTreeMap::new));
@@ -54,4 +59,11 @@ public class Float2CharMapTests extends TestCase
 		return builder.named(name).createTestSuite();
 	}
 	
+	private static class HashStrategy implements FloatStrategy {
+		static final HashStrategy INSTANCE = new HashStrategy();
+		@Override
+		public int hashCode(float o) { return Float.hashCode(o); }
+		@Override
+		public boolean equals(float key, float value) { return Float.floatToIntBits(key) == Float.floatToIntBits(value); }
+	}
 }

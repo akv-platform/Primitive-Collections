@@ -12,12 +12,15 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import speiger.src.collections.bytes.maps.impl.concurrent.Byte2FloatConcurrentOpenHashMap;
 import speiger.src.collections.bytes.maps.impl.hash.Byte2FloatLinkedOpenHashMap;
+import speiger.src.collections.bytes.maps.impl.customHash.Byte2FloatOpenCustomHashMap;
+import speiger.src.collections.bytes.maps.impl.customHash.Byte2FloatLinkedOpenCustomHashMap;
 import speiger.src.collections.bytes.maps.impl.hash.Byte2FloatOpenHashMap;
 import speiger.src.collections.bytes.maps.impl.misc.Byte2FloatArrayMap;
 import speiger.src.collections.bytes.maps.impl.tree.Byte2FloatAVLTreeMap;
 import speiger.src.collections.bytes.maps.impl.tree.Byte2FloatRBTreeMap;
 import speiger.src.collections.bytes.maps.interfaces.Byte2FloatMap;
 import speiger.src.collections.bytes.maps.interfaces.Byte2FloatSortedMap;
+import speiger.src.collections.bytes.utils.ByteStrategy;
 import speiger.src.testers.bytes.builder.maps.Byte2FloatMapTestSuiteBuilder;
 import speiger.src.testers.bytes.builder.maps.Byte2FloatNavigableMapTestSuiteBuilder;
 import speiger.src.testers.bytes.impl.maps.SimpleByte2FloatMapTestGenerator;
@@ -36,6 +39,8 @@ public class Byte2FloatMapTests extends TestCase
 	public static void suite(TestSuite suite) {
 		suite.addTest(mapSuite("Byte2FloatOpenHashMap", Byte2FloatOpenHashMap::new));
 		suite.addTest(mapSuite("Byte2FloatLinkedOpenHashMap", Byte2FloatLinkedOpenHashMap::new));
+		suite.addTest(mapSuite("Byte2FloatOpenCustomHashMap", (K, V) -> new Byte2FloatOpenCustomHashMap(K, V, HashStrategy.INSTANCE)));
+		suite.addTest(mapSuite("Byte2FloatLinkedOpenCustomHashMap", (K, V) -> new Byte2FloatLinkedOpenCustomHashMap(K, V, HashStrategy.INSTANCE)));
 		suite.addTest(mapSuite("Byte2FloatArrayMap", Byte2FloatArrayMap::new));
 		suite.addTest(mapSuite("Byte2FloatConcurrentOpenHashMap", Byte2FloatConcurrentOpenHashMap::new));
 		suite.addTest(navigableMapSuite("Byte2FloatRBTreeMap", Byte2FloatRBTreeMap::new));
@@ -54,4 +59,11 @@ public class Byte2FloatMapTests extends TestCase
 		return builder.named(name).createTestSuite();
 	}
 	
+	private static class HashStrategy implements ByteStrategy {
+		static final HashStrategy INSTANCE = new HashStrategy();
+		@Override
+		public int hashCode(byte o) { return Byte.hashCode(o); }
+		@Override
+		public boolean equals(byte key, byte value) { return key == value; }
+	}
 }

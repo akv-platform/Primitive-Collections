@@ -12,12 +12,15 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import speiger.src.collections.shorts.maps.impl.concurrent.Short2LongConcurrentOpenHashMap;
 import speiger.src.collections.shorts.maps.impl.hash.Short2LongLinkedOpenHashMap;
+import speiger.src.collections.shorts.maps.impl.customHash.Short2LongOpenCustomHashMap;
+import speiger.src.collections.shorts.maps.impl.customHash.Short2LongLinkedOpenCustomHashMap;
 import speiger.src.collections.shorts.maps.impl.hash.Short2LongOpenHashMap;
 import speiger.src.collections.shorts.maps.impl.misc.Short2LongArrayMap;
 import speiger.src.collections.shorts.maps.impl.tree.Short2LongAVLTreeMap;
 import speiger.src.collections.shorts.maps.impl.tree.Short2LongRBTreeMap;
 import speiger.src.collections.shorts.maps.interfaces.Short2LongMap;
 import speiger.src.collections.shorts.maps.interfaces.Short2LongSortedMap;
+import speiger.src.collections.shorts.utils.ShortStrategy;
 import speiger.src.testers.shorts.builder.maps.Short2LongMapTestSuiteBuilder;
 import speiger.src.testers.shorts.builder.maps.Short2LongNavigableMapTestSuiteBuilder;
 import speiger.src.testers.shorts.impl.maps.SimpleShort2LongMapTestGenerator;
@@ -36,6 +39,8 @@ public class Short2LongMapTests extends TestCase
 	public static void suite(TestSuite suite) {
 		suite.addTest(mapSuite("Short2LongOpenHashMap", Short2LongOpenHashMap::new));
 		suite.addTest(mapSuite("Short2LongLinkedOpenHashMap", Short2LongLinkedOpenHashMap::new));
+		suite.addTest(mapSuite("Short2LongOpenCustomHashMap", (K, V) -> new Short2LongOpenCustomHashMap(K, V, HashStrategy.INSTANCE)));
+		suite.addTest(mapSuite("Short2LongLinkedOpenCustomHashMap", (K, V) -> new Short2LongLinkedOpenCustomHashMap(K, V, HashStrategy.INSTANCE)));
 		suite.addTest(mapSuite("Short2LongArrayMap", Short2LongArrayMap::new));
 		suite.addTest(mapSuite("Short2LongConcurrentOpenHashMap", Short2LongConcurrentOpenHashMap::new));
 		suite.addTest(navigableMapSuite("Short2LongRBTreeMap", Short2LongRBTreeMap::new));
@@ -54,4 +59,11 @@ public class Short2LongMapTests extends TestCase
 		return builder.named(name).createTestSuite();
 	}
 	
+	private static class HashStrategy implements ShortStrategy {
+		static final HashStrategy INSTANCE = new HashStrategy();
+		@Override
+		public int hashCode(short o) { return Short.hashCode(o); }
+		@Override
+		public boolean equals(short key, short value) { return key == value; }
+	}
 }

@@ -12,12 +12,15 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import speiger.src.collections.doubles.maps.impl.concurrent.Double2FloatConcurrentOpenHashMap;
 import speiger.src.collections.doubles.maps.impl.hash.Double2FloatLinkedOpenHashMap;
+import speiger.src.collections.doubles.maps.impl.customHash.Double2FloatOpenCustomHashMap;
+import speiger.src.collections.doubles.maps.impl.customHash.Double2FloatLinkedOpenCustomHashMap;
 import speiger.src.collections.doubles.maps.impl.hash.Double2FloatOpenHashMap;
 import speiger.src.collections.doubles.maps.impl.misc.Double2FloatArrayMap;
 import speiger.src.collections.doubles.maps.impl.tree.Double2FloatAVLTreeMap;
 import speiger.src.collections.doubles.maps.impl.tree.Double2FloatRBTreeMap;
 import speiger.src.collections.doubles.maps.interfaces.Double2FloatMap;
 import speiger.src.collections.doubles.maps.interfaces.Double2FloatSortedMap;
+import speiger.src.collections.doubles.utils.DoubleStrategy;
 import speiger.src.testers.doubles.builder.maps.Double2FloatMapTestSuiteBuilder;
 import speiger.src.testers.doubles.builder.maps.Double2FloatNavigableMapTestSuiteBuilder;
 import speiger.src.testers.doubles.impl.maps.SimpleDouble2FloatMapTestGenerator;
@@ -36,6 +39,8 @@ public class Double2FloatMapTests extends TestCase
 	public static void suite(TestSuite suite) {
 		suite.addTest(mapSuite("Double2FloatOpenHashMap", Double2FloatOpenHashMap::new));
 		suite.addTest(mapSuite("Double2FloatLinkedOpenHashMap", Double2FloatLinkedOpenHashMap::new));
+		suite.addTest(mapSuite("Double2FloatOpenCustomHashMap", (K, V) -> new Double2FloatOpenCustomHashMap(K, V, HashStrategy.INSTANCE)));
+		suite.addTest(mapSuite("Double2FloatLinkedOpenCustomHashMap", (K, V) -> new Double2FloatLinkedOpenCustomHashMap(K, V, HashStrategy.INSTANCE)));
 		suite.addTest(mapSuite("Double2FloatArrayMap", Double2FloatArrayMap::new));
 		suite.addTest(mapSuite("Double2FloatConcurrentOpenHashMap", Double2FloatConcurrentOpenHashMap::new));
 		suite.addTest(navigableMapSuite("Double2FloatRBTreeMap", Double2FloatRBTreeMap::new));
@@ -54,4 +59,11 @@ public class Double2FloatMapTests extends TestCase
 		return builder.named(name).createTestSuite();
 	}
 	
+	private static class HashStrategy implements DoubleStrategy {
+		static final HashStrategy INSTANCE = new HashStrategy();
+		@Override
+		public int hashCode(double o) { return Double.hashCode(o); }
+		@Override
+		public boolean equals(double key, double value) { return Double.doubleToLongBits(key) == Double.doubleToLongBits(value); }
+	}
 }

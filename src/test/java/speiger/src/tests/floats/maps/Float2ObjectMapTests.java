@@ -12,12 +12,15 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import speiger.src.collections.floats.maps.impl.concurrent.Float2ObjectConcurrentOpenHashMap;
 import speiger.src.collections.floats.maps.impl.hash.Float2ObjectLinkedOpenHashMap;
+import speiger.src.collections.floats.maps.impl.customHash.Float2ObjectOpenCustomHashMap;
+import speiger.src.collections.floats.maps.impl.customHash.Float2ObjectLinkedOpenCustomHashMap;
 import speiger.src.collections.floats.maps.impl.hash.Float2ObjectOpenHashMap;
 import speiger.src.collections.floats.maps.impl.misc.Float2ObjectArrayMap;
 import speiger.src.collections.floats.maps.impl.tree.Float2ObjectAVLTreeMap;
 import speiger.src.collections.floats.maps.impl.tree.Float2ObjectRBTreeMap;
 import speiger.src.collections.floats.maps.interfaces.Float2ObjectMap;
 import speiger.src.collections.floats.maps.interfaces.Float2ObjectSortedMap;
+import speiger.src.collections.floats.utils.FloatStrategy;
 import speiger.src.testers.floats.builder.maps.Float2ObjectMapTestSuiteBuilder;
 import speiger.src.testers.floats.builder.maps.Float2ObjectNavigableMapTestSuiteBuilder;
 import speiger.src.testers.floats.impl.maps.SimpleFloat2ObjectMapTestGenerator;
@@ -36,6 +39,8 @@ public class Float2ObjectMapTests extends TestCase
 	public static void suite(TestSuite suite) {
 		suite.addTest(mapSuite("Float2ObjectOpenHashMap", Float2ObjectOpenHashMap::new));
 		suite.addTest(mapSuite("Float2ObjectLinkedOpenHashMap", Float2ObjectLinkedOpenHashMap::new));
+		suite.addTest(mapSuite("Float2ObjectOpenCustomHashMap", (K, V) -> new Float2ObjectOpenCustomHashMap<>(K, V, HashStrategy.INSTANCE)));
+		suite.addTest(mapSuite("Float2ObjectLinkedOpenCustomHashMap", (K, V) -> new Float2ObjectLinkedOpenCustomHashMap<>(K, V, HashStrategy.INSTANCE)));
 		suite.addTest(mapSuite("Float2ObjectArrayMap", Float2ObjectArrayMap::new));
 		suite.addTest(mapSuite("Float2ObjectConcurrentOpenHashMap", Float2ObjectConcurrentOpenHashMap::new));
 		suite.addTest(navigableMapSuite("Float2ObjectRBTreeMap", Float2ObjectRBTreeMap::new));
@@ -58,6 +63,13 @@ public class Float2ObjectMapTests extends TestCase
 		return builder.named(name).createTestSuite();
 	}
 	
+	private static class HashStrategy implements FloatStrategy {
+		static final HashStrategy INSTANCE = new HashStrategy();
+		@Override
+		public int hashCode(float o) { return Float.hashCode(o); }
+		@Override
+		public boolean equals(float key, float value) { return Float.floatToIntBits(key) == Float.floatToIntBits(value); }
+	}
 	private static String[] createValues() {
 		return new String[]{"January", "February", "March", "April", "May", "below view", "below view", "above view", "above view"};
 	}

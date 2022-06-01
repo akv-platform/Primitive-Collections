@@ -12,12 +12,15 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import speiger.src.collections.bytes.maps.impl.concurrent.Byte2ObjectConcurrentOpenHashMap;
 import speiger.src.collections.bytes.maps.impl.hash.Byte2ObjectLinkedOpenHashMap;
+import speiger.src.collections.bytes.maps.impl.customHash.Byte2ObjectOpenCustomHashMap;
+import speiger.src.collections.bytes.maps.impl.customHash.Byte2ObjectLinkedOpenCustomHashMap;
 import speiger.src.collections.bytes.maps.impl.hash.Byte2ObjectOpenHashMap;
 import speiger.src.collections.bytes.maps.impl.misc.Byte2ObjectArrayMap;
 import speiger.src.collections.bytes.maps.impl.tree.Byte2ObjectAVLTreeMap;
 import speiger.src.collections.bytes.maps.impl.tree.Byte2ObjectRBTreeMap;
 import speiger.src.collections.bytes.maps.interfaces.Byte2ObjectMap;
 import speiger.src.collections.bytes.maps.interfaces.Byte2ObjectSortedMap;
+import speiger.src.collections.bytes.utils.ByteStrategy;
 import speiger.src.testers.bytes.builder.maps.Byte2ObjectMapTestSuiteBuilder;
 import speiger.src.testers.bytes.builder.maps.Byte2ObjectNavigableMapTestSuiteBuilder;
 import speiger.src.testers.bytes.impl.maps.SimpleByte2ObjectMapTestGenerator;
@@ -36,6 +39,8 @@ public class Byte2ObjectMapTests extends TestCase
 	public static void suite(TestSuite suite) {
 		suite.addTest(mapSuite("Byte2ObjectOpenHashMap", Byte2ObjectOpenHashMap::new));
 		suite.addTest(mapSuite("Byte2ObjectLinkedOpenHashMap", Byte2ObjectLinkedOpenHashMap::new));
+		suite.addTest(mapSuite("Byte2ObjectOpenCustomHashMap", (K, V) -> new Byte2ObjectOpenCustomHashMap<>(K, V, HashStrategy.INSTANCE)));
+		suite.addTest(mapSuite("Byte2ObjectLinkedOpenCustomHashMap", (K, V) -> new Byte2ObjectLinkedOpenCustomHashMap<>(K, V, HashStrategy.INSTANCE)));
 		suite.addTest(mapSuite("Byte2ObjectArrayMap", Byte2ObjectArrayMap::new));
 		suite.addTest(mapSuite("Byte2ObjectConcurrentOpenHashMap", Byte2ObjectConcurrentOpenHashMap::new));
 		suite.addTest(navigableMapSuite("Byte2ObjectRBTreeMap", Byte2ObjectRBTreeMap::new));
@@ -58,6 +63,13 @@ public class Byte2ObjectMapTests extends TestCase
 		return builder.named(name).createTestSuite();
 	}
 	
+	private static class HashStrategy implements ByteStrategy {
+		static final HashStrategy INSTANCE = new HashStrategy();
+		@Override
+		public int hashCode(byte o) { return Byte.hashCode(o); }
+		@Override
+		public boolean equals(byte key, byte value) { return key == value; }
+	}
 	private static String[] createValues() {
 		return new String[]{"January", "February", "March", "April", "May", "below view", "below view", "above view", "above view"};
 	}

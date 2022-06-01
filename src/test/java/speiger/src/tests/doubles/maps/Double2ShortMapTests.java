@@ -12,12 +12,15 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import speiger.src.collections.doubles.maps.impl.concurrent.Double2ShortConcurrentOpenHashMap;
 import speiger.src.collections.doubles.maps.impl.hash.Double2ShortLinkedOpenHashMap;
+import speiger.src.collections.doubles.maps.impl.customHash.Double2ShortOpenCustomHashMap;
+import speiger.src.collections.doubles.maps.impl.customHash.Double2ShortLinkedOpenCustomHashMap;
 import speiger.src.collections.doubles.maps.impl.hash.Double2ShortOpenHashMap;
 import speiger.src.collections.doubles.maps.impl.misc.Double2ShortArrayMap;
 import speiger.src.collections.doubles.maps.impl.tree.Double2ShortAVLTreeMap;
 import speiger.src.collections.doubles.maps.impl.tree.Double2ShortRBTreeMap;
 import speiger.src.collections.doubles.maps.interfaces.Double2ShortMap;
 import speiger.src.collections.doubles.maps.interfaces.Double2ShortSortedMap;
+import speiger.src.collections.doubles.utils.DoubleStrategy;
 import speiger.src.testers.doubles.builder.maps.Double2ShortMapTestSuiteBuilder;
 import speiger.src.testers.doubles.builder.maps.Double2ShortNavigableMapTestSuiteBuilder;
 import speiger.src.testers.doubles.impl.maps.SimpleDouble2ShortMapTestGenerator;
@@ -36,6 +39,8 @@ public class Double2ShortMapTests extends TestCase
 	public static void suite(TestSuite suite) {
 		suite.addTest(mapSuite("Double2ShortOpenHashMap", Double2ShortOpenHashMap::new));
 		suite.addTest(mapSuite("Double2ShortLinkedOpenHashMap", Double2ShortLinkedOpenHashMap::new));
+		suite.addTest(mapSuite("Double2ShortOpenCustomHashMap", (K, V) -> new Double2ShortOpenCustomHashMap(K, V, HashStrategy.INSTANCE)));
+		suite.addTest(mapSuite("Double2ShortLinkedOpenCustomHashMap", (K, V) -> new Double2ShortLinkedOpenCustomHashMap(K, V, HashStrategy.INSTANCE)));
 		suite.addTest(mapSuite("Double2ShortArrayMap", Double2ShortArrayMap::new));
 		suite.addTest(mapSuite("Double2ShortConcurrentOpenHashMap", Double2ShortConcurrentOpenHashMap::new));
 		suite.addTest(navigableMapSuite("Double2ShortRBTreeMap", Double2ShortRBTreeMap::new));
@@ -54,4 +59,11 @@ public class Double2ShortMapTests extends TestCase
 		return builder.named(name).createTestSuite();
 	}
 	
+	private static class HashStrategy implements DoubleStrategy {
+		static final HashStrategy INSTANCE = new HashStrategy();
+		@Override
+		public int hashCode(double o) { return Double.hashCode(o); }
+		@Override
+		public boolean equals(double key, double value) { return Double.doubleToLongBits(key) == Double.doubleToLongBits(value); }
+	}
 }
