@@ -4,6 +4,8 @@ import java.util.Objects;
 
 import org.junit.Ignore;
 
+import com.google.common.collect.testing.features.CollectionFeature;
+
 import speiger.src.collections.chars.utils.CharArrays;
 import speiger.src.collections.objects.lists.ObjectArrayList;
 import speiger.src.collections.objects.lists.ObjectList;
@@ -17,27 +19,44 @@ public class ObjectIterableMapTester<T> extends AbstractObjectCollectionTester<T
 	public void testIterableMap_ToString() {
 		assertEquals(ObjectHelpers.copyToList(collection).toString(), collection.map(T::toString).pourAsList().toString());
 	}
-	
+
+	@CollectionFeature.Require(CollectionFeature.KNOWN_ORDER)
 	public void testIterableMap_Collection() {
 		ObjectList<Character> result = new ObjectArrayList<>();
-		for(T entry : getOrderedElements())
-		{
+		for(T entry : getOrderedElements()) {
+			result.addAll(toRange(entry));
+		}
+		assertEquals(result, collection.flatMap(T -> ObjectArrayList.wrap(toRange(T))).pourAsList());
+	}
+
+	@CollectionFeature.Require(CollectionFeature.KNOWN_ORDER)
+	public void testIterableMap_Array() {
+		ObjectList<Character> result = new ObjectArrayList<>();
+		for(T entry : getOrderedElements()) {
+			result.addAll(toRange(entry));
+		}
+		assertEquals(result, collection.arrayflatMap(this::toRange).pourAsList());
+	}
+	
+	@CollectionFeature.Require(absent = CollectionFeature.KNOWN_ORDER)
+	public void testIterableMap_CollectionUnordered() {
+		ObjectList<Character> result = new ObjectArrayList<>();
+		for(T entry : getOrderedElements()) {
 			result.addAll(toRange(entry));
 		}
 		ObjectHelpers.assertEqualIgnoringOrder(result, collection.flatMap(T -> ObjectArrayList.wrap(toRange(T))).pourAsList());
 	}
-
-	public void testIterableMap_Array() {
+	
+	@CollectionFeature.Require(absent = CollectionFeature.KNOWN_ORDER)
+	public void testIterableMap_ArrayUnordered() {
 		ObjectList<Character> result = new ObjectArrayList<>();
-		for(T entry : getOrderedElements())
-		{
+		for(T entry : getOrderedElements()) {
 			result.addAll(toRange(entry));
 		}
 		ObjectHelpers.assertEqualIgnoringOrder(result, collection.arrayflatMap(this::toRange).pourAsList());
 	}
 
-	private Character[] toRange(T obj)
-	{
+	private Character[] toRange(T obj) {
 		return CharArrays.wrap(Objects.toString(obj).toCharArray());
 	}
 }

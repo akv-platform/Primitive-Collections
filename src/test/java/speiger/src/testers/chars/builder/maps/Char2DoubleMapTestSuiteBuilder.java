@@ -144,6 +144,7 @@ public class Char2DoubleMapTestSuiteBuilder extends MapTestSuiteBuilder<Characte
 			entrySetFeatures.add(CollectionFeature.ALLOWS_NULL_QUERIES);
 		}
 		entrySetFeatures.remove(SpecialFeature.COPYING);
+		entrySetFeatures.add(SpecialFeature.MAP_ENTRY);
 		return entrySetFeatures;
 	}
 

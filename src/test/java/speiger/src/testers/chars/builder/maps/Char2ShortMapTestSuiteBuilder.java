@@ -144,6 +144,7 @@ public class Char2ShortMapTestSuiteBuilder extends MapTestSuiteBuilder<Character
 			entrySetFeatures.add(CollectionFeature.ALLOWS_NULL_QUERIES);
 		}
 		entrySetFeatures.remove(SpecialFeature.COPYING);
+		entrySetFeatures.add(SpecialFeature.MAP_ENTRY);
 		return entrySetFeatures;
 	}
 

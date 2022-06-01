@@ -144,6 +144,7 @@ public class Byte2ByteMapTestSuiteBuilder extends MapTestSuiteBuilder<Byte, Byte
 			entrySetFeatures.add(CollectionFeature.ALLOWS_NULL_QUERIES);
 		}
 		entrySetFeatures.remove(SpecialFeature.COPYING);
+		entrySetFeatures.add(SpecialFeature.MAP_ENTRY);
 		return entrySetFeatures;
 	}
 
