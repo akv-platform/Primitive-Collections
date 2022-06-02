@@ -1,0 +1,202 @@
+package speiger.src.testers.PACKAGE.builder;
+
+#ignore
+import static com.google.common.collect.testing.features.CollectionFeature.KNOWN_ORDER;
+import static com.google.common.collect.testing.features.CollectionFeature.SERIALIZABLE;
+import static com.google.common.collect.testing.features.CollectionFeature.SERIALIZABLE_INCLUDING_VIEWS;
+#endignore
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import com.google.common.collect.testing.AbstractTester;
+import com.google.common.collect.testing.FeatureSpecificTestSuiteBuilder;
+import com.google.common.collect.testing.Helpers;
+import com.google.common.collect.testing.ListTestSuiteBuilder;
+import com.google.common.collect.testing.OneSizeTestContainerGenerator;
+import com.google.common.collect.testing.SampleElements;
+import com.google.common.collect.testing.TestListGenerator;
+import com.google.common.collect.testing.features.Feature;
+import com.google.common.collect.testing.testers.CollectionSerializationEqualTester;
+import com.google.common.collect.testing.testers.ListAddAllAtIndexTester;
+import com.google.common.collect.testing.testers.ListAddAllTester;
+import com.google.common.collect.testing.testers.ListAddAtIndexTester;
+import com.google.common.collect.testing.testers.ListAddTester;
+import com.google.common.collect.testing.testers.ListCreationTester;
+import com.google.common.collect.testing.testers.ListEqualsTester;
+import com.google.common.collect.testing.testers.ListGetTester;
+import com.google.common.collect.testing.testers.ListHashCodeTester;
+import com.google.common.collect.testing.testers.ListIndexOfTester;
+import com.google.common.collect.testing.testers.ListLastIndexOfTester;
+import com.google.common.collect.testing.testers.ListListIteratorTester;
+import com.google.common.collect.testing.testers.ListRemoveAllTester;
+import com.google.common.collect.testing.testers.ListRemoveAtIndexTester;
+import com.google.common.collect.testing.testers.ListRemoveTester;
+import com.google.common.collect.testing.testers.ListReplaceAllTester;
+import com.google.common.collect.testing.testers.ListRetainAllTester;
+import com.google.common.collect.testing.testers.ListSetTester;
+import com.google.common.collect.testing.testers.ListSubListTester;
+import com.google.common.collect.testing.testers.ListToArrayTester;
+import com.google.common.testing.SerializableTester;
+
+import junit.framework.TestSuite;
+import speiger.src.testers.PACKAGE.generators.TEST_LIST_GENERATOR;
+import speiger.src.testers.PACKAGE.tests.list.FILE_KEY_TYPEListAbsentTester;
+import speiger.src.testers.PACKAGE.tests.list.FILE_KEY_TYPEListAddAllArrayAtIndexTester;
+import speiger.src.testers.PACKAGE.tests.list.FILE_KEY_TYPEListAddAllAtIndexTester;
+import speiger.src.testers.PACKAGE.tests.list.FILE_KEY_TYPEListAddAllTester;
+import speiger.src.testers.PACKAGE.tests.list.FILE_KEY_TYPEListAddAtIndexTester;
+import speiger.src.testers.PACKAGE.tests.list.FILE_KEY_TYPEListAddTester;
+import speiger.src.testers.PACKAGE.tests.list.FILE_KEY_TYPEListCreationTester;
+import speiger.src.testers.PACKAGE.tests.list.FILE_KEY_TYPEListEqualsTester;
+import speiger.src.testers.PACKAGE.tests.list.FILE_KEY_TYPEListExtractElementsTester;
+import speiger.src.testers.PACKAGE.tests.list.FILE_KEY_TYPEListGetElementsTester;
+import speiger.src.testers.PACKAGE.tests.list.FILE_KEY_TYPEListGetTester;
+import speiger.src.testers.PACKAGE.tests.list.FILE_KEY_TYPEListIndexOfTester;
+import speiger.src.testers.PACKAGE.tests.list.FILE_KEY_TYPEListLastIndexOfTester;
+import speiger.src.testers.PACKAGE.tests.list.FILE_KEY_TYPEListListIteratorTester;
+import speiger.src.testers.PACKAGE.tests.list.FILE_KEY_TYPEListPresentTester;
+import speiger.src.testers.PACKAGE.tests.list.FILE_KEY_TYPEListRemoveAllTester;
+import speiger.src.testers.PACKAGE.tests.list.FILE_KEY_TYPEListRemoveAtIndexTester;
+import speiger.src.testers.PACKAGE.tests.list.FILE_KEY_TYPEListRemoveElementsTester;
+import speiger.src.testers.PACKAGE.tests.list.FILE_KEY_TYPEListRemoveTester;
+#if !TYPE_BOOLEAN
+#if !TYPE_OBJECT
+import speiger.src.testers.PACKAGE.tests.list.FILE_KEY_TYPEListFillBufferTester;
+#endif
+import speiger.src.testers.PACKAGE.tests.list.FILE_KEY_TYPEListReplaceAllTester;
+#endif
+import speiger.src.testers.PACKAGE.tests.list.FILE_KEY_TYPEListRetainAllTester;
+import speiger.src.testers.PACKAGE.tests.list.FILE_KEY_TYPEListSetTester;
+import speiger.src.testers.PACKAGE.tests.list.FILE_KEY_TYPEListSubListTester;
+import speiger.src.testers.PACKAGE.tests.list.FILE_KEY_TYPEListSwapRemoveAtIndexTester;
+import speiger.src.testers.PACKAGE.tests.list.FILE_KEY_TYPEListSwapRemoveTester;
+import speiger.src.testers.PACKAGE.tests.list.FILE_KEY_TYPEListToArrayTester;
+
+@SuppressWarnings("javadoc")
+public class LIST_TEST_BUILDER KEY_GENERIC_TYPE extends COLLECTION_TEST_BUILDER KEY_GENERIC_TYPE {
+	public static GENERIC_KEY_BRACES LIST_TEST_BUILDER KEY_GENERIC_TYPE using(TEST_LIST_GENERATOR KEY_GENERIC_TYPE generator) {
+		return (LIST_TEST_BUILDER KEY_GENERIC_TYPE) new LIST_TEST_BUILDER KEY_GENERIC_TYPE().usingGenerator(generator);
+	}
+	
+	@Override
+	@SuppressWarnings("rawtypes")
+	protected List<Class<? extends AbstractTester>> getTesters() {
+		List<Class<? extends AbstractTester>> testers = Helpers.copyToList(super.getTesters());
+
+		testers.add(CollectionSerializationEqualTester.class);
+		testers.add(ListAddAllAtIndexTester.class);
+		testers.add(ListAddAllTester.class);
+		testers.add(ListAddAtIndexTester.class);
+		testers.add(ListAddTester.class);
+		testers.add(ListCreationTester.class);
+		testers.add(ListEqualsTester.class);
+		testers.add(ListGetTester.class);
+		testers.add(ListHashCodeTester.class);
+		testers.add(ListIndexOfTester.class);
+		testers.add(ListLastIndexOfTester.class);
+		testers.add(ListListIteratorTester.class);
+		testers.add(ListRemoveAllTester.class);
+		testers.add(ListRemoveAtIndexTester.class);
+		testers.add(ListRemoveTester.class);
+		testers.add(ListReplaceAllTester.class);
+		testers.add(ListRetainAllTester.class);
+		testers.add(ListSetTester.class);
+		testers.add(ListSubListTester.class);
+		testers.add(ListToArrayTester.class);
+		
+		testers.add(FILE_KEY_TYPEListAddAllAtIndexTester.class);
+		testers.add(FILE_KEY_TYPEListAddAllArrayAtIndexTester.class);
+		testers.add(FILE_KEY_TYPEListAddAllTester.class);
+		testers.add(FILE_KEY_TYPEListAddAtIndexTester.class);
+		testers.add(FILE_KEY_TYPEListAddTester.class);
+		testers.add(FILE_KEY_TYPEListAbsentTester.class);
+		testers.add(FILE_KEY_TYPEListPresentTester.class);
+		testers.add(FILE_KEY_TYPEListCreationTester.class);
+		testers.add(FILE_KEY_TYPEListEqualsTester.class);
+		testers.add(FILE_KEY_TYPEListGetTester.class);
+		testers.add(FILE_KEY_TYPEListGetElementsTester.class);
+		testers.add(FILE_KEY_TYPEListExtractElementsTester.class);
+		testers.add(FILE_KEY_TYPEListIndexOfTester.class);
+		testers.add(FILE_KEY_TYPEListLastIndexOfTester.class);
+		testers.add(FILE_KEY_TYPEListListIteratorTester.class);
+		testers.add(FILE_KEY_TYPEListRemoveAllTester.class);
+		testers.add(FILE_KEY_TYPEListRemoveAtIndexTester.class);
+		testers.add(FILE_KEY_TYPEListRemoveTester.class);
+		testers.add(FILE_KEY_TYPEListRemoveElementsTester.class);
+		testers.add(FILE_KEY_TYPEListSwapRemoveAtIndexTester.class);
+		testers.add(FILE_KEY_TYPEListSwapRemoveTester.class);
+#if !TYPE_BOOLEAN
+#if !TYPE_OBJECT
+		testers.add(FILE_KEY_TYPEListFillBufferTester.class);
+#endif
+		testers.add(FILE_KEY_TYPEListReplaceAllTester.class);
+#endif
+		testers.add(FILE_KEY_TYPEListRetainAllTester.class);
+		testers.add(FILE_KEY_TYPEListSetTester.class);
+		testers.add(FILE_KEY_TYPEListSubListTester.class);
+		testers.add(FILE_KEY_TYPEListToArrayTester.class);
+		return testers;
+	}
+
+	@Override
+	public TestSuite createTestSuite() {
+#ignore
+		withFeatures(KNOWN_ORDER);
+#endignore
+		return super.createTestSuite();
+	}
+
+	@Override
+	protected List<TestSuite> createDerivedSuites(FeatureSpecificTestSuiteBuilder<?, ? extends OneSizeTestContainerGenerator<Collection<CLASS_TYPE>, CLASS_TYPE>> parentBuilder) {
+		List<TestSuite> derivedSuites = new ArrayList<>(super.createDerivedSuites(parentBuilder));
+		if (parentBuilder.getFeatures().contains(SERIALIZABLE)) {
+			derivedSuites.add(ListTestSuiteBuilder.using(new ReserializedListGenerator<CLASS_TYPE>(parentBuilder.getSubjectGenerator()))
+							.named(getName() + " reserialized")
+							.withFeatures(computeReserializedCollectionFeatures(parentBuilder.getFeatures()))
+							.suppressing(parentBuilder.getSuppressedTests()).withSetUp(parentBuilder.getSetUp())
+							.withTearDown(parentBuilder.getTearDown()).createTestSuite());
+		}
+		return derivedSuites;
+	}
+	
+	static class ReserializedListGenerator<E> implements TestListGenerator<E> {
+		final OneSizeTestContainerGenerator<Collection<E>, E> gen;
+
+		private ReserializedListGenerator(OneSizeTestContainerGenerator<Collection<E>, E> gen) {
+			this.gen = gen;
+		}
+
+		@Override
+		public SampleElements<E> samples() {
+			return gen.samples();
+		}
+
+		@Override
+		public List<E> create(Object... elements) {
+			return (List<E>) SerializableTester.reserialize(gen.create(elements));
+		}
+
+		@Override
+		public E[] createArray(int length) {
+			return gen.createArray(length);
+		}
+
+		@Override
+		public Iterable<E> order(List<E> insertionOrder) {
+			return gen.order(insertionOrder);
+		}
+	}
+
+	private static Set<Feature<?>> computeReserializedCollectionFeatures(Set<Feature<?>> features) {
+		Set<Feature<?>> derivedFeatures = new HashSet<>(features);
+#ignore
+		derivedFeatures.remove(SERIALIZABLE);
+		derivedFeatures.remove(SERIALIZABLE_INCLUDING_VIEWS);
+#endignore
+		return derivedFeatures;
+	}
+}

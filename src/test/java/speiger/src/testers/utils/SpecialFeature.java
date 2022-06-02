@@ -10,7 +10,7 @@ import com.google.common.collect.testing.Helpers;
 import com.google.common.collect.testing.features.Feature;
 import com.google.common.collect.testing.features.TesterAnnotation;
 
-@SuppressWarnings("rawtypes")
+@SuppressWarnings({"rawtypes", "javadoc"})
 public enum SpecialFeature implements Feature<Collection> {
 	COPYING,
 	MAP_ENTRY;

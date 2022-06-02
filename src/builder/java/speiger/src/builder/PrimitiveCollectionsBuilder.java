@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -14,6 +15,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringJoiner;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import speiger.src.builder.processor.TemplateProcess;
@@ -23,6 +25,7 @@ import speiger.src.builder.processor.TemplateProcessor;
 public class PrimitiveCollectionsBuilder extends TemplateProcessor
 {
 	Map<String, EnumSet<ClassType>> blocked = new HashMap<>();
+	EnumMap<ClassType, List<Predicate<String>>> blockedPredicate = new EnumMap<>(ClassType.class);
 	Map<String, String> nameRemapper = new HashMap<>();
 	Map<String, String> biRequired = new HashMap<>();
 	Set<String> enumRequired = new HashSet<>();
@@ -30,6 +33,7 @@ public class PrimitiveCollectionsBuilder extends TemplateProcessor
 	List<GlobalVariables> variables = new ArrayList<>();
 	List<GlobalVariables> biVariables = new ArrayList<>();
 	List<GlobalVariables> enumVariables = new ArrayList<>();
+	boolean special = false;
 	
 	public PrimitiveCollectionsBuilder()
 	{
@@ -38,7 +42,7 @@ public class PrimitiveCollectionsBuilder extends TemplateProcessor
 	
 	public PrimitiveCollectionsBuilder(boolean silencedSuccess)
 	{
-		super(silencedSuccess, Paths.get("src/builder/resources/speiger/assets/collections/templates/"), Paths.get("src/main/java/speiger/src/collections/"), Paths.get("src/builder/resources/speiger/assets/collections/"));
+		super(silencedSuccess, Paths.get("src/builder/resources/speiger/assets/testers/templates/"), Paths.get("src/test/java/speiger/src/testers/"), Paths.get("src/builder/resources/speiger/assets/testers/"));
 	}
 	
 	public PrimitiveCollectionsBuilder(Path sourceFolder, Path outputFolder, Path dataFolder)
@@ -49,6 +53,14 @@ public class PrimitiveCollectionsBuilder extends TemplateProcessor
 	public PrimitiveCollectionsBuilder(boolean silencedSuccess, Path sourceFolder, Path outputFolder, Path dataFolder)
 	{
 		super(silencedSuccess, sourceFolder, outputFolder, dataFolder);
+	}
+	
+	private static PrimitiveCollectionsBuilder createTests() {
+		return new PrimitiveCollectionsBuilder(Paths.get("src/builder/resources/speiger/assets/tests/templates/"), Paths.get("src/test/java/speiger/src/tests/"), Paths.get("src/builder/resources/speiger/assets/tests/"));
+	}
+	
+	private static PrimitiveCollectionsBuilder createTesters() {
+		return new PrimitiveCollectionsBuilder(Paths.get("src/builder/resources/speiger/assets/testers/templates/"), Paths.get("src/test/java/speiger/src/testers/"), Paths.get("src/builder/resources/speiger/assets/testers/"));
 	}
 	
 	@Override
@@ -119,9 +131,44 @@ public class PrimitiveCollectionsBuilder extends TemplateProcessor
 		nameRemapper.put("ImmutableOpenHashSet", "Immutable%sOpenHashSet");
 		nameRemapper.put("ImmutableOpenHashMap", "Immutable%sOpenHashMap");
 		
+		
 		addBlockage(ClassType.OBJECT, "Consumer", "Comparator", "Stack");
 		addBlockage(ClassType.BOOLEAN, "ArraySet", "AVLTreeSet", "RBTreeSet", "SortedSet", "OrderedSet", "NavigableSet", "OpenHashSet", "OpenCustomHashSet", "LinkedOpenHashSet", "LinkedOpenCustomHashSet");
 		addBlockage(ClassType.BOOLEAN, "ConcurrentOpenHashMap", "ImmutableOpenHashMap", "ImmutableOpenHashSet", "SortedMap", "OrderedMap", "NavigableMap", "ConcurrentMap", "OpenHashMap", "LinkedOpenHashMap", "OpenCustomHashMap", "LinkedOpenCustomHashMap", "ArrayMap", "RBTreeMap", "AVLTreeMap");
+		
+		//UnitTesters
+		nameRemapper.put("AbstractIteratorTester", "Abstract%sIteratorTester");
+		nameRemapper.put("MinimalCollection", "Minimal%sCollection");
+		nameRemapper.put("MinimalSet", "Minimal%sSet");
+		nameRemapper.put("TestCollectionGenerator", "Test%sCollectionGenerator");
+		nameRemapper.put("TestListGenerator", "Test%sListGenerator");
+		nameRemapper.put("TestNavigableSetGenerator", "Test%sNavigableSetGenerator");
+		nameRemapper.put("TestSortedSetGenerator", "Test%sSortedSetGenerator");
+		nameRemapper.put("TestOrderedSetGenerator", "Test%sOrderedSetGenerator");
+		nameRemapper.put("TestSetGenerator", "Test%sSetGenerator");
+		nameRemapper.put("AbstractContainerTester", "Abstract%sContainerTester");
+		nameRemapper.put("AbstractCollectionTester", "Abstract%sCollectionTester");
+		nameRemapper.put("AbstractListTester", "Abstract%sListTester");
+		nameRemapper.put("AbstractListIndexOfTester", "Abstract%sListIndexOfTester");
+		nameRemapper.put("AbstractSetTester", "Abstract%sSetTester");
+		nameRemapper.put("SimpleTestGenerator", "Simple%sTestGenerator");
+		nameRemapper.put("TestMapGenerator", "Test%sMapGenerator");
+		nameRemapper.put("TestSortedMapGenerator", "Test%sSortedMapGenerator");
+		nameRemapper.put("SimpleMapTestGenerator", "Simple%sMapTestGenerator");
+		nameRemapper.put("DerivedMapGenerators", "Derived%sMapGenerators");
+		nameRemapper.put("AbstractMapTester", "Abstract%sMapTester");
+		
+		addBiClass("TestMapGenerator", "TestSortedMapGenerator", "SimpleMapTestGenerator", "DerivedMapGenerators", "AbstractMapTester", "MapTestSuiteBuilder", "SortedMapTestSuiteBuilder", "NavigableMapTestSuiteBuilder", "MapTests");
+		addBiClass("MapAddToTester", "MapClearTester", "MapComputeIfAbsentTester", "MapComputeIfPresentTester", "MapComputeTester", "MapCopyTester", "MapContainsKeyTester", "MapContainsValueTester", "MapCreatorTester", "MapEntrySetTester",
+			"MapEqualsTester", "MapForEachTester", "MapGetOrDefaultTester", "MapGetTester", "MapHashCodeTester", "MapIsEmptyTester", "MapMergeTester", "MapPutAllArrayTester", "MapPutAllTester", "MapPutIfAbsentTester", "MapPutTester",
+			"MapRemoveEntryTester", "MapRemoveOrDefaultTester", "MapRemoveTester", "MapReplaceAllTester", "MapReplaceEntryTester", "MapReplaceTester", "MapSizeTester", "MapSupplyIfAbsentTester", "MapToStringTester",
+			"NavigableMapNavigationTester", "SortedMapNavigationTester");
+		
+		addBlockage(ClassType.OBJECT, "CollectionStreamTester", "ListFillBufferTester");
+		addBlockage(ClassType.BOOLEAN, "TestOrderedSetGenerator", "TestSortedSetGenerator", "TestNavigableSetGenerator", "CollectionRemoveIfTester", "CollectionStreamTester", "ListFillBufferTester", "ListReplaceAllTester", "NavigableSetNavigationTester", "SetTests");
+		addBlockage(ClassType.BOOLEAN, "OrderedSetMoveTester", "OrderedSetNavigationTester", "SortedSetNaviationTester", "SetTestSuiteBuilder", "OrderedSetTestSuiteBuilder", "SortedSetTestSuiteBuilder", "NavigableSetTestSuiteBuilder", "SortedSetSubsetTestSetGenerator");
+		addBlockage(ClassType.BOOLEAN, "TestMapGenerator", "TestSortedMapGenerator", "SimpleMapTestGenerator", "DerivedMapGenerators", "AbstractMapTester", "MapTestSuiteBuilder", "SortedMapTestSuiteBuilder", "NavigableMapTestSuiteBuilder", "MapTests");
+		addBlockage(ClassType.BOOLEAN, T -> T.endsWith("Tester") && (T.startsWith("Iterable") ||T.startsWith("Map") || T.startsWith("SortedMap") || T.startsWith("NavigableMap")));
 	}
 	
 	protected void create(ClassType mainType, ClassType subType) 
@@ -146,6 +193,11 @@ public class PrimitiveCollectionsBuilder extends TemplateProcessor
 		}
 	}
 	
+	protected void addBlockage(ClassType type, Predicate<String> filter)
+	{
+		blockedPredicate.computeIfAbsent(type, T -> new ArrayList<>()).add(filter);
+	}
+	
 	protected void addBlockage(ClassType type, String...args) 
 	{
 		for(String s : args) 
@@ -166,15 +218,27 @@ public class PrimitiveCollectionsBuilder extends TemplateProcessor
 		String splitter = biRequired.get(name);
 		boolean valueRequired = enumRequired.contains(name);
 		List<GlobalVariables> vars = getVariablesByClass(name, splitter != null);
-		EnumSet<ClassType> types = blocked.get(name);
 		for(int i = 0,m=vars.size();i<m;i++)
 		{
 			GlobalVariables type = vars.get(i);
-			if(types == null || !types.contains(type.getType()))
+			if(isAllowed(type.getType(), name))
 			{
 				acceptor.accept(type.create(nameRemapper.getOrDefault(name, "%s"+name), splitter, valueRequired));
 			}
 		}
+	}
+	
+	protected boolean isAllowed(ClassType type, String fileName)
+	{
+		EnumSet<ClassType> types = blocked.get(fileName);
+		if(types != null && types.contains(type)) return false;
+		List<Predicate<String>> list = blockedPredicate.get(type);
+		if(list != null) {
+			for(int i = 0,m=list.size();i<m;i++) {
+				if(list.get(i).test(fileName)) return false;
+			}
+		}
+		return true;
 	}
 	
 	protected List<GlobalVariables> getVariablesByClass(String name, boolean bi) {
@@ -236,22 +300,24 @@ public class PrimitiveCollectionsBuilder extends TemplateProcessor
 	{
 		try
 		{
-	        if(args.length == 0) {
-	            new PrimitiveCollectionsBuilder().process(false);
-	        } else if(args.length == 1) {
-	            new PrimitiveCollectionsBuilder().process(Boolean.parseBoolean(args[0]));
-	        } else if(args.length == 2) {
-	            new PrimitiveCollectionsBuilder(Boolean.parseBoolean(args[1])).process(Boolean.parseBoolean(args[0]));
-	        } else if(args.length == 3) {
-	            new PrimitiveCollectionsBuilder(Paths.get(args[0]), Paths.get(args[1]), Paths.get(args[2])).process(false);
-	        } else if(args.length == 4) {
-	            new PrimitiveCollectionsBuilder(false, Paths.get(args[0]), Paths.get(args[1]), Paths.get(args[2])).process(Boolean.parseBoolean(args[3]));
-	        } else if(args.length == 4) {
-	            new PrimitiveCollectionsBuilder(Boolean.parseBoolean(args[4]), Paths.get(args[0]), Paths.get(args[1]), Paths.get(args[2])).process(Boolean.parseBoolean(args[3]));
-	        } else {
-	            System.out.println("Invalid argument count passed in");
-	            System.exit(1);
-	    	}
+			createTests().process(false);
+			createTesters().process(false);
+//	        if(args.length == 0) {
+//	            new PrimitiveCollectionsBuilder().process(false);
+//	        } else if(args.length == 1) {
+//	            new PrimitiveCollectionsBuilder().process(Boolean.parseBoolean(args[0]));
+//	        } else if(args.length == 2) {
+//	            new PrimitiveCollectionsBuilder(Boolean.parseBoolean(args[1])).process(Boolean.parseBoolean(args[0]));
+//	        } else if(args.length == 3) {
+//	            new PrimitiveCollectionsBuilder(Paths.get(args[0]), Paths.get(args[1]), Paths.get(args[2])).process(false);
+//	        } else if(args.length == 4) {
+//	            new PrimitiveCollectionsBuilder(false, Paths.get(args[0]), Paths.get(args[1]), Paths.get(args[2])).process(Boolean.parseBoolean(args[3]));
+//	        } else if(args.length == 4) {
+//	            new PrimitiveCollectionsBuilder(Boolean.parseBoolean(args[4]), Paths.get(args[0]), Paths.get(args[1]), Paths.get(args[2])).process(Boolean.parseBoolean(args[3]));
+//	        } else {
+//	            System.out.println("Invalid argument count passed in");
+//	            System.exit(1);
+//	    	}
 		}
 		catch(InterruptedException e)
 		{

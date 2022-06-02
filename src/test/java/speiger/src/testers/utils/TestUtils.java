@@ -6,7 +6,9 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-public class TestUtils {
+@SuppressWarnings("javadoc")
+public class TestUtils
+{
 	public static void getSurpession(Collection<Method> methods, Class<?> clz, String...args) {
 		Set<String> set = new HashSet<>(Arrays.asList(args));
 		try {
