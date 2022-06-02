@@ -5,6 +5,8 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 #endif
+import java.util.Arrays;
+import java.util.Collection;
 #if TYPE_OBJECT
 import java.util.Objects;
 #endif
@@ -13,6 +15,7 @@ import java.util.function.BiFunction;
 import com.google.common.collect.testing.features.CollectionFeature;
 import com.google.common.collect.testing.features.CollectionSize;
 import com.google.common.collect.testing.features.MapFeature;
+import com.google.common.collect.testing.features.Feature;
 #if VALUE_BOOLEAN
 import com.google.common.collect.testing.testers.CollectionAddAllTester;
 import com.google.common.collect.testing.testers.CollectionAddTester;
@@ -27,6 +30,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import speiger.src.collections.PACKAGE.maps.impl.concurrent.CONCURRENT_HASH_MAP;
 import speiger.src.collections.PACKAGE.maps.impl.hash.LINKED_HASH_MAP;
+import speiger.src.collections.PACKAGE.maps.impl.immutable.IMMUTABLE_HASH_MAP;
 import speiger.src.collections.PACKAGE.maps.impl.customHash.CUSTOM_HASH_MAP;
 import speiger.src.collections.PACKAGE.maps.impl.customHash.LINKED_CUSTOM_HASH_MAP;
 import speiger.src.collections.PACKAGE.maps.impl.hash.HASH_MAP;
@@ -64,139 +68,80 @@ public class MAP_TESTS extends TestCase
 	}
 
 	public static void suite(TestSuite suite) {
-		suite.addTest(mapSuite("HASH_MAP", HASH_MAP::new));
-		suite.addTest(mapSuite("LINKED_HASH_MAP", LINKED_HASH_MAP::new));
-		suite.addTest(mapSuite("CUSTOM_HASH_MAP", (K, V) -> new CUSTOM_HASH_MAPKV_BRACES(K, V, HashStrategy.INSTANCE)));
-		suite.addTest(mapSuite("LINKED_CUSTOM_HASH_MAP", (K, V) -> new LINKED_CUSTOM_HASH_MAPKV_BRACES(K, V, HashStrategy.INSTANCE)));
-		suite.addTest(mapSuite("ARRAY_MAP", ARRAY_MAP::new));
-		suite.addTest(mapSuite("CONCURRENT_HASH_MAP", CONCURRENT_HASH_MAP::new));
-		suite.addTest(navigableMapSuite("RB_TREE_MAP", RB_TREE_MAP::new));
-		suite.addTest(navigableMapSuite("AVL_TREE_MAP", AVL_TREE_MAP::new));
+//		suite.addTest(mapSuite("HASH_MAP", HASH_MAP::new, getFeatures(), -1));
+//		suite.addTest(mapSuite("LINKED_HASH_MAP", LINKED_HASH_MAP::new, getFeatures(), -1));
+//		suite.addTest(mapSuite("IMMUTABLE_HASH_MAP", IMMUTABLE_HASH_MAP::new, getImmutableFeatures(), -1));
+//		suite.addTest(mapSuite("CUSTOM_HASH_MAP", (K, V) -> new CUSTOM_HASH_MAPKV_BRACES(K, V, HashStrategy.INSTANCE), getFeatures(), -1));
+//		suite.addTest(mapSuite("LINKED_CUSTOM_HASH_MAP", (K, V) -> new LINKED_CUSTOM_HASH_MAPKV_BRACES(K, V, HashStrategy.INSTANCE), getFeatures(), -1));
+//		suite.addTest(mapSuite("ARRAY_MAP", ARRAY_MAP::new, getFeatures(), -1));
+//		suite.addTest(mapSuite("CONCURRENT_HASH_MAP", CONCURRENT_HASH_MAP::new, getFeatures(), -1));
+//		suite.addTest(navigableMapSuite("RB_TREE_MAP", RB_TREE_MAP::new, getFeatures(), -1));
+//		suite.addTest(navigableMapSuite("AVL_TREE_MAP", AVL_TREE_MAP::new, getFeatures(), -1));
+		suite.addTest(navigableMapSuite("Synchronized RB_TREE_MAP", (K, V) -> new RB_TREE_MAPKV_BRACES(K, V).synchronize(), getFeatures(), -1));
+//		suite.addTest(navigableMapSuite("RB_TREE_MAP", (K, V) -> new RB_TREE_MAPKV_BRACES(K, V).unmodifiable(), getImmutableFeatures(), -1));
 	}
 	
-#if TYPE_OBJECT && VALUE_OBJECT
-	private static Test mapSuite(String name, BiFunction<String[], String[], MAP<String, String>> factory) {
-		SIMPLE_MAP_TEST_GENERATOR.Maps<String, String> generator = new SIMPLE_MAP_TEST_GENERATOR.Maps<>(factory);
+	private static Test mapSuite(String name, BiFunction<KEY_STRING_TYPE[], VALUE_STRING_TYPE[], MAP KEY_VALUE_STRING_GENERIC_TYPE> factory, Collection<Feature<?>> features, int size) {
+		SIMPLE_MAP_TEST_GENERATOR.Maps KEY_VALUE_STRING_GENERIC_TYPE generator = new SIMPLE_MAP_TEST_GENERATOR.Maps KEY_VALUE_STRING_GENERIC_TYPE(factory);
+#if TYPE_OBJECT
 		generator.setKeys(createKeys());
+#endif
+#if VALUE_OBJECT
 		generator.setValues(createValues());
-		MAP_TEST_BUILDER<String, String> builder = MAP_TEST_BUILDER.using(generator);
-#ignore
-		builder.withFeatures(MapFeature.GENERAL_PURPOSE, CollectionSize.ANY, CollectionFeature.SUPPORTS_ITERATOR_REMOVE, MapFeature.ALLOWS_NULL_VALUE_QUERIES, MapFeature.ALLOWS_NULL_KEY_QUERIES, MapFeature.ALLOWS_NULL_ENTRY_QUERIES, SpecialFeature.COPYING);
-#endignore
-		return builder.named(name).createTestSuite();
-	}
-	
-	private static Test navigableMapSuite(String name, BiFunction<String[], String[], SORTED_MAP<String, String>> factory) {
-		SIMPLE_MAP_TEST_GENERATOR.SortedMaps<String, String> generator = new SIMPLE_MAP_TEST_GENERATOR.SortedMaps<>(factory);
-		generator.setKeys(createKeys());
-		generator.setValues(createValues());
-		NAVIGABLE_MAP_TEST_BUILDER<String, String> builder = NAVIGABLE_MAP_TEST_BUILDER.using(generator);
-#ignore
-		builder.withFeatures(MapFeature.GENERAL_PURPOSE, CollectionSize.ANY, CollectionFeature.SUPPORTS_ITERATOR_REMOVE, MapFeature.ALLOWS_NULL_VALUE_QUERIES, SpecialFeature.COPYING);
-#endignore
-		return builder.named(name).createTestSuite();
-	}
-	
-	private static class HashStrategy implements STRATEGY<String> {
-		static final HashStrategy INSTANCE = new HashStrategy();
-		@Override
-		public int hashCode(String o) { return KEY_TO_HASH(o); }
-		@Override
-		public boolean equals(String key, String value) { return KEY_EQUALS(key, value); }
-	}
-#else if TYPE_OBJECT
-	private static Test mapSuite(String name, BiFunction<String[], VALUE_TYPE[], MAP<String>> factory) {
-		SIMPLE_MAP_TEST_GENERATOR.Maps<String> generator = new SIMPLE_MAP_TEST_GENERATOR.Maps<>(factory);
-		generator.setKeys(createKeys());
-		MAP_TEST_BUILDER<String> builder = MAP_TEST_BUILDER.using(generator);
-#ignore
-		builder.withFeatures(MapFeature.GENERAL_PURPOSE, CollectionSize.ANY, CollectionFeature.SUPPORTS_ITERATOR_REMOVE, MapFeature.ALLOWS_NULL_KEY_QUERIES, SpecialFeature.COPYING);
-#endignore
+#endif
+		MAP_TEST_BUILDER KEY_VALUE_STRING_GENERIC_TYPE builder = MAP_TEST_BUILDER.using(generator);
+		builder.withFeatures(getSizes(size)).withFeatures(features);
 #if VALUE_BOOLEAN
 		builder.suppressing(getSuppression());
 #endif
 		return builder.named(name).createTestSuite();
 	}
 	
-	private static Test navigableMapSuite(String name, BiFunction<String[], VALUE_TYPE[], SORTED_MAP<String>> factory) {
-		SIMPLE_MAP_TEST_GENERATOR.SortedMaps<String> generator = new SIMPLE_MAP_TEST_GENERATOR.SortedMaps<>(factory);
+	private static Test navigableMapSuite(String name, BiFunction<KEY_STRING_TYPE[], VALUE_STRING_TYPE[], SORTED_MAP KEY_VALUE_STRING_GENERIC_TYPE> factory, Collection<Feature<?>> features, int size) {
+		SIMPLE_MAP_TEST_GENERATOR.SortedMaps KEY_VALUE_STRING_GENERIC_TYPE generator = new SIMPLE_MAP_TEST_GENERATOR.SortedMaps KEY_VALUE_STRING_GENERIC_TYPE(factory);
+		NAVIGABLE_MAP_TEST_BUILDER KEY_VALUE_STRING_GENERIC_TYPE builder = NAVIGABLE_MAP_TEST_BUILDER.using(generator);
+#if TYPE_OBJECT
 		generator.setKeys(createKeys());
-		NAVIGABLE_MAP_TEST_BUILDER<String> builder = NAVIGABLE_MAP_TEST_BUILDER.using(generator);
-#ignore
-		builder.withFeatures(MapFeature.GENERAL_PURPOSE, CollectionSize.ANY, CollectionFeature.SUPPORTS_ITERATOR_REMOVE, MapFeature.ALLOWS_NULL_KEY_QUERIES, SpecialFeature.COPYING);
-#endignore
-#if VALUE_BOOLEAN
-		builder.suppressing(getSuppression());
 #endif
-		return builder.named(name).createTestSuite();
-	}
-	
-	private static class HashStrategy implements STRATEGY<String> {
-		static final HashStrategy INSTANCE = new HashStrategy();
-		@Override
-		public int hashCode(String o) { return KEY_TO_HASH(o); }
-		@Override
-		public boolean equals(String key, String value) { return KEY_EQUALS(key, value); }
-	}
-#else if VALUE_OBJECT
-	private static Test mapSuite(String name, BiFunction<KEY_TYPE[], String[], MAP<String>> factory) {
-		SIMPLE_MAP_TEST_GENERATOR.Maps<String> generator = new SIMPLE_MAP_TEST_GENERATOR.Maps<>(factory);
+#if VALUE_OBJECT
 		generator.setValues(createValues());
-		MAP_TEST_BUILDER<String> builder = MAP_TEST_BUILDER.using(generator);
-#ignore
-		builder.withFeatures(MapFeature.GENERAL_PURPOSE, CollectionSize.ANY, CollectionFeature.SUPPORTS_ITERATOR_REMOVE, MapFeature.ALLOWS_NULL_VALUE_QUERIES, SpecialFeature.COPYING);
-#endignore
-		return builder.named(name).createTestSuite();
-	}
-	
-	private static Test navigableMapSuite(String name, BiFunction<KEY_TYPE[], String[], SORTED_MAP<String>> factory) {
-		SIMPLE_MAP_TEST_GENERATOR.SortedMaps<String> generator = new SIMPLE_MAP_TEST_GENERATOR.SortedMaps<>(factory);
-		generator.setValues(createValues());
-		NAVIGABLE_MAP_TEST_BUILDER<String> builder = NAVIGABLE_MAP_TEST_BUILDER.using(generator);
-#ignore
-		builder.withFeatures(MapFeature.GENERAL_PURPOSE, CollectionSize.ANY, CollectionFeature.SUPPORTS_ITERATOR_REMOVE, MapFeature.ALLOWS_NULL_VALUE_QUERIES, SpecialFeature.COPYING);
-#endignore
-		return builder.named(name).createTestSuite();
-	}
-	
-	private static class HashStrategy implements STRATEGY KEY_GENERIC_TYPE {
-		static final HashStrategy INSTANCE = new HashStrategy();
-		@Override
-		public int hashCode(KEY_TYPE o) { return KEY_TO_HASH(o); }
-		@Override
-		public boolean equals(KEY_TYPE key, KEY_TYPE value) { return KEY_EQUALS(key, value); }
-	}
-#else
-	private static Test mapSuite(String name, BiFunction<KEY_TYPE[], VALUE_TYPE[], MAP KEY_VALUE_GENERIC_TYPE> factory) {
-		MAP_TEST_BUILDER KEY_VALUE_GENERIC_TYPE builder = MAP_TEST_BUILDER.using(new SIMPLE_MAP_TEST_GENERATOR.MapsKV_BRACES(factory));
-#ignore
-		builder.withFeatures(MapFeature.GENERAL_PURPOSE, CollectionSize.ANY, CollectionFeature.SUPPORTS_ITERATOR_REMOVE, SpecialFeature.COPYING);
-#endignore
+#endif
+		builder.withFeatures(getSizes(size)).withFeatures(features);
 #if VALUE_BOOLEAN
 		builder.suppressing(getSuppression());
 #endif
 		return builder.named(name).createTestSuite();
 	}
 	
-	private static Test navigableMapSuite(String name, BiFunction<KEY_TYPE[], VALUE_TYPE[], SORTED_MAP KEY_VALUE_GENERIC_TYPE> factory) {
-		NAVIGABLE_MAP_TEST_BUILDER builder = NAVIGABLE_MAP_TEST_BUILDER.using(new SIMPLE_MAP_TEST_GENERATOR.SortedMapsKV_BRACES(factory));
-#ignore
-		builder.withFeatures(MapFeature.GENERAL_PURPOSE, CollectionSize.ANY, CollectionFeature.SUPPORTS_ITERATOR_REMOVE, SpecialFeature.COPYING);
-#endignore
-#if VALUE_BOOLEAN
-		builder.suppressing(getSuppression());
-#endif
-		return builder.named(name).createTestSuite();
-	}
-	
-	private static class HashStrategy implements STRATEGY KEY_GENERIC_TYPE {
+	private static class HashStrategy implements STRATEGY KEY_STRING_GENERIC_TYPE {
 		static final HashStrategy INSTANCE = new HashStrategy();
 		@Override
-		public int hashCode(KEY_TYPE o) { return KEY_TO_HASH(o); }
+		public int hashCode(KEY_STRING_TYPE o) { return KEY_TO_HASH(o); }
 		@Override
-		public boolean equals(KEY_TYPE key, KEY_TYPE value) { return KEY_EQUALS(key, value); }
+		public boolean equals(KEY_STRING_TYPE key, KEY_STRING_TYPE value) { return KEY_EQUALS(key, value); }
 	}
-#endif
+	
+#ignore
+	private static Collection<CollectionSize> getSizes(int size) {
+		switch(size) {
+			case 0: return Arrays.asList(CollectionSize.ZERO);
+			case 1: return Arrays.asList(CollectionSize.ONE);
+			case 2: return Arrays.asList(CollectionSize.ZERO, CollectionSize.ONE);
+			case 3: return Arrays.asList(CollectionSize.SEVERAL);
+			case 4: return Arrays.asList(CollectionSize.ZERO, CollectionSize.SEVERAL);
+			case 5: return Arrays.asList(CollectionSize.ONE, CollectionSize.SEVERAL);
+			default: return Arrays.asList(CollectionSize.ANY);
+		}
+	}
+	
+	private static Collection<Feature<?>> getFeatures() {
+		return Arrays.asList(MapFeature.GENERAL_PURPOSE, CollectionFeature.SUPPORTS_ITERATOR_REMOVE, SpecialFeature.COPYING);
+	}
+	
+	private static Collection<Feature<?>> getImmutableFeatures() {
+		return Arrays.asList(SpecialFeature.COPYING);
+	}
+#endignore
 #if TYPE_OBJECT
 	private static String[] createKeys() {
 		return new String[]{"one", "two", "three", "four", "five", "!! a", "!! b", "~~ a", "~~ b"};
