@@ -55,12 +55,17 @@ public class PrimitiveCollectionsBuilder extends TemplateProcessor
 		super(silencedSuccess, sourceFolder, outputFolder, dataFolder);
 	}
 	
+	private PrimitiveCollectionsBuilder setSpecial() {
+		special = true;
+		return this;
+	}
+	
 	private static PrimitiveCollectionsBuilder createTests() {
-		return new PrimitiveCollectionsBuilder(Paths.get("src/builder/resources/speiger/assets/tests/templates/"), Paths.get("src/test/java/speiger/src/tests/"), Paths.get("src/builder/resources/speiger/assets/tests/"));
+		return new PrimitiveCollectionsBuilder(true, Paths.get("src/builder/resources/speiger/assets/tests/templates/"), Paths.get("src/test/java/speiger/src/tests/"), Paths.get("src/builder/resources/speiger/assets/tests/")).setSpecial();
 	}
 	
 	private static PrimitiveCollectionsBuilder createTesters() {
-		return new PrimitiveCollectionsBuilder(Paths.get("src/builder/resources/speiger/assets/testers/templates/"), Paths.get("src/test/java/speiger/src/testers/"), Paths.get("src/builder/resources/speiger/assets/testers/"));
+		return new PrimitiveCollectionsBuilder(true, Paths.get("src/builder/resources/speiger/assets/testers/templates/"), Paths.get("src/test/java/speiger/src/testers/"), Paths.get("src/builder/resources/speiger/assets/testers/")).setSpecial();
 	}
 	
 	@Override
@@ -84,7 +89,7 @@ public class PrimitiveCollectionsBuilder extends TemplateProcessor
 	@Override
 	protected void afterFinish()
 	{
-		if(getVersion() > 8) 
+		if(!special && getVersion() > 8) 
 		{
 			Path basePath = Paths.get("src/main/java");
 			try(BufferedWriter writer = Files.newBufferedWriter(basePath.resolve("module-info.java")))
@@ -300,6 +305,7 @@ public class PrimitiveCollectionsBuilder extends TemplateProcessor
 	{
 		try
 		{
+            new PrimitiveCollectionsBuilder(true).process(false);
 			createTests().process(false);
 			createTesters().process(false);
 //	        if(args.length == 0) {
