@@ -20,15 +20,15 @@ gradle-app.setting
 /bin/
 /storage/
 #Generated Code
-/src/main/java/speiger/src/collections/booleans/*
-/src/main/java/speiger/src/collections/bytes/*
-/src/main/java/speiger/src/collections/shorts/*
-/src/main/java/speiger/src/collections/chars/*
-/src/main/java/speiger/src/collections/ints/*
-/src/main/java/speiger/src/collections/longs/*
-/src/main/java/speiger/src/collections/floats/*
-/src/main/java/speiger/src/collections/doubles/*
-/src/main/java/speiger/src/collections/objects/*
+#/src/main/java/speiger/src/collections/booleans/*
+#/src/main/java/speiger/src/collections/bytes/*
+#/src/main/java/speiger/src/collections/shorts/*
+#/src/main/java/speiger/src/collections/chars/*
+#/src/main/java/speiger/src/collections/ints/*
+#/src/main/java/speiger/src/collections/longs/*
+#/src/main/java/speiger/src/collections/floats/*
+#/src/main/java/speiger/src/collections/doubles/*
+#/src/main/java/speiger/src/collections/objects/*
 
 /src/test/java/speiger/src/testers/booleans/*
 /src/test/java/speiger/src/testers/bytes/*
@@ -42,6 +42,6 @@ gradle-app.setting
 /src/test/java/speiger/src/tests/*
 
 #Cache result
-/src/builder/resources/speiger/assets/collections/cache.bin
+#/src/builder/resources/speiger/assets/collections/cache.bin
 /src/builder/resources/speiger/assets/testers/cache.bin
 /src/builder/resources/speiger/assets/tests/cache.bin
