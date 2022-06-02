@@ -585,7 +585,7 @@ public class MAPS
 		@Override
 		public VALUE_TYPE GET_VALUE(KEY_TYPE key) {
 			VALUE_TYPE type = map.GET_VALUE(key);
-			return VALUE_EQUALS(type, map.getDefaultReturnValue()) ? getDefaultReturnValue() : type;
+			return VALUE_EQUALS(type, map.getDefaultReturnValue()) && !map.containsKey(key) ? getDefaultReturnValue() : type;
 		}
 #if !TYPE_OBJECT || !VALUE_OBJECT
 		@Override
@@ -605,6 +605,8 @@ public class MAPS
 		public void BULK_MERGE(MAP KEY_VALUE_GENERIC_TYPE m, VALUE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public MAP KEY_VALUE_GENERIC_TYPE copy() { return map.copy(); }
+		@Override
+		public void clear() { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public SET KEY_GENERIC_TYPE keySet() { 
@@ -687,7 +689,7 @@ public class MAPS
 		@Override
 		public MAP.Entry KEY_VALUE_GENERIC_TYPE firstEntry() { synchronized(mutex) { return map.firstEntry(); } }
 		@Override
-		public MAP.Entry KEY_VALUE_GENERIC_TYPE lastEntry() { synchronized(mutex) { return map.firstEntry(); } }
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE lastEntry() { synchronized(mutex) { return map.lastEntry(); } }
 		@Override
 		public MAP.Entry KEY_VALUE_GENERIC_TYPE pollFirstEntry() { synchronized(mutex) { return map.pollFirstEntry(); } }
 		@Override
