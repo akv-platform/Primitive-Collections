@@ -40,7 +40,6 @@ gradle-app.setting
 /src/test/java/speiger/src/testers/doubles/*
 /src/test/java/speiger/src/testers/objects/*
 /src/test/java/speiger/src/tests/*
-/src/test/java/tests/*
 
 #Cache result
 #/src/builder/resources/speiger/assets/collections/cache.bin
