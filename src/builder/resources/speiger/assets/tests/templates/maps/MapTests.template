@@ -111,9 +111,6 @@ public class MAP_TESTS extends TestCase
 		NAVIGABLE_MAP_TEST_BUILDER KEY_VALUE_STRING_GENERIC_TYPE builder = NAVIGABLE_MAP_TEST_BUILDER.using(generator);
 #if TYPE_OBJECT
 		generator.setKeys(createKeys());
-#ignore
-		builder.withFeatures(MapFeature.ALLOWS_NULL_KEYS);
-#endignore
 #endif
 #if VALUE_OBJECT
 		generator.setValues(createValues());
