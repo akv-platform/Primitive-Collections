@@ -246,6 +246,18 @@ public class Char2IntMaps
 		@Override
 		public int getOrDefault(char key, int defaultValue) { return Objects.equals(this.key, Character.valueOf(key)) ? value : defaultValue; }
 		@Override
+		public int computeInt(char key, CharIntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public int computeIntIfAbsent(char key, Char2IntFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public int computeIntIfPresent(char key, CharIntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public int supplyIntIfAbsent(char key, IntSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public int mergeInt(char key, int value, IntIntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllInt(Char2IntMap m, IntIntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
 		public SingletonMap copy() { return new SingletonMap(key, value); }
 		@Override
 		public CharSet keySet() { 
@@ -286,7 +298,19 @@ public class Char2IntMaps
 		@Override
 		public int get(char key) { return getDefaultReturnValue(); }
 		@Override
-		public int getOrDefault(char key, int defaultValue) { return 0; }
+		public int getOrDefault(char key, int defaultValue) { return defaultValue; }
+		@Override
+		public int computeInt(char key, CharIntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public int computeIntIfAbsent(char key, Char2IntFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public int computeIntIfPresent(char key, CharIntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public int supplyIntIfAbsent(char key, IntSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public int mergeInt(char key, int value, IntIntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllInt(Char2IntMap m, IntIntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public CharSet keySet() { return CharSets.empty(); }
 		@Override

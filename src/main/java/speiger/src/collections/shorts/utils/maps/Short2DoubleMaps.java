@@ -246,6 +246,18 @@ public class Short2DoubleMaps
 		@Override
 		public double getOrDefault(short key, double defaultValue) { return Objects.equals(this.key, Short.valueOf(key)) ? value : defaultValue; }
 		@Override
+		public double computeDouble(short key, ShortDoubleUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public double computeDoubleIfAbsent(short key, Short2DoubleFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public double computeDoubleIfPresent(short key, ShortDoubleUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public double supplyDoubleIfAbsent(short key, DoubleSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public double mergeDouble(short key, double value, DoubleDoubleUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllDouble(Short2DoubleMap m, DoubleDoubleUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
 		public SingletonMap copy() { return new SingletonMap(key, value); }
 		@Override
 		public ShortSet keySet() { 
@@ -286,7 +298,19 @@ public class Short2DoubleMaps
 		@Override
 		public double get(short key) { return getDefaultReturnValue(); }
 		@Override
-		public double getOrDefault(short key, double defaultValue) { return 0D; }
+		public double getOrDefault(short key, double defaultValue) { return defaultValue; }
+		@Override
+		public double computeDouble(short key, ShortDoubleUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public double computeDoubleIfAbsent(short key, Short2DoubleFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public double computeDoubleIfPresent(short key, ShortDoubleUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public double supplyDoubleIfAbsent(short key, DoubleSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public double mergeDouble(short key, double value, DoubleDoubleUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllDouble(Short2DoubleMap m, DoubleDoubleUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public ShortSet keySet() { return ShortSets.empty(); }
 		@Override

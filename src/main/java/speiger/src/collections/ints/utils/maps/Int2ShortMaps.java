@@ -246,6 +246,18 @@ public class Int2ShortMaps
 		@Override
 		public short getOrDefault(int key, short defaultValue) { return Objects.equals(this.key, Integer.valueOf(key)) ? value : defaultValue; }
 		@Override
+		public short computeShort(int key, IntShortUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public short computeShortIfAbsent(int key, Int2ShortFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public short computeShortIfPresent(int key, IntShortUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public short supplyShortIfAbsent(int key, ShortSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public short mergeShort(int key, short value, ShortShortUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllShort(Int2ShortMap m, ShortShortUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
 		public SingletonMap copy() { return new SingletonMap(key, value); }
 		@Override
 		public IntSet keySet() { 
@@ -286,7 +298,19 @@ public class Int2ShortMaps
 		@Override
 		public short get(int key) { return getDefaultReturnValue(); }
 		@Override
-		public short getOrDefault(int key, short defaultValue) { return (short)0; }
+		public short getOrDefault(int key, short defaultValue) { return defaultValue; }
+		@Override
+		public short computeShort(int key, IntShortUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public short computeShortIfAbsent(int key, Int2ShortFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public short computeShortIfPresent(int key, IntShortUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public short supplyShortIfAbsent(int key, ShortSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public short mergeShort(int key, short value, ShortShortUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllShort(Int2ShortMap m, ShortShortUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public IntSet keySet() { return IntSets.empty(); }
 		@Override

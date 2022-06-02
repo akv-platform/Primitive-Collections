@@ -246,6 +246,18 @@ public class Long2FloatMaps
 		@Override
 		public float getOrDefault(long key, float defaultValue) { return Objects.equals(this.key, Long.valueOf(key)) ? value : defaultValue; }
 		@Override
+		public float computeFloat(long key, LongFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public float computeFloatIfAbsent(long key, Long2FloatFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public float computeFloatIfPresent(long key, LongFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public float supplyFloatIfAbsent(long key, FloatSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public float mergeFloat(long key, float value, FloatFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllFloat(Long2FloatMap m, FloatFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
 		public SingletonMap copy() { return new SingletonMap(key, value); }
 		@Override
 		public LongSet keySet() { 
@@ -286,7 +298,19 @@ public class Long2FloatMaps
 		@Override
 		public float get(long key) { return getDefaultReturnValue(); }
 		@Override
-		public float getOrDefault(long key, float defaultValue) { return 0F; }
+		public float getOrDefault(long key, float defaultValue) { return defaultValue; }
+		@Override
+		public float computeFloat(long key, LongFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public float computeFloatIfAbsent(long key, Long2FloatFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public float computeFloatIfPresent(long key, LongFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public float supplyFloatIfAbsent(long key, FloatSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public float mergeFloat(long key, float value, FloatFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllFloat(Long2FloatMap m, FloatFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public LongSet keySet() { return LongSets.empty(); }
 		@Override

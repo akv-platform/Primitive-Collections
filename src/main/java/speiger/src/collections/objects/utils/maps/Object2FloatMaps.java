@@ -261,6 +261,18 @@ public class Object2FloatMaps
 		@Override
 		public float getOrDefault(T key, float defaultValue) { return Objects.equals(this.key, key) ? value : defaultValue; }
 		@Override
+		public float computeFloat(T key, ObjectFloatUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public float computeFloatIfAbsent(T key, Object2FloatFunction<T> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public float computeFloatIfPresent(T key, ObjectFloatUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public float supplyFloatIfAbsent(T key, FloatSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public float mergeFloat(T key, float value, FloatFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllFloat(Object2FloatMap<T> m, FloatFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
 		public SingletonMap<T> copy() { return new SingletonMap<>(key, value); }
 		@Override
 		public ObjectSet<T> keySet() { 
@@ -302,7 +314,19 @@ public class Object2FloatMaps
 		@Override
 		public float getFloat(T key) { return getDefaultReturnValue(); }
 		@Override
-		public float getOrDefault(T key, float defaultValue) { return 0F; }
+		public float getOrDefault(T key, float defaultValue) { return defaultValue; }
+		@Override
+		public float computeFloat(T key, ObjectFloatUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public float computeFloatIfAbsent(T key, Object2FloatFunction<T> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public float computeFloatIfPresent(T key, ObjectFloatUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public float supplyFloatIfAbsent(T key, FloatSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public float mergeFloat(T key, float value, FloatFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllFloat(Object2FloatMap<T> m, FloatFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public ObjectSet<T> keySet() { return ObjectSets.empty(); }
 		@Override

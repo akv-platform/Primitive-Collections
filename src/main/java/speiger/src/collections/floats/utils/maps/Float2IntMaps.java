@@ -246,6 +246,18 @@ public class Float2IntMaps
 		@Override
 		public int getOrDefault(float key, int defaultValue) { return Objects.equals(this.key, Float.valueOf(key)) ? value : defaultValue; }
 		@Override
+		public int computeInt(float key, FloatIntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public int computeIntIfAbsent(float key, Float2IntFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public int computeIntIfPresent(float key, FloatIntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public int supplyIntIfAbsent(float key, IntSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public int mergeInt(float key, int value, IntIntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllInt(Float2IntMap m, IntIntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
 		public SingletonMap copy() { return new SingletonMap(key, value); }
 		@Override
 		public FloatSet keySet() { 
@@ -286,7 +298,19 @@ public class Float2IntMaps
 		@Override
 		public int get(float key) { return getDefaultReturnValue(); }
 		@Override
-		public int getOrDefault(float key, int defaultValue) { return 0; }
+		public int getOrDefault(float key, int defaultValue) { return defaultValue; }
+		@Override
+		public int computeInt(float key, FloatIntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public int computeIntIfAbsent(float key, Float2IntFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public int computeIntIfPresent(float key, FloatIntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public int supplyIntIfAbsent(float key, IntSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public int mergeInt(float key, int value, IntIntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllInt(Float2IntMap m, IntIntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public FloatSet keySet() { return FloatSets.empty(); }
 		@Override

@@ -261,6 +261,18 @@ public class Long2ObjectMaps
 		@Override
 		public V getOrDefault(long key, V defaultValue) { return Objects.equals(this.key, Long.valueOf(key)) ? value : defaultValue; }
 		@Override
+		public V compute(long key, LongObjectUnaryOperator<V> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public V computeIfAbsent(long key, Long2ObjectFunction<V> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public V computeIfPresent(long key, LongObjectUnaryOperator<V> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public V supplyIfAbsent(long key, ObjectSupplier<V> valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public V merge(long key, V value, ObjectObjectUnaryOperator<V, V> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAll(Long2ObjectMap<V> m, ObjectObjectUnaryOperator<V, V> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
 		public SingletonMap<V> copy() { return new SingletonMap<>(key, value); }
 		@Override
 		public LongSet keySet() { 
@@ -298,7 +310,19 @@ public class Long2ObjectMaps
 		@Override
 		public V get(long key) { return getDefaultReturnValue(); }
 		@Override
-		public V getOrDefault(long key, V defaultValue) { return null; }
+		public V getOrDefault(long key, V defaultValue) { return defaultValue; }
+		@Override
+		public V compute(long key, LongObjectUnaryOperator<V> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public V computeIfAbsent(long key, Long2ObjectFunction<V> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public V computeIfPresent(long key, LongObjectUnaryOperator<V> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public V supplyIfAbsent(long key, ObjectSupplier<V> valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public V merge(long key, V value, ObjectObjectUnaryOperator<V, V> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAll(Long2ObjectMap<V> m, ObjectObjectUnaryOperator<V, V> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public LongSet keySet() { return LongSets.empty(); }
 		@Override

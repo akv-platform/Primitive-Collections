@@ -242,6 +242,18 @@ public class Double2BooleanMaps
 		@Override
 		public boolean getOrDefault(double key, boolean defaultValue) { return Objects.equals(this.key, Double.valueOf(key)) ? value : defaultValue; }
 		@Override
+		public boolean computeBoolean(double key, DoubleBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanIfAbsent(double key, Double2BooleanFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanIfPresent(double key, DoubleBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean supplyBooleanIfAbsent(double key, BooleanSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean mergeBoolean(double key, boolean value, BooleanBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllBoolean(Double2BooleanMap m, BooleanBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
 		public SingletonMap copy() { return new SingletonMap(key, value); }
 		@Override
 		public DoubleSet keySet() { 
@@ -278,7 +290,19 @@ public class Double2BooleanMaps
 		@Override
 		public boolean get(double key) { return getDefaultReturnValue(); }
 		@Override
-		public boolean getOrDefault(double key, boolean defaultValue) { return false; }
+		public boolean getOrDefault(double key, boolean defaultValue) { return defaultValue; }
+		@Override
+		public boolean computeBoolean(double key, DoubleBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanIfAbsent(double key, Double2BooleanFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanIfPresent(double key, DoubleBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean supplyBooleanIfAbsent(double key, BooleanSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean mergeBoolean(double key, boolean value, BooleanBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllBoolean(Double2BooleanMap m, BooleanBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public DoubleSet keySet() { return DoubleSets.empty(); }
 		@Override

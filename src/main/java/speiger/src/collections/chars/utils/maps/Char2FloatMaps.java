@@ -246,6 +246,18 @@ public class Char2FloatMaps
 		@Override
 		public float getOrDefault(char key, float defaultValue) { return Objects.equals(this.key, Character.valueOf(key)) ? value : defaultValue; }
 		@Override
+		public float computeFloat(char key, CharFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public float computeFloatIfAbsent(char key, Char2FloatFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public float computeFloatIfPresent(char key, CharFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public float supplyFloatIfAbsent(char key, FloatSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public float mergeFloat(char key, float value, FloatFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllFloat(Char2FloatMap m, FloatFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
 		public SingletonMap copy() { return new SingletonMap(key, value); }
 		@Override
 		public CharSet keySet() { 
@@ -286,7 +298,19 @@ public class Char2FloatMaps
 		@Override
 		public float get(char key) { return getDefaultReturnValue(); }
 		@Override
-		public float getOrDefault(char key, float defaultValue) { return 0F; }
+		public float getOrDefault(char key, float defaultValue) { return defaultValue; }
+		@Override
+		public float computeFloat(char key, CharFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public float computeFloatIfAbsent(char key, Char2FloatFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public float computeFloatIfPresent(char key, CharFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public float supplyFloatIfAbsent(char key, FloatSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public float mergeFloat(char key, float value, FloatFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllFloat(Char2FloatMap m, FloatFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public CharSet keySet() { return CharSets.empty(); }
 		@Override

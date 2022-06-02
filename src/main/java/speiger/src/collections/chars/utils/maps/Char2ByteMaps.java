@@ -246,6 +246,18 @@ public class Char2ByteMaps
 		@Override
 		public byte getOrDefault(char key, byte defaultValue) { return Objects.equals(this.key, Character.valueOf(key)) ? value : defaultValue; }
 		@Override
+		public byte computeByte(char key, CharByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte computeByteIfAbsent(char key, Char2ByteFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte computeByteIfPresent(char key, CharByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte supplyByteIfAbsent(char key, ByteSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte mergeByte(char key, byte value, ByteByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllByte(Char2ByteMap m, ByteByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
 		public SingletonMap copy() { return new SingletonMap(key, value); }
 		@Override
 		public CharSet keySet() { 
@@ -286,7 +298,19 @@ public class Char2ByteMaps
 		@Override
 		public byte get(char key) { return getDefaultReturnValue(); }
 		@Override
-		public byte getOrDefault(char key, byte defaultValue) { return (byte)0; }
+		public byte getOrDefault(char key, byte defaultValue) { return defaultValue; }
+		@Override
+		public byte computeByte(char key, CharByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte computeByteIfAbsent(char key, Char2ByteFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte computeByteIfPresent(char key, CharByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte supplyByteIfAbsent(char key, ByteSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte mergeByte(char key, byte value, ByteByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllByte(Char2ByteMap m, ByteByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public CharSet keySet() { return CharSets.empty(); }
 		@Override

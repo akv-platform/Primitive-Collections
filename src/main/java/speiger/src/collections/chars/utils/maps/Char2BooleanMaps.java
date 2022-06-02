@@ -242,6 +242,18 @@ public class Char2BooleanMaps
 		@Override
 		public boolean getOrDefault(char key, boolean defaultValue) { return Objects.equals(this.key, Character.valueOf(key)) ? value : defaultValue; }
 		@Override
+		public boolean computeBoolean(char key, CharBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanIfAbsent(char key, Char2BooleanFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanIfPresent(char key, CharBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean supplyBooleanIfAbsent(char key, BooleanSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean mergeBoolean(char key, boolean value, BooleanBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllBoolean(Char2BooleanMap m, BooleanBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
 		public SingletonMap copy() { return new SingletonMap(key, value); }
 		@Override
 		public CharSet keySet() { 
@@ -278,7 +290,19 @@ public class Char2BooleanMaps
 		@Override
 		public boolean get(char key) { return getDefaultReturnValue(); }
 		@Override
-		public boolean getOrDefault(char key, boolean defaultValue) { return false; }
+		public boolean getOrDefault(char key, boolean defaultValue) { return defaultValue; }
+		@Override
+		public boolean computeBoolean(char key, CharBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanIfAbsent(char key, Char2BooleanFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanIfPresent(char key, CharBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean supplyBooleanIfAbsent(char key, BooleanSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean mergeBoolean(char key, boolean value, BooleanBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllBoolean(Char2BooleanMap m, BooleanBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public CharSet keySet() { return CharSets.empty(); }
 		@Override

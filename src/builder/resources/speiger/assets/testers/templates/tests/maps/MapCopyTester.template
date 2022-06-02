@@ -6,6 +6,7 @@ import org.junit.Ignore;
 import com.google.common.collect.testing.features.CollectionFeature;
 
 import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
+import speiger.src.collections.PACKAGE.utils.maps.MAPS;
 import speiger.src.testers.PACKAGE.tests.base.maps.ABSTRACT_MAP_TESTER;
 import speiger.src.testers.utils.SpecialFeature;
 
@@ -19,7 +20,9 @@ public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapCopyTester KEY_VALUE_GENERIC_TYPE e
 #endignore
 	public void testEquals() {
 		MAP KEY_VALUE_GENERIC_TYPE copy = container.copy();
-		Assert.assertFalse("Copied Map shouldn't match", copy == container);
+		if(!(copy instanceof MAPS.EmptyMap)) {
+			Assert.assertFalse("Copied Map shouldn't match", copy == container);
+		}
 		Assert.assertTrue("Copied Map contents should match", copy.equals(container));
 	}
 

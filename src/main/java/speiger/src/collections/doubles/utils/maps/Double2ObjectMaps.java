@@ -261,6 +261,18 @@ public class Double2ObjectMaps
 		@Override
 		public V getOrDefault(double key, V defaultValue) { return Objects.equals(this.key, Double.valueOf(key)) ? value : defaultValue; }
 		@Override
+		public V compute(double key, DoubleObjectUnaryOperator<V> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public V computeIfAbsent(double key, Double2ObjectFunction<V> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public V computeIfPresent(double key, DoubleObjectUnaryOperator<V> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public V supplyIfAbsent(double key, ObjectSupplier<V> valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public V merge(double key, V value, ObjectObjectUnaryOperator<V, V> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAll(Double2ObjectMap<V> m, ObjectObjectUnaryOperator<V, V> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
 		public SingletonMap<V> copy() { return new SingletonMap<>(key, value); }
 		@Override
 		public DoubleSet keySet() { 
@@ -298,7 +310,19 @@ public class Double2ObjectMaps
 		@Override
 		public V get(double key) { return getDefaultReturnValue(); }
 		@Override
-		public V getOrDefault(double key, V defaultValue) { return null; }
+		public V getOrDefault(double key, V defaultValue) { return defaultValue; }
+		@Override
+		public V compute(double key, DoubleObjectUnaryOperator<V> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public V computeIfAbsent(double key, Double2ObjectFunction<V> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public V computeIfPresent(double key, DoubleObjectUnaryOperator<V> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public V supplyIfAbsent(double key, ObjectSupplier<V> valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public V merge(double key, V value, ObjectObjectUnaryOperator<V, V> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAll(Double2ObjectMap<V> m, ObjectObjectUnaryOperator<V, V> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public DoubleSet keySet() { return DoubleSets.empty(); }
 		@Override

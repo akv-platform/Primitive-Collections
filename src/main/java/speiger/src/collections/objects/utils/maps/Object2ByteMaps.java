@@ -261,6 +261,18 @@ public class Object2ByteMaps
 		@Override
 		public byte getOrDefault(T key, byte defaultValue) { return Objects.equals(this.key, key) ? value : defaultValue; }
 		@Override
+		public byte computeByte(T key, ObjectByteUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte computeByteIfAbsent(T key, Object2ByteFunction<T> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte computeByteIfPresent(T key, ObjectByteUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte supplyByteIfAbsent(T key, ByteSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte mergeByte(T key, byte value, ByteByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllByte(Object2ByteMap<T> m, ByteByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
 		public SingletonMap<T> copy() { return new SingletonMap<>(key, value); }
 		@Override
 		public ObjectSet<T> keySet() { 
@@ -302,7 +314,19 @@ public class Object2ByteMaps
 		@Override
 		public byte getByte(T key) { return getDefaultReturnValue(); }
 		@Override
-		public byte getOrDefault(T key, byte defaultValue) { return (byte)0; }
+		public byte getOrDefault(T key, byte defaultValue) { return defaultValue; }
+		@Override
+		public byte computeByte(T key, ObjectByteUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte computeByteIfAbsent(T key, Object2ByteFunction<T> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte computeByteIfPresent(T key, ObjectByteUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte supplyByteIfAbsent(T key, ByteSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte mergeByte(T key, byte value, ByteByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllByte(Object2ByteMap<T> m, ByteByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public ObjectSet<T> keySet() { return ObjectSets.empty(); }
 		@Override

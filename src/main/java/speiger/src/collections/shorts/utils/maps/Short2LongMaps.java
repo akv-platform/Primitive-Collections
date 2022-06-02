@@ -246,6 +246,18 @@ public class Short2LongMaps
 		@Override
 		public long getOrDefault(short key, long defaultValue) { return Objects.equals(this.key, Short.valueOf(key)) ? value : defaultValue; }
 		@Override
+		public long computeLong(short key, ShortLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public long computeLongIfAbsent(short key, Short2LongFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public long computeLongIfPresent(short key, ShortLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public long supplyLongIfAbsent(short key, LongSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public long mergeLong(short key, long value, LongLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllLong(Short2LongMap m, LongLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
 		public SingletonMap copy() { return new SingletonMap(key, value); }
 		@Override
 		public ShortSet keySet() { 
@@ -286,7 +298,19 @@ public class Short2LongMaps
 		@Override
 		public long get(short key) { return getDefaultReturnValue(); }
 		@Override
-		public long getOrDefault(short key, long defaultValue) { return 0L; }
+		public long getOrDefault(short key, long defaultValue) { return defaultValue; }
+		@Override
+		public long computeLong(short key, ShortLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public long computeLongIfAbsent(short key, Short2LongFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public long computeLongIfPresent(short key, ShortLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public long supplyLongIfAbsent(short key, LongSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public long mergeLong(short key, long value, LongLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllLong(Short2LongMap m, LongLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public ShortSet keySet() { return ShortSets.empty(); }
 		@Override

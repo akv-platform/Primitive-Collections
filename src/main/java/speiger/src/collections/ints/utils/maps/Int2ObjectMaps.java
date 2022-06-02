@@ -261,6 +261,18 @@ public class Int2ObjectMaps
 		@Override
 		public V getOrDefault(int key, V defaultValue) { return Objects.equals(this.key, Integer.valueOf(key)) ? value : defaultValue; }
 		@Override
+		public V compute(int key, IntObjectUnaryOperator<V> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public V computeIfAbsent(int key, Int2ObjectFunction<V> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public V computeIfPresent(int key, IntObjectUnaryOperator<V> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public V supplyIfAbsent(int key, ObjectSupplier<V> valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public V merge(int key, V value, ObjectObjectUnaryOperator<V, V> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAll(Int2ObjectMap<V> m, ObjectObjectUnaryOperator<V, V> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
 		public SingletonMap<V> copy() { return new SingletonMap<>(key, value); }
 		@Override
 		public IntSet keySet() { 
@@ -298,7 +310,19 @@ public class Int2ObjectMaps
 		@Override
 		public V get(int key) { return getDefaultReturnValue(); }
 		@Override
-		public V getOrDefault(int key, V defaultValue) { return null; }
+		public V getOrDefault(int key, V defaultValue) { return defaultValue; }
+		@Override
+		public V compute(int key, IntObjectUnaryOperator<V> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public V computeIfAbsent(int key, Int2ObjectFunction<V> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public V computeIfPresent(int key, IntObjectUnaryOperator<V> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public V supplyIfAbsent(int key, ObjectSupplier<V> valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public V merge(int key, V value, ObjectObjectUnaryOperator<V, V> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAll(Int2ObjectMap<V> m, ObjectObjectUnaryOperator<V, V> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public IntSet keySet() { return IntSets.empty(); }
 		@Override

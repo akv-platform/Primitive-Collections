@@ -261,6 +261,18 @@ public class Short2ObjectMaps
 		@Override
 		public V getOrDefault(short key, V defaultValue) { return Objects.equals(this.key, Short.valueOf(key)) ? value : defaultValue; }
 		@Override
+		public V compute(short key, ShortObjectUnaryOperator<V> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public V computeIfAbsent(short key, Short2ObjectFunction<V> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public V computeIfPresent(short key, ShortObjectUnaryOperator<V> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public V supplyIfAbsent(short key, ObjectSupplier<V> valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public V merge(short key, V value, ObjectObjectUnaryOperator<V, V> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAll(Short2ObjectMap<V> m, ObjectObjectUnaryOperator<V, V> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
 		public SingletonMap<V> copy() { return new SingletonMap<>(key, value); }
 		@Override
 		public ShortSet keySet() { 
@@ -298,7 +310,19 @@ public class Short2ObjectMaps
 		@Override
 		public V get(short key) { return getDefaultReturnValue(); }
 		@Override
-		public V getOrDefault(short key, V defaultValue) { return null; }
+		public V getOrDefault(short key, V defaultValue) { return defaultValue; }
+		@Override
+		public V compute(short key, ShortObjectUnaryOperator<V> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public V computeIfAbsent(short key, Short2ObjectFunction<V> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public V computeIfPresent(short key, ShortObjectUnaryOperator<V> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public V supplyIfAbsent(short key, ObjectSupplier<V> valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public V merge(short key, V value, ObjectObjectUnaryOperator<V, V> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAll(Short2ObjectMap<V> m, ObjectObjectUnaryOperator<V, V> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public ShortSet keySet() { return ShortSets.empty(); }
 		@Override

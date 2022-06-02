@@ -246,6 +246,18 @@ public class Float2ShortMaps
 		@Override
 		public short getOrDefault(float key, short defaultValue) { return Objects.equals(this.key, Float.valueOf(key)) ? value : defaultValue; }
 		@Override
+		public short computeShort(float key, FloatShortUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public short computeShortIfAbsent(float key, Float2ShortFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public short computeShortIfPresent(float key, FloatShortUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public short supplyShortIfAbsent(float key, ShortSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public short mergeShort(float key, short value, ShortShortUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllShort(Float2ShortMap m, ShortShortUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
 		public SingletonMap copy() { return new SingletonMap(key, value); }
 		@Override
 		public FloatSet keySet() { 
@@ -286,7 +298,19 @@ public class Float2ShortMaps
 		@Override
 		public short get(float key) { return getDefaultReturnValue(); }
 		@Override
-		public short getOrDefault(float key, short defaultValue) { return (short)0; }
+		public short getOrDefault(float key, short defaultValue) { return defaultValue; }
+		@Override
+		public short computeShort(float key, FloatShortUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public short computeShortIfAbsent(float key, Float2ShortFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public short computeShortIfPresent(float key, FloatShortUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public short supplyShortIfAbsent(float key, ShortSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public short mergeShort(float key, short value, ShortShortUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllShort(Float2ShortMap m, ShortShortUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public FloatSet keySet() { return FloatSets.empty(); }
 		@Override

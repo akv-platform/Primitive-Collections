@@ -261,6 +261,18 @@ public class Char2ObjectMaps
 		@Override
 		public V getOrDefault(char key, V defaultValue) { return Objects.equals(this.key, Character.valueOf(key)) ? value : defaultValue; }
 		@Override
+		public V compute(char key, CharObjectUnaryOperator<V> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public V computeIfAbsent(char key, Char2ObjectFunction<V> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public V computeIfPresent(char key, CharObjectUnaryOperator<V> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public V supplyIfAbsent(char key, ObjectSupplier<V> valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public V merge(char key, V value, ObjectObjectUnaryOperator<V, V> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAll(Char2ObjectMap<V> m, ObjectObjectUnaryOperator<V, V> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
 		public SingletonMap<V> copy() { return new SingletonMap<>(key, value); }
 		@Override
 		public CharSet keySet() { 
@@ -298,7 +310,19 @@ public class Char2ObjectMaps
 		@Override
 		public V get(char key) { return getDefaultReturnValue(); }
 		@Override
-		public V getOrDefault(char key, V defaultValue) { return null; }
+		public V getOrDefault(char key, V defaultValue) { return defaultValue; }
+		@Override
+		public V compute(char key, CharObjectUnaryOperator<V> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public V computeIfAbsent(char key, Char2ObjectFunction<V> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public V computeIfPresent(char key, CharObjectUnaryOperator<V> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public V supplyIfAbsent(char key, ObjectSupplier<V> valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public V merge(char key, V value, ObjectObjectUnaryOperator<V, V> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAll(Char2ObjectMap<V> m, ObjectObjectUnaryOperator<V, V> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public CharSet keySet() { return CharSets.empty(); }
 		@Override

@@ -246,6 +246,18 @@ public class Char2ShortMaps
 		@Override
 		public short getOrDefault(char key, short defaultValue) { return Objects.equals(this.key, Character.valueOf(key)) ? value : defaultValue; }
 		@Override
+		public short computeShort(char key, CharShortUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public short computeShortIfAbsent(char key, Char2ShortFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public short computeShortIfPresent(char key, CharShortUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public short supplyShortIfAbsent(char key, ShortSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public short mergeShort(char key, short value, ShortShortUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllShort(Char2ShortMap m, ShortShortUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
 		public SingletonMap copy() { return new SingletonMap(key, value); }
 		@Override
 		public CharSet keySet() { 
@@ -286,7 +298,19 @@ public class Char2ShortMaps
 		@Override
 		public short get(char key) { return getDefaultReturnValue(); }
 		@Override
-		public short getOrDefault(char key, short defaultValue) { return (short)0; }
+		public short getOrDefault(char key, short defaultValue) { return defaultValue; }
+		@Override
+		public short computeShort(char key, CharShortUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public short computeShortIfAbsent(char key, Char2ShortFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public short computeShortIfPresent(char key, CharShortUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public short supplyShortIfAbsent(char key, ShortSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public short mergeShort(char key, short value, ShortShortUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllShort(Char2ShortMap m, ShortShortUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public CharSet keySet() { return CharSets.empty(); }
 		@Override

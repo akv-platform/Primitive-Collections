@@ -246,6 +246,18 @@ public class Byte2ShortMaps
 		@Override
 		public short getOrDefault(byte key, short defaultValue) { return Objects.equals(this.key, Byte.valueOf(key)) ? value : defaultValue; }
 		@Override
+		public short computeShort(byte key, ByteShortUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public short computeShortIfAbsent(byte key, Byte2ShortFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public short computeShortIfPresent(byte key, ByteShortUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public short supplyShortIfAbsent(byte key, ShortSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public short mergeShort(byte key, short value, ShortShortUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllShort(Byte2ShortMap m, ShortShortUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
 		public SingletonMap copy() { return new SingletonMap(key, value); }
 		@Override
 		public ByteSet keySet() { 
@@ -286,7 +298,19 @@ public class Byte2ShortMaps
 		@Override
 		public short get(byte key) { return getDefaultReturnValue(); }
 		@Override
-		public short getOrDefault(byte key, short defaultValue) { return (short)0; }
+		public short getOrDefault(byte key, short defaultValue) { return defaultValue; }
+		@Override
+		public short computeShort(byte key, ByteShortUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public short computeShortIfAbsent(byte key, Byte2ShortFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public short computeShortIfPresent(byte key, ByteShortUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public short supplyShortIfAbsent(byte key, ShortSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public short mergeShort(byte key, short value, ShortShortUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllShort(Byte2ShortMap m, ShortShortUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public ByteSet keySet() { return ByteSets.empty(); }
 		@Override

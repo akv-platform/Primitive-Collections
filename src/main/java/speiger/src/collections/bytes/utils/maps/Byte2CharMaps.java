@@ -246,6 +246,18 @@ public class Byte2CharMaps
 		@Override
 		public char getOrDefault(byte key, char defaultValue) { return Objects.equals(this.key, Byte.valueOf(key)) ? value : defaultValue; }
 		@Override
+		public char computeChar(byte key, ByteCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public char computeCharIfAbsent(byte key, Byte2CharFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public char computeCharIfPresent(byte key, ByteCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public char supplyCharIfAbsent(byte key, CharSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public char mergeChar(byte key, char value, CharCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllChar(Byte2CharMap m, CharCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
 		public SingletonMap copy() { return new SingletonMap(key, value); }
 		@Override
 		public ByteSet keySet() { 
@@ -286,7 +298,19 @@ public class Byte2CharMaps
 		@Override
 		public char get(byte key) { return getDefaultReturnValue(); }
 		@Override
-		public char getOrDefault(byte key, char defaultValue) { return (char)0; }
+		public char getOrDefault(byte key, char defaultValue) { return defaultValue; }
+		@Override
+		public char computeChar(byte key, ByteCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public char computeCharIfAbsent(byte key, Byte2CharFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public char computeCharIfPresent(byte key, ByteCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public char supplyCharIfAbsent(byte key, CharSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public char mergeChar(byte key, char value, CharCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllChar(Byte2CharMap m, CharCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public ByteSet keySet() { return ByteSets.empty(); }
 		@Override

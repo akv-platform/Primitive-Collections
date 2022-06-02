@@ -246,6 +246,18 @@ public class Double2ByteMaps
 		@Override
 		public byte getOrDefault(double key, byte defaultValue) { return Objects.equals(this.key, Double.valueOf(key)) ? value : defaultValue; }
 		@Override
+		public byte computeByte(double key, DoubleByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte computeByteIfAbsent(double key, Double2ByteFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte computeByteIfPresent(double key, DoubleByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte supplyByteIfAbsent(double key, ByteSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte mergeByte(double key, byte value, ByteByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllByte(Double2ByteMap m, ByteByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
 		public SingletonMap copy() { return new SingletonMap(key, value); }
 		@Override
 		public DoubleSet keySet() { 
@@ -286,7 +298,19 @@ public class Double2ByteMaps
 		@Override
 		public byte get(double key) { return getDefaultReturnValue(); }
 		@Override
-		public byte getOrDefault(double key, byte defaultValue) { return (byte)0; }
+		public byte getOrDefault(double key, byte defaultValue) { return defaultValue; }
+		@Override
+		public byte computeByte(double key, DoubleByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte computeByteIfAbsent(double key, Double2ByteFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte computeByteIfPresent(double key, DoubleByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte supplyByteIfAbsent(double key, ByteSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte mergeByte(double key, byte value, ByteByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllByte(Double2ByteMap m, ByteByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public DoubleSet keySet() { return DoubleSets.empty(); }
 		@Override

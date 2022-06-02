@@ -246,6 +246,18 @@ public class Long2ByteMaps
 		@Override
 		public byte getOrDefault(long key, byte defaultValue) { return Objects.equals(this.key, Long.valueOf(key)) ? value : defaultValue; }
 		@Override
+		public byte computeByte(long key, LongByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte computeByteIfAbsent(long key, Long2ByteFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte computeByteIfPresent(long key, LongByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte supplyByteIfAbsent(long key, ByteSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte mergeByte(long key, byte value, ByteByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllByte(Long2ByteMap m, ByteByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
 		public SingletonMap copy() { return new SingletonMap(key, value); }
 		@Override
 		public LongSet keySet() { 
@@ -286,7 +298,19 @@ public class Long2ByteMaps
 		@Override
 		public byte get(long key) { return getDefaultReturnValue(); }
 		@Override
-		public byte getOrDefault(long key, byte defaultValue) { return (byte)0; }
+		public byte getOrDefault(long key, byte defaultValue) { return defaultValue; }
+		@Override
+		public byte computeByte(long key, LongByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte computeByteIfAbsent(long key, Long2ByteFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte computeByteIfPresent(long key, LongByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte supplyByteIfAbsent(long key, ByteSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte mergeByte(long key, byte value, ByteByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllByte(Long2ByteMap m, ByteByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public LongSet keySet() { return LongSets.empty(); }
 		@Override

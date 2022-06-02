@@ -242,6 +242,18 @@ public class Short2BooleanMaps
 		@Override
 		public boolean getOrDefault(short key, boolean defaultValue) { return Objects.equals(this.key, Short.valueOf(key)) ? value : defaultValue; }
 		@Override
+		public boolean computeBoolean(short key, ShortBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanIfAbsent(short key, Short2BooleanFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanIfPresent(short key, ShortBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean supplyBooleanIfAbsent(short key, BooleanSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean mergeBoolean(short key, boolean value, BooleanBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllBoolean(Short2BooleanMap m, BooleanBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
 		public SingletonMap copy() { return new SingletonMap(key, value); }
 		@Override
 		public ShortSet keySet() { 
@@ -278,7 +290,19 @@ public class Short2BooleanMaps
 		@Override
 		public boolean get(short key) { return getDefaultReturnValue(); }
 		@Override
-		public boolean getOrDefault(short key, boolean defaultValue) { return false; }
+		public boolean getOrDefault(short key, boolean defaultValue) { return defaultValue; }
+		@Override
+		public boolean computeBoolean(short key, ShortBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanIfAbsent(short key, Short2BooleanFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanIfPresent(short key, ShortBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean supplyBooleanIfAbsent(short key, BooleanSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean mergeBoolean(short key, boolean value, BooleanBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllBoolean(Short2BooleanMap m, BooleanBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public ShortSet keySet() { return ShortSets.empty(); }
 		@Override

@@ -40,6 +40,7 @@ import speiger.src.collections.PACKAGE.maps.impl.tree.RB_TREE_MAP;
 import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
 import speiger.src.collections.PACKAGE.maps.interfaces.SORTED_MAP;
 import speiger.src.collections.PACKAGE.utils.STRATEGY;
+import speiger.src.collections.PACKAGE.utils.maps.MAPS;
 import speiger.src.testers.PACKAGE.builder.maps.MAP_TEST_BUILDER;
 import speiger.src.testers.PACKAGE.builder.maps.NAVIGABLE_MAP_TEST_BUILDER;
 import speiger.src.testers.PACKAGE.impl.maps.SIMPLE_MAP_TEST_GENERATOR;
@@ -79,6 +80,8 @@ public class MAP_TESTS extends TestCase
 		suite.addTest(navigableMapSuite("AVL_TREE_MAP", AVL_TREE_MAP::new, getFeatures(), -1));
 		suite.addTest(navigableMapSuite("Synchronized RB_TREE_MAP", (K, V) -> new RB_TREE_MAPKV_BRACES(K, V).synchronize(), getLimitedFeatures(), -1));
 		suite.addTest(navigableMapSuite("Unmodifiable RB_TREE_MAP", (K, V) -> new RB_TREE_MAPKV_BRACES(K, V).unmodifiable(), getLimitedImmutableFeatures(), -1));
+		suite.addTest(mapSuite("EmptyMAP", (K, V) -> MAPS.empty(), getEmptyFeatures(), 0));
+		suite.addTest(mapSuite("SingletonMAP", (K, V) -> MAPS.singleton(K[0], V[0]), getEmptyFeatures(), 1));
 	}
 	
 	private static Test mapSuite(String name, BiFunction<KEY_STRING_TYPE[], VALUE_STRING_TYPE[], MAP KEY_VALUE_STRING_GENERIC_TYPE> factory, Collection<Feature<?>> features, int size) {
@@ -151,6 +154,10 @@ public class MAP_TESTS extends TestCase
 	
 	private static Collection<Feature<?>> getFeatures() {
 		return Arrays.asList(MapFeature.GENERAL_PURPOSE, CollectionFeature.SUPPORTS_ITERATOR_REMOVE, SpecialFeature.COPYING);
+	}
+	
+	private static Collection<Feature<?>> getEmptyFeatures() {
+		return Arrays.asList(SpecialFeature.CHILDREN_COPY);
 	}
 	
 	private static Collection<Feature<?>> getImmutableFeatures() {

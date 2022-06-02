@@ -242,6 +242,18 @@ public class Byte2BooleanMaps
 		@Override
 		public boolean getOrDefault(byte key, boolean defaultValue) { return Objects.equals(this.key, Byte.valueOf(key)) ? value : defaultValue; }
 		@Override
+		public boolean computeBoolean(byte key, ByteBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanIfAbsent(byte key, Byte2BooleanFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanIfPresent(byte key, ByteBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean supplyBooleanIfAbsent(byte key, BooleanSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean mergeBoolean(byte key, boolean value, BooleanBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllBoolean(Byte2BooleanMap m, BooleanBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
 		public SingletonMap copy() { return new SingletonMap(key, value); }
 		@Override
 		public ByteSet keySet() { 
@@ -278,7 +290,19 @@ public class Byte2BooleanMaps
 		@Override
 		public boolean get(byte key) { return getDefaultReturnValue(); }
 		@Override
-		public boolean getOrDefault(byte key, boolean defaultValue) { return false; }
+		public boolean getOrDefault(byte key, boolean defaultValue) { return defaultValue; }
+		@Override
+		public boolean computeBoolean(byte key, ByteBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanIfAbsent(byte key, Byte2BooleanFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanIfPresent(byte key, ByteBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean supplyBooleanIfAbsent(byte key, BooleanSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean mergeBoolean(byte key, boolean value, BooleanBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllBoolean(Byte2BooleanMap m, BooleanBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public ByteSet keySet() { return ByteSets.empty(); }
 		@Override

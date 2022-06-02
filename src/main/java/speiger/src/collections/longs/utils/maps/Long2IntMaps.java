@@ -246,6 +246,18 @@ public class Long2IntMaps
 		@Override
 		public int getOrDefault(long key, int defaultValue) { return Objects.equals(this.key, Long.valueOf(key)) ? value : defaultValue; }
 		@Override
+		public int computeInt(long key, LongIntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public int computeIntIfAbsent(long key, Long2IntFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public int computeIntIfPresent(long key, LongIntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public int supplyIntIfAbsent(long key, IntSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public int mergeInt(long key, int value, IntIntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllInt(Long2IntMap m, IntIntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
 		public SingletonMap copy() { return new SingletonMap(key, value); }
 		@Override
 		public LongSet keySet() { 
@@ -286,7 +298,19 @@ public class Long2IntMaps
 		@Override
 		public int get(long key) { return getDefaultReturnValue(); }
 		@Override
-		public int getOrDefault(long key, int defaultValue) { return 0; }
+		public int getOrDefault(long key, int defaultValue) { return defaultValue; }
+		@Override
+		public int computeInt(long key, LongIntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public int computeIntIfAbsent(long key, Long2IntFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public int computeIntIfPresent(long key, LongIntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public int supplyIntIfAbsent(long key, IntSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public int mergeInt(long key, int value, IntIntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllInt(Long2IntMap m, IntIntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public LongSet keySet() { return LongSets.empty(); }
 		@Override

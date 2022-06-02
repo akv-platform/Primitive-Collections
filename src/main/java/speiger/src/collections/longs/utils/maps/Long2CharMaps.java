@@ -246,6 +246,18 @@ public class Long2CharMaps
 		@Override
 		public char getOrDefault(long key, char defaultValue) { return Objects.equals(this.key, Long.valueOf(key)) ? value : defaultValue; }
 		@Override
+		public char computeChar(long key, LongCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public char computeCharIfAbsent(long key, Long2CharFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public char computeCharIfPresent(long key, LongCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public char supplyCharIfAbsent(long key, CharSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public char mergeChar(long key, char value, CharCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllChar(Long2CharMap m, CharCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
 		public SingletonMap copy() { return new SingletonMap(key, value); }
 		@Override
 		public LongSet keySet() { 
@@ -286,7 +298,19 @@ public class Long2CharMaps
 		@Override
 		public char get(long key) { return getDefaultReturnValue(); }
 		@Override
-		public char getOrDefault(long key, char defaultValue) { return (char)0; }
+		public char getOrDefault(long key, char defaultValue) { return defaultValue; }
+		@Override
+		public char computeChar(long key, LongCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public char computeCharIfAbsent(long key, Long2CharFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public char computeCharIfPresent(long key, LongCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public char supplyCharIfAbsent(long key, CharSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public char mergeChar(long key, char value, CharCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllChar(Long2CharMap m, CharCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public LongSet keySet() { return LongSets.empty(); }
 		@Override

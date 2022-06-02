@@ -242,6 +242,18 @@ public class Float2BooleanMaps
 		@Override
 		public boolean getOrDefault(float key, boolean defaultValue) { return Objects.equals(this.key, Float.valueOf(key)) ? value : defaultValue; }
 		@Override
+		public boolean computeBoolean(float key, FloatBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanIfAbsent(float key, Float2BooleanFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanIfPresent(float key, FloatBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean supplyBooleanIfAbsent(float key, BooleanSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean mergeBoolean(float key, boolean value, BooleanBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllBoolean(Float2BooleanMap m, BooleanBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
 		public SingletonMap copy() { return new SingletonMap(key, value); }
 		@Override
 		public FloatSet keySet() { 
@@ -278,7 +290,19 @@ public class Float2BooleanMaps
 		@Override
 		public boolean get(float key) { return getDefaultReturnValue(); }
 		@Override
-		public boolean getOrDefault(float key, boolean defaultValue) { return false; }
+		public boolean getOrDefault(float key, boolean defaultValue) { return defaultValue; }
+		@Override
+		public boolean computeBoolean(float key, FloatBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanIfAbsent(float key, Float2BooleanFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanIfPresent(float key, FloatBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean supplyBooleanIfAbsent(float key, BooleanSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean mergeBoolean(float key, boolean value, BooleanBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllBoolean(Float2BooleanMap m, BooleanBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public FloatSet keySet() { return FloatSets.empty(); }
 		@Override

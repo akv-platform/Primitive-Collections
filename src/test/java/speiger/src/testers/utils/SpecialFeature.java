@@ -13,6 +13,7 @@ import com.google.common.collect.testing.features.TesterAnnotation;
 @SuppressWarnings({"rawtypes", "javadoc"})
 public enum SpecialFeature implements Feature<Collection> {
 	COPYING,
+	CHILDREN_COPY(COPYING),
 	MAP_ENTRY,
 	DESCENDING,
 	SUBMAP;

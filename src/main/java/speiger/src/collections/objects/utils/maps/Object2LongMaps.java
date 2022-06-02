@@ -261,6 +261,18 @@ public class Object2LongMaps
 		@Override
 		public long getOrDefault(T key, long defaultValue) { return Objects.equals(this.key, key) ? value : defaultValue; }
 		@Override
+		public long computeLong(T key, ObjectLongUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public long computeLongIfAbsent(T key, Object2LongFunction<T> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public long computeLongIfPresent(T key, ObjectLongUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public long supplyLongIfAbsent(T key, LongSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public long mergeLong(T key, long value, LongLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllLong(Object2LongMap<T> m, LongLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
 		public SingletonMap<T> copy() { return new SingletonMap<>(key, value); }
 		@Override
 		public ObjectSet<T> keySet() { 
@@ -302,7 +314,19 @@ public class Object2LongMaps
 		@Override
 		public long getLong(T key) { return getDefaultReturnValue(); }
 		@Override
-		public long getOrDefault(T key, long defaultValue) { return 0L; }
+		public long getOrDefault(T key, long defaultValue) { return defaultValue; }
+		@Override
+		public long computeLong(T key, ObjectLongUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public long computeLongIfAbsent(T key, Object2LongFunction<T> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public long computeLongIfPresent(T key, ObjectLongUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public long supplyLongIfAbsent(T key, LongSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public long mergeLong(T key, long value, LongLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllLong(Object2LongMap<T> m, LongLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public ObjectSet<T> keySet() { return ObjectSets.empty(); }
 		@Override

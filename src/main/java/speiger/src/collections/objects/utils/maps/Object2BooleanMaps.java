@@ -257,6 +257,18 @@ public class Object2BooleanMaps
 		@Override
 		public boolean getOrDefault(T key, boolean defaultValue) { return Objects.equals(this.key, key) ? value : defaultValue; }
 		@Override
+		public boolean computeBoolean(T key, ObjectBooleanUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanIfAbsent(T key, Object2BooleanFunction<T> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanIfPresent(T key, ObjectBooleanUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean supplyBooleanIfAbsent(T key, BooleanSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean mergeBoolean(T key, boolean value, BooleanBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllBoolean(Object2BooleanMap<T> m, BooleanBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
 		public SingletonMap<T> copy() { return new SingletonMap<>(key, value); }
 		@Override
 		public ObjectSet<T> keySet() { 
@@ -294,7 +306,19 @@ public class Object2BooleanMaps
 		@Override
 		public boolean getBoolean(T key) { return getDefaultReturnValue(); }
 		@Override
-		public boolean getOrDefault(T key, boolean defaultValue) { return false; }
+		public boolean getOrDefault(T key, boolean defaultValue) { return defaultValue; }
+		@Override
+		public boolean computeBoolean(T key, ObjectBooleanUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanIfAbsent(T key, Object2BooleanFunction<T> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanIfPresent(T key, ObjectBooleanUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean supplyBooleanIfAbsent(T key, BooleanSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean mergeBoolean(T key, boolean value, BooleanBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllBoolean(Object2BooleanMap<T> m, BooleanBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public ObjectSet<T> keySet() { return ObjectSets.empty(); }
 		@Override

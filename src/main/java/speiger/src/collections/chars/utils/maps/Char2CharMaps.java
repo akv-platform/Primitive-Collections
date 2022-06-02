@@ -244,6 +244,18 @@ public class Char2CharMaps
 		@Override
 		public char getOrDefault(char key, char defaultValue) { return Objects.equals(this.key, Character.valueOf(key)) ? value : defaultValue; }
 		@Override
+		public char computeChar(char key, CharCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public char computeCharIfAbsent(char key, Char2CharFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public char computeCharIfPresent(char key, CharCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public char supplyCharIfAbsent(char key, CharSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public char mergeChar(char key, char value, CharCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllChar(Char2CharMap m, CharCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
 		public SingletonMap copy() { return new SingletonMap(key, value); }
 		@Override
 		public CharSet keySet() { 
@@ -284,7 +296,19 @@ public class Char2CharMaps
 		@Override
 		public char get(char key) { return getDefaultReturnValue(); }
 		@Override
-		public char getOrDefault(char key, char defaultValue) { return (char)0; }
+		public char getOrDefault(char key, char defaultValue) { return defaultValue; }
+		@Override
+		public char computeChar(char key, CharCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public char computeCharIfAbsent(char key, Char2CharFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public char computeCharIfPresent(char key, CharCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public char supplyCharIfAbsent(char key, CharSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public char mergeChar(char key, char value, CharCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllChar(Char2CharMap m, CharCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public CharSet keySet() { return CharSets.empty(); }
 		@Override

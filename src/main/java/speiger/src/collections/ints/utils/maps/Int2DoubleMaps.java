@@ -246,6 +246,18 @@ public class Int2DoubleMaps
 		@Override
 		public double getOrDefault(int key, double defaultValue) { return Objects.equals(this.key, Integer.valueOf(key)) ? value : defaultValue; }
 		@Override
+		public double computeDouble(int key, IntDoubleUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public double computeDoubleIfAbsent(int key, Int2DoubleFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public double computeDoubleIfPresent(int key, IntDoubleUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public double supplyDoubleIfAbsent(int key, DoubleSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public double mergeDouble(int key, double value, DoubleDoubleUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllDouble(Int2DoubleMap m, DoubleDoubleUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
 		public SingletonMap copy() { return new SingletonMap(key, value); }
 		@Override
 		public IntSet keySet() { 
@@ -286,7 +298,19 @@ public class Int2DoubleMaps
 		@Override
 		public double get(int key) { return getDefaultReturnValue(); }
 		@Override
-		public double getOrDefault(int key, double defaultValue) { return 0D; }
+		public double getOrDefault(int key, double defaultValue) { return defaultValue; }
+		@Override
+		public double computeDouble(int key, IntDoubleUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public double computeDoubleIfAbsent(int key, Int2DoubleFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public double computeDoubleIfPresent(int key, IntDoubleUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public double supplyDoubleIfAbsent(int key, DoubleSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public double mergeDouble(int key, double value, DoubleDoubleUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllDouble(Int2DoubleMap m, DoubleDoubleUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public IntSet keySet() { return IntSets.empty(); }
 		@Override

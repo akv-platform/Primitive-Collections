@@ -246,6 +246,18 @@ public class Double2LongMaps
 		@Override
 		public long getOrDefault(double key, long defaultValue) { return Objects.equals(this.key, Double.valueOf(key)) ? value : defaultValue; }
 		@Override
+		public long computeLong(double key, DoubleLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public long computeLongIfAbsent(double key, Double2LongFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public long computeLongIfPresent(double key, DoubleLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public long supplyLongIfAbsent(double key, LongSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public long mergeLong(double key, long value, LongLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllLong(Double2LongMap m, LongLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
 		public SingletonMap copy() { return new SingletonMap(key, value); }
 		@Override
 		public DoubleSet keySet() { 
@@ -286,7 +298,19 @@ public class Double2LongMaps
 		@Override
 		public long get(double key) { return getDefaultReturnValue(); }
 		@Override
-		public long getOrDefault(double key, long defaultValue) { return 0L; }
+		public long getOrDefault(double key, long defaultValue) { return defaultValue; }
+		@Override
+		public long computeLong(double key, DoubleLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public long computeLongIfAbsent(double key, Double2LongFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public long computeLongIfPresent(double key, DoubleLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public long supplyLongIfAbsent(double key, LongSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public long mergeLong(double key, long value, LongLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllLong(Double2LongMap m, LongLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public DoubleSet keySet() { return DoubleSets.empty(); }
 		@Override

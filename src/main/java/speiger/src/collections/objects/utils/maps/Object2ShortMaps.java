@@ -261,6 +261,18 @@ public class Object2ShortMaps
 		@Override
 		public short getOrDefault(T key, short defaultValue) { return Objects.equals(this.key, key) ? value : defaultValue; }
 		@Override
+		public short computeShort(T key, ObjectShortUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public short computeShortIfAbsent(T key, Object2ShortFunction<T> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public short computeShortIfPresent(T key, ObjectShortUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public short supplyShortIfAbsent(T key, ShortSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public short mergeShort(T key, short value, ShortShortUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllShort(Object2ShortMap<T> m, ShortShortUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
 		public SingletonMap<T> copy() { return new SingletonMap<>(key, value); }
 		@Override
 		public ObjectSet<T> keySet() { 
@@ -302,7 +314,19 @@ public class Object2ShortMaps
 		@Override
 		public short getShort(T key) { return getDefaultReturnValue(); }
 		@Override
-		public short getOrDefault(T key, short defaultValue) { return (short)0; }
+		public short getOrDefault(T key, short defaultValue) { return defaultValue; }
+		@Override
+		public short computeShort(T key, ObjectShortUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public short computeShortIfAbsent(T key, Object2ShortFunction<T> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public short computeShortIfPresent(T key, ObjectShortUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public short supplyShortIfAbsent(T key, ShortSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public short mergeShort(T key, short value, ShortShortUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllShort(Object2ShortMap<T> m, ShortShortUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public ObjectSet<T> keySet() { return ObjectSets.empty(); }
 		@Override

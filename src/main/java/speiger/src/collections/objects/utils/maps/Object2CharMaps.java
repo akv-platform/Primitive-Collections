@@ -261,6 +261,18 @@ public class Object2CharMaps
 		@Override
 		public char getOrDefault(T key, char defaultValue) { return Objects.equals(this.key, key) ? value : defaultValue; }
 		@Override
+		public char computeChar(T key, ObjectCharUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public char computeCharIfAbsent(T key, Object2CharFunction<T> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public char computeCharIfPresent(T key, ObjectCharUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public char supplyCharIfAbsent(T key, CharSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public char mergeChar(T key, char value, CharCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllChar(Object2CharMap<T> m, CharCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
 		public SingletonMap<T> copy() { return new SingletonMap<>(key, value); }
 		@Override
 		public ObjectSet<T> keySet() { 
@@ -302,7 +314,19 @@ public class Object2CharMaps
 		@Override
 		public char getChar(T key) { return getDefaultReturnValue(); }
 		@Override
-		public char getOrDefault(T key, char defaultValue) { return (char)0; }
+		public char getOrDefault(T key, char defaultValue) { return defaultValue; }
+		@Override
+		public char computeChar(T key, ObjectCharUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public char computeCharIfAbsent(T key, Object2CharFunction<T> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public char computeCharIfPresent(T key, ObjectCharUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public char supplyCharIfAbsent(T key, CharSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public char mergeChar(T key, char value, CharCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllChar(Object2CharMap<T> m, CharCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public ObjectSet<T> keySet() { return ObjectSets.empty(); }
 		@Override
