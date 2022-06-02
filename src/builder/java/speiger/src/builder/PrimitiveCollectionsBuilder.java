@@ -1,5 +1,6 @@
 package speiger.src.builder;
 
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -41,7 +42,7 @@ public class PrimitiveCollectionsBuilder extends TemplateProcessor
 	
 	public PrimitiveCollectionsBuilder(boolean silencedSuccess)
 	{
-		super(silencedSuccess, Paths.get("src/builder/resources/speiger/assets/testers/templates/"), Paths.get("src/test/java/speiger/src/testers/"), Paths.get("src/builder/resources/speiger/assets/testers/"));
+		super(silencedSuccess, Paths.get("src/builder/resources/speiger/assets/collections/templates/"), Paths.get("src/main/java/speiger/src/collections/"), Paths.get("src/builder/resources/speiger/assets/collections/"));
 	}
 	
 	public PrimitiveCollectionsBuilder(Path sourceFolder, Path outputFolder, Path dataFolder)
@@ -88,18 +89,18 @@ public class PrimitiveCollectionsBuilder extends TemplateProcessor
 	@Override
 	protected void afterFinish()
 	{
-//		if(!special && getVersion() > 8) 
-//		{
-//			Path basePath = Paths.get("src/main/java");
-//			try(BufferedWriter writer = Files.newBufferedWriter(basePath.resolve("module-info.java")))
-//			{
-//				writer.write(getModuleInfo(basePath));
-//			}
-//			catch(Exception e)
-//			{
-//				e.printStackTrace();
-//			}
-//		}
+		if(!special && getVersion() > 8) 
+		{
+			Path basePath = Paths.get("src/main/java");
+			try(BufferedWriter writer = Files.newBufferedWriter(basePath.resolve("module-info.java")))
+			{
+				writer.write(getModuleInfo(basePath));
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	@Override
