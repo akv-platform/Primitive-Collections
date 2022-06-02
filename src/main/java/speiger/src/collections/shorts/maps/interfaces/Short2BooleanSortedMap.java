@@ -4,7 +4,7 @@ import java.util.SortedMap;
 
 import speiger.src.collections.booleans.collections.BooleanCollection;
 import speiger.src.collections.shorts.functions.ShortComparator;
-import speiger.src.collections.shorts.sets.ShortSet;
+import speiger.src.collections.shorts.sets.ShortSortedSet;
 import speiger.src.collections.shorts.utils.maps.Short2BooleanMaps;
 import speiger.src.collections.objects.sets.ObjectSortedSet;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
@@ -24,7 +24,7 @@ public interface Short2BooleanSortedMap extends SortedMap<Short, Boolean>, Short
 	public Short2BooleanSortedMap copy();
 	
 	@Override
-	public ShortSet keySet();
+	public ShortSortedSet keySet();
 	@Override
 	public BooleanCollection values();
 	

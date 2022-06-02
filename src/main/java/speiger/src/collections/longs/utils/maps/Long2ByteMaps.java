@@ -21,10 +21,12 @@ import speiger.src.collections.longs.maps.interfaces.Long2ByteNavigableMap;
 import speiger.src.collections.longs.maps.interfaces.Long2ByteSortedMap;
 import speiger.src.collections.longs.maps.interfaces.Long2ByteOrderedMap;
 import speiger.src.collections.longs.sets.LongNavigableSet;
+import speiger.src.collections.longs.sets.LongSortedSet;
 import speiger.src.collections.longs.sets.LongSet;
 import speiger.src.collections.longs.utils.LongSets;
 import speiger.src.collections.bytes.collections.ByteCollection;
 import speiger.src.collections.bytes.functions.function.ByteByteUnaryOperator;
+import speiger.src.collections.bytes.functions.ByteSupplier;
 import speiger.src.collections.bytes.utils.ByteCollections;
 import speiger.src.collections.bytes.utils.ByteSets;
 
@@ -193,13 +195,13 @@ public class Long2ByteMaps
 	 * @param entry the Entry that should be made unmodifiable
 	 * @return a Unmodifyable Entry
 	 */
-	public static Long2ByteMap.Entry unmodifiable(Long2ByteMap.Entry entry) { return entry instanceof UnmodifyableEntry ? entry : new UnmodifyableEntry(entry); }
+	public static Long2ByteMap.Entry unmodifiable(Long2ByteMap.Entry entry) { return entry instanceof UnmodifyableEntry ? entry : (entry == null ? null : new UnmodifyableEntry(entry)); }
 	/**
 	 * A Helper function that creates a Unmodifyable Entry
 	 * @param entry the Entry that should be made unmodifiable
 	 * @return a Unmodifyable Entry
 	 */
-	public static Long2ByteMap.Entry unmodifiable(Map.Entry<Long, Byte> entry) { return entry instanceof UnmodifyableEntry ? (UnmodifyableEntry)entry : new UnmodifyableEntry(entry); }
+	public static Long2ByteMap.Entry unmodifiable(Map.Entry<Long, Byte> entry) { return entry instanceof UnmodifyableEntry ? (UnmodifyableEntry)entry : (entry == null ? null : new UnmodifyableEntry(entry)); }
 	
 	/**
 	 * Creates a Singleton map from the provided values.
@@ -324,9 +326,11 @@ public class Long2ByteMaps
 		}
 		
 		@Override
-		public Long2ByteNavigableMap descendingMap() { return Long2ByteMaps.synchronize(map.descendingMap()); }
+		public Long2ByteNavigableMap descendingMap() { return Long2ByteMaps.unmodifiable(map.descendingMap()); }
 		@Override
 		public LongNavigableSet navigableKeySet() { return LongSets.unmodifiable(map.navigableKeySet()); }
+		@Override
+		public LongNavigableSet keySet() { return LongSets.unmodifiable(map.keySet()); }
 		@Override
 		public LongNavigableSet descendingKeySet() { return LongSets.unmodifiable(map.descendingKeySet()); }
 		@Override
@@ -374,7 +378,7 @@ public class Long2ByteMaps
 		@Override
 		public Long2ByteMap.Entry ceilingEntry(long key) { return Long2ByteMaps.unmodifiable(map.ceilingEntry(key)); }
 		@Override
-		public Long2ByteNavigableMap copy() { throw new UnsupportedOperationException(); }
+		public Long2ByteNavigableMap copy() { return map.copy(); }
 	}
 	
 	/**
@@ -413,7 +417,7 @@ public class Long2ByteMaps
 		@Override
 		public byte lastByteValue() { return map.lastByteValue(); }
 		@Override
-		public Long2ByteOrderedMap copy() { throw new UnsupportedOperationException(); }
+		public Long2ByteOrderedMap copy() { return map.copy(); }
 	}
 	
 	/**
@@ -436,6 +440,9 @@ public class Long2ByteMaps
 		@Override
 		public Long2ByteSortedMap tailMap(long fromKey) { return Long2ByteMaps.unmodifiable(map.tailMap(fromKey)); }
 		@Override
+		public LongSortedSet keySet() { return LongSets.unmodifiable(map.keySet()); }
+
+		@Override
 		public long firstLongKey() { return map.firstLongKey(); }
 		@Override
 		public long pollFirstLongKey() { return map.pollFirstLongKey(); }
@@ -448,7 +455,7 @@ public class Long2ByteMaps
 		@Override
 		public byte lastByteValue() { return map.lastByteValue(); }
 		@Override
-		public Long2ByteSortedMap copy() { throw new UnsupportedOperationException(); }
+		public Long2ByteSortedMap copy() { return map.copy(); }
 	}
 	
 	/**
@@ -479,11 +486,26 @@ public class Long2ByteMaps
 		@Override
 		public boolean remove(long key, byte value) { throw new UnsupportedOperationException(); }
 		@Override
-		public byte get(long key) { return map.get(key); }
+		public byte get(long key) {
+			byte type = map.get(key);
+			return type == map.getDefaultReturnValue() ? getDefaultReturnValue() : type;
+		}
 		@Override
 		public byte getOrDefault(long key, byte defaultValue) { return map.getOrDefault(key, defaultValue); }
 		@Override
-		public Long2ByteMap copy() { throw new UnsupportedOperationException(); }
+		public byte computeByte(long key, LongByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte computeByteIfAbsent(long key, Long2ByteFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte computeByteIfPresent(long key, LongByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte supplyByteIfAbsent(long key, ByteSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte mergeByte(long key, byte value, ByteByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllByte(Long2ByteMap m, ByteByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public Long2ByteMap copy() { return map.copy(); }
 		
 		@Override
 		public LongSet keySet() { 
@@ -558,6 +580,8 @@ public class Long2ByteMaps
 		@Override
 		public LongNavigableSet descendingKeySet() { synchronized(mutex) { return LongSets.synchronize(map.descendingKeySet(), mutex); } }
 		@Override
+		public LongNavigableSet keySet() { synchronized(mutex) { return LongSets.synchronize(map.keySet(), mutex); } }
+		@Override
 		public Long2ByteMap.Entry firstEntry() { synchronized(mutex) { return map.firstEntry(); } }
 		@Override
 		public Long2ByteMap.Entry lastEntry() { synchronized(mutex) { return map.firstEntry(); } }
@@ -594,7 +618,7 @@ public class Long2ByteMaps
 		@Override
 		public Long2ByteMap.Entry ceilingEntry(long key) { synchronized(mutex) { return map.ceilingEntry(key); } }
 		@Override
-		public Long2ByteNavigableMap copy() { throw new UnsupportedOperationException(); }
+		public Long2ByteNavigableMap copy() { synchronized(mutex) { return map.copy(); } }
 		@Override
 		@Deprecated
 		public Long2ByteNavigableMap subMap(Long fromKey, boolean fromInclusive, Long toKey, boolean toInclusive) { synchronized(mutex) { return Long2ByteMaps.synchronize(map.subMap(fromKey, fromInclusive, toKey, toInclusive), mutex); } }
@@ -688,7 +712,7 @@ public class Long2ByteMaps
 		@Override
 		public byte lastByteValue() { synchronized(mutex) { return map.lastByteValue(); } }
 		@Override
-		public Long2ByteOrderedMap copy() { throw new UnsupportedOperationException(); }
+		public Long2ByteOrderedMap copy() { synchronized(mutex) { return map.copy(); } }
 	}
 	
 	/**
@@ -716,6 +740,8 @@ public class Long2ByteMaps
 		@Override
 		public Long2ByteSortedMap tailMap(long fromKey) { synchronized(mutex) { return Long2ByteMaps.synchronize(map.tailMap(fromKey), mutex); } }
 		@Override
+		public LongSortedSet keySet() { synchronized(mutex) { return LongSets.synchronize(map.keySet(), mutex); } }
+		@Override
 		public long firstLongKey() { synchronized(mutex) { return map.firstLongKey(); } }
 		@Override
 		public long pollFirstLongKey() { synchronized(mutex) { return map.pollFirstLongKey(); } }
@@ -728,7 +754,7 @@ public class Long2ByteMaps
 		@Override
 		public byte lastByteValue() { synchronized(mutex) { return map.lastByteValue(); } }
 		@Override
-		public Long2ByteSortedMap copy() { throw new UnsupportedOperationException(); }
+		public Long2ByteSortedMap copy() { synchronized(mutex) { return map.copy(); } }
 		@Override
 		@Deprecated
 		public Long firstKey() { synchronized(mutex) { return map.firstKey(); } }
@@ -820,6 +846,8 @@ public class Long2ByteMaps
 		@Override
 		public byte computeByteIfPresent(long key, LongByteUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeByteIfPresent(key, mappingFunction); } }
 		@Override
+		public byte supplyByteIfAbsent(long key, ByteSupplier valueProvider) { synchronized(mutex) { return map.supplyByteIfAbsent(key, valueProvider); } }
+		@Override
 		public byte mergeByte(long key, byte value, ByteByteUnaryOperator mappingFunction) { synchronized(mutex) { return map.mergeByte(key, value, mappingFunction); } }
 		@Override
 		public void mergeAllByte(Long2ByteMap m, ByteByteUnaryOperator mappingFunction) { synchronized(mutex) { map.mergeAllByte(m, mappingFunction); } }
@@ -828,9 +856,9 @@ public class Long2ByteMaps
 		@Override
 		public void forEach(LongByteConsumer action) { synchronized(mutex) { map.forEach(action); } }
 		@Override
-		public int size() { synchronized(mutex) { return super.size(); } }
+		public int size() { synchronized(mutex) { return map.size(); } }
 		@Override
-		public Long2ByteMap copy() { throw new UnsupportedOperationException(); }
+		public Long2ByteMap copy() { synchronized(mutex) { return map.copy(); } }
 		@Override
 		public LongSet keySet() {
 			if(keys == null) keys = LongSets.synchronize(map.keySet(), mutex);

@@ -21,8 +21,6 @@ import speiger.src.collections.longs.maps.interfaces.Long2DoubleMap;
 import speiger.src.collections.longs.maps.interfaces.Long2DoubleNavigableMap;
 import speiger.src.collections.longs.sets.AbstractLongSet;
 import speiger.src.collections.longs.sets.LongNavigableSet;
-import speiger.src.collections.longs.sets.LongSet;
-import speiger.src.collections.longs.sets.LongSortedSet;
 import speiger.src.collections.longs.utils.maps.Long2DoubleMaps;
 import speiger.src.collections.doubles.collections.AbstractDoubleCollection;
 import speiger.src.collections.doubles.collections.DoubleCollection;
@@ -580,7 +578,7 @@ public class Long2DoubleAVLTreeMap extends AbstractLong2DoubleMap implements Lon
 	}
 	
 	@Override
-	public LongSortedSet keySet() {
+	public LongNavigableSet keySet() {
 		return navigableKeySet();
 	}
 	
@@ -1337,7 +1335,7 @@ public class Long2DoubleAVLTreeMap extends AbstractLong2DoubleMap implements Lon
 		}
 		
 		@Override
-		public LongSet keySet() {
+		public LongNavigableSet keySet() {
 			return navigableKeySet();
 		}
 		

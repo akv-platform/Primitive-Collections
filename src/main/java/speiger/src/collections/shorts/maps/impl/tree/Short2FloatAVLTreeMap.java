@@ -21,8 +21,6 @@ import speiger.src.collections.shorts.maps.interfaces.Short2FloatMap;
 import speiger.src.collections.shorts.maps.interfaces.Short2FloatNavigableMap;
 import speiger.src.collections.shorts.sets.AbstractShortSet;
 import speiger.src.collections.shorts.sets.ShortNavigableSet;
-import speiger.src.collections.shorts.sets.ShortSet;
-import speiger.src.collections.shorts.sets.ShortSortedSet;
 import speiger.src.collections.shorts.utils.maps.Short2FloatMaps;
 import speiger.src.collections.floats.collections.AbstractFloatCollection;
 import speiger.src.collections.floats.collections.FloatCollection;
@@ -580,7 +578,7 @@ public class Short2FloatAVLTreeMap extends AbstractShort2FloatMap implements Sho
 	}
 	
 	@Override
-	public ShortSortedSet keySet() {
+	public ShortNavigableSet keySet() {
 		return navigableKeySet();
 	}
 	
@@ -1337,7 +1335,7 @@ public class Short2FloatAVLTreeMap extends AbstractShort2FloatMap implements Sho
 		}
 		
 		@Override
-		public ShortSet keySet() {
+		public ShortNavigableSet keySet() {
 			return navigableKeySet();
 		}
 		

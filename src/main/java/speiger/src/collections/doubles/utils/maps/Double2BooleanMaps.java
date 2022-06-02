@@ -21,10 +21,12 @@ import speiger.src.collections.doubles.maps.interfaces.Double2BooleanNavigableMa
 import speiger.src.collections.doubles.maps.interfaces.Double2BooleanSortedMap;
 import speiger.src.collections.doubles.maps.interfaces.Double2BooleanOrderedMap;
 import speiger.src.collections.doubles.sets.DoubleNavigableSet;
+import speiger.src.collections.doubles.sets.DoubleSortedSet;
 import speiger.src.collections.doubles.sets.DoubleSet;
 import speiger.src.collections.doubles.utils.DoubleSets;
 import speiger.src.collections.booleans.collections.BooleanCollection;
 import speiger.src.collections.booleans.functions.function.BooleanBooleanUnaryOperator;
+import speiger.src.collections.booleans.functions.BooleanSupplier;
 import speiger.src.collections.booleans.utils.BooleanCollections;
 import speiger.src.collections.booleans.utils.BooleanSets;
 
@@ -193,13 +195,13 @@ public class Double2BooleanMaps
 	 * @param entry the Entry that should be made unmodifiable
 	 * @return a Unmodifyable Entry
 	 */
-	public static Double2BooleanMap.Entry unmodifiable(Double2BooleanMap.Entry entry) { return entry instanceof UnmodifyableEntry ? entry : new UnmodifyableEntry(entry); }
+	public static Double2BooleanMap.Entry unmodifiable(Double2BooleanMap.Entry entry) { return entry instanceof UnmodifyableEntry ? entry : (entry == null ? null : new UnmodifyableEntry(entry)); }
 	/**
 	 * A Helper function that creates a Unmodifyable Entry
 	 * @param entry the Entry that should be made unmodifiable
 	 * @return a Unmodifyable Entry
 	 */
-	public static Double2BooleanMap.Entry unmodifiable(Map.Entry<Double, Boolean> entry) { return entry instanceof UnmodifyableEntry ? (UnmodifyableEntry)entry : new UnmodifyableEntry(entry); }
+	public static Double2BooleanMap.Entry unmodifiable(Map.Entry<Double, Boolean> entry) { return entry instanceof UnmodifyableEntry ? (UnmodifyableEntry)entry : (entry == null ? null : new UnmodifyableEntry(entry)); }
 	
 	/**
 	 * Creates a Singleton map from the provided values.
@@ -316,9 +318,11 @@ public class Double2BooleanMaps
 		}
 		
 		@Override
-		public Double2BooleanNavigableMap descendingMap() { return Double2BooleanMaps.synchronize(map.descendingMap()); }
+		public Double2BooleanNavigableMap descendingMap() { return Double2BooleanMaps.unmodifiable(map.descendingMap()); }
 		@Override
 		public DoubleNavigableSet navigableKeySet() { return DoubleSets.unmodifiable(map.navigableKeySet()); }
+		@Override
+		public DoubleNavigableSet keySet() { return DoubleSets.unmodifiable(map.keySet()); }
 		@Override
 		public DoubleNavigableSet descendingKeySet() { return DoubleSets.unmodifiable(map.descendingKeySet()); }
 		@Override
@@ -366,7 +370,7 @@ public class Double2BooleanMaps
 		@Override
 		public Double2BooleanMap.Entry ceilingEntry(double key) { return Double2BooleanMaps.unmodifiable(map.ceilingEntry(key)); }
 		@Override
-		public Double2BooleanNavigableMap copy() { throw new UnsupportedOperationException(); }
+		public Double2BooleanNavigableMap copy() { return map.copy(); }
 	}
 	
 	/**
@@ -405,7 +409,7 @@ public class Double2BooleanMaps
 		@Override
 		public boolean lastBooleanValue() { return map.lastBooleanValue(); }
 		@Override
-		public Double2BooleanOrderedMap copy() { throw new UnsupportedOperationException(); }
+		public Double2BooleanOrderedMap copy() { return map.copy(); }
 	}
 	
 	/**
@@ -428,6 +432,9 @@ public class Double2BooleanMaps
 		@Override
 		public Double2BooleanSortedMap tailMap(double fromKey) { return Double2BooleanMaps.unmodifiable(map.tailMap(fromKey)); }
 		@Override
+		public DoubleSortedSet keySet() { return DoubleSets.unmodifiable(map.keySet()); }
+
+		@Override
 		public double firstDoubleKey() { return map.firstDoubleKey(); }
 		@Override
 		public double pollFirstDoubleKey() { return map.pollFirstDoubleKey(); }
@@ -440,7 +447,7 @@ public class Double2BooleanMaps
 		@Override
 		public boolean lastBooleanValue() { return map.lastBooleanValue(); }
 		@Override
-		public Double2BooleanSortedMap copy() { throw new UnsupportedOperationException(); }
+		public Double2BooleanSortedMap copy() { return map.copy(); }
 	}
 	
 	/**
@@ -467,11 +474,26 @@ public class Double2BooleanMaps
 		@Override
 		public boolean remove(double key, boolean value) { throw new UnsupportedOperationException(); }
 		@Override
-		public boolean get(double key) { return map.get(key); }
+		public boolean get(double key) {
+			boolean type = map.get(key);
+			return type == map.getDefaultReturnValue() ? getDefaultReturnValue() : type;
+		}
 		@Override
 		public boolean getOrDefault(double key, boolean defaultValue) { return map.getOrDefault(key, defaultValue); }
 		@Override
-		public Double2BooleanMap copy() { throw new UnsupportedOperationException(); }
+		public boolean computeBoolean(double key, DoubleBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanIfAbsent(double key, Double2BooleanFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanIfPresent(double key, DoubleBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean supplyBooleanIfAbsent(double key, BooleanSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean mergeBoolean(double key, boolean value, BooleanBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllBoolean(Double2BooleanMap m, BooleanBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public Double2BooleanMap copy() { return map.copy(); }
 		
 		@Override
 		public DoubleSet keySet() { 
@@ -546,6 +568,8 @@ public class Double2BooleanMaps
 		@Override
 		public DoubleNavigableSet descendingKeySet() { synchronized(mutex) { return DoubleSets.synchronize(map.descendingKeySet(), mutex); } }
 		@Override
+		public DoubleNavigableSet keySet() { synchronized(mutex) { return DoubleSets.synchronize(map.keySet(), mutex); } }
+		@Override
 		public Double2BooleanMap.Entry firstEntry() { synchronized(mutex) { return map.firstEntry(); } }
 		@Override
 		public Double2BooleanMap.Entry lastEntry() { synchronized(mutex) { return map.firstEntry(); } }
@@ -582,7 +606,7 @@ public class Double2BooleanMaps
 		@Override
 		public Double2BooleanMap.Entry ceilingEntry(double key) { synchronized(mutex) { return map.ceilingEntry(key); } }
 		@Override
-		public Double2BooleanNavigableMap copy() { throw new UnsupportedOperationException(); }
+		public Double2BooleanNavigableMap copy() { synchronized(mutex) { return map.copy(); } }
 		@Override
 		@Deprecated
 		public Double2BooleanNavigableMap subMap(Double fromKey, boolean fromInclusive, Double toKey, boolean toInclusive) { synchronized(mutex) { return Double2BooleanMaps.synchronize(map.subMap(fromKey, fromInclusive, toKey, toInclusive), mutex); } }
@@ -676,7 +700,7 @@ public class Double2BooleanMaps
 		@Override
 		public boolean lastBooleanValue() { synchronized(mutex) { return map.lastBooleanValue(); } }
 		@Override
-		public Double2BooleanOrderedMap copy() { throw new UnsupportedOperationException(); }
+		public Double2BooleanOrderedMap copy() { synchronized(mutex) { return map.copy(); } }
 	}
 	
 	/**
@@ -704,6 +728,8 @@ public class Double2BooleanMaps
 		@Override
 		public Double2BooleanSortedMap tailMap(double fromKey) { synchronized(mutex) { return Double2BooleanMaps.synchronize(map.tailMap(fromKey), mutex); } }
 		@Override
+		public DoubleSortedSet keySet() { synchronized(mutex) { return DoubleSets.synchronize(map.keySet(), mutex); } }
+		@Override
 		public double firstDoubleKey() { synchronized(mutex) { return map.firstDoubleKey(); } }
 		@Override
 		public double pollFirstDoubleKey() { synchronized(mutex) { return map.pollFirstDoubleKey(); } }
@@ -716,7 +742,7 @@ public class Double2BooleanMaps
 		@Override
 		public boolean lastBooleanValue() { synchronized(mutex) { return map.lastBooleanValue(); } }
 		@Override
-		public Double2BooleanSortedMap copy() { throw new UnsupportedOperationException(); }
+		public Double2BooleanSortedMap copy() { synchronized(mutex) { return map.copy(); } }
 		@Override
 		@Deprecated
 		public Double firstKey() { synchronized(mutex) { return map.firstKey(); } }
@@ -803,6 +829,8 @@ public class Double2BooleanMaps
 		@Override
 		public boolean computeBooleanIfPresent(double key, DoubleBooleanUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeBooleanIfPresent(key, mappingFunction); } }
 		@Override
+		public boolean supplyBooleanIfAbsent(double key, BooleanSupplier valueProvider) { synchronized(mutex) { return map.supplyBooleanIfAbsent(key, valueProvider); } }
+		@Override
 		public boolean mergeBoolean(double key, boolean value, BooleanBooleanUnaryOperator mappingFunction) { synchronized(mutex) { return map.mergeBoolean(key, value, mappingFunction); } }
 		@Override
 		public void mergeAllBoolean(Double2BooleanMap m, BooleanBooleanUnaryOperator mappingFunction) { synchronized(mutex) { map.mergeAllBoolean(m, mappingFunction); } }
@@ -811,9 +839,9 @@ public class Double2BooleanMaps
 		@Override
 		public void forEach(DoubleBooleanConsumer action) { synchronized(mutex) { map.forEach(action); } }
 		@Override
-		public int size() { synchronized(mutex) { return super.size(); } }
+		public int size() { synchronized(mutex) { return map.size(); } }
 		@Override
-		public Double2BooleanMap copy() { throw new UnsupportedOperationException(); }
+		public Double2BooleanMap copy() { synchronized(mutex) { return map.copy(); } }
 		@Override
 		public DoubleSet keySet() {
 			if(keys == null) keys = DoubleSets.synchronize(map.keySet(), mutex);

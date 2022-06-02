@@ -21,8 +21,6 @@ import speiger.src.collections.bytes.maps.interfaces.Byte2CharMap;
 import speiger.src.collections.bytes.maps.interfaces.Byte2CharNavigableMap;
 import speiger.src.collections.bytes.sets.AbstractByteSet;
 import speiger.src.collections.bytes.sets.ByteNavigableSet;
-import speiger.src.collections.bytes.sets.ByteSet;
-import speiger.src.collections.bytes.sets.ByteSortedSet;
 import speiger.src.collections.bytes.utils.maps.Byte2CharMaps;
 import speiger.src.collections.chars.collections.AbstractCharCollection;
 import speiger.src.collections.chars.collections.CharCollection;
@@ -580,7 +578,7 @@ public class Byte2CharRBTreeMap extends AbstractByte2CharMap implements Byte2Cha
 	}
 	
 	@Override
-	public ByteSortedSet keySet() {
+	public ByteNavigableSet keySet() {
 		return navigableKeySet();
 	}
 	
@@ -1180,6 +1178,11 @@ public class Byte2CharRBTreeMap extends AbstractByte2CharMap implements Byte2Cha
 		}
 		
 		@Override
+		public ByteNavigableSet keySet() {
+			return navigableKeySet();
+		}
+		
+		@Override
 		public Byte2CharNavigableMap subMap(byte fromKey, boolean fromInclusive, byte toKey, boolean toInclusive) {
 			if (!inRange(fromKey, fromInclusive)) throw new IllegalArgumentException("fromKey out of range");
 			if (!inRange(toKey, toInclusive)) throw new IllegalArgumentException("toKey out of range");
@@ -1259,6 +1262,11 @@ public class Byte2CharRBTreeMap extends AbstractByte2CharMap implements Byte2Cha
 		public ByteNavigableSet navigableKeySet() {
 			if(keySet == null) keySet = new KeySet(this);
 			return keySet;
+		}
+		
+		@Override
+		public ByteNavigableSet keySet() {
+			return navigableKeySet();
 		}
 		
 		@Override
@@ -1391,7 +1399,7 @@ public class Byte2CharRBTreeMap extends AbstractByte2CharMap implements Byte2Cha
 		}
 		
 		@Override
-		public ByteSet keySet() {
+		public ByteNavigableSet keySet() {
 			return navigableKeySet();
 		}
 		

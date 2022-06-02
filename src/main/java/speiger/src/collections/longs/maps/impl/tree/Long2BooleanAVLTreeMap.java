@@ -20,8 +20,6 @@ import speiger.src.collections.longs.maps.interfaces.Long2BooleanMap;
 import speiger.src.collections.longs.maps.interfaces.Long2BooleanNavigableMap;
 import speiger.src.collections.longs.sets.AbstractLongSet;
 import speiger.src.collections.longs.sets.LongNavigableSet;
-import speiger.src.collections.longs.sets.LongSet;
-import speiger.src.collections.longs.sets.LongSortedSet;
 import speiger.src.collections.longs.utils.maps.Long2BooleanMaps;
 import speiger.src.collections.booleans.collections.AbstractBooleanCollection;
 import speiger.src.collections.booleans.collections.BooleanCollection;
@@ -521,7 +519,7 @@ public class Long2BooleanAVLTreeMap extends AbstractLong2BooleanMap implements L
 	}
 	
 	@Override
-	public LongSortedSet keySet() {
+	public LongNavigableSet keySet() {
 		return navigableKeySet();
 	}
 	
@@ -1278,7 +1276,7 @@ public class Long2BooleanAVLTreeMap extends AbstractLong2BooleanMap implements L
 		}
 		
 		@Override
-		public LongSet keySet() {
+		public LongNavigableSet keySet() {
 			return navigableKeySet();
 		}
 		

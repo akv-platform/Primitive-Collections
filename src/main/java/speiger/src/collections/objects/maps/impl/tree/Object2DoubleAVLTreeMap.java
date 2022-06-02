@@ -19,7 +19,6 @@ import speiger.src.collections.objects.maps.interfaces.Object2DoubleNavigableMap
 import speiger.src.collections.objects.sets.AbstractObjectSet;
 import speiger.src.collections.objects.sets.ObjectNavigableSet;
 import speiger.src.collections.objects.sets.ObjectSet;
-import speiger.src.collections.objects.sets.ObjectSortedSet;
 import speiger.src.collections.objects.utils.maps.Object2DoubleMaps;
 import speiger.src.collections.doubles.collections.AbstractDoubleCollection;
 import speiger.src.collections.doubles.collections.DoubleCollection;
@@ -576,7 +575,7 @@ public class Object2DoubleAVLTreeMap<T> extends AbstractObject2DoubleMap<T> impl
 	}
 	
 	@Override
-	public ObjectSortedSet<T> keySet() {
+	public ObjectNavigableSet<T> keySet() {
 		return navigableKeySet();
 	}
 	
@@ -1295,7 +1294,7 @@ public class Object2DoubleAVLTreeMap<T> extends AbstractObject2DoubleMap<T> impl
 		}
 		
 		@Override
-		public ObjectSet<T> keySet() {
+		public ObjectNavigableSet<T> keySet() {
 			return navigableKeySet();
 		}
 		

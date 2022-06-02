@@ -21,10 +21,12 @@ import speiger.src.collections.shorts.maps.interfaces.Short2FloatNavigableMap;
 import speiger.src.collections.shorts.maps.interfaces.Short2FloatSortedMap;
 import speiger.src.collections.shorts.maps.interfaces.Short2FloatOrderedMap;
 import speiger.src.collections.shorts.sets.ShortNavigableSet;
+import speiger.src.collections.shorts.sets.ShortSortedSet;
 import speiger.src.collections.shorts.sets.ShortSet;
 import speiger.src.collections.shorts.utils.ShortSets;
 import speiger.src.collections.floats.collections.FloatCollection;
 import speiger.src.collections.floats.functions.function.FloatFloatUnaryOperator;
+import speiger.src.collections.floats.functions.FloatSupplier;
 import speiger.src.collections.floats.utils.FloatCollections;
 import speiger.src.collections.floats.utils.FloatSets;
 
@@ -193,13 +195,13 @@ public class Short2FloatMaps
 	 * @param entry the Entry that should be made unmodifiable
 	 * @return a Unmodifyable Entry
 	 */
-	public static Short2FloatMap.Entry unmodifiable(Short2FloatMap.Entry entry) { return entry instanceof UnmodifyableEntry ? entry : new UnmodifyableEntry(entry); }
+	public static Short2FloatMap.Entry unmodifiable(Short2FloatMap.Entry entry) { return entry instanceof UnmodifyableEntry ? entry : (entry == null ? null : new UnmodifyableEntry(entry)); }
 	/**
 	 * A Helper function that creates a Unmodifyable Entry
 	 * @param entry the Entry that should be made unmodifiable
 	 * @return a Unmodifyable Entry
 	 */
-	public static Short2FloatMap.Entry unmodifiable(Map.Entry<Short, Float> entry) { return entry instanceof UnmodifyableEntry ? (UnmodifyableEntry)entry : new UnmodifyableEntry(entry); }
+	public static Short2FloatMap.Entry unmodifiable(Map.Entry<Short, Float> entry) { return entry instanceof UnmodifyableEntry ? (UnmodifyableEntry)entry : (entry == null ? null : new UnmodifyableEntry(entry)); }
 	
 	/**
 	 * Creates a Singleton map from the provided values.
@@ -324,9 +326,11 @@ public class Short2FloatMaps
 		}
 		
 		@Override
-		public Short2FloatNavigableMap descendingMap() { return Short2FloatMaps.synchronize(map.descendingMap()); }
+		public Short2FloatNavigableMap descendingMap() { return Short2FloatMaps.unmodifiable(map.descendingMap()); }
 		@Override
 		public ShortNavigableSet navigableKeySet() { return ShortSets.unmodifiable(map.navigableKeySet()); }
+		@Override
+		public ShortNavigableSet keySet() { return ShortSets.unmodifiable(map.keySet()); }
 		@Override
 		public ShortNavigableSet descendingKeySet() { return ShortSets.unmodifiable(map.descendingKeySet()); }
 		@Override
@@ -374,7 +378,7 @@ public class Short2FloatMaps
 		@Override
 		public Short2FloatMap.Entry ceilingEntry(short key) { return Short2FloatMaps.unmodifiable(map.ceilingEntry(key)); }
 		@Override
-		public Short2FloatNavigableMap copy() { throw new UnsupportedOperationException(); }
+		public Short2FloatNavigableMap copy() { return map.copy(); }
 	}
 	
 	/**
@@ -413,7 +417,7 @@ public class Short2FloatMaps
 		@Override
 		public float lastFloatValue() { return map.lastFloatValue(); }
 		@Override
-		public Short2FloatOrderedMap copy() { throw new UnsupportedOperationException(); }
+		public Short2FloatOrderedMap copy() { return map.copy(); }
 	}
 	
 	/**
@@ -436,6 +440,9 @@ public class Short2FloatMaps
 		@Override
 		public Short2FloatSortedMap tailMap(short fromKey) { return Short2FloatMaps.unmodifiable(map.tailMap(fromKey)); }
 		@Override
+		public ShortSortedSet keySet() { return ShortSets.unmodifiable(map.keySet()); }
+
+		@Override
 		public short firstShortKey() { return map.firstShortKey(); }
 		@Override
 		public short pollFirstShortKey() { return map.pollFirstShortKey(); }
@@ -448,7 +455,7 @@ public class Short2FloatMaps
 		@Override
 		public float lastFloatValue() { return map.lastFloatValue(); }
 		@Override
-		public Short2FloatSortedMap copy() { throw new UnsupportedOperationException(); }
+		public Short2FloatSortedMap copy() { return map.copy(); }
 	}
 	
 	/**
@@ -479,11 +486,26 @@ public class Short2FloatMaps
 		@Override
 		public boolean remove(short key, float value) { throw new UnsupportedOperationException(); }
 		@Override
-		public float get(short key) { return map.get(key); }
+		public float get(short key) {
+			float type = map.get(key);
+			return Float.floatToIntBits(type) == Float.floatToIntBits(map.getDefaultReturnValue()) ? getDefaultReturnValue() : type;
+		}
 		@Override
 		public float getOrDefault(short key, float defaultValue) { return map.getOrDefault(key, defaultValue); }
 		@Override
-		public Short2FloatMap copy() { throw new UnsupportedOperationException(); }
+		public float computeFloat(short key, ShortFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public float computeFloatIfAbsent(short key, Short2FloatFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public float computeFloatIfPresent(short key, ShortFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public float supplyFloatIfAbsent(short key, FloatSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public float mergeFloat(short key, float value, FloatFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllFloat(Short2FloatMap m, FloatFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public Short2FloatMap copy() { return map.copy(); }
 		
 		@Override
 		public ShortSet keySet() { 
@@ -558,6 +580,8 @@ public class Short2FloatMaps
 		@Override
 		public ShortNavigableSet descendingKeySet() { synchronized(mutex) { return ShortSets.synchronize(map.descendingKeySet(), mutex); } }
 		@Override
+		public ShortNavigableSet keySet() { synchronized(mutex) { return ShortSets.synchronize(map.keySet(), mutex); } }
+		@Override
 		public Short2FloatMap.Entry firstEntry() { synchronized(mutex) { return map.firstEntry(); } }
 		@Override
 		public Short2FloatMap.Entry lastEntry() { synchronized(mutex) { return map.firstEntry(); } }
@@ -594,7 +618,7 @@ public class Short2FloatMaps
 		@Override
 		public Short2FloatMap.Entry ceilingEntry(short key) { synchronized(mutex) { return map.ceilingEntry(key); } }
 		@Override
-		public Short2FloatNavigableMap copy() { throw new UnsupportedOperationException(); }
+		public Short2FloatNavigableMap copy() { synchronized(mutex) { return map.copy(); } }
 		@Override
 		@Deprecated
 		public Short2FloatNavigableMap subMap(Short fromKey, boolean fromInclusive, Short toKey, boolean toInclusive) { synchronized(mutex) { return Short2FloatMaps.synchronize(map.subMap(fromKey, fromInclusive, toKey, toInclusive), mutex); } }
@@ -688,7 +712,7 @@ public class Short2FloatMaps
 		@Override
 		public float lastFloatValue() { synchronized(mutex) { return map.lastFloatValue(); } }
 		@Override
-		public Short2FloatOrderedMap copy() { throw new UnsupportedOperationException(); }
+		public Short2FloatOrderedMap copy() { synchronized(mutex) { return map.copy(); } }
 	}
 	
 	/**
@@ -716,6 +740,8 @@ public class Short2FloatMaps
 		@Override
 		public Short2FloatSortedMap tailMap(short fromKey) { synchronized(mutex) { return Short2FloatMaps.synchronize(map.tailMap(fromKey), mutex); } }
 		@Override
+		public ShortSortedSet keySet() { synchronized(mutex) { return ShortSets.synchronize(map.keySet(), mutex); } }
+		@Override
 		public short firstShortKey() { synchronized(mutex) { return map.firstShortKey(); } }
 		@Override
 		public short pollFirstShortKey() { synchronized(mutex) { return map.pollFirstShortKey(); } }
@@ -728,7 +754,7 @@ public class Short2FloatMaps
 		@Override
 		public float lastFloatValue() { synchronized(mutex) { return map.lastFloatValue(); } }
 		@Override
-		public Short2FloatSortedMap copy() { throw new UnsupportedOperationException(); }
+		public Short2FloatSortedMap copy() { synchronized(mutex) { return map.copy(); } }
 		@Override
 		@Deprecated
 		public Short firstKey() { synchronized(mutex) { return map.firstKey(); } }
@@ -820,6 +846,8 @@ public class Short2FloatMaps
 		@Override
 		public float computeFloatIfPresent(short key, ShortFloatUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeFloatIfPresent(key, mappingFunction); } }
 		@Override
+		public float supplyFloatIfAbsent(short key, FloatSupplier valueProvider) { synchronized(mutex) { return map.supplyFloatIfAbsent(key, valueProvider); } }
+		@Override
 		public float mergeFloat(short key, float value, FloatFloatUnaryOperator mappingFunction) { synchronized(mutex) { return map.mergeFloat(key, value, mappingFunction); } }
 		@Override
 		public void mergeAllFloat(Short2FloatMap m, FloatFloatUnaryOperator mappingFunction) { synchronized(mutex) { map.mergeAllFloat(m, mappingFunction); } }
@@ -828,9 +856,9 @@ public class Short2FloatMaps
 		@Override
 		public void forEach(ShortFloatConsumer action) { synchronized(mutex) { map.forEach(action); } }
 		@Override
-		public int size() { synchronized(mutex) { return super.size(); } }
+		public int size() { synchronized(mutex) { return map.size(); } }
 		@Override
-		public Short2FloatMap copy() { throw new UnsupportedOperationException(); }
+		public Short2FloatMap copy() { synchronized(mutex) { return map.copy(); } }
 		@Override
 		public ShortSet keySet() {
 			if(keys == null) keys = ShortSets.synchronize(map.keySet(), mutex);

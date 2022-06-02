@@ -21,8 +21,6 @@ import speiger.src.collections.doubles.maps.interfaces.Double2CharMap;
 import speiger.src.collections.doubles.maps.interfaces.Double2CharNavigableMap;
 import speiger.src.collections.doubles.sets.AbstractDoubleSet;
 import speiger.src.collections.doubles.sets.DoubleNavigableSet;
-import speiger.src.collections.doubles.sets.DoubleSet;
-import speiger.src.collections.doubles.sets.DoubleSortedSet;
 import speiger.src.collections.doubles.utils.maps.Double2CharMaps;
 import speiger.src.collections.chars.collections.AbstractCharCollection;
 import speiger.src.collections.chars.collections.CharCollection;
@@ -580,7 +578,7 @@ public class Double2CharRBTreeMap extends AbstractDouble2CharMap implements Doub
 	}
 	
 	@Override
-	public DoubleSortedSet keySet() {
+	public DoubleNavigableSet keySet() {
 		return navigableKeySet();
 	}
 	
@@ -1180,6 +1178,11 @@ public class Double2CharRBTreeMap extends AbstractDouble2CharMap implements Doub
 		}
 		
 		@Override
+		public DoubleNavigableSet keySet() {
+			return navigableKeySet();
+		}
+		
+		@Override
 		public Double2CharNavigableMap subMap(double fromKey, boolean fromInclusive, double toKey, boolean toInclusive) {
 			if (!inRange(fromKey, fromInclusive)) throw new IllegalArgumentException("fromKey out of range");
 			if (!inRange(toKey, toInclusive)) throw new IllegalArgumentException("toKey out of range");
@@ -1259,6 +1262,11 @@ public class Double2CharRBTreeMap extends AbstractDouble2CharMap implements Doub
 		public DoubleNavigableSet navigableKeySet() {
 			if(keySet == null) keySet = new KeySet(this);
 			return keySet;
+		}
+		
+		@Override
+		public DoubleNavigableSet keySet() {
+			return navigableKeySet();
 		}
 		
 		@Override
@@ -1391,7 +1399,7 @@ public class Double2CharRBTreeMap extends AbstractDouble2CharMap implements Doub
 		}
 		
 		@Override
-		public DoubleSet keySet() {
+		public DoubleNavigableSet keySet() {
 			return navigableKeySet();
 		}
 		

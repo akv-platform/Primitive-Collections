@@ -32,7 +32,9 @@ public interface Long2ByteNavigableMap extends Long2ByteSortedMap, NavigableMap<
 	/** @return a Type Specific pollLastEntry */
 	@Override
 	public Long2ByteMap.Entry pollLastEntry();
-	
+	/** @return a Type Specific Navigable Key Set */
+	@Override
+	public LongNavigableSet keySet();
 	/**
 	 * Creates a Wrapped NavigableMap that is Synchronized
 	 * @return a new NavigableMap that is synchronized

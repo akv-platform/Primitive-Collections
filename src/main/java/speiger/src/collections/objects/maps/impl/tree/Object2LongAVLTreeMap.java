@@ -19,7 +19,6 @@ import speiger.src.collections.objects.maps.interfaces.Object2LongNavigableMap;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
 import speiger.src.collections.objects.sets.ObjectNavigableSet;
 import speiger.src.collections.objects.sets.ObjectSet;
-import speiger.src.collections.objects.sets.ObjectSortedSet;
 import speiger.src.collections.objects.utils.maps.Object2LongMaps;
 import speiger.src.collections.longs.collections.AbstractLongCollection;
 import speiger.src.collections.longs.collections.LongCollection;
@@ -576,7 +575,7 @@ public class Object2LongAVLTreeMap<T> extends AbstractObject2LongMap<T> implemen
 	}
 	
 	@Override
-	public ObjectSortedSet<T> keySet() {
+	public ObjectNavigableSet<T> keySet() {
 		return navigableKeySet();
 	}
 	
@@ -1295,7 +1294,7 @@ public class Object2LongAVLTreeMap<T> extends AbstractObject2LongMap<T> implemen
 		}
 		
 		@Override
-		public ObjectSet<T> keySet() {
+		public ObjectNavigableSet<T> keySet() {
 			return navigableKeySet();
 		}
 		

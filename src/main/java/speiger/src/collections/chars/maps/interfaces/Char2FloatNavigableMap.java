@@ -32,7 +32,9 @@ public interface Char2FloatNavigableMap extends Char2FloatSortedMap, NavigableMa
 	/** @return a Type Specific pollLastEntry */
 	@Override
 	public Char2FloatMap.Entry pollLastEntry();
-	
+	/** @return a Type Specific Navigable Key Set */
+	@Override
+	public CharNavigableSet keySet();
 	/**
 	 * Creates a Wrapped NavigableMap that is Synchronized
 	 * @return a new NavigableMap that is synchronized

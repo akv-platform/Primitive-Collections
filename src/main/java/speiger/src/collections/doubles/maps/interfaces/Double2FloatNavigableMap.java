@@ -32,7 +32,9 @@ public interface Double2FloatNavigableMap extends Double2FloatSortedMap, Navigab
 	/** @return a Type Specific pollLastEntry */
 	@Override
 	public Double2FloatMap.Entry pollLastEntry();
-	
+	/** @return a Type Specific Navigable Key Set */
+	@Override
+	public DoubleNavigableSet keySet();
 	/**
 	 * Creates a Wrapped NavigableMap that is Synchronized
 	 * @return a new NavigableMap that is synchronized

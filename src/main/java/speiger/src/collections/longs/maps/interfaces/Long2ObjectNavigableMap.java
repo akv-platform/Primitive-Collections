@@ -33,7 +33,9 @@ public interface Long2ObjectNavigableMap<V> extends Long2ObjectSortedMap<V>, Nav
 	/** @return a Type Specific pollLastEntry */
 	@Override
 	public Long2ObjectMap.Entry<V> pollLastEntry();
-	
+	/** @return a Type Specific Navigable Key Set */
+	@Override
+	public LongNavigableSet keySet();
 	/**
 	 * Creates a Wrapped NavigableMap that is Synchronized
 	 * @return a new NavigableMap that is synchronized

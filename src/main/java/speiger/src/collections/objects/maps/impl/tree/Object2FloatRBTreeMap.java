@@ -19,7 +19,6 @@ import speiger.src.collections.objects.maps.interfaces.Object2FloatNavigableMap;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
 import speiger.src.collections.objects.sets.ObjectNavigableSet;
 import speiger.src.collections.objects.sets.ObjectSet;
-import speiger.src.collections.objects.sets.ObjectSortedSet;
 import speiger.src.collections.objects.utils.maps.Object2FloatMaps;
 import speiger.src.collections.floats.collections.AbstractFloatCollection;
 import speiger.src.collections.floats.collections.FloatCollection;
@@ -577,7 +576,7 @@ public class Object2FloatRBTreeMap<T> extends AbstractObject2FloatMap<T> impleme
 	}
 	
 	@Override
-	public ObjectSortedSet<T> keySet() {
+	public ObjectNavigableSet<T> keySet() {
 		return navigableKeySet();
 	}
 	
@@ -1145,6 +1144,11 @@ public class Object2FloatRBTreeMap<T> extends AbstractObject2FloatMap<T> impleme
 		}
 		
 		@Override
+		public ObjectNavigableSet<T> keySet() {
+			return navigableKeySet();
+		}
+		
+		@Override
 		public Object2FloatNavigableMap<T> subMap(T fromKey, boolean fromInclusive, T toKey, boolean toInclusive) {
 			if (!inRange(fromKey, fromInclusive)) throw new IllegalArgumentException("fromKey out of range");
 			if (!inRange(toKey, toInclusive)) throw new IllegalArgumentException("toKey out of range");
@@ -1224,6 +1228,11 @@ public class Object2FloatRBTreeMap<T> extends AbstractObject2FloatMap<T> impleme
 		public ObjectNavigableSet<T> navigableKeySet() {
 			if(keySet == null) keySet = new KeySet<>(this);
 			return keySet;
+		}
+		
+		@Override
+		public ObjectNavigableSet<T> keySet() {
+			return navigableKeySet();
 		}
 		
 		@Override
@@ -1350,7 +1359,7 @@ public class Object2FloatRBTreeMap<T> extends AbstractObject2FloatMap<T> impleme
 		}
 		
 		@Override
-		public ObjectSet<T> keySet() {
+		public ObjectNavigableSet<T> keySet() {
 			return navigableKeySet();
 		}
 		

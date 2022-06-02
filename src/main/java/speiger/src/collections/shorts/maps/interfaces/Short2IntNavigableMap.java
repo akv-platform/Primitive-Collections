@@ -32,7 +32,9 @@ public interface Short2IntNavigableMap extends Short2IntSortedMap, NavigableMap<
 	/** @return a Type Specific pollLastEntry */
 	@Override
 	public Short2IntMap.Entry pollLastEntry();
-	
+	/** @return a Type Specific Navigable Key Set */
+	@Override
+	public ShortNavigableSet keySet();
 	/**
 	 * Creates a Wrapped NavigableMap that is Synchronized
 	 * @return a new NavigableMap that is synchronized

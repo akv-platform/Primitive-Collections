@@ -4,7 +4,7 @@ import java.util.SortedMap;
 
 import speiger.src.collections.objects.collections.ObjectCollection;
 import speiger.src.collections.longs.functions.LongComparator;
-import speiger.src.collections.longs.sets.LongSet;
+import speiger.src.collections.longs.sets.LongSortedSet;
 import speiger.src.collections.longs.utils.maps.Long2ObjectMaps;
 import speiger.src.collections.objects.sets.ObjectSortedSet;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
@@ -25,7 +25,7 @@ public interface Long2ObjectSortedMap<V> extends SortedMap<Long, V>, Long2Object
 	public Long2ObjectSortedMap<V> copy();
 	
 	@Override
-	public LongSet keySet();
+	public LongSortedSet keySet();
 	@Override
 	public ObjectCollection<V> values();
 	

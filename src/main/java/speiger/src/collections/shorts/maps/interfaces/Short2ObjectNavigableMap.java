@@ -33,7 +33,9 @@ public interface Short2ObjectNavigableMap<V> extends Short2ObjectSortedMap<V>, N
 	/** @return a Type Specific pollLastEntry */
 	@Override
 	public Short2ObjectMap.Entry<V> pollLastEntry();
-	
+	/** @return a Type Specific Navigable Key Set */
+	@Override
+	public ShortNavigableSet keySet();
 	/**
 	 * Creates a Wrapped NavigableMap that is Synchronized
 	 * @return a new NavigableMap that is synchronized

@@ -4,7 +4,7 @@ import java.util.SortedMap;
 
 import speiger.src.collections.bytes.collections.ByteCollection;
 import speiger.src.collections.bytes.functions.ByteComparator;
-import speiger.src.collections.bytes.sets.ByteSet;
+import speiger.src.collections.bytes.sets.ByteSortedSet;
 import speiger.src.collections.bytes.utils.maps.Byte2ByteMaps;
 import speiger.src.collections.objects.sets.ObjectSortedSet;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
@@ -24,7 +24,7 @@ public interface Byte2ByteSortedMap extends SortedMap<Byte, Byte>, Byte2ByteMap
 	public Byte2ByteSortedMap copy();
 	
 	@Override
-	public ByteSet keySet();
+	public ByteSortedSet keySet();
 	@Override
 	public ByteCollection values();
 	

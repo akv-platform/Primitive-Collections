@@ -216,6 +216,7 @@ test {
 	filter {
 		excludeTestsMatching "speiger.src.testers.**.*"
 		excludeTestsMatching "speiger.src.tests.**.*"
+		excludeTestsMatching "tests.**.*"
 	}
 	useJUnit()
 	maxHeapSize = "1024m"

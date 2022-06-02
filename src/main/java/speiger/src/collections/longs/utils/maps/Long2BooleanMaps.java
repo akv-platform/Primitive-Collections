@@ -21,10 +21,12 @@ import speiger.src.collections.longs.maps.interfaces.Long2BooleanNavigableMap;
 import speiger.src.collections.longs.maps.interfaces.Long2BooleanSortedMap;
 import speiger.src.collections.longs.maps.interfaces.Long2BooleanOrderedMap;
 import speiger.src.collections.longs.sets.LongNavigableSet;
+import speiger.src.collections.longs.sets.LongSortedSet;
 import speiger.src.collections.longs.sets.LongSet;
 import speiger.src.collections.longs.utils.LongSets;
 import speiger.src.collections.booleans.collections.BooleanCollection;
 import speiger.src.collections.booleans.functions.function.BooleanBooleanUnaryOperator;
+import speiger.src.collections.booleans.functions.BooleanSupplier;
 import speiger.src.collections.booleans.utils.BooleanCollections;
 import speiger.src.collections.booleans.utils.BooleanSets;
 
@@ -193,13 +195,13 @@ public class Long2BooleanMaps
 	 * @param entry the Entry that should be made unmodifiable
 	 * @return a Unmodifyable Entry
 	 */
-	public static Long2BooleanMap.Entry unmodifiable(Long2BooleanMap.Entry entry) { return entry instanceof UnmodifyableEntry ? entry : new UnmodifyableEntry(entry); }
+	public static Long2BooleanMap.Entry unmodifiable(Long2BooleanMap.Entry entry) { return entry instanceof UnmodifyableEntry ? entry : (entry == null ? null : new UnmodifyableEntry(entry)); }
 	/**
 	 * A Helper function that creates a Unmodifyable Entry
 	 * @param entry the Entry that should be made unmodifiable
 	 * @return a Unmodifyable Entry
 	 */
-	public static Long2BooleanMap.Entry unmodifiable(Map.Entry<Long, Boolean> entry) { return entry instanceof UnmodifyableEntry ? (UnmodifyableEntry)entry : new UnmodifyableEntry(entry); }
+	public static Long2BooleanMap.Entry unmodifiable(Map.Entry<Long, Boolean> entry) { return entry instanceof UnmodifyableEntry ? (UnmodifyableEntry)entry : (entry == null ? null : new UnmodifyableEntry(entry)); }
 	
 	/**
 	 * Creates a Singleton map from the provided values.
@@ -316,9 +318,11 @@ public class Long2BooleanMaps
 		}
 		
 		@Override
-		public Long2BooleanNavigableMap descendingMap() { return Long2BooleanMaps.synchronize(map.descendingMap()); }
+		public Long2BooleanNavigableMap descendingMap() { return Long2BooleanMaps.unmodifiable(map.descendingMap()); }
 		@Override
 		public LongNavigableSet navigableKeySet() { return LongSets.unmodifiable(map.navigableKeySet()); }
+		@Override
+		public LongNavigableSet keySet() { return LongSets.unmodifiable(map.keySet()); }
 		@Override
 		public LongNavigableSet descendingKeySet() { return LongSets.unmodifiable(map.descendingKeySet()); }
 		@Override
@@ -366,7 +370,7 @@ public class Long2BooleanMaps
 		@Override
 		public Long2BooleanMap.Entry ceilingEntry(long key) { return Long2BooleanMaps.unmodifiable(map.ceilingEntry(key)); }
 		@Override
-		public Long2BooleanNavigableMap copy() { throw new UnsupportedOperationException(); }
+		public Long2BooleanNavigableMap copy() { return map.copy(); }
 	}
 	
 	/**
@@ -405,7 +409,7 @@ public class Long2BooleanMaps
 		@Override
 		public boolean lastBooleanValue() { return map.lastBooleanValue(); }
 		@Override
-		public Long2BooleanOrderedMap copy() { throw new UnsupportedOperationException(); }
+		public Long2BooleanOrderedMap copy() { return map.copy(); }
 	}
 	
 	/**
@@ -428,6 +432,9 @@ public class Long2BooleanMaps
 		@Override
 		public Long2BooleanSortedMap tailMap(long fromKey) { return Long2BooleanMaps.unmodifiable(map.tailMap(fromKey)); }
 		@Override
+		public LongSortedSet keySet() { return LongSets.unmodifiable(map.keySet()); }
+
+		@Override
 		public long firstLongKey() { return map.firstLongKey(); }
 		@Override
 		public long pollFirstLongKey() { return map.pollFirstLongKey(); }
@@ -440,7 +447,7 @@ public class Long2BooleanMaps
 		@Override
 		public boolean lastBooleanValue() { return map.lastBooleanValue(); }
 		@Override
-		public Long2BooleanSortedMap copy() { throw new UnsupportedOperationException(); }
+		public Long2BooleanSortedMap copy() { return map.copy(); }
 	}
 	
 	/**
@@ -467,11 +474,26 @@ public class Long2BooleanMaps
 		@Override
 		public boolean remove(long key, boolean value) { throw new UnsupportedOperationException(); }
 		@Override
-		public boolean get(long key) { return map.get(key); }
+		public boolean get(long key) {
+			boolean type = map.get(key);
+			return type == map.getDefaultReturnValue() ? getDefaultReturnValue() : type;
+		}
 		@Override
 		public boolean getOrDefault(long key, boolean defaultValue) { return map.getOrDefault(key, defaultValue); }
 		@Override
-		public Long2BooleanMap copy() { throw new UnsupportedOperationException(); }
+		public boolean computeBoolean(long key, LongBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanIfAbsent(long key, Long2BooleanFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanIfPresent(long key, LongBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean supplyBooleanIfAbsent(long key, BooleanSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean mergeBoolean(long key, boolean value, BooleanBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllBoolean(Long2BooleanMap m, BooleanBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public Long2BooleanMap copy() { return map.copy(); }
 		
 		@Override
 		public LongSet keySet() { 
@@ -546,6 +568,8 @@ public class Long2BooleanMaps
 		@Override
 		public LongNavigableSet descendingKeySet() { synchronized(mutex) { return LongSets.synchronize(map.descendingKeySet(), mutex); } }
 		@Override
+		public LongNavigableSet keySet() { synchronized(mutex) { return LongSets.synchronize(map.keySet(), mutex); } }
+		@Override
 		public Long2BooleanMap.Entry firstEntry() { synchronized(mutex) { return map.firstEntry(); } }
 		@Override
 		public Long2BooleanMap.Entry lastEntry() { synchronized(mutex) { return map.firstEntry(); } }
@@ -582,7 +606,7 @@ public class Long2BooleanMaps
 		@Override
 		public Long2BooleanMap.Entry ceilingEntry(long key) { synchronized(mutex) { return map.ceilingEntry(key); } }
 		@Override
-		public Long2BooleanNavigableMap copy() { throw new UnsupportedOperationException(); }
+		public Long2BooleanNavigableMap copy() { synchronized(mutex) { return map.copy(); } }
 		@Override
 		@Deprecated
 		public Long2BooleanNavigableMap subMap(Long fromKey, boolean fromInclusive, Long toKey, boolean toInclusive) { synchronized(mutex) { return Long2BooleanMaps.synchronize(map.subMap(fromKey, fromInclusive, toKey, toInclusive), mutex); } }
@@ -676,7 +700,7 @@ public class Long2BooleanMaps
 		@Override
 		public boolean lastBooleanValue() { synchronized(mutex) { return map.lastBooleanValue(); } }
 		@Override
-		public Long2BooleanOrderedMap copy() { throw new UnsupportedOperationException(); }
+		public Long2BooleanOrderedMap copy() { synchronized(mutex) { return map.copy(); } }
 	}
 	
 	/**
@@ -704,6 +728,8 @@ public class Long2BooleanMaps
 		@Override
 		public Long2BooleanSortedMap tailMap(long fromKey) { synchronized(mutex) { return Long2BooleanMaps.synchronize(map.tailMap(fromKey), mutex); } }
 		@Override
+		public LongSortedSet keySet() { synchronized(mutex) { return LongSets.synchronize(map.keySet(), mutex); } }
+		@Override
 		public long firstLongKey() { synchronized(mutex) { return map.firstLongKey(); } }
 		@Override
 		public long pollFirstLongKey() { synchronized(mutex) { return map.pollFirstLongKey(); } }
@@ -716,7 +742,7 @@ public class Long2BooleanMaps
 		@Override
 		public boolean lastBooleanValue() { synchronized(mutex) { return map.lastBooleanValue(); } }
 		@Override
-		public Long2BooleanSortedMap copy() { throw new UnsupportedOperationException(); }
+		public Long2BooleanSortedMap copy() { synchronized(mutex) { return map.copy(); } }
 		@Override
 		@Deprecated
 		public Long firstKey() { synchronized(mutex) { return map.firstKey(); } }
@@ -803,6 +829,8 @@ public class Long2BooleanMaps
 		@Override
 		public boolean computeBooleanIfPresent(long key, LongBooleanUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeBooleanIfPresent(key, mappingFunction); } }
 		@Override
+		public boolean supplyBooleanIfAbsent(long key, BooleanSupplier valueProvider) { synchronized(mutex) { return map.supplyBooleanIfAbsent(key, valueProvider); } }
+		@Override
 		public boolean mergeBoolean(long key, boolean value, BooleanBooleanUnaryOperator mappingFunction) { synchronized(mutex) { return map.mergeBoolean(key, value, mappingFunction); } }
 		@Override
 		public void mergeAllBoolean(Long2BooleanMap m, BooleanBooleanUnaryOperator mappingFunction) { synchronized(mutex) { map.mergeAllBoolean(m, mappingFunction); } }
@@ -811,9 +839,9 @@ public class Long2BooleanMaps
 		@Override
 		public void forEach(LongBooleanConsumer action) { synchronized(mutex) { map.forEach(action); } }
 		@Override
-		public int size() { synchronized(mutex) { return super.size(); } }
+		public int size() { synchronized(mutex) { return map.size(); } }
 		@Override
-		public Long2BooleanMap copy() { throw new UnsupportedOperationException(); }
+		public Long2BooleanMap copy() { synchronized(mutex) { return map.copy(); } }
 		@Override
 		public LongSet keySet() {
 			if(keys == null) keys = LongSets.synchronize(map.keySet(), mutex);

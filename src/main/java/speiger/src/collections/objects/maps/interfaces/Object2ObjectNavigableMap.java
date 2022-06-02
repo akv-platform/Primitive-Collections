@@ -34,7 +34,9 @@ public interface Object2ObjectNavigableMap<T, V> extends Object2ObjectSortedMap<
 	/** @return a Type Specific pollLastEntry */
 	@Override
 	public Object2ObjectMap.Entry<T, V> pollLastEntry();
-	
+	/** @return a Type Specific Navigable Key Set */
+	@Override
+	public ObjectNavigableSet<T> keySet();
 	/**
 	 * Creates a Wrapped NavigableMap that is Synchronized
 	 * @return a new NavigableMap that is synchronized

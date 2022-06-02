@@ -21,8 +21,6 @@ import speiger.src.collections.ints.maps.interfaces.Int2CharMap;
 import speiger.src.collections.ints.maps.interfaces.Int2CharNavigableMap;
 import speiger.src.collections.ints.sets.AbstractIntSet;
 import speiger.src.collections.ints.sets.IntNavigableSet;
-import speiger.src.collections.ints.sets.IntSet;
-import speiger.src.collections.ints.sets.IntSortedSet;
 import speiger.src.collections.ints.utils.maps.Int2CharMaps;
 import speiger.src.collections.chars.collections.AbstractCharCollection;
 import speiger.src.collections.chars.collections.CharCollection;
@@ -580,7 +578,7 @@ public class Int2CharAVLTreeMap extends AbstractInt2CharMap implements Int2CharN
 	}
 	
 	@Override
-	public IntSortedSet keySet() {
+	public IntNavigableSet keySet() {
 		return navigableKeySet();
 	}
 	
@@ -1337,7 +1335,7 @@ public class Int2CharAVLTreeMap extends AbstractInt2CharMap implements Int2CharN
 		}
 		
 		@Override
-		public IntSet keySet() {
+		public IntNavigableSet keySet() {
 			return navigableKeySet();
 		}
 		

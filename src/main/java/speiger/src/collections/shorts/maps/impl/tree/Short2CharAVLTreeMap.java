@@ -21,8 +21,6 @@ import speiger.src.collections.shorts.maps.interfaces.Short2CharMap;
 import speiger.src.collections.shorts.maps.interfaces.Short2CharNavigableMap;
 import speiger.src.collections.shorts.sets.AbstractShortSet;
 import speiger.src.collections.shorts.sets.ShortNavigableSet;
-import speiger.src.collections.shorts.sets.ShortSet;
-import speiger.src.collections.shorts.sets.ShortSortedSet;
 import speiger.src.collections.shorts.utils.maps.Short2CharMaps;
 import speiger.src.collections.chars.collections.AbstractCharCollection;
 import speiger.src.collections.chars.collections.CharCollection;
@@ -580,7 +578,7 @@ public class Short2CharAVLTreeMap extends AbstractShort2CharMap implements Short
 	}
 	
 	@Override
-	public ShortSortedSet keySet() {
+	public ShortNavigableSet keySet() {
 		return navigableKeySet();
 	}
 	
@@ -1337,7 +1335,7 @@ public class Short2CharAVLTreeMap extends AbstractShort2CharMap implements Short
 		}
 		
 		@Override
-		public ShortSet keySet() {
+		public ShortNavigableSet keySet() {
 			return navigableKeySet();
 		}
 		

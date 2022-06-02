@@ -20,8 +20,6 @@ import speiger.src.collections.doubles.maps.interfaces.Double2BooleanMap;
 import speiger.src.collections.doubles.maps.interfaces.Double2BooleanNavigableMap;
 import speiger.src.collections.doubles.sets.AbstractDoubleSet;
 import speiger.src.collections.doubles.sets.DoubleNavigableSet;
-import speiger.src.collections.doubles.sets.DoubleSet;
-import speiger.src.collections.doubles.sets.DoubleSortedSet;
 import speiger.src.collections.doubles.utils.maps.Double2BooleanMaps;
 import speiger.src.collections.booleans.collections.AbstractBooleanCollection;
 import speiger.src.collections.booleans.collections.BooleanCollection;
@@ -521,7 +519,7 @@ public class Double2BooleanAVLTreeMap extends AbstractDouble2BooleanMap implemen
 	}
 	
 	@Override
-	public DoubleSortedSet keySet() {
+	public DoubleNavigableSet keySet() {
 		return navigableKeySet();
 	}
 	
@@ -1278,7 +1276,7 @@ public class Double2BooleanAVLTreeMap extends AbstractDouble2BooleanMap implemen
 		}
 		
 		@Override
-		public DoubleSet keySet() {
+		public DoubleNavigableSet keySet() {
 			return navigableKeySet();
 		}
 		

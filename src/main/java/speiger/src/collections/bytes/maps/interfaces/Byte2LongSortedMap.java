@@ -4,7 +4,7 @@ import java.util.SortedMap;
 
 import speiger.src.collections.longs.collections.LongCollection;
 import speiger.src.collections.bytes.functions.ByteComparator;
-import speiger.src.collections.bytes.sets.ByteSet;
+import speiger.src.collections.bytes.sets.ByteSortedSet;
 import speiger.src.collections.bytes.utils.maps.Byte2LongMaps;
 import speiger.src.collections.objects.sets.ObjectSortedSet;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
@@ -24,7 +24,7 @@ public interface Byte2LongSortedMap extends SortedMap<Byte, Long>, Byte2LongMap
 	public Byte2LongSortedMap copy();
 	
 	@Override
-	public ByteSet keySet();
+	public ByteSortedSet keySet();
 	@Override
 	public LongCollection values();
 	

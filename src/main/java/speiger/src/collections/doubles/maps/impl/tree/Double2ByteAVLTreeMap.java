@@ -21,8 +21,6 @@ import speiger.src.collections.doubles.maps.interfaces.Double2ByteMap;
 import speiger.src.collections.doubles.maps.interfaces.Double2ByteNavigableMap;
 import speiger.src.collections.doubles.sets.AbstractDoubleSet;
 import speiger.src.collections.doubles.sets.DoubleNavigableSet;
-import speiger.src.collections.doubles.sets.DoubleSet;
-import speiger.src.collections.doubles.sets.DoubleSortedSet;
 import speiger.src.collections.doubles.utils.maps.Double2ByteMaps;
 import speiger.src.collections.bytes.collections.AbstractByteCollection;
 import speiger.src.collections.bytes.collections.ByteCollection;
@@ -580,7 +578,7 @@ public class Double2ByteAVLTreeMap extends AbstractDouble2ByteMap implements Dou
 	}
 	
 	@Override
-	public DoubleSortedSet keySet() {
+	public DoubleNavigableSet keySet() {
 		return navigableKeySet();
 	}
 	
@@ -1337,7 +1335,7 @@ public class Double2ByteAVLTreeMap extends AbstractDouble2ByteMap implements Dou
 		}
 		
 		@Override
-		public DoubleSet keySet() {
+		public DoubleNavigableSet keySet() {
 			return navigableKeySet();
 		}
 		

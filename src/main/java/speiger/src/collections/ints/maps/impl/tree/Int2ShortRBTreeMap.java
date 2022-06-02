@@ -21,8 +21,6 @@ import speiger.src.collections.ints.maps.interfaces.Int2ShortMap;
 import speiger.src.collections.ints.maps.interfaces.Int2ShortNavigableMap;
 import speiger.src.collections.ints.sets.AbstractIntSet;
 import speiger.src.collections.ints.sets.IntNavigableSet;
-import speiger.src.collections.ints.sets.IntSet;
-import speiger.src.collections.ints.sets.IntSortedSet;
 import speiger.src.collections.ints.utils.maps.Int2ShortMaps;
 import speiger.src.collections.shorts.collections.AbstractShortCollection;
 import speiger.src.collections.shorts.collections.ShortCollection;
@@ -580,7 +578,7 @@ public class Int2ShortRBTreeMap extends AbstractInt2ShortMap implements Int2Shor
 	}
 	
 	@Override
-	public IntSortedSet keySet() {
+	public IntNavigableSet keySet() {
 		return navigableKeySet();
 	}
 	
@@ -1180,6 +1178,11 @@ public class Int2ShortRBTreeMap extends AbstractInt2ShortMap implements Int2Shor
 		}
 		
 		@Override
+		public IntNavigableSet keySet() {
+			return navigableKeySet();
+		}
+		
+		@Override
 		public Int2ShortNavigableMap subMap(int fromKey, boolean fromInclusive, int toKey, boolean toInclusive) {
 			if (!inRange(fromKey, fromInclusive)) throw new IllegalArgumentException("fromKey out of range");
 			if (!inRange(toKey, toInclusive)) throw new IllegalArgumentException("toKey out of range");
@@ -1259,6 +1262,11 @@ public class Int2ShortRBTreeMap extends AbstractInt2ShortMap implements Int2Shor
 		public IntNavigableSet navigableKeySet() {
 			if(keySet == null) keySet = new KeySet(this);
 			return keySet;
+		}
+		
+		@Override
+		public IntNavigableSet keySet() {
+			return navigableKeySet();
 		}
 		
 		@Override
@@ -1391,7 +1399,7 @@ public class Int2ShortRBTreeMap extends AbstractInt2ShortMap implements Int2Shor
 		}
 		
 		@Override
-		public IntSet keySet() {
+		public IntNavigableSet keySet() {
 			return navigableKeySet();
 		}
 		

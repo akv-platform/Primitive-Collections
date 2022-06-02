@@ -21,10 +21,12 @@ import speiger.src.collections.shorts.maps.interfaces.Short2LongNavigableMap;
 import speiger.src.collections.shorts.maps.interfaces.Short2LongSortedMap;
 import speiger.src.collections.shorts.maps.interfaces.Short2LongOrderedMap;
 import speiger.src.collections.shorts.sets.ShortNavigableSet;
+import speiger.src.collections.shorts.sets.ShortSortedSet;
 import speiger.src.collections.shorts.sets.ShortSet;
 import speiger.src.collections.shorts.utils.ShortSets;
 import speiger.src.collections.longs.collections.LongCollection;
 import speiger.src.collections.longs.functions.function.LongLongUnaryOperator;
+import speiger.src.collections.longs.functions.LongSupplier;
 import speiger.src.collections.longs.utils.LongCollections;
 import speiger.src.collections.longs.utils.LongSets;
 
@@ -193,13 +195,13 @@ public class Short2LongMaps
 	 * @param entry the Entry that should be made unmodifiable
 	 * @return a Unmodifyable Entry
 	 */
-	public static Short2LongMap.Entry unmodifiable(Short2LongMap.Entry entry) { return entry instanceof UnmodifyableEntry ? entry : new UnmodifyableEntry(entry); }
+	public static Short2LongMap.Entry unmodifiable(Short2LongMap.Entry entry) { return entry instanceof UnmodifyableEntry ? entry : (entry == null ? null : new UnmodifyableEntry(entry)); }
 	/**
 	 * A Helper function that creates a Unmodifyable Entry
 	 * @param entry the Entry that should be made unmodifiable
 	 * @return a Unmodifyable Entry
 	 */
-	public static Short2LongMap.Entry unmodifiable(Map.Entry<Short, Long> entry) { return entry instanceof UnmodifyableEntry ? (UnmodifyableEntry)entry : new UnmodifyableEntry(entry); }
+	public static Short2LongMap.Entry unmodifiable(Map.Entry<Short, Long> entry) { return entry instanceof UnmodifyableEntry ? (UnmodifyableEntry)entry : (entry == null ? null : new UnmodifyableEntry(entry)); }
 	
 	/**
 	 * Creates a Singleton map from the provided values.
@@ -324,9 +326,11 @@ public class Short2LongMaps
 		}
 		
 		@Override
-		public Short2LongNavigableMap descendingMap() { return Short2LongMaps.synchronize(map.descendingMap()); }
+		public Short2LongNavigableMap descendingMap() { return Short2LongMaps.unmodifiable(map.descendingMap()); }
 		@Override
 		public ShortNavigableSet navigableKeySet() { return ShortSets.unmodifiable(map.navigableKeySet()); }
+		@Override
+		public ShortNavigableSet keySet() { return ShortSets.unmodifiable(map.keySet()); }
 		@Override
 		public ShortNavigableSet descendingKeySet() { return ShortSets.unmodifiable(map.descendingKeySet()); }
 		@Override
@@ -374,7 +378,7 @@ public class Short2LongMaps
 		@Override
 		public Short2LongMap.Entry ceilingEntry(short key) { return Short2LongMaps.unmodifiable(map.ceilingEntry(key)); }
 		@Override
-		public Short2LongNavigableMap copy() { throw new UnsupportedOperationException(); }
+		public Short2LongNavigableMap copy() { return map.copy(); }
 	}
 	
 	/**
@@ -413,7 +417,7 @@ public class Short2LongMaps
 		@Override
 		public long lastLongValue() { return map.lastLongValue(); }
 		@Override
-		public Short2LongOrderedMap copy() { throw new UnsupportedOperationException(); }
+		public Short2LongOrderedMap copy() { return map.copy(); }
 	}
 	
 	/**
@@ -436,6 +440,9 @@ public class Short2LongMaps
 		@Override
 		public Short2LongSortedMap tailMap(short fromKey) { return Short2LongMaps.unmodifiable(map.tailMap(fromKey)); }
 		@Override
+		public ShortSortedSet keySet() { return ShortSets.unmodifiable(map.keySet()); }
+
+		@Override
 		public short firstShortKey() { return map.firstShortKey(); }
 		@Override
 		public short pollFirstShortKey() { return map.pollFirstShortKey(); }
@@ -448,7 +455,7 @@ public class Short2LongMaps
 		@Override
 		public long lastLongValue() { return map.lastLongValue(); }
 		@Override
-		public Short2LongSortedMap copy() { throw new UnsupportedOperationException(); }
+		public Short2LongSortedMap copy() { return map.copy(); }
 	}
 	
 	/**
@@ -479,11 +486,26 @@ public class Short2LongMaps
 		@Override
 		public boolean remove(short key, long value) { throw new UnsupportedOperationException(); }
 		@Override
-		public long get(short key) { return map.get(key); }
+		public long get(short key) {
+			long type = map.get(key);
+			return type == map.getDefaultReturnValue() ? getDefaultReturnValue() : type;
+		}
 		@Override
 		public long getOrDefault(short key, long defaultValue) { return map.getOrDefault(key, defaultValue); }
 		@Override
-		public Short2LongMap copy() { throw new UnsupportedOperationException(); }
+		public long computeLong(short key, ShortLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public long computeLongIfAbsent(short key, Short2LongFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public long computeLongIfPresent(short key, ShortLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public long supplyLongIfAbsent(short key, LongSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public long mergeLong(short key, long value, LongLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllLong(Short2LongMap m, LongLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public Short2LongMap copy() { return map.copy(); }
 		
 		@Override
 		public ShortSet keySet() { 
@@ -558,6 +580,8 @@ public class Short2LongMaps
 		@Override
 		public ShortNavigableSet descendingKeySet() { synchronized(mutex) { return ShortSets.synchronize(map.descendingKeySet(), mutex); } }
 		@Override
+		public ShortNavigableSet keySet() { synchronized(mutex) { return ShortSets.synchronize(map.keySet(), mutex); } }
+		@Override
 		public Short2LongMap.Entry firstEntry() { synchronized(mutex) { return map.firstEntry(); } }
 		@Override
 		public Short2LongMap.Entry lastEntry() { synchronized(mutex) { return map.firstEntry(); } }
@@ -594,7 +618,7 @@ public class Short2LongMaps
 		@Override
 		public Short2LongMap.Entry ceilingEntry(short key) { synchronized(mutex) { return map.ceilingEntry(key); } }
 		@Override
-		public Short2LongNavigableMap copy() { throw new UnsupportedOperationException(); }
+		public Short2LongNavigableMap copy() { synchronized(mutex) { return map.copy(); } }
 		@Override
 		@Deprecated
 		public Short2LongNavigableMap subMap(Short fromKey, boolean fromInclusive, Short toKey, boolean toInclusive) { synchronized(mutex) { return Short2LongMaps.synchronize(map.subMap(fromKey, fromInclusive, toKey, toInclusive), mutex); } }
@@ -688,7 +712,7 @@ public class Short2LongMaps
 		@Override
 		public long lastLongValue() { synchronized(mutex) { return map.lastLongValue(); } }
 		@Override
-		public Short2LongOrderedMap copy() { throw new UnsupportedOperationException(); }
+		public Short2LongOrderedMap copy() { synchronized(mutex) { return map.copy(); } }
 	}
 	
 	/**
@@ -716,6 +740,8 @@ public class Short2LongMaps
 		@Override
 		public Short2LongSortedMap tailMap(short fromKey) { synchronized(mutex) { return Short2LongMaps.synchronize(map.tailMap(fromKey), mutex); } }
 		@Override
+		public ShortSortedSet keySet() { synchronized(mutex) { return ShortSets.synchronize(map.keySet(), mutex); } }
+		@Override
 		public short firstShortKey() { synchronized(mutex) { return map.firstShortKey(); } }
 		@Override
 		public short pollFirstShortKey() { synchronized(mutex) { return map.pollFirstShortKey(); } }
@@ -728,7 +754,7 @@ public class Short2LongMaps
 		@Override
 		public long lastLongValue() { synchronized(mutex) { return map.lastLongValue(); } }
 		@Override
-		public Short2LongSortedMap copy() { throw new UnsupportedOperationException(); }
+		public Short2LongSortedMap copy() { synchronized(mutex) { return map.copy(); } }
 		@Override
 		@Deprecated
 		public Short firstKey() { synchronized(mutex) { return map.firstKey(); } }
@@ -820,6 +846,8 @@ public class Short2LongMaps
 		@Override
 		public long computeLongIfPresent(short key, ShortLongUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeLongIfPresent(key, mappingFunction); } }
 		@Override
+		public long supplyLongIfAbsent(short key, LongSupplier valueProvider) { synchronized(mutex) { return map.supplyLongIfAbsent(key, valueProvider); } }
+		@Override
 		public long mergeLong(short key, long value, LongLongUnaryOperator mappingFunction) { synchronized(mutex) { return map.mergeLong(key, value, mappingFunction); } }
 		@Override
 		public void mergeAllLong(Short2LongMap m, LongLongUnaryOperator mappingFunction) { synchronized(mutex) { map.mergeAllLong(m, mappingFunction); } }
@@ -828,9 +856,9 @@ public class Short2LongMaps
 		@Override
 		public void forEach(ShortLongConsumer action) { synchronized(mutex) { map.forEach(action); } }
 		@Override
-		public int size() { synchronized(mutex) { return super.size(); } }
+		public int size() { synchronized(mutex) { return map.size(); } }
 		@Override
-		public Short2LongMap copy() { throw new UnsupportedOperationException(); }
+		public Short2LongMap copy() { synchronized(mutex) { return map.copy(); } }
 		@Override
 		public ShortSet keySet() {
 			if(keys == null) keys = ShortSets.synchronize(map.keySet(), mutex);

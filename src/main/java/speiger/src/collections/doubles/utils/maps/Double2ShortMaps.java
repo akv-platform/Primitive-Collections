@@ -21,10 +21,12 @@ import speiger.src.collections.doubles.maps.interfaces.Double2ShortNavigableMap;
 import speiger.src.collections.doubles.maps.interfaces.Double2ShortSortedMap;
 import speiger.src.collections.doubles.maps.interfaces.Double2ShortOrderedMap;
 import speiger.src.collections.doubles.sets.DoubleNavigableSet;
+import speiger.src.collections.doubles.sets.DoubleSortedSet;
 import speiger.src.collections.doubles.sets.DoubleSet;
 import speiger.src.collections.doubles.utils.DoubleSets;
 import speiger.src.collections.shorts.collections.ShortCollection;
 import speiger.src.collections.shorts.functions.function.ShortShortUnaryOperator;
+import speiger.src.collections.shorts.functions.ShortSupplier;
 import speiger.src.collections.shorts.utils.ShortCollections;
 import speiger.src.collections.shorts.utils.ShortSets;
 
@@ -193,13 +195,13 @@ public class Double2ShortMaps
 	 * @param entry the Entry that should be made unmodifiable
 	 * @return a Unmodifyable Entry
 	 */
-	public static Double2ShortMap.Entry unmodifiable(Double2ShortMap.Entry entry) { return entry instanceof UnmodifyableEntry ? entry : new UnmodifyableEntry(entry); }
+	public static Double2ShortMap.Entry unmodifiable(Double2ShortMap.Entry entry) { return entry instanceof UnmodifyableEntry ? entry : (entry == null ? null : new UnmodifyableEntry(entry)); }
 	/**
 	 * A Helper function that creates a Unmodifyable Entry
 	 * @param entry the Entry that should be made unmodifiable
 	 * @return a Unmodifyable Entry
 	 */
-	public static Double2ShortMap.Entry unmodifiable(Map.Entry<Double, Short> entry) { return entry instanceof UnmodifyableEntry ? (UnmodifyableEntry)entry : new UnmodifyableEntry(entry); }
+	public static Double2ShortMap.Entry unmodifiable(Map.Entry<Double, Short> entry) { return entry instanceof UnmodifyableEntry ? (UnmodifyableEntry)entry : (entry == null ? null : new UnmodifyableEntry(entry)); }
 	
 	/**
 	 * Creates a Singleton map from the provided values.
@@ -324,9 +326,11 @@ public class Double2ShortMaps
 		}
 		
 		@Override
-		public Double2ShortNavigableMap descendingMap() { return Double2ShortMaps.synchronize(map.descendingMap()); }
+		public Double2ShortNavigableMap descendingMap() { return Double2ShortMaps.unmodifiable(map.descendingMap()); }
 		@Override
 		public DoubleNavigableSet navigableKeySet() { return DoubleSets.unmodifiable(map.navigableKeySet()); }
+		@Override
+		public DoubleNavigableSet keySet() { return DoubleSets.unmodifiable(map.keySet()); }
 		@Override
 		public DoubleNavigableSet descendingKeySet() { return DoubleSets.unmodifiable(map.descendingKeySet()); }
 		@Override
@@ -374,7 +378,7 @@ public class Double2ShortMaps
 		@Override
 		public Double2ShortMap.Entry ceilingEntry(double key) { return Double2ShortMaps.unmodifiable(map.ceilingEntry(key)); }
 		@Override
-		public Double2ShortNavigableMap copy() { throw new UnsupportedOperationException(); }
+		public Double2ShortNavigableMap copy() { return map.copy(); }
 	}
 	
 	/**
@@ -413,7 +417,7 @@ public class Double2ShortMaps
 		@Override
 		public short lastShortValue() { return map.lastShortValue(); }
 		@Override
-		public Double2ShortOrderedMap copy() { throw new UnsupportedOperationException(); }
+		public Double2ShortOrderedMap copy() { return map.copy(); }
 	}
 	
 	/**
@@ -436,6 +440,9 @@ public class Double2ShortMaps
 		@Override
 		public Double2ShortSortedMap tailMap(double fromKey) { return Double2ShortMaps.unmodifiable(map.tailMap(fromKey)); }
 		@Override
+		public DoubleSortedSet keySet() { return DoubleSets.unmodifiable(map.keySet()); }
+
+		@Override
 		public double firstDoubleKey() { return map.firstDoubleKey(); }
 		@Override
 		public double pollFirstDoubleKey() { return map.pollFirstDoubleKey(); }
@@ -448,7 +455,7 @@ public class Double2ShortMaps
 		@Override
 		public short lastShortValue() { return map.lastShortValue(); }
 		@Override
-		public Double2ShortSortedMap copy() { throw new UnsupportedOperationException(); }
+		public Double2ShortSortedMap copy() { return map.copy(); }
 	}
 	
 	/**
@@ -479,11 +486,26 @@ public class Double2ShortMaps
 		@Override
 		public boolean remove(double key, short value) { throw new UnsupportedOperationException(); }
 		@Override
-		public short get(double key) { return map.get(key); }
+		public short get(double key) {
+			short type = map.get(key);
+			return type == map.getDefaultReturnValue() ? getDefaultReturnValue() : type;
+		}
 		@Override
 		public short getOrDefault(double key, short defaultValue) { return map.getOrDefault(key, defaultValue); }
 		@Override
-		public Double2ShortMap copy() { throw new UnsupportedOperationException(); }
+		public short computeShort(double key, DoubleShortUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public short computeShortIfAbsent(double key, Double2ShortFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public short computeShortIfPresent(double key, DoubleShortUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public short supplyShortIfAbsent(double key, ShortSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public short mergeShort(double key, short value, ShortShortUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllShort(Double2ShortMap m, ShortShortUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public Double2ShortMap copy() { return map.copy(); }
 		
 		@Override
 		public DoubleSet keySet() { 
@@ -558,6 +580,8 @@ public class Double2ShortMaps
 		@Override
 		public DoubleNavigableSet descendingKeySet() { synchronized(mutex) { return DoubleSets.synchronize(map.descendingKeySet(), mutex); } }
 		@Override
+		public DoubleNavigableSet keySet() { synchronized(mutex) { return DoubleSets.synchronize(map.keySet(), mutex); } }
+		@Override
 		public Double2ShortMap.Entry firstEntry() { synchronized(mutex) { return map.firstEntry(); } }
 		@Override
 		public Double2ShortMap.Entry lastEntry() { synchronized(mutex) { return map.firstEntry(); } }
@@ -594,7 +618,7 @@ public class Double2ShortMaps
 		@Override
 		public Double2ShortMap.Entry ceilingEntry(double key) { synchronized(mutex) { return map.ceilingEntry(key); } }
 		@Override
-		public Double2ShortNavigableMap copy() { throw new UnsupportedOperationException(); }
+		public Double2ShortNavigableMap copy() { synchronized(mutex) { return map.copy(); } }
 		@Override
 		@Deprecated
 		public Double2ShortNavigableMap subMap(Double fromKey, boolean fromInclusive, Double toKey, boolean toInclusive) { synchronized(mutex) { return Double2ShortMaps.synchronize(map.subMap(fromKey, fromInclusive, toKey, toInclusive), mutex); } }
@@ -688,7 +712,7 @@ public class Double2ShortMaps
 		@Override
 		public short lastShortValue() { synchronized(mutex) { return map.lastShortValue(); } }
 		@Override
-		public Double2ShortOrderedMap copy() { throw new UnsupportedOperationException(); }
+		public Double2ShortOrderedMap copy() { synchronized(mutex) { return map.copy(); } }
 	}
 	
 	/**
@@ -716,6 +740,8 @@ public class Double2ShortMaps
 		@Override
 		public Double2ShortSortedMap tailMap(double fromKey) { synchronized(mutex) { return Double2ShortMaps.synchronize(map.tailMap(fromKey), mutex); } }
 		@Override
+		public DoubleSortedSet keySet() { synchronized(mutex) { return DoubleSets.synchronize(map.keySet(), mutex); } }
+		@Override
 		public double firstDoubleKey() { synchronized(mutex) { return map.firstDoubleKey(); } }
 		@Override
 		public double pollFirstDoubleKey() { synchronized(mutex) { return map.pollFirstDoubleKey(); } }
@@ -728,7 +754,7 @@ public class Double2ShortMaps
 		@Override
 		public short lastShortValue() { synchronized(mutex) { return map.lastShortValue(); } }
 		@Override
-		public Double2ShortSortedMap copy() { throw new UnsupportedOperationException(); }
+		public Double2ShortSortedMap copy() { synchronized(mutex) { return map.copy(); } }
 		@Override
 		@Deprecated
 		public Double firstKey() { synchronized(mutex) { return map.firstKey(); } }
@@ -820,6 +846,8 @@ public class Double2ShortMaps
 		@Override
 		public short computeShortIfPresent(double key, DoubleShortUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeShortIfPresent(key, mappingFunction); } }
 		@Override
+		public short supplyShortIfAbsent(double key, ShortSupplier valueProvider) { synchronized(mutex) { return map.supplyShortIfAbsent(key, valueProvider); } }
+		@Override
 		public short mergeShort(double key, short value, ShortShortUnaryOperator mappingFunction) { synchronized(mutex) { return map.mergeShort(key, value, mappingFunction); } }
 		@Override
 		public void mergeAllShort(Double2ShortMap m, ShortShortUnaryOperator mappingFunction) { synchronized(mutex) { map.mergeAllShort(m, mappingFunction); } }
@@ -828,9 +856,9 @@ public class Double2ShortMaps
 		@Override
 		public void forEach(DoubleShortConsumer action) { synchronized(mutex) { map.forEach(action); } }
 		@Override
-		public int size() { synchronized(mutex) { return super.size(); } }
+		public int size() { synchronized(mutex) { return map.size(); } }
 		@Override
-		public Double2ShortMap copy() { throw new UnsupportedOperationException(); }
+		public Double2ShortMap copy() { synchronized(mutex) { return map.copy(); } }
 		@Override
 		public DoubleSet keySet() {
 			if(keys == null) keys = DoubleSets.synchronize(map.keySet(), mutex);

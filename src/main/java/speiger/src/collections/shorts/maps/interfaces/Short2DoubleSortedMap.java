@@ -4,7 +4,7 @@ import java.util.SortedMap;
 
 import speiger.src.collections.doubles.collections.DoubleCollection;
 import speiger.src.collections.shorts.functions.ShortComparator;
-import speiger.src.collections.shorts.sets.ShortSet;
+import speiger.src.collections.shorts.sets.ShortSortedSet;
 import speiger.src.collections.shorts.utils.maps.Short2DoubleMaps;
 import speiger.src.collections.objects.sets.ObjectSortedSet;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
@@ -24,7 +24,7 @@ public interface Short2DoubleSortedMap extends SortedMap<Short, Double>, Short2D
 	public Short2DoubleSortedMap copy();
 	
 	@Override
-	public ShortSet keySet();
+	public ShortSortedSet keySet();
 	@Override
 	public DoubleCollection values();
 	

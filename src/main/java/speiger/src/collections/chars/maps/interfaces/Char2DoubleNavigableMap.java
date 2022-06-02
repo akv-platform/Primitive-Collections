@@ -32,7 +32,9 @@ public interface Char2DoubleNavigableMap extends Char2DoubleSortedMap, Navigable
 	/** @return a Type Specific pollLastEntry */
 	@Override
 	public Char2DoubleMap.Entry pollLastEntry();
-	
+	/** @return a Type Specific Navigable Key Set */
+	@Override
+	public CharNavigableSet keySet();
 	/**
 	 * Creates a Wrapped NavigableMap that is Synchronized
 	 * @return a new NavigableMap that is synchronized

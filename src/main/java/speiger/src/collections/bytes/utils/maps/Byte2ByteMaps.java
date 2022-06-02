@@ -21,9 +21,11 @@ import speiger.src.collections.bytes.maps.interfaces.Byte2ByteNavigableMap;
 import speiger.src.collections.bytes.maps.interfaces.Byte2ByteSortedMap;
 import speiger.src.collections.bytes.maps.interfaces.Byte2ByteOrderedMap;
 import speiger.src.collections.bytes.sets.ByteNavigableSet;
+import speiger.src.collections.bytes.sets.ByteSortedSet;
 import speiger.src.collections.bytes.sets.ByteSet;
 import speiger.src.collections.bytes.utils.ByteSets;
 import speiger.src.collections.bytes.collections.ByteCollection;
+import speiger.src.collections.bytes.functions.ByteSupplier;
 import speiger.src.collections.bytes.utils.ByteCollections;
 
 /**
@@ -191,13 +193,13 @@ public class Byte2ByteMaps
 	 * @param entry the Entry that should be made unmodifiable
 	 * @return a Unmodifyable Entry
 	 */
-	public static Byte2ByteMap.Entry unmodifiable(Byte2ByteMap.Entry entry) { return entry instanceof UnmodifyableEntry ? entry : new UnmodifyableEntry(entry); }
+	public static Byte2ByteMap.Entry unmodifiable(Byte2ByteMap.Entry entry) { return entry instanceof UnmodifyableEntry ? entry : (entry == null ? null : new UnmodifyableEntry(entry)); }
 	/**
 	 * A Helper function that creates a Unmodifyable Entry
 	 * @param entry the Entry that should be made unmodifiable
 	 * @return a Unmodifyable Entry
 	 */
-	public static Byte2ByteMap.Entry unmodifiable(Map.Entry<Byte, Byte> entry) { return entry instanceof UnmodifyableEntry ? (UnmodifyableEntry)entry : new UnmodifyableEntry(entry); }
+	public static Byte2ByteMap.Entry unmodifiable(Map.Entry<Byte, Byte> entry) { return entry instanceof UnmodifyableEntry ? (UnmodifyableEntry)entry : (entry == null ? null : new UnmodifyableEntry(entry)); }
 	
 	/**
 	 * Creates a Singleton map from the provided values.
@@ -322,9 +324,11 @@ public class Byte2ByteMaps
 		}
 		
 		@Override
-		public Byte2ByteNavigableMap descendingMap() { return Byte2ByteMaps.synchronize(map.descendingMap()); }
+		public Byte2ByteNavigableMap descendingMap() { return Byte2ByteMaps.unmodifiable(map.descendingMap()); }
 		@Override
 		public ByteNavigableSet navigableKeySet() { return ByteSets.unmodifiable(map.navigableKeySet()); }
+		@Override
+		public ByteNavigableSet keySet() { return ByteSets.unmodifiable(map.keySet()); }
 		@Override
 		public ByteNavigableSet descendingKeySet() { return ByteSets.unmodifiable(map.descendingKeySet()); }
 		@Override
@@ -372,7 +376,7 @@ public class Byte2ByteMaps
 		@Override
 		public Byte2ByteMap.Entry ceilingEntry(byte key) { return Byte2ByteMaps.unmodifiable(map.ceilingEntry(key)); }
 		@Override
-		public Byte2ByteNavigableMap copy() { throw new UnsupportedOperationException(); }
+		public Byte2ByteNavigableMap copy() { return map.copy(); }
 	}
 	
 	/**
@@ -411,7 +415,7 @@ public class Byte2ByteMaps
 		@Override
 		public byte lastByteValue() { return map.lastByteValue(); }
 		@Override
-		public Byte2ByteOrderedMap copy() { throw new UnsupportedOperationException(); }
+		public Byte2ByteOrderedMap copy() { return map.copy(); }
 	}
 	
 	/**
@@ -434,6 +438,9 @@ public class Byte2ByteMaps
 		@Override
 		public Byte2ByteSortedMap tailMap(byte fromKey) { return Byte2ByteMaps.unmodifiable(map.tailMap(fromKey)); }
 		@Override
+		public ByteSortedSet keySet() { return ByteSets.unmodifiable(map.keySet()); }
+
+		@Override
 		public byte firstByteKey() { return map.firstByteKey(); }
 		@Override
 		public byte pollFirstByteKey() { return map.pollFirstByteKey(); }
@@ -446,7 +453,7 @@ public class Byte2ByteMaps
 		@Override
 		public byte lastByteValue() { return map.lastByteValue(); }
 		@Override
-		public Byte2ByteSortedMap copy() { throw new UnsupportedOperationException(); }
+		public Byte2ByteSortedMap copy() { return map.copy(); }
 	}
 	
 	/**
@@ -477,11 +484,26 @@ public class Byte2ByteMaps
 		@Override
 		public boolean remove(byte key, byte value) { throw new UnsupportedOperationException(); }
 		@Override
-		public byte get(byte key) { return map.get(key); }
+		public byte get(byte key) {
+			byte type = map.get(key);
+			return type == map.getDefaultReturnValue() ? getDefaultReturnValue() : type;
+		}
 		@Override
 		public byte getOrDefault(byte key, byte defaultValue) { return map.getOrDefault(key, defaultValue); }
 		@Override
-		public Byte2ByteMap copy() { throw new UnsupportedOperationException(); }
+		public byte computeByte(byte key, ByteByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte computeByteIfAbsent(byte key, Byte2ByteFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte computeByteIfPresent(byte key, ByteByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte supplyByteIfAbsent(byte key, ByteSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public byte mergeByte(byte key, byte value, ByteByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllByte(Byte2ByteMap m, ByteByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public Byte2ByteMap copy() { return map.copy(); }
 		
 		@Override
 		public ByteSet keySet() { 
@@ -556,6 +578,8 @@ public class Byte2ByteMaps
 		@Override
 		public ByteNavigableSet descendingKeySet() { synchronized(mutex) { return ByteSets.synchronize(map.descendingKeySet(), mutex); } }
 		@Override
+		public ByteNavigableSet keySet() { synchronized(mutex) { return ByteSets.synchronize(map.keySet(), mutex); } }
+		@Override
 		public Byte2ByteMap.Entry firstEntry() { synchronized(mutex) { return map.firstEntry(); } }
 		@Override
 		public Byte2ByteMap.Entry lastEntry() { synchronized(mutex) { return map.firstEntry(); } }
@@ -592,7 +616,7 @@ public class Byte2ByteMaps
 		@Override
 		public Byte2ByteMap.Entry ceilingEntry(byte key) { synchronized(mutex) { return map.ceilingEntry(key); } }
 		@Override
-		public Byte2ByteNavigableMap copy() { throw new UnsupportedOperationException(); }
+		public Byte2ByteNavigableMap copy() { synchronized(mutex) { return map.copy(); } }
 		@Override
 		@Deprecated
 		public Byte2ByteNavigableMap subMap(Byte fromKey, boolean fromInclusive, Byte toKey, boolean toInclusive) { synchronized(mutex) { return Byte2ByteMaps.synchronize(map.subMap(fromKey, fromInclusive, toKey, toInclusive), mutex); } }
@@ -686,7 +710,7 @@ public class Byte2ByteMaps
 		@Override
 		public byte lastByteValue() { synchronized(mutex) { return map.lastByteValue(); } }
 		@Override
-		public Byte2ByteOrderedMap copy() { throw new UnsupportedOperationException(); }
+		public Byte2ByteOrderedMap copy() { synchronized(mutex) { return map.copy(); } }
 	}
 	
 	/**
@@ -714,6 +738,8 @@ public class Byte2ByteMaps
 		@Override
 		public Byte2ByteSortedMap tailMap(byte fromKey) { synchronized(mutex) { return Byte2ByteMaps.synchronize(map.tailMap(fromKey), mutex); } }
 		@Override
+		public ByteSortedSet keySet() { synchronized(mutex) { return ByteSets.synchronize(map.keySet(), mutex); } }
+		@Override
 		public byte firstByteKey() { synchronized(mutex) { return map.firstByteKey(); } }
 		@Override
 		public byte pollFirstByteKey() { synchronized(mutex) { return map.pollFirstByteKey(); } }
@@ -726,7 +752,7 @@ public class Byte2ByteMaps
 		@Override
 		public byte lastByteValue() { synchronized(mutex) { return map.lastByteValue(); } }
 		@Override
-		public Byte2ByteSortedMap copy() { throw new UnsupportedOperationException(); }
+		public Byte2ByteSortedMap copy() { synchronized(mutex) { return map.copy(); } }
 		@Override
 		@Deprecated
 		public Byte firstKey() { synchronized(mutex) { return map.firstKey(); } }
@@ -818,6 +844,8 @@ public class Byte2ByteMaps
 		@Override
 		public byte computeByteIfPresent(byte key, ByteByteUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeByteIfPresent(key, mappingFunction); } }
 		@Override
+		public byte supplyByteIfAbsent(byte key, ByteSupplier valueProvider) { synchronized(mutex) { return map.supplyByteIfAbsent(key, valueProvider); } }
+		@Override
 		public byte mergeByte(byte key, byte value, ByteByteUnaryOperator mappingFunction) { synchronized(mutex) { return map.mergeByte(key, value, mappingFunction); } }
 		@Override
 		public void mergeAllByte(Byte2ByteMap m, ByteByteUnaryOperator mappingFunction) { synchronized(mutex) { map.mergeAllByte(m, mappingFunction); } }
@@ -826,9 +854,9 @@ public class Byte2ByteMaps
 		@Override
 		public void forEach(ByteByteConsumer action) { synchronized(mutex) { map.forEach(action); } }
 		@Override
-		public int size() { synchronized(mutex) { return super.size(); } }
+		public int size() { synchronized(mutex) { return map.size(); } }
 		@Override
-		public Byte2ByteMap copy() { throw new UnsupportedOperationException(); }
+		public Byte2ByteMap copy() { synchronized(mutex) { return map.copy(); } }
 		@Override
 		public ByteSet keySet() {
 			if(keys == null) keys = ByteSets.synchronize(map.keySet(), mutex);

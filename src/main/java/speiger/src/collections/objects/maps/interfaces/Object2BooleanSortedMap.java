@@ -4,9 +4,8 @@ import java.util.Comparator;
 import java.util.SortedMap;
 
 import speiger.src.collections.booleans.collections.BooleanCollection;
-import speiger.src.collections.objects.sets.ObjectSet;
-import speiger.src.collections.objects.utils.maps.Object2BooleanMaps;
 import speiger.src.collections.objects.sets.ObjectSortedSet;
+import speiger.src.collections.objects.utils.maps.Object2BooleanMaps;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 
 /**
@@ -25,7 +24,7 @@ public interface Object2BooleanSortedMap<T> extends SortedMap<T, Boolean>, Objec
 	public Object2BooleanSortedMap<T> copy();
 	
 	@Override
-	public ObjectSet<T> keySet();
+	public ObjectSortedSet<T> keySet();
 	@Override
 	public BooleanCollection values();
 	

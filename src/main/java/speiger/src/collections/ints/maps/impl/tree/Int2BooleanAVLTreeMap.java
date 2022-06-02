@@ -20,8 +20,6 @@ import speiger.src.collections.ints.maps.interfaces.Int2BooleanMap;
 import speiger.src.collections.ints.maps.interfaces.Int2BooleanNavigableMap;
 import speiger.src.collections.ints.sets.AbstractIntSet;
 import speiger.src.collections.ints.sets.IntNavigableSet;
-import speiger.src.collections.ints.sets.IntSet;
-import speiger.src.collections.ints.sets.IntSortedSet;
 import speiger.src.collections.ints.utils.maps.Int2BooleanMaps;
 import speiger.src.collections.booleans.collections.AbstractBooleanCollection;
 import speiger.src.collections.booleans.collections.BooleanCollection;
@@ -521,7 +519,7 @@ public class Int2BooleanAVLTreeMap extends AbstractInt2BooleanMap implements Int
 	}
 	
 	@Override
-	public IntSortedSet keySet() {
+	public IntNavigableSet keySet() {
 		return navigableKeySet();
 	}
 	
@@ -1278,7 +1276,7 @@ public class Int2BooleanAVLTreeMap extends AbstractInt2BooleanMap implements Int
 		}
 		
 		@Override
-		public IntSet keySet() {
+		public IntNavigableSet keySet() {
 			return navigableKeySet();
 		}
 		

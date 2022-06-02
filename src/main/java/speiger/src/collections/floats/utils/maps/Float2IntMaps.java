@@ -21,10 +21,12 @@ import speiger.src.collections.floats.maps.interfaces.Float2IntNavigableMap;
 import speiger.src.collections.floats.maps.interfaces.Float2IntSortedMap;
 import speiger.src.collections.floats.maps.interfaces.Float2IntOrderedMap;
 import speiger.src.collections.floats.sets.FloatNavigableSet;
+import speiger.src.collections.floats.sets.FloatSortedSet;
 import speiger.src.collections.floats.sets.FloatSet;
 import speiger.src.collections.floats.utils.FloatSets;
 import speiger.src.collections.ints.collections.IntCollection;
 import speiger.src.collections.ints.functions.function.IntIntUnaryOperator;
+import speiger.src.collections.ints.functions.IntSupplier;
 import speiger.src.collections.ints.utils.IntCollections;
 import speiger.src.collections.ints.utils.IntSets;
 
@@ -193,13 +195,13 @@ public class Float2IntMaps
 	 * @param entry the Entry that should be made unmodifiable
 	 * @return a Unmodifyable Entry
 	 */
-	public static Float2IntMap.Entry unmodifiable(Float2IntMap.Entry entry) { return entry instanceof UnmodifyableEntry ? entry : new UnmodifyableEntry(entry); }
+	public static Float2IntMap.Entry unmodifiable(Float2IntMap.Entry entry) { return entry instanceof UnmodifyableEntry ? entry : (entry == null ? null : new UnmodifyableEntry(entry)); }
 	/**
 	 * A Helper function that creates a Unmodifyable Entry
 	 * @param entry the Entry that should be made unmodifiable
 	 * @return a Unmodifyable Entry
 	 */
-	public static Float2IntMap.Entry unmodifiable(Map.Entry<Float, Integer> entry) { return entry instanceof UnmodifyableEntry ? (UnmodifyableEntry)entry : new UnmodifyableEntry(entry); }
+	public static Float2IntMap.Entry unmodifiable(Map.Entry<Float, Integer> entry) { return entry instanceof UnmodifyableEntry ? (UnmodifyableEntry)entry : (entry == null ? null : new UnmodifyableEntry(entry)); }
 	
 	/**
 	 * Creates a Singleton map from the provided values.
@@ -324,9 +326,11 @@ public class Float2IntMaps
 		}
 		
 		@Override
-		public Float2IntNavigableMap descendingMap() { return Float2IntMaps.synchronize(map.descendingMap()); }
+		public Float2IntNavigableMap descendingMap() { return Float2IntMaps.unmodifiable(map.descendingMap()); }
 		@Override
 		public FloatNavigableSet navigableKeySet() { return FloatSets.unmodifiable(map.navigableKeySet()); }
+		@Override
+		public FloatNavigableSet keySet() { return FloatSets.unmodifiable(map.keySet()); }
 		@Override
 		public FloatNavigableSet descendingKeySet() { return FloatSets.unmodifiable(map.descendingKeySet()); }
 		@Override
@@ -374,7 +378,7 @@ public class Float2IntMaps
 		@Override
 		public Float2IntMap.Entry ceilingEntry(float key) { return Float2IntMaps.unmodifiable(map.ceilingEntry(key)); }
 		@Override
-		public Float2IntNavigableMap copy() { throw new UnsupportedOperationException(); }
+		public Float2IntNavigableMap copy() { return map.copy(); }
 	}
 	
 	/**
@@ -413,7 +417,7 @@ public class Float2IntMaps
 		@Override
 		public int lastIntValue() { return map.lastIntValue(); }
 		@Override
-		public Float2IntOrderedMap copy() { throw new UnsupportedOperationException(); }
+		public Float2IntOrderedMap copy() { return map.copy(); }
 	}
 	
 	/**
@@ -436,6 +440,9 @@ public class Float2IntMaps
 		@Override
 		public Float2IntSortedMap tailMap(float fromKey) { return Float2IntMaps.unmodifiable(map.tailMap(fromKey)); }
 		@Override
+		public FloatSortedSet keySet() { return FloatSets.unmodifiable(map.keySet()); }
+
+		@Override
 		public float firstFloatKey() { return map.firstFloatKey(); }
 		@Override
 		public float pollFirstFloatKey() { return map.pollFirstFloatKey(); }
@@ -448,7 +455,7 @@ public class Float2IntMaps
 		@Override
 		public int lastIntValue() { return map.lastIntValue(); }
 		@Override
-		public Float2IntSortedMap copy() { throw new UnsupportedOperationException(); }
+		public Float2IntSortedMap copy() { return map.copy(); }
 	}
 	
 	/**
@@ -479,11 +486,26 @@ public class Float2IntMaps
 		@Override
 		public boolean remove(float key, int value) { throw new UnsupportedOperationException(); }
 		@Override
-		public int get(float key) { return map.get(key); }
+		public int get(float key) {
+			int type = map.get(key);
+			return type == map.getDefaultReturnValue() ? getDefaultReturnValue() : type;
+		}
 		@Override
 		public int getOrDefault(float key, int defaultValue) { return map.getOrDefault(key, defaultValue); }
 		@Override
-		public Float2IntMap copy() { throw new UnsupportedOperationException(); }
+		public int computeInt(float key, FloatIntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public int computeIntIfAbsent(float key, Float2IntFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public int computeIntIfPresent(float key, FloatIntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public int supplyIntIfAbsent(float key, IntSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public int mergeInt(float key, int value, IntIntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllInt(Float2IntMap m, IntIntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public Float2IntMap copy() { return map.copy(); }
 		
 		@Override
 		public FloatSet keySet() { 
@@ -558,6 +580,8 @@ public class Float2IntMaps
 		@Override
 		public FloatNavigableSet descendingKeySet() { synchronized(mutex) { return FloatSets.synchronize(map.descendingKeySet(), mutex); } }
 		@Override
+		public FloatNavigableSet keySet() { synchronized(mutex) { return FloatSets.synchronize(map.keySet(), mutex); } }
+		@Override
 		public Float2IntMap.Entry firstEntry() { synchronized(mutex) { return map.firstEntry(); } }
 		@Override
 		public Float2IntMap.Entry lastEntry() { synchronized(mutex) { return map.firstEntry(); } }
@@ -594,7 +618,7 @@ public class Float2IntMaps
 		@Override
 		public Float2IntMap.Entry ceilingEntry(float key) { synchronized(mutex) { return map.ceilingEntry(key); } }
 		@Override
-		public Float2IntNavigableMap copy() { throw new UnsupportedOperationException(); }
+		public Float2IntNavigableMap copy() { synchronized(mutex) { return map.copy(); } }
 		@Override
 		@Deprecated
 		public Float2IntNavigableMap subMap(Float fromKey, boolean fromInclusive, Float toKey, boolean toInclusive) { synchronized(mutex) { return Float2IntMaps.synchronize(map.subMap(fromKey, fromInclusive, toKey, toInclusive), mutex); } }
@@ -688,7 +712,7 @@ public class Float2IntMaps
 		@Override
 		public int lastIntValue() { synchronized(mutex) { return map.lastIntValue(); } }
 		@Override
-		public Float2IntOrderedMap copy() { throw new UnsupportedOperationException(); }
+		public Float2IntOrderedMap copy() { synchronized(mutex) { return map.copy(); } }
 	}
 	
 	/**
@@ -716,6 +740,8 @@ public class Float2IntMaps
 		@Override
 		public Float2IntSortedMap tailMap(float fromKey) { synchronized(mutex) { return Float2IntMaps.synchronize(map.tailMap(fromKey), mutex); } }
 		@Override
+		public FloatSortedSet keySet() { synchronized(mutex) { return FloatSets.synchronize(map.keySet(), mutex); } }
+		@Override
 		public float firstFloatKey() { synchronized(mutex) { return map.firstFloatKey(); } }
 		@Override
 		public float pollFirstFloatKey() { synchronized(mutex) { return map.pollFirstFloatKey(); } }
@@ -728,7 +754,7 @@ public class Float2IntMaps
 		@Override
 		public int lastIntValue() { synchronized(mutex) { return map.lastIntValue(); } }
 		@Override
-		public Float2IntSortedMap copy() { throw new UnsupportedOperationException(); }
+		public Float2IntSortedMap copy() { synchronized(mutex) { return map.copy(); } }
 		@Override
 		@Deprecated
 		public Float firstKey() { synchronized(mutex) { return map.firstKey(); } }
@@ -820,6 +846,8 @@ public class Float2IntMaps
 		@Override
 		public int computeIntIfPresent(float key, FloatIntUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeIntIfPresent(key, mappingFunction); } }
 		@Override
+		public int supplyIntIfAbsent(float key, IntSupplier valueProvider) { synchronized(mutex) { return map.supplyIntIfAbsent(key, valueProvider); } }
+		@Override
 		public int mergeInt(float key, int value, IntIntUnaryOperator mappingFunction) { synchronized(mutex) { return map.mergeInt(key, value, mappingFunction); } }
 		@Override
 		public void mergeAllInt(Float2IntMap m, IntIntUnaryOperator mappingFunction) { synchronized(mutex) { map.mergeAllInt(m, mappingFunction); } }
@@ -828,9 +856,9 @@ public class Float2IntMaps
 		@Override
 		public void forEach(FloatIntConsumer action) { synchronized(mutex) { map.forEach(action); } }
 		@Override
-		public int size() { synchronized(mutex) { return super.size(); } }
+		public int size() { synchronized(mutex) { return map.size(); } }
 		@Override
-		public Float2IntMap copy() { throw new UnsupportedOperationException(); }
+		public Float2IntMap copy() { synchronized(mutex) { return map.copy(); } }
 		@Override
 		public FloatSet keySet() {
 			if(keys == null) keys = FloatSets.synchronize(map.keySet(), mutex);

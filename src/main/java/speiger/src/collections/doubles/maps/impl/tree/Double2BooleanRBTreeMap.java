@@ -20,8 +20,6 @@ import speiger.src.collections.doubles.maps.interfaces.Double2BooleanMap;
 import speiger.src.collections.doubles.maps.interfaces.Double2BooleanNavigableMap;
 import speiger.src.collections.doubles.sets.AbstractDoubleSet;
 import speiger.src.collections.doubles.sets.DoubleNavigableSet;
-import speiger.src.collections.doubles.sets.DoubleSet;
-import speiger.src.collections.doubles.sets.DoubleSortedSet;
 import speiger.src.collections.doubles.utils.maps.Double2BooleanMaps;
 import speiger.src.collections.booleans.collections.AbstractBooleanCollection;
 import speiger.src.collections.booleans.collections.BooleanCollection;
@@ -521,7 +519,7 @@ public class Double2BooleanRBTreeMap extends AbstractDouble2BooleanMap implement
 	}
 	
 	@Override
-	public DoubleSortedSet keySet() {
+	public DoubleNavigableSet keySet() {
 		return navigableKeySet();
 	}
 	
@@ -1121,6 +1119,11 @@ public class Double2BooleanRBTreeMap extends AbstractDouble2BooleanMap implement
 		}
 		
 		@Override
+		public DoubleNavigableSet keySet() {
+			return navigableKeySet();
+		}
+		
+		@Override
 		public Double2BooleanNavigableMap subMap(double fromKey, boolean fromInclusive, double toKey, boolean toInclusive) {
 			if (!inRange(fromKey, fromInclusive)) throw new IllegalArgumentException("fromKey out of range");
 			if (!inRange(toKey, toInclusive)) throw new IllegalArgumentException("toKey out of range");
@@ -1200,6 +1203,11 @@ public class Double2BooleanRBTreeMap extends AbstractDouble2BooleanMap implement
 		public DoubleNavigableSet navigableKeySet() {
 			if(keySet == null) keySet = new KeySet(this);
 			return keySet;
+		}
+		
+		@Override
+		public DoubleNavigableSet keySet() {
+			return navigableKeySet();
 		}
 		
 		@Override
@@ -1332,7 +1340,7 @@ public class Double2BooleanRBTreeMap extends AbstractDouble2BooleanMap implement
 		}
 		
 		@Override
-		public DoubleSet keySet() {
+		public DoubleNavigableSet keySet() {
 			return navigableKeySet();
 		}
 		

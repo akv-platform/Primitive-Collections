@@ -32,7 +32,9 @@ public interface Byte2IntNavigableMap extends Byte2IntSortedMap, NavigableMap<By
 	/** @return a Type Specific pollLastEntry */
 	@Override
 	public Byte2IntMap.Entry pollLastEntry();
-	
+	/** @return a Type Specific Navigable Key Set */
+	@Override
+	public ByteNavigableSet keySet();
 	/**
 	 * Creates a Wrapped NavigableMap that is Synchronized
 	 * @return a new NavigableMap that is synchronized

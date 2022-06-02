@@ -21,10 +21,12 @@ import speiger.src.collections.floats.maps.interfaces.Float2LongNavigableMap;
 import speiger.src.collections.floats.maps.interfaces.Float2LongSortedMap;
 import speiger.src.collections.floats.maps.interfaces.Float2LongOrderedMap;
 import speiger.src.collections.floats.sets.FloatNavigableSet;
+import speiger.src.collections.floats.sets.FloatSortedSet;
 import speiger.src.collections.floats.sets.FloatSet;
 import speiger.src.collections.floats.utils.FloatSets;
 import speiger.src.collections.longs.collections.LongCollection;
 import speiger.src.collections.longs.functions.function.LongLongUnaryOperator;
+import speiger.src.collections.longs.functions.LongSupplier;
 import speiger.src.collections.longs.utils.LongCollections;
 import speiger.src.collections.longs.utils.LongSets;
 
@@ -193,13 +195,13 @@ public class Float2LongMaps
 	 * @param entry the Entry that should be made unmodifiable
 	 * @return a Unmodifyable Entry
 	 */
-	public static Float2LongMap.Entry unmodifiable(Float2LongMap.Entry entry) { return entry instanceof UnmodifyableEntry ? entry : new UnmodifyableEntry(entry); }
+	public static Float2LongMap.Entry unmodifiable(Float2LongMap.Entry entry) { return entry instanceof UnmodifyableEntry ? entry : (entry == null ? null : new UnmodifyableEntry(entry)); }
 	/**
 	 * A Helper function that creates a Unmodifyable Entry
 	 * @param entry the Entry that should be made unmodifiable
 	 * @return a Unmodifyable Entry
 	 */
-	public static Float2LongMap.Entry unmodifiable(Map.Entry<Float, Long> entry) { return entry instanceof UnmodifyableEntry ? (UnmodifyableEntry)entry : new UnmodifyableEntry(entry); }
+	public static Float2LongMap.Entry unmodifiable(Map.Entry<Float, Long> entry) { return entry instanceof UnmodifyableEntry ? (UnmodifyableEntry)entry : (entry == null ? null : new UnmodifyableEntry(entry)); }
 	
 	/**
 	 * Creates a Singleton map from the provided values.
@@ -324,9 +326,11 @@ public class Float2LongMaps
 		}
 		
 		@Override
-		public Float2LongNavigableMap descendingMap() { return Float2LongMaps.synchronize(map.descendingMap()); }
+		public Float2LongNavigableMap descendingMap() { return Float2LongMaps.unmodifiable(map.descendingMap()); }
 		@Override
 		public FloatNavigableSet navigableKeySet() { return FloatSets.unmodifiable(map.navigableKeySet()); }
+		@Override
+		public FloatNavigableSet keySet() { return FloatSets.unmodifiable(map.keySet()); }
 		@Override
 		public FloatNavigableSet descendingKeySet() { return FloatSets.unmodifiable(map.descendingKeySet()); }
 		@Override
@@ -374,7 +378,7 @@ public class Float2LongMaps
 		@Override
 		public Float2LongMap.Entry ceilingEntry(float key) { return Float2LongMaps.unmodifiable(map.ceilingEntry(key)); }
 		@Override
-		public Float2LongNavigableMap copy() { throw new UnsupportedOperationException(); }
+		public Float2LongNavigableMap copy() { return map.copy(); }
 	}
 	
 	/**
@@ -413,7 +417,7 @@ public class Float2LongMaps
 		@Override
 		public long lastLongValue() { return map.lastLongValue(); }
 		@Override
-		public Float2LongOrderedMap copy() { throw new UnsupportedOperationException(); }
+		public Float2LongOrderedMap copy() { return map.copy(); }
 	}
 	
 	/**
@@ -436,6 +440,9 @@ public class Float2LongMaps
 		@Override
 		public Float2LongSortedMap tailMap(float fromKey) { return Float2LongMaps.unmodifiable(map.tailMap(fromKey)); }
 		@Override
+		public FloatSortedSet keySet() { return FloatSets.unmodifiable(map.keySet()); }
+
+		@Override
 		public float firstFloatKey() { return map.firstFloatKey(); }
 		@Override
 		public float pollFirstFloatKey() { return map.pollFirstFloatKey(); }
@@ -448,7 +455,7 @@ public class Float2LongMaps
 		@Override
 		public long lastLongValue() { return map.lastLongValue(); }
 		@Override
-		public Float2LongSortedMap copy() { throw new UnsupportedOperationException(); }
+		public Float2LongSortedMap copy() { return map.copy(); }
 	}
 	
 	/**
@@ -479,11 +486,26 @@ public class Float2LongMaps
 		@Override
 		public boolean remove(float key, long value) { throw new UnsupportedOperationException(); }
 		@Override
-		public long get(float key) { return map.get(key); }
+		public long get(float key) {
+			long type = map.get(key);
+			return type == map.getDefaultReturnValue() ? getDefaultReturnValue() : type;
+		}
 		@Override
 		public long getOrDefault(float key, long defaultValue) { return map.getOrDefault(key, defaultValue); }
 		@Override
-		public Float2LongMap copy() { throw new UnsupportedOperationException(); }
+		public long computeLong(float key, FloatLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public long computeLongIfAbsent(float key, Float2LongFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public long computeLongIfPresent(float key, FloatLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public long supplyLongIfAbsent(float key, LongSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public long mergeLong(float key, long value, LongLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllLong(Float2LongMap m, LongLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public Float2LongMap copy() { return map.copy(); }
 		
 		@Override
 		public FloatSet keySet() { 
@@ -558,6 +580,8 @@ public class Float2LongMaps
 		@Override
 		public FloatNavigableSet descendingKeySet() { synchronized(mutex) { return FloatSets.synchronize(map.descendingKeySet(), mutex); } }
 		@Override
+		public FloatNavigableSet keySet() { synchronized(mutex) { return FloatSets.synchronize(map.keySet(), mutex); } }
+		@Override
 		public Float2LongMap.Entry firstEntry() { synchronized(mutex) { return map.firstEntry(); } }
 		@Override
 		public Float2LongMap.Entry lastEntry() { synchronized(mutex) { return map.firstEntry(); } }
@@ -594,7 +618,7 @@ public class Float2LongMaps
 		@Override
 		public Float2LongMap.Entry ceilingEntry(float key) { synchronized(mutex) { return map.ceilingEntry(key); } }
 		@Override
-		public Float2LongNavigableMap copy() { throw new UnsupportedOperationException(); }
+		public Float2LongNavigableMap copy() { synchronized(mutex) { return map.copy(); } }
 		@Override
 		@Deprecated
 		public Float2LongNavigableMap subMap(Float fromKey, boolean fromInclusive, Float toKey, boolean toInclusive) { synchronized(mutex) { return Float2LongMaps.synchronize(map.subMap(fromKey, fromInclusive, toKey, toInclusive), mutex); } }
@@ -688,7 +712,7 @@ public class Float2LongMaps
 		@Override
 		public long lastLongValue() { synchronized(mutex) { return map.lastLongValue(); } }
 		@Override
-		public Float2LongOrderedMap copy() { throw new UnsupportedOperationException(); }
+		public Float2LongOrderedMap copy() { synchronized(mutex) { return map.copy(); } }
 	}
 	
 	/**
@@ -716,6 +740,8 @@ public class Float2LongMaps
 		@Override
 		public Float2LongSortedMap tailMap(float fromKey) { synchronized(mutex) { return Float2LongMaps.synchronize(map.tailMap(fromKey), mutex); } }
 		@Override
+		public FloatSortedSet keySet() { synchronized(mutex) { return FloatSets.synchronize(map.keySet(), mutex); } }
+		@Override
 		public float firstFloatKey() { synchronized(mutex) { return map.firstFloatKey(); } }
 		@Override
 		public float pollFirstFloatKey() { synchronized(mutex) { return map.pollFirstFloatKey(); } }
@@ -728,7 +754,7 @@ public class Float2LongMaps
 		@Override
 		public long lastLongValue() { synchronized(mutex) { return map.lastLongValue(); } }
 		@Override
-		public Float2LongSortedMap copy() { throw new UnsupportedOperationException(); }
+		public Float2LongSortedMap copy() { synchronized(mutex) { return map.copy(); } }
 		@Override
 		@Deprecated
 		public Float firstKey() { synchronized(mutex) { return map.firstKey(); } }
@@ -820,6 +846,8 @@ public class Float2LongMaps
 		@Override
 		public long computeLongIfPresent(float key, FloatLongUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeLongIfPresent(key, mappingFunction); } }
 		@Override
+		public long supplyLongIfAbsent(float key, LongSupplier valueProvider) { synchronized(mutex) { return map.supplyLongIfAbsent(key, valueProvider); } }
+		@Override
 		public long mergeLong(float key, long value, LongLongUnaryOperator mappingFunction) { synchronized(mutex) { return map.mergeLong(key, value, mappingFunction); } }
 		@Override
 		public void mergeAllLong(Float2LongMap m, LongLongUnaryOperator mappingFunction) { synchronized(mutex) { map.mergeAllLong(m, mappingFunction); } }
@@ -828,9 +856,9 @@ public class Float2LongMaps
 		@Override
 		public void forEach(FloatLongConsumer action) { synchronized(mutex) { map.forEach(action); } }
 		@Override
-		public int size() { synchronized(mutex) { return super.size(); } }
+		public int size() { synchronized(mutex) { return map.size(); } }
 		@Override
-		public Float2LongMap copy() { throw new UnsupportedOperationException(); }
+		public Float2LongMap copy() { synchronized(mutex) { return map.copy(); } }
 		@Override
 		public FloatSet keySet() {
 			if(keys == null) keys = FloatSets.synchronize(map.keySet(), mutex);

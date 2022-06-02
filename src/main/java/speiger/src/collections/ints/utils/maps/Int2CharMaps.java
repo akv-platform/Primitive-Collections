@@ -21,10 +21,12 @@ import speiger.src.collections.ints.maps.interfaces.Int2CharNavigableMap;
 import speiger.src.collections.ints.maps.interfaces.Int2CharSortedMap;
 import speiger.src.collections.ints.maps.interfaces.Int2CharOrderedMap;
 import speiger.src.collections.ints.sets.IntNavigableSet;
+import speiger.src.collections.ints.sets.IntSortedSet;
 import speiger.src.collections.ints.sets.IntSet;
 import speiger.src.collections.ints.utils.IntSets;
 import speiger.src.collections.chars.collections.CharCollection;
 import speiger.src.collections.chars.functions.function.CharCharUnaryOperator;
+import speiger.src.collections.chars.functions.CharSupplier;
 import speiger.src.collections.chars.utils.CharCollections;
 import speiger.src.collections.chars.utils.CharSets;
 
@@ -193,13 +195,13 @@ public class Int2CharMaps
 	 * @param entry the Entry that should be made unmodifiable
 	 * @return a Unmodifyable Entry
 	 */
-	public static Int2CharMap.Entry unmodifiable(Int2CharMap.Entry entry) { return entry instanceof UnmodifyableEntry ? entry : new UnmodifyableEntry(entry); }
+	public static Int2CharMap.Entry unmodifiable(Int2CharMap.Entry entry) { return entry instanceof UnmodifyableEntry ? entry : (entry == null ? null : new UnmodifyableEntry(entry)); }
 	/**
 	 * A Helper function that creates a Unmodifyable Entry
 	 * @param entry the Entry that should be made unmodifiable
 	 * @return a Unmodifyable Entry
 	 */
-	public static Int2CharMap.Entry unmodifiable(Map.Entry<Integer, Character> entry) { return entry instanceof UnmodifyableEntry ? (UnmodifyableEntry)entry : new UnmodifyableEntry(entry); }
+	public static Int2CharMap.Entry unmodifiable(Map.Entry<Integer, Character> entry) { return entry instanceof UnmodifyableEntry ? (UnmodifyableEntry)entry : (entry == null ? null : new UnmodifyableEntry(entry)); }
 	
 	/**
 	 * Creates a Singleton map from the provided values.
@@ -324,9 +326,11 @@ public class Int2CharMaps
 		}
 		
 		@Override
-		public Int2CharNavigableMap descendingMap() { return Int2CharMaps.synchronize(map.descendingMap()); }
+		public Int2CharNavigableMap descendingMap() { return Int2CharMaps.unmodifiable(map.descendingMap()); }
 		@Override
 		public IntNavigableSet navigableKeySet() { return IntSets.unmodifiable(map.navigableKeySet()); }
+		@Override
+		public IntNavigableSet keySet() { return IntSets.unmodifiable(map.keySet()); }
 		@Override
 		public IntNavigableSet descendingKeySet() { return IntSets.unmodifiable(map.descendingKeySet()); }
 		@Override
@@ -374,7 +378,7 @@ public class Int2CharMaps
 		@Override
 		public Int2CharMap.Entry ceilingEntry(int key) { return Int2CharMaps.unmodifiable(map.ceilingEntry(key)); }
 		@Override
-		public Int2CharNavigableMap copy() { throw new UnsupportedOperationException(); }
+		public Int2CharNavigableMap copy() { return map.copy(); }
 	}
 	
 	/**
@@ -413,7 +417,7 @@ public class Int2CharMaps
 		@Override
 		public char lastCharValue() { return map.lastCharValue(); }
 		@Override
-		public Int2CharOrderedMap copy() { throw new UnsupportedOperationException(); }
+		public Int2CharOrderedMap copy() { return map.copy(); }
 	}
 	
 	/**
@@ -436,6 +440,9 @@ public class Int2CharMaps
 		@Override
 		public Int2CharSortedMap tailMap(int fromKey) { return Int2CharMaps.unmodifiable(map.tailMap(fromKey)); }
 		@Override
+		public IntSortedSet keySet() { return IntSets.unmodifiable(map.keySet()); }
+
+		@Override
 		public int firstIntKey() { return map.firstIntKey(); }
 		@Override
 		public int pollFirstIntKey() { return map.pollFirstIntKey(); }
@@ -448,7 +455,7 @@ public class Int2CharMaps
 		@Override
 		public char lastCharValue() { return map.lastCharValue(); }
 		@Override
-		public Int2CharSortedMap copy() { throw new UnsupportedOperationException(); }
+		public Int2CharSortedMap copy() { return map.copy(); }
 	}
 	
 	/**
@@ -479,11 +486,26 @@ public class Int2CharMaps
 		@Override
 		public boolean remove(int key, char value) { throw new UnsupportedOperationException(); }
 		@Override
-		public char get(int key) { return map.get(key); }
+		public char get(int key) {
+			char type = map.get(key);
+			return type == map.getDefaultReturnValue() ? getDefaultReturnValue() : type;
+		}
 		@Override
 		public char getOrDefault(int key, char defaultValue) { return map.getOrDefault(key, defaultValue); }
 		@Override
-		public Int2CharMap copy() { throw new UnsupportedOperationException(); }
+		public char computeChar(int key, IntCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public char computeCharIfAbsent(int key, Int2CharFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public char computeCharIfPresent(int key, IntCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public char supplyCharIfAbsent(int key, CharSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public char mergeChar(int key, char value, CharCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllChar(Int2CharMap m, CharCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public Int2CharMap copy() { return map.copy(); }
 		
 		@Override
 		public IntSet keySet() { 
@@ -558,6 +580,8 @@ public class Int2CharMaps
 		@Override
 		public IntNavigableSet descendingKeySet() { synchronized(mutex) { return IntSets.synchronize(map.descendingKeySet(), mutex); } }
 		@Override
+		public IntNavigableSet keySet() { synchronized(mutex) { return IntSets.synchronize(map.keySet(), mutex); } }
+		@Override
 		public Int2CharMap.Entry firstEntry() { synchronized(mutex) { return map.firstEntry(); } }
 		@Override
 		public Int2CharMap.Entry lastEntry() { synchronized(mutex) { return map.firstEntry(); } }
@@ -594,7 +618,7 @@ public class Int2CharMaps
 		@Override
 		public Int2CharMap.Entry ceilingEntry(int key) { synchronized(mutex) { return map.ceilingEntry(key); } }
 		@Override
-		public Int2CharNavigableMap copy() { throw new UnsupportedOperationException(); }
+		public Int2CharNavigableMap copy() { synchronized(mutex) { return map.copy(); } }
 		@Override
 		@Deprecated
 		public Int2CharNavigableMap subMap(Integer fromKey, boolean fromInclusive, Integer toKey, boolean toInclusive) { synchronized(mutex) { return Int2CharMaps.synchronize(map.subMap(fromKey, fromInclusive, toKey, toInclusive), mutex); } }
@@ -688,7 +712,7 @@ public class Int2CharMaps
 		@Override
 		public char lastCharValue() { synchronized(mutex) { return map.lastCharValue(); } }
 		@Override
-		public Int2CharOrderedMap copy() { throw new UnsupportedOperationException(); }
+		public Int2CharOrderedMap copy() { synchronized(mutex) { return map.copy(); } }
 	}
 	
 	/**
@@ -716,6 +740,8 @@ public class Int2CharMaps
 		@Override
 		public Int2CharSortedMap tailMap(int fromKey) { synchronized(mutex) { return Int2CharMaps.synchronize(map.tailMap(fromKey), mutex); } }
 		@Override
+		public IntSortedSet keySet() { synchronized(mutex) { return IntSets.synchronize(map.keySet(), mutex); } }
+		@Override
 		public int firstIntKey() { synchronized(mutex) { return map.firstIntKey(); } }
 		@Override
 		public int pollFirstIntKey() { synchronized(mutex) { return map.pollFirstIntKey(); } }
@@ -728,7 +754,7 @@ public class Int2CharMaps
 		@Override
 		public char lastCharValue() { synchronized(mutex) { return map.lastCharValue(); } }
 		@Override
-		public Int2CharSortedMap copy() { throw new UnsupportedOperationException(); }
+		public Int2CharSortedMap copy() { synchronized(mutex) { return map.copy(); } }
 		@Override
 		@Deprecated
 		public Integer firstKey() { synchronized(mutex) { return map.firstKey(); } }
@@ -820,6 +846,8 @@ public class Int2CharMaps
 		@Override
 		public char computeCharIfPresent(int key, IntCharUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeCharIfPresent(key, mappingFunction); } }
 		@Override
+		public char supplyCharIfAbsent(int key, CharSupplier valueProvider) { synchronized(mutex) { return map.supplyCharIfAbsent(key, valueProvider); } }
+		@Override
 		public char mergeChar(int key, char value, CharCharUnaryOperator mappingFunction) { synchronized(mutex) { return map.mergeChar(key, value, mappingFunction); } }
 		@Override
 		public void mergeAllChar(Int2CharMap m, CharCharUnaryOperator mappingFunction) { synchronized(mutex) { map.mergeAllChar(m, mappingFunction); } }
@@ -828,9 +856,9 @@ public class Int2CharMaps
 		@Override
 		public void forEach(IntCharConsumer action) { synchronized(mutex) { map.forEach(action); } }
 		@Override
-		public int size() { synchronized(mutex) { return super.size(); } }
+		public int size() { synchronized(mutex) { return map.size(); } }
 		@Override
-		public Int2CharMap copy() { throw new UnsupportedOperationException(); }
+		public Int2CharMap copy() { synchronized(mutex) { return map.copy(); } }
 		@Override
 		public IntSet keySet() {
 			if(keys == null) keys = IntSets.synchronize(map.keySet(), mutex);

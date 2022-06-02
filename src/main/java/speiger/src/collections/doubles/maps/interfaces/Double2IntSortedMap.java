@@ -4,7 +4,7 @@ import java.util.SortedMap;
 
 import speiger.src.collections.ints.collections.IntCollection;
 import speiger.src.collections.doubles.functions.DoubleComparator;
-import speiger.src.collections.doubles.sets.DoubleSet;
+import speiger.src.collections.doubles.sets.DoubleSortedSet;
 import speiger.src.collections.doubles.utils.maps.Double2IntMaps;
 import speiger.src.collections.objects.sets.ObjectSortedSet;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
@@ -24,7 +24,7 @@ public interface Double2IntSortedMap extends SortedMap<Double, Integer>, Double2
 	public Double2IntSortedMap copy();
 	
 	@Override
-	public DoubleSet keySet();
+	public DoubleSortedSet keySet();
 	@Override
 	public IntCollection values();
 	

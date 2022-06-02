@@ -21,8 +21,6 @@ import speiger.src.collections.chars.maps.interfaces.Char2ObjectMap;
 import speiger.src.collections.chars.maps.interfaces.Char2ObjectNavigableMap;
 import speiger.src.collections.chars.sets.AbstractCharSet;
 import speiger.src.collections.chars.sets.CharNavigableSet;
-import speiger.src.collections.chars.sets.CharSet;
-import speiger.src.collections.chars.sets.CharSortedSet;
 import speiger.src.collections.chars.utils.maps.Char2ObjectMaps;
 import speiger.src.collections.objects.collections.AbstractObjectCollection;
 import speiger.src.collections.objects.collections.ObjectCollection;
@@ -518,7 +516,7 @@ public class Char2ObjectAVLTreeMap<V> extends AbstractChar2ObjectMap<V> implemen
 	}
 	
 	@Override
-	public CharSortedSet keySet() {
+	public CharNavigableSet keySet() {
 		return navigableKeySet();
 	}
 	
@@ -1275,7 +1273,7 @@ public class Char2ObjectAVLTreeMap<V> extends AbstractChar2ObjectMap<V> implemen
 		}
 		
 		@Override
-		public CharSet keySet() {
+		public CharNavigableSet keySet() {
 			return navigableKeySet();
 		}
 		

@@ -32,7 +32,9 @@ public interface Char2IntNavigableMap extends Char2IntSortedMap, NavigableMap<Ch
 	/** @return a Type Specific pollLastEntry */
 	@Override
 	public Char2IntMap.Entry pollLastEntry();
-	
+	/** @return a Type Specific Navigable Key Set */
+	@Override
+	public CharNavigableSet keySet();
 	/**
 	 * Creates a Wrapped NavigableMap that is Synchronized
 	 * @return a new NavigableMap that is synchronized

@@ -21,8 +21,6 @@ import speiger.src.collections.chars.maps.interfaces.Char2LongMap;
 import speiger.src.collections.chars.maps.interfaces.Char2LongNavigableMap;
 import speiger.src.collections.chars.sets.AbstractCharSet;
 import speiger.src.collections.chars.sets.CharNavigableSet;
-import speiger.src.collections.chars.sets.CharSet;
-import speiger.src.collections.chars.sets.CharSortedSet;
 import speiger.src.collections.chars.utils.maps.Char2LongMaps;
 import speiger.src.collections.longs.collections.AbstractLongCollection;
 import speiger.src.collections.longs.collections.LongCollection;
@@ -580,7 +578,7 @@ public class Char2LongAVLTreeMap extends AbstractChar2LongMap implements Char2Lo
 	}
 	
 	@Override
-	public CharSortedSet keySet() {
+	public CharNavigableSet keySet() {
 		return navigableKeySet();
 	}
 	
@@ -1337,7 +1335,7 @@ public class Char2LongAVLTreeMap extends AbstractChar2LongMap implements Char2Lo
 		}
 		
 		@Override
-		public CharSet keySet() {
+		public CharNavigableSet keySet() {
 			return navigableKeySet();
 		}
 		

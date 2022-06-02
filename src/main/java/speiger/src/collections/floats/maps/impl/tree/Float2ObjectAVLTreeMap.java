@@ -21,8 +21,6 @@ import speiger.src.collections.floats.maps.interfaces.Float2ObjectMap;
 import speiger.src.collections.floats.maps.interfaces.Float2ObjectNavigableMap;
 import speiger.src.collections.floats.sets.AbstractFloatSet;
 import speiger.src.collections.floats.sets.FloatNavigableSet;
-import speiger.src.collections.floats.sets.FloatSet;
-import speiger.src.collections.floats.sets.FloatSortedSet;
 import speiger.src.collections.floats.utils.maps.Float2ObjectMaps;
 import speiger.src.collections.objects.collections.AbstractObjectCollection;
 import speiger.src.collections.objects.collections.ObjectCollection;
@@ -518,7 +516,7 @@ public class Float2ObjectAVLTreeMap<V> extends AbstractFloat2ObjectMap<V> implem
 	}
 	
 	@Override
-	public FloatSortedSet keySet() {
+	public FloatNavigableSet keySet() {
 		return navigableKeySet();
 	}
 	
@@ -1275,7 +1273,7 @@ public class Float2ObjectAVLTreeMap<V> extends AbstractFloat2ObjectMap<V> implem
 		}
 		
 		@Override
-		public FloatSet keySet() {
+		public FloatNavigableSet keySet() {
 			return navigableKeySet();
 		}
 		

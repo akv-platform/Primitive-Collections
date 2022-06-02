@@ -19,7 +19,6 @@ import speiger.src.collections.objects.maps.interfaces.Object2IntNavigableMap;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
 import speiger.src.collections.objects.sets.ObjectNavigableSet;
 import speiger.src.collections.objects.sets.ObjectSet;
-import speiger.src.collections.objects.sets.ObjectSortedSet;
 import speiger.src.collections.objects.utils.maps.Object2IntMaps;
 import speiger.src.collections.ints.collections.AbstractIntCollection;
 import speiger.src.collections.ints.collections.IntCollection;
@@ -576,7 +575,7 @@ public class Object2IntAVLTreeMap<T> extends AbstractObject2IntMap<T> implements
 	}
 	
 	@Override
-	public ObjectSortedSet<T> keySet() {
+	public ObjectNavigableSet<T> keySet() {
 		return navigableKeySet();
 	}
 	
@@ -1295,7 +1294,7 @@ public class Object2IntAVLTreeMap<T> extends AbstractObject2IntMap<T> implements
 		}
 		
 		@Override
-		public ObjectSet<T> keySet() {
+		public ObjectNavigableSet<T> keySet() {
 			return navigableKeySet();
 		}
 		

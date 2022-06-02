@@ -19,7 +19,6 @@ import speiger.src.collections.objects.maps.interfaces.Object2BooleanNavigableMa
 import speiger.src.collections.objects.sets.AbstractObjectSet;
 import speiger.src.collections.objects.sets.ObjectNavigableSet;
 import speiger.src.collections.objects.sets.ObjectSet;
-import speiger.src.collections.objects.sets.ObjectSortedSet;
 import speiger.src.collections.objects.utils.maps.Object2BooleanMaps;
 import speiger.src.collections.booleans.collections.AbstractBooleanCollection;
 import speiger.src.collections.booleans.collections.BooleanCollection;
@@ -517,7 +516,7 @@ public class Object2BooleanAVLTreeMap<T> extends AbstractObject2BooleanMap<T> im
 	}
 	
 	@Override
-	public ObjectSortedSet<T> keySet() {
+	public ObjectNavigableSet<T> keySet() {
 		return navigableKeySet();
 	}
 	
@@ -1236,7 +1235,7 @@ public class Object2BooleanAVLTreeMap<T> extends AbstractObject2BooleanMap<T> im
 		}
 		
 		@Override
-		public ObjectSet<T> keySet() {
+		public ObjectNavigableSet<T> keySet() {
 			return navigableKeySet();
 		}
 		

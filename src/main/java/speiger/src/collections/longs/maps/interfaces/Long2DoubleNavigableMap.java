@@ -32,7 +32,9 @@ public interface Long2DoubleNavigableMap extends Long2DoubleSortedMap, Navigable
 	/** @return a Type Specific pollLastEntry */
 	@Override
 	public Long2DoubleMap.Entry pollLastEntry();
-	
+	/** @return a Type Specific Navigable Key Set */
+	@Override
+	public LongNavigableSet keySet();
 	/**
 	 * Creates a Wrapped NavigableMap that is Synchronized
 	 * @return a new NavigableMap that is synchronized

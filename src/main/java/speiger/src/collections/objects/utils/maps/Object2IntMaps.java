@@ -18,8 +18,10 @@ import speiger.src.collections.objects.maps.interfaces.Object2IntNavigableMap;
 import speiger.src.collections.objects.maps.interfaces.Object2IntSortedMap;
 import speiger.src.collections.objects.maps.interfaces.Object2IntOrderedMap;
 import speiger.src.collections.objects.sets.ObjectNavigableSet;
+import speiger.src.collections.objects.sets.ObjectSortedSet;
 import speiger.src.collections.ints.collections.IntCollection;
 import speiger.src.collections.ints.functions.function.IntIntUnaryOperator;
+import speiger.src.collections.ints.functions.IntSupplier;
 import speiger.src.collections.ints.utils.IntCollections;
 import speiger.src.collections.ints.utils.IntSets;
 
@@ -205,14 +207,14 @@ public class Object2IntMaps
 	 * @param <T> the type of elements maintained by this Collection
 	 * @return a Unmodifyable Entry
 	 */
-	public static <T> Object2IntMap.Entry<T> unmodifiable(Object2IntMap.Entry<T> entry) { return entry instanceof UnmodifyableEntry ? entry : new UnmodifyableEntry<>(entry); }
+	public static <T> Object2IntMap.Entry<T> unmodifiable(Object2IntMap.Entry<T> entry) { return entry instanceof UnmodifyableEntry ? entry : (entry == null ? null : new UnmodifyableEntry<>(entry)); }
 	/**
 	 * A Helper function that creates a Unmodifyable Entry
 	 * @param entry the Entry that should be made unmodifiable
 	 * @param <T> the type of elements maintained by this Collection
 	 * @return a Unmodifyable Entry
 	 */
-	public static <T> Object2IntMap.Entry<T> unmodifiable(Map.Entry<T, Integer> entry) { return entry instanceof UnmodifyableEntry ? (UnmodifyableEntry<T>)entry : new UnmodifyableEntry<>(entry); }
+	public static <T> Object2IntMap.Entry<T> unmodifiable(Map.Entry<T, Integer> entry) { return entry instanceof UnmodifyableEntry ? (UnmodifyableEntry<T>)entry : (entry == null ? null : new UnmodifyableEntry<>(entry)); }
 	
 	/**
 	 * Creates a Singleton map from the provided values.
@@ -342,9 +344,11 @@ public class Object2IntMaps
 		}
 		
 		@Override
-		public Object2IntNavigableMap<T> descendingMap() { return Object2IntMaps.synchronize(map.descendingMap()); }
+		public Object2IntNavigableMap<T> descendingMap() { return Object2IntMaps.unmodifiable(map.descendingMap()); }
 		@Override
 		public ObjectNavigableSet<T> navigableKeySet() { return ObjectSets.unmodifiable(map.navigableKeySet()); }
+		@Override
+		public ObjectNavigableSet<T> keySet() { return ObjectSets.unmodifiable(map.keySet()); }
 		@Override
 		public ObjectNavigableSet<T> descendingKeySet() { return ObjectSets.unmodifiable(map.descendingKeySet()); }
 		@Override
@@ -384,7 +388,7 @@ public class Object2IntMaps
 		@Override
 		public Object2IntMap.Entry<T> ceilingEntry(T key) { return Object2IntMaps.unmodifiable(map.ceilingEntry(key)); }
 		@Override
-		public Object2IntNavigableMap<T> copy() { throw new UnsupportedOperationException(); }
+		public Object2IntNavigableMap<T> copy() { return map.copy(); }
 	}
 	
 	/**
@@ -424,7 +428,7 @@ public class Object2IntMaps
 		@Override
 		public int lastIntValue() { return map.lastIntValue(); }
 		@Override
-		public Object2IntOrderedMap<T> copy() { throw new UnsupportedOperationException(); }
+		public Object2IntOrderedMap<T> copy() { return map.copy(); }
 	}
 	
 	/**
@@ -448,6 +452,9 @@ public class Object2IntMaps
 		@Override
 		public Object2IntSortedMap<T> tailMap(T fromKey) { return Object2IntMaps.unmodifiable(map.tailMap(fromKey)); }
 		@Override
+		public ObjectSortedSet<T> keySet() { return ObjectSets.unmodifiable(map.keySet()); }
+
+		@Override
 		public T firstKey() { return map.firstKey(); }
 		@Override
 		public T pollFirstKey() { return map.pollFirstKey(); }
@@ -460,7 +467,7 @@ public class Object2IntMaps
 		@Override
 		public int lastIntValue() { return map.lastIntValue(); }
 		@Override
-		public Object2IntSortedMap<T> copy() { throw new UnsupportedOperationException(); }
+		public Object2IntSortedMap<T> copy() { return map.copy(); }
 	}
 	
 	/**
@@ -492,11 +499,26 @@ public class Object2IntMaps
 		@Override
 		public boolean remove(T key, int value) { throw new UnsupportedOperationException(); }
 		@Override
-		public int getInt(T key) { return map.getInt(key); }
+		public int getInt(T key) {
+			int type = map.getInt(key);
+			return type == map.getDefaultReturnValue() ? getDefaultReturnValue() : type;
+		}
 		@Override
 		public int getOrDefault(T key, int defaultValue) { return map.getOrDefault(key, defaultValue); }
 		@Override
-		public Object2IntMap<T> copy() { throw new UnsupportedOperationException(); }
+		public int computeInt(T key, ObjectIntUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public int computeIntIfAbsent(T key, Object2IntFunction<T> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public int computeIntIfPresent(T key, ObjectIntUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public int supplyIntIfAbsent(T key, IntSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public int mergeInt(T key, int value, IntIntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllInt(Object2IntMap<T> m, IntIntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public Object2IntMap<T> copy() { return map.copy(); }
 		
 		@Override
 		public ObjectSet<T> keySet() { 
@@ -573,6 +595,8 @@ public class Object2IntMaps
 		@Override
 		public ObjectNavigableSet<T> descendingKeySet() { synchronized(mutex) { return ObjectSets.synchronize(map.descendingKeySet(), mutex); } }
 		@Override
+		public ObjectNavigableSet<T> keySet() { synchronized(mutex) { return ObjectSets.synchronize(map.keySet(), mutex); } }
+		@Override
 		public Object2IntMap.Entry<T> firstEntry() { synchronized(mutex) { return map.firstEntry(); } }
 		@Override
 		public Object2IntMap.Entry<T> lastEntry() { synchronized(mutex) { return map.firstEntry(); } }
@@ -609,7 +633,7 @@ public class Object2IntMaps
 		@Override
 		public Object2IntMap.Entry<T> ceilingEntry(T key) { synchronized(mutex) { return map.ceilingEntry(key); } }
 		@Override
-		public Object2IntNavigableMap<T> copy() { throw new UnsupportedOperationException(); }
+		public Object2IntNavigableMap<T> copy() { synchronized(mutex) { return map.copy(); } }
 	}
 	
 	/**
@@ -654,7 +678,7 @@ public class Object2IntMaps
 		@Override
 		public int lastIntValue() { synchronized(mutex) { return map.lastIntValue(); } }
 		@Override
-		public Object2IntOrderedMap<T> copy() { throw new UnsupportedOperationException(); }
+		public Object2IntOrderedMap<T> copy() { synchronized(mutex) { return map.copy(); } }
 	}
 	
 	/**
@@ -683,6 +707,8 @@ public class Object2IntMaps
 		@Override
 		public Object2IntSortedMap<T> tailMap(T fromKey) { synchronized(mutex) { return Object2IntMaps.synchronize(map.tailMap(fromKey), mutex); } }
 		@Override
+		public ObjectSortedSet<T> keySet() { synchronized(mutex) { return ObjectSets.synchronize(map.keySet(), mutex); } }
+		@Override
 		public T firstKey() { synchronized(mutex) { return map.firstKey(); } }
 		@Override
 		public T pollFirstKey() { synchronized(mutex) { return map.pollFirstKey(); } }
@@ -695,7 +721,7 @@ public class Object2IntMaps
 		@Override
 		public int lastIntValue() { synchronized(mutex) { return map.lastIntValue(); } }
 		@Override
-		public Object2IntSortedMap<T> copy() { throw new UnsupportedOperationException(); }
+		public Object2IntSortedMap<T> copy() { synchronized(mutex) { return map.copy(); } }
 	}
 	
 	/**
@@ -771,6 +797,8 @@ public class Object2IntMaps
 		@Override
 		public int computeIntIfPresent(T key, ObjectIntUnaryOperator<T> mappingFunction) { synchronized(mutex) { return map.computeIntIfPresent(key, mappingFunction); } }
 		@Override
+		public int supplyIntIfAbsent(T key, IntSupplier valueProvider) { synchronized(mutex) { return map.supplyIntIfAbsent(key, valueProvider); } }
+		@Override
 		public int mergeInt(T key, int value, IntIntUnaryOperator mappingFunction) { synchronized(mutex) { return map.mergeInt(key, value, mappingFunction); } }
 		@Override
 		public void mergeAllInt(Object2IntMap<T> m, IntIntUnaryOperator mappingFunction) { synchronized(mutex) { map.mergeAllInt(m, mappingFunction); } }
@@ -779,9 +807,9 @@ public class Object2IntMaps
 		@Override
 		public void forEach(ObjectIntConsumer<T> action) { synchronized(mutex) { map.forEach(action); } }
 		@Override
-		public int size() { synchronized(mutex) { return super.size(); } }
+		public int size() { synchronized(mutex) { return map.size(); } }
 		@Override
-		public Object2IntMap<T> copy() { throw new UnsupportedOperationException(); }
+		public Object2IntMap<T> copy() { synchronized(mutex) { return map.copy(); } }
 		@Override
 		public ObjectSet<T> keySet() {
 			if(keys == null) keys = ObjectSets.synchronize(map.keySet(), mutex);

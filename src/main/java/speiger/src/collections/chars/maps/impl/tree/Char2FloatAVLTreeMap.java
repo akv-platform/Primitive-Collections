@@ -21,8 +21,6 @@ import speiger.src.collections.chars.maps.interfaces.Char2FloatMap;
 import speiger.src.collections.chars.maps.interfaces.Char2FloatNavigableMap;
 import speiger.src.collections.chars.sets.AbstractCharSet;
 import speiger.src.collections.chars.sets.CharNavigableSet;
-import speiger.src.collections.chars.sets.CharSet;
-import speiger.src.collections.chars.sets.CharSortedSet;
 import speiger.src.collections.chars.utils.maps.Char2FloatMaps;
 import speiger.src.collections.floats.collections.AbstractFloatCollection;
 import speiger.src.collections.floats.collections.FloatCollection;
@@ -580,7 +578,7 @@ public class Char2FloatAVLTreeMap extends AbstractChar2FloatMap implements Char2
 	}
 	
 	@Override
-	public CharSortedSet keySet() {
+	public CharNavigableSet keySet() {
 		return navigableKeySet();
 	}
 	
@@ -1337,7 +1335,7 @@ public class Char2FloatAVLTreeMap extends AbstractChar2FloatMap implements Char2
 		}
 		
 		@Override
-		public CharSet keySet() {
+		public CharNavigableSet keySet() {
 			return navigableKeySet();
 		}
 		

@@ -20,8 +20,6 @@ import speiger.src.collections.chars.maps.interfaces.Char2BooleanMap;
 import speiger.src.collections.chars.maps.interfaces.Char2BooleanNavigableMap;
 import speiger.src.collections.chars.sets.AbstractCharSet;
 import speiger.src.collections.chars.sets.CharNavigableSet;
-import speiger.src.collections.chars.sets.CharSet;
-import speiger.src.collections.chars.sets.CharSortedSet;
 import speiger.src.collections.chars.utils.maps.Char2BooleanMaps;
 import speiger.src.collections.booleans.collections.AbstractBooleanCollection;
 import speiger.src.collections.booleans.collections.BooleanCollection;
@@ -521,7 +519,7 @@ public class Char2BooleanAVLTreeMap extends AbstractChar2BooleanMap implements C
 	}
 	
 	@Override
-	public CharSortedSet keySet() {
+	public CharNavigableSet keySet() {
 		return navigableKeySet();
 	}
 	
@@ -1278,7 +1276,7 @@ public class Char2BooleanAVLTreeMap extends AbstractChar2BooleanMap implements C
 		}
 		
 		@Override
-		public CharSet keySet() {
+		public CharNavigableSet keySet() {
 			return navigableKeySet();
 		}
 		

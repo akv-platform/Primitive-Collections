@@ -21,10 +21,12 @@ import speiger.src.collections.bytes.maps.interfaces.Byte2FloatNavigableMap;
 import speiger.src.collections.bytes.maps.interfaces.Byte2FloatSortedMap;
 import speiger.src.collections.bytes.maps.interfaces.Byte2FloatOrderedMap;
 import speiger.src.collections.bytes.sets.ByteNavigableSet;
+import speiger.src.collections.bytes.sets.ByteSortedSet;
 import speiger.src.collections.bytes.sets.ByteSet;
 import speiger.src.collections.bytes.utils.ByteSets;
 import speiger.src.collections.floats.collections.FloatCollection;
 import speiger.src.collections.floats.functions.function.FloatFloatUnaryOperator;
+import speiger.src.collections.floats.functions.FloatSupplier;
 import speiger.src.collections.floats.utils.FloatCollections;
 import speiger.src.collections.floats.utils.FloatSets;
 
@@ -193,13 +195,13 @@ public class Byte2FloatMaps
 	 * @param entry the Entry that should be made unmodifiable
 	 * @return a Unmodifyable Entry
 	 */
-	public static Byte2FloatMap.Entry unmodifiable(Byte2FloatMap.Entry entry) { return entry instanceof UnmodifyableEntry ? entry : new UnmodifyableEntry(entry); }
+	public static Byte2FloatMap.Entry unmodifiable(Byte2FloatMap.Entry entry) { return entry instanceof UnmodifyableEntry ? entry : (entry == null ? null : new UnmodifyableEntry(entry)); }
 	/**
 	 * A Helper function that creates a Unmodifyable Entry
 	 * @param entry the Entry that should be made unmodifiable
 	 * @return a Unmodifyable Entry
 	 */
-	public static Byte2FloatMap.Entry unmodifiable(Map.Entry<Byte, Float> entry) { return entry instanceof UnmodifyableEntry ? (UnmodifyableEntry)entry : new UnmodifyableEntry(entry); }
+	public static Byte2FloatMap.Entry unmodifiable(Map.Entry<Byte, Float> entry) { return entry instanceof UnmodifyableEntry ? (UnmodifyableEntry)entry : (entry == null ? null : new UnmodifyableEntry(entry)); }
 	
 	/**
 	 * Creates a Singleton map from the provided values.
@@ -324,9 +326,11 @@ public class Byte2FloatMaps
 		}
 		
 		@Override
-		public Byte2FloatNavigableMap descendingMap() { return Byte2FloatMaps.synchronize(map.descendingMap()); }
+		public Byte2FloatNavigableMap descendingMap() { return Byte2FloatMaps.unmodifiable(map.descendingMap()); }
 		@Override
 		public ByteNavigableSet navigableKeySet() { return ByteSets.unmodifiable(map.navigableKeySet()); }
+		@Override
+		public ByteNavigableSet keySet() { return ByteSets.unmodifiable(map.keySet()); }
 		@Override
 		public ByteNavigableSet descendingKeySet() { return ByteSets.unmodifiable(map.descendingKeySet()); }
 		@Override
@@ -374,7 +378,7 @@ public class Byte2FloatMaps
 		@Override
 		public Byte2FloatMap.Entry ceilingEntry(byte key) { return Byte2FloatMaps.unmodifiable(map.ceilingEntry(key)); }
 		@Override
-		public Byte2FloatNavigableMap copy() { throw new UnsupportedOperationException(); }
+		public Byte2FloatNavigableMap copy() { return map.copy(); }
 	}
 	
 	/**
@@ -413,7 +417,7 @@ public class Byte2FloatMaps
 		@Override
 		public float lastFloatValue() { return map.lastFloatValue(); }
 		@Override
-		public Byte2FloatOrderedMap copy() { throw new UnsupportedOperationException(); }
+		public Byte2FloatOrderedMap copy() { return map.copy(); }
 	}
 	
 	/**
@@ -436,6 +440,9 @@ public class Byte2FloatMaps
 		@Override
 		public Byte2FloatSortedMap tailMap(byte fromKey) { return Byte2FloatMaps.unmodifiable(map.tailMap(fromKey)); }
 		@Override
+		public ByteSortedSet keySet() { return ByteSets.unmodifiable(map.keySet()); }
+
+		@Override
 		public byte firstByteKey() { return map.firstByteKey(); }
 		@Override
 		public byte pollFirstByteKey() { return map.pollFirstByteKey(); }
@@ -448,7 +455,7 @@ public class Byte2FloatMaps
 		@Override
 		public float lastFloatValue() { return map.lastFloatValue(); }
 		@Override
-		public Byte2FloatSortedMap copy() { throw new UnsupportedOperationException(); }
+		public Byte2FloatSortedMap copy() { return map.copy(); }
 	}
 	
 	/**
@@ -479,11 +486,26 @@ public class Byte2FloatMaps
 		@Override
 		public boolean remove(byte key, float value) { throw new UnsupportedOperationException(); }
 		@Override
-		public float get(byte key) { return map.get(key); }
+		public float get(byte key) {
+			float type = map.get(key);
+			return Float.floatToIntBits(type) == Float.floatToIntBits(map.getDefaultReturnValue()) ? getDefaultReturnValue() : type;
+		}
 		@Override
 		public float getOrDefault(byte key, float defaultValue) { return map.getOrDefault(key, defaultValue); }
 		@Override
-		public Byte2FloatMap copy() { throw new UnsupportedOperationException(); }
+		public float computeFloat(byte key, ByteFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public float computeFloatIfAbsent(byte key, Byte2FloatFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public float computeFloatIfPresent(byte key, ByteFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public float supplyFloatIfAbsent(byte key, FloatSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public float mergeFloat(byte key, float value, FloatFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllFloat(Byte2FloatMap m, FloatFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public Byte2FloatMap copy() { return map.copy(); }
 		
 		@Override
 		public ByteSet keySet() { 
@@ -558,6 +580,8 @@ public class Byte2FloatMaps
 		@Override
 		public ByteNavigableSet descendingKeySet() { synchronized(mutex) { return ByteSets.synchronize(map.descendingKeySet(), mutex); } }
 		@Override
+		public ByteNavigableSet keySet() { synchronized(mutex) { return ByteSets.synchronize(map.keySet(), mutex); } }
+		@Override
 		public Byte2FloatMap.Entry firstEntry() { synchronized(mutex) { return map.firstEntry(); } }
 		@Override
 		public Byte2FloatMap.Entry lastEntry() { synchronized(mutex) { return map.firstEntry(); } }
@@ -594,7 +618,7 @@ public class Byte2FloatMaps
 		@Override
 		public Byte2FloatMap.Entry ceilingEntry(byte key) { synchronized(mutex) { return map.ceilingEntry(key); } }
 		@Override
-		public Byte2FloatNavigableMap copy() { throw new UnsupportedOperationException(); }
+		public Byte2FloatNavigableMap copy() { synchronized(mutex) { return map.copy(); } }
 		@Override
 		@Deprecated
 		public Byte2FloatNavigableMap subMap(Byte fromKey, boolean fromInclusive, Byte toKey, boolean toInclusive) { synchronized(mutex) { return Byte2FloatMaps.synchronize(map.subMap(fromKey, fromInclusive, toKey, toInclusive), mutex); } }
@@ -688,7 +712,7 @@ public class Byte2FloatMaps
 		@Override
 		public float lastFloatValue() { synchronized(mutex) { return map.lastFloatValue(); } }
 		@Override
-		public Byte2FloatOrderedMap copy() { throw new UnsupportedOperationException(); }
+		public Byte2FloatOrderedMap copy() { synchronized(mutex) { return map.copy(); } }
 	}
 	
 	/**
@@ -716,6 +740,8 @@ public class Byte2FloatMaps
 		@Override
 		public Byte2FloatSortedMap tailMap(byte fromKey) { synchronized(mutex) { return Byte2FloatMaps.synchronize(map.tailMap(fromKey), mutex); } }
 		@Override
+		public ByteSortedSet keySet() { synchronized(mutex) { return ByteSets.synchronize(map.keySet(), mutex); } }
+		@Override
 		public byte firstByteKey() { synchronized(mutex) { return map.firstByteKey(); } }
 		@Override
 		public byte pollFirstByteKey() { synchronized(mutex) { return map.pollFirstByteKey(); } }
@@ -728,7 +754,7 @@ public class Byte2FloatMaps
 		@Override
 		public float lastFloatValue() { synchronized(mutex) { return map.lastFloatValue(); } }
 		@Override
-		public Byte2FloatSortedMap copy() { throw new UnsupportedOperationException(); }
+		public Byte2FloatSortedMap copy() { synchronized(mutex) { return map.copy(); } }
 		@Override
 		@Deprecated
 		public Byte firstKey() { synchronized(mutex) { return map.firstKey(); } }
@@ -820,6 +846,8 @@ public class Byte2FloatMaps
 		@Override
 		public float computeFloatIfPresent(byte key, ByteFloatUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeFloatIfPresent(key, mappingFunction); } }
 		@Override
+		public float supplyFloatIfAbsent(byte key, FloatSupplier valueProvider) { synchronized(mutex) { return map.supplyFloatIfAbsent(key, valueProvider); } }
+		@Override
 		public float mergeFloat(byte key, float value, FloatFloatUnaryOperator mappingFunction) { synchronized(mutex) { return map.mergeFloat(key, value, mappingFunction); } }
 		@Override
 		public void mergeAllFloat(Byte2FloatMap m, FloatFloatUnaryOperator mappingFunction) { synchronized(mutex) { map.mergeAllFloat(m, mappingFunction); } }
@@ -828,9 +856,9 @@ public class Byte2FloatMaps
 		@Override
 		public void forEach(ByteFloatConsumer action) { synchronized(mutex) { map.forEach(action); } }
 		@Override
-		public int size() { synchronized(mutex) { return super.size(); } }
+		public int size() { synchronized(mutex) { return map.size(); } }
 		@Override
-		public Byte2FloatMap copy() { throw new UnsupportedOperationException(); }
+		public Byte2FloatMap copy() { synchronized(mutex) { return map.copy(); } }
 		@Override
 		public ByteSet keySet() {
 			if(keys == null) keys = ByteSets.synchronize(map.keySet(), mutex);

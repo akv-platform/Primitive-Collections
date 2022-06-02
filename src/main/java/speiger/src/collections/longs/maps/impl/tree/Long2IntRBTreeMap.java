@@ -21,8 +21,6 @@ import speiger.src.collections.longs.maps.interfaces.Long2IntMap;
 import speiger.src.collections.longs.maps.interfaces.Long2IntNavigableMap;
 import speiger.src.collections.longs.sets.AbstractLongSet;
 import speiger.src.collections.longs.sets.LongNavigableSet;
-import speiger.src.collections.longs.sets.LongSet;
-import speiger.src.collections.longs.sets.LongSortedSet;
 import speiger.src.collections.longs.utils.maps.Long2IntMaps;
 import speiger.src.collections.ints.collections.AbstractIntCollection;
 import speiger.src.collections.ints.collections.IntCollection;
@@ -580,7 +578,7 @@ public class Long2IntRBTreeMap extends AbstractLong2IntMap implements Long2IntNa
 	}
 	
 	@Override
-	public LongSortedSet keySet() {
+	public LongNavigableSet keySet() {
 		return navigableKeySet();
 	}
 	
@@ -1180,6 +1178,11 @@ public class Long2IntRBTreeMap extends AbstractLong2IntMap implements Long2IntNa
 		}
 		
 		@Override
+		public LongNavigableSet keySet() {
+			return navigableKeySet();
+		}
+		
+		@Override
 		public Long2IntNavigableMap subMap(long fromKey, boolean fromInclusive, long toKey, boolean toInclusive) {
 			if (!inRange(fromKey, fromInclusive)) throw new IllegalArgumentException("fromKey out of range");
 			if (!inRange(toKey, toInclusive)) throw new IllegalArgumentException("toKey out of range");
@@ -1259,6 +1262,11 @@ public class Long2IntRBTreeMap extends AbstractLong2IntMap implements Long2IntNa
 		public LongNavigableSet navigableKeySet() {
 			if(keySet == null) keySet = new KeySet(this);
 			return keySet;
+		}
+		
+		@Override
+		public LongNavigableSet keySet() {
+			return navigableKeySet();
 		}
 		
 		@Override
@@ -1391,7 +1399,7 @@ public class Long2IntRBTreeMap extends AbstractLong2IntMap implements Long2IntNa
 		}
 		
 		@Override
-		public LongSet keySet() {
+		public LongNavigableSet keySet() {
 			return navigableKeySet();
 		}
 		

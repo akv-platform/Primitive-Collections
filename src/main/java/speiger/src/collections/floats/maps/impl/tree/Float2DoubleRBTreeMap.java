@@ -21,8 +21,6 @@ import speiger.src.collections.floats.maps.interfaces.Float2DoubleMap;
 import speiger.src.collections.floats.maps.interfaces.Float2DoubleNavigableMap;
 import speiger.src.collections.floats.sets.AbstractFloatSet;
 import speiger.src.collections.floats.sets.FloatNavigableSet;
-import speiger.src.collections.floats.sets.FloatSet;
-import speiger.src.collections.floats.sets.FloatSortedSet;
 import speiger.src.collections.floats.utils.maps.Float2DoubleMaps;
 import speiger.src.collections.doubles.collections.AbstractDoubleCollection;
 import speiger.src.collections.doubles.collections.DoubleCollection;
@@ -580,7 +578,7 @@ public class Float2DoubleRBTreeMap extends AbstractFloat2DoubleMap implements Fl
 	}
 	
 	@Override
-	public FloatSortedSet keySet() {
+	public FloatNavigableSet keySet() {
 		return navigableKeySet();
 	}
 	
@@ -1180,6 +1178,11 @@ public class Float2DoubleRBTreeMap extends AbstractFloat2DoubleMap implements Fl
 		}
 		
 		@Override
+		public FloatNavigableSet keySet() {
+			return navigableKeySet();
+		}
+		
+		@Override
 		public Float2DoubleNavigableMap subMap(float fromKey, boolean fromInclusive, float toKey, boolean toInclusive) {
 			if (!inRange(fromKey, fromInclusive)) throw new IllegalArgumentException("fromKey out of range");
 			if (!inRange(toKey, toInclusive)) throw new IllegalArgumentException("toKey out of range");
@@ -1259,6 +1262,11 @@ public class Float2DoubleRBTreeMap extends AbstractFloat2DoubleMap implements Fl
 		public FloatNavigableSet navigableKeySet() {
 			if(keySet == null) keySet = new KeySet(this);
 			return keySet;
+		}
+		
+		@Override
+		public FloatNavigableSet keySet() {
+			return navigableKeySet();
 		}
 		
 		@Override
@@ -1391,7 +1399,7 @@ public class Float2DoubleRBTreeMap extends AbstractFloat2DoubleMap implements Fl
 		}
 		
 		@Override
-		public FloatSet keySet() {
+		public FloatNavigableSet keySet() {
 			return navigableKeySet();
 		}
 		

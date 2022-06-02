@@ -4,7 +4,7 @@ import java.util.SortedMap;
 
 import speiger.src.collections.objects.collections.ObjectCollection;
 import speiger.src.collections.ints.functions.IntComparator;
-import speiger.src.collections.ints.sets.IntSet;
+import speiger.src.collections.ints.sets.IntSortedSet;
 import speiger.src.collections.ints.utils.maps.Int2ObjectMaps;
 import speiger.src.collections.objects.sets.ObjectSortedSet;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
@@ -25,7 +25,7 @@ public interface Int2ObjectSortedMap<V> extends SortedMap<Integer, V>, Int2Objec
 	public Int2ObjectSortedMap<V> copy();
 	
 	@Override
-	public IntSet keySet();
+	public IntSortedSet keySet();
 	@Override
 	public ObjectCollection<V> values();
 	

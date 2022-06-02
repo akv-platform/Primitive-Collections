@@ -21,10 +21,12 @@ import speiger.src.collections.doubles.maps.interfaces.Double2ObjectNavigableMap
 import speiger.src.collections.doubles.maps.interfaces.Double2ObjectSortedMap;
 import speiger.src.collections.doubles.maps.interfaces.Double2ObjectOrderedMap;
 import speiger.src.collections.doubles.sets.DoubleNavigableSet;
+import speiger.src.collections.doubles.sets.DoubleSortedSet;
 import speiger.src.collections.doubles.sets.DoubleSet;
 import speiger.src.collections.doubles.utils.DoubleSets;
 import speiger.src.collections.objects.collections.ObjectCollection;
 import speiger.src.collections.objects.functions.function.ObjectObjectUnaryOperator;
+import speiger.src.collections.objects.functions.ObjectSupplier;
 import speiger.src.collections.objects.utils.ObjectCollections;
 
 /**
@@ -209,14 +211,14 @@ public class Double2ObjectMaps
 	 * @param <V> the type of elements maintained by this Collection
 	 * @return a Unmodifyable Entry
 	 */
-	public static <V> Double2ObjectMap.Entry<V> unmodifiable(Double2ObjectMap.Entry<V> entry) { return entry instanceof UnmodifyableEntry ? entry : new UnmodifyableEntry<>(entry); }
+	public static <V> Double2ObjectMap.Entry<V> unmodifiable(Double2ObjectMap.Entry<V> entry) { return entry instanceof UnmodifyableEntry ? entry : (entry == null ? null : new UnmodifyableEntry<>(entry)); }
 	/**
 	 * A Helper function that creates a Unmodifyable Entry
 	 * @param entry the Entry that should be made unmodifiable
 	 * @param <V> the type of elements maintained by this Collection
 	 * @return a Unmodifyable Entry
 	 */
-	public static <V> Double2ObjectMap.Entry<V> unmodifiable(Map.Entry<Double, V> entry) { return entry instanceof UnmodifyableEntry ? (UnmodifyableEntry<V>)entry : new UnmodifyableEntry<>(entry); }
+	public static <V> Double2ObjectMap.Entry<V> unmodifiable(Map.Entry<Double, V> entry) { return entry instanceof UnmodifyableEntry ? (UnmodifyableEntry<V>)entry : (entry == null ? null : new UnmodifyableEntry<>(entry)); }
 	
 	/**
 	 * Creates a Singleton map from the provided values.
@@ -338,9 +340,11 @@ public class Double2ObjectMaps
 		}
 		
 		@Override
-		public Double2ObjectNavigableMap<V> descendingMap() { return Double2ObjectMaps.synchronize(map.descendingMap()); }
+		public Double2ObjectNavigableMap<V> descendingMap() { return Double2ObjectMaps.unmodifiable(map.descendingMap()); }
 		@Override
 		public DoubleNavigableSet navigableKeySet() { return DoubleSets.unmodifiable(map.navigableKeySet()); }
+		@Override
+		public DoubleNavigableSet keySet() { return DoubleSets.unmodifiable(map.keySet()); }
 		@Override
 		public DoubleNavigableSet descendingKeySet() { return DoubleSets.unmodifiable(map.descendingKeySet()); }
 		@Override
@@ -388,7 +392,7 @@ public class Double2ObjectMaps
 		@Override
 		public Double2ObjectMap.Entry<V> ceilingEntry(double key) { return Double2ObjectMaps.unmodifiable(map.ceilingEntry(key)); }
 		@Override
-		public Double2ObjectNavigableMap<V> copy() { throw new UnsupportedOperationException(); }
+		public Double2ObjectNavigableMap<V> copy() { return map.copy(); }
 	}
 	
 	/**
@@ -428,7 +432,7 @@ public class Double2ObjectMaps
 		@Override
 		public V lastValue() { return map.lastValue(); }
 		@Override
-		public Double2ObjectOrderedMap<V> copy() { throw new UnsupportedOperationException(); }
+		public Double2ObjectOrderedMap<V> copy() { return map.copy(); }
 	}
 	
 	/**
@@ -452,6 +456,9 @@ public class Double2ObjectMaps
 		@Override
 		public Double2ObjectSortedMap<V> tailMap(double fromKey) { return Double2ObjectMaps.unmodifiable(map.tailMap(fromKey)); }
 		@Override
+		public DoubleSortedSet keySet() { return DoubleSets.unmodifiable(map.keySet()); }
+
+		@Override
 		public double firstDoubleKey() { return map.firstDoubleKey(); }
 		@Override
 		public double pollFirstDoubleKey() { return map.pollFirstDoubleKey(); }
@@ -464,7 +471,7 @@ public class Double2ObjectMaps
 		@Override
 		public V lastValue() { return map.lastValue(); }
 		@Override
-		public Double2ObjectSortedMap<V> copy() { throw new UnsupportedOperationException(); }
+		public Double2ObjectSortedMap<V> copy() { return map.copy(); }
 	}
 	
 	/**
@@ -492,11 +499,26 @@ public class Double2ObjectMaps
 		@Override
 		public boolean remove(double key, V value) { throw new UnsupportedOperationException(); }
 		@Override
-		public V get(double key) { return map.get(key); }
+		public V get(double key) {
+			V type = map.get(key);
+			return Objects.equals(type, map.getDefaultReturnValue()) ? getDefaultReturnValue() : type;
+		}
 		@Override
 		public V getOrDefault(double key, V defaultValue) { return map.getOrDefault(key, defaultValue); }
 		@Override
-		public Double2ObjectMap<V> copy() { throw new UnsupportedOperationException(); }
+		public V compute(double key, DoubleObjectUnaryOperator<V> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public V computeIfAbsent(double key, Double2ObjectFunction<V> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public V computeIfPresent(double key, DoubleObjectUnaryOperator<V> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public V supplyIfAbsent(double key, ObjectSupplier<V> valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public V merge(double key, V value, ObjectObjectUnaryOperator<V, V> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAll(Double2ObjectMap<V> m, ObjectObjectUnaryOperator<V, V> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public Double2ObjectMap<V> copy() { return map.copy(); }
 		
 		@Override
 		public DoubleSet keySet() { 
@@ -573,6 +595,8 @@ public class Double2ObjectMaps
 		@Override
 		public DoubleNavigableSet descendingKeySet() { synchronized(mutex) { return DoubleSets.synchronize(map.descendingKeySet(), mutex); } }
 		@Override
+		public DoubleNavigableSet keySet() { synchronized(mutex) { return DoubleSets.synchronize(map.keySet(), mutex); } }
+		@Override
 		public Double2ObjectMap.Entry<V> firstEntry() { synchronized(mutex) { return map.firstEntry(); } }
 		@Override
 		public Double2ObjectMap.Entry<V> lastEntry() { synchronized(mutex) { return map.firstEntry(); } }
@@ -609,7 +633,7 @@ public class Double2ObjectMaps
 		@Override
 		public Double2ObjectMap.Entry<V> ceilingEntry(double key) { synchronized(mutex) { return map.ceilingEntry(key); } }
 		@Override
-		public Double2ObjectNavigableMap<V> copy() { throw new UnsupportedOperationException(); }
+		public Double2ObjectNavigableMap<V> copy() { synchronized(mutex) { return map.copy(); } }
 		@Override
 		@Deprecated
 		public Double2ObjectNavigableMap<V> subMap(Double fromKey, boolean fromInclusive, Double toKey, boolean toInclusive) { synchronized(mutex) { return Double2ObjectMaps.synchronize(map.subMap(fromKey, fromInclusive, toKey, toInclusive), mutex); } }
@@ -704,7 +728,7 @@ public class Double2ObjectMaps
 		@Override
 		public V lastValue() { synchronized(mutex) { return map.lastValue(); } }
 		@Override
-		public Double2ObjectOrderedMap<V> copy() { throw new UnsupportedOperationException(); }
+		public Double2ObjectOrderedMap<V> copy() { synchronized(mutex) { return map.copy(); } }
 	}
 	
 	/**
@@ -733,6 +757,8 @@ public class Double2ObjectMaps
 		@Override
 		public Double2ObjectSortedMap<V> tailMap(double fromKey) { synchronized(mutex) { return Double2ObjectMaps.synchronize(map.tailMap(fromKey), mutex); } }
 		@Override
+		public DoubleSortedSet keySet() { synchronized(mutex) { return DoubleSets.synchronize(map.keySet(), mutex); } }
+		@Override
 		public double firstDoubleKey() { synchronized(mutex) { return map.firstDoubleKey(); } }
 		@Override
 		public double pollFirstDoubleKey() { synchronized(mutex) { return map.pollFirstDoubleKey(); } }
@@ -745,7 +771,7 @@ public class Double2ObjectMaps
 		@Override
 		public V lastValue() { synchronized(mutex) { return map.lastValue(); } }
 		@Override
-		public Double2ObjectSortedMap<V> copy() { throw new UnsupportedOperationException(); }
+		public Double2ObjectSortedMap<V> copy() { synchronized(mutex) { return map.copy(); } }
 		@Override
 		@Deprecated
 		public Double firstKey() { synchronized(mutex) { return map.firstKey(); } }
@@ -831,6 +857,8 @@ public class Double2ObjectMaps
 		@Override
 		public V computeIfPresent(double key, DoubleObjectUnaryOperator<V> mappingFunction) { synchronized(mutex) { return map.computeIfPresent(key, mappingFunction); } }
 		@Override
+		public V supplyIfAbsent(double key, ObjectSupplier<V> valueProvider) { synchronized(mutex) { return map.supplyIfAbsent(key, valueProvider); } }
+		@Override
 		public V merge(double key, V value, ObjectObjectUnaryOperator<V, V> mappingFunction) { synchronized(mutex) { return map.merge(key, value, mappingFunction); } }
 		@Override
 		public void mergeAll(Double2ObjectMap<V> m, ObjectObjectUnaryOperator<V, V> mappingFunction) { synchronized(mutex) { map.mergeAll(m, mappingFunction); } }
@@ -839,9 +867,9 @@ public class Double2ObjectMaps
 		@Override
 		public void forEach(DoubleObjectConsumer<V> action) { synchronized(mutex) { map.forEach(action); } }
 		@Override
-		public int size() { synchronized(mutex) { return super.size(); } }
+		public int size() { synchronized(mutex) { return map.size(); } }
 		@Override
-		public Double2ObjectMap<V> copy() { throw new UnsupportedOperationException(); }
+		public Double2ObjectMap<V> copy() { synchronized(mutex) { return map.copy(); } }
 		@Override
 		public DoubleSet keySet() {
 			if(keys == null) keys = DoubleSets.synchronize(map.keySet(), mutex);

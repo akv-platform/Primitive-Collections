@@ -32,7 +32,9 @@ public interface Double2BooleanNavigableMap extends Double2BooleanSortedMap, Nav
 	/** @return a Type Specific pollLastEntry */
 	@Override
 	public Double2BooleanMap.Entry pollLastEntry();
-	
+	/** @return a Type Specific Navigable Key Set */
+	@Override
+	public DoubleNavigableSet keySet();
 	/**
 	 * Creates a Wrapped NavigableMap that is Synchronized
 	 * @return a new NavigableMap that is synchronized

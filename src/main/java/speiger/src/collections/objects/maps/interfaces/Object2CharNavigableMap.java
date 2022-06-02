@@ -33,7 +33,9 @@ public interface Object2CharNavigableMap<T> extends Object2CharSortedMap<T>, Nav
 	/** @return a Type Specific pollLastEntry */
 	@Override
 	public Object2CharMap.Entry<T> pollLastEntry();
-	
+	/** @return a Type Specific Navigable Key Set */
+	@Override
+	public ObjectNavigableSet<T> keySet();
 	/**
 	 * Creates a Wrapped NavigableMap that is Synchronized
 	 * @return a new NavigableMap that is synchronized

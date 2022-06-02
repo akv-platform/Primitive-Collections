@@ -33,7 +33,9 @@ public interface Byte2ObjectNavigableMap<V> extends Byte2ObjectSortedMap<V>, Nav
 	/** @return a Type Specific pollLastEntry */
 	@Override
 	public Byte2ObjectMap.Entry<V> pollLastEntry();
-	
+	/** @return a Type Specific Navigable Key Set */
+	@Override
+	public ByteNavigableSet keySet();
 	/**
 	 * Creates a Wrapped NavigableMap that is Synchronized
 	 * @return a new NavigableMap that is synchronized

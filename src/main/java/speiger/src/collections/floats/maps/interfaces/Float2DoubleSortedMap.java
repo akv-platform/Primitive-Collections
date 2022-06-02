@@ -4,7 +4,7 @@ import java.util.SortedMap;
 
 import speiger.src.collections.doubles.collections.DoubleCollection;
 import speiger.src.collections.floats.functions.FloatComparator;
-import speiger.src.collections.floats.sets.FloatSet;
+import speiger.src.collections.floats.sets.FloatSortedSet;
 import speiger.src.collections.floats.utils.maps.Float2DoubleMaps;
 import speiger.src.collections.objects.sets.ObjectSortedSet;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
@@ -24,7 +24,7 @@ public interface Float2DoubleSortedMap extends SortedMap<Float, Double>, Float2D
 	public Float2DoubleSortedMap copy();
 	
 	@Override
-	public FloatSet keySet();
+	public FloatSortedSet keySet();
 	@Override
 	public DoubleCollection values();
 	

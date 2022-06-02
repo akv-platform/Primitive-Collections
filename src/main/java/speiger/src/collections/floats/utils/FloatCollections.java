@@ -154,7 +154,10 @@ public class FloatCollections
 		@Override
 		public int hashCode() { synchronized(mutex) { return c.hashCode(); } }
 		@Override
-		public boolean equals(Object obj) { synchronized(mutex) { return c.equals(obj); } }
+		public boolean equals(Object obj) {
+			if(obj == this) return true;
+			synchronized(mutex) { return c.equals(obj); } 
+		}
 		@Override
 		public String toString() { synchronized(mutex) { return c.toString(); } }
 		@Override
@@ -255,7 +258,7 @@ public class FloatCollections
 		@Override
 		public int hashCode() { return c.hashCode(); }
 		@Override
-		public boolean equals(Object obj) { return c.equals(obj); }
+		public boolean equals(Object obj) { return obj == this || c.equals(obj); }
 		@Override
 		public String toString() { return c.toString(); }
 		@Override

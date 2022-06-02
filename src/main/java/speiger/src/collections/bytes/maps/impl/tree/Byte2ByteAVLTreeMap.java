@@ -20,8 +20,6 @@ import speiger.src.collections.bytes.maps.interfaces.Byte2ByteMap;
 import speiger.src.collections.bytes.maps.interfaces.Byte2ByteNavigableMap;
 import speiger.src.collections.bytes.sets.AbstractByteSet;
 import speiger.src.collections.bytes.sets.ByteNavigableSet;
-import speiger.src.collections.bytes.sets.ByteSet;
-import speiger.src.collections.bytes.sets.ByteSortedSet;
 import speiger.src.collections.bytes.utils.maps.Byte2ByteMaps;
 import speiger.src.collections.bytes.collections.AbstractByteCollection;
 import speiger.src.collections.bytes.collections.ByteCollection;
@@ -574,7 +572,7 @@ public class Byte2ByteAVLTreeMap extends AbstractByte2ByteMap implements Byte2By
 	}
 	
 	@Override
-	public ByteSortedSet keySet() {
+	public ByteNavigableSet keySet() {
 		return navigableKeySet();
 	}
 	
@@ -1331,7 +1329,7 @@ public class Byte2ByteAVLTreeMap extends AbstractByte2ByteMap implements Byte2By
 		}
 		
 		@Override
-		public ByteSet keySet() {
+		public ByteNavigableSet keySet() {
 			return navigableKeySet();
 		}
 		

@@ -33,7 +33,9 @@ public interface Object2IntNavigableMap<T> extends Object2IntSortedMap<T>, Navig
 	/** @return a Type Specific pollLastEntry */
 	@Override
 	public Object2IntMap.Entry<T> pollLastEntry();
-	
+	/** @return a Type Specific Navigable Key Set */
+	@Override
+	public ObjectNavigableSet<T> keySet();
 	/**
 	 * Creates a Wrapped NavigableMap that is Synchronized
 	 * @return a new NavigableMap that is synchronized

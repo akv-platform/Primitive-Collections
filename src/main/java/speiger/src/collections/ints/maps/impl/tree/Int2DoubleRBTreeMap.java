@@ -21,8 +21,6 @@ import speiger.src.collections.ints.maps.interfaces.Int2DoubleMap;
 import speiger.src.collections.ints.maps.interfaces.Int2DoubleNavigableMap;
 import speiger.src.collections.ints.sets.AbstractIntSet;
 import speiger.src.collections.ints.sets.IntNavigableSet;
-import speiger.src.collections.ints.sets.IntSet;
-import speiger.src.collections.ints.sets.IntSortedSet;
 import speiger.src.collections.ints.utils.maps.Int2DoubleMaps;
 import speiger.src.collections.doubles.collections.AbstractDoubleCollection;
 import speiger.src.collections.doubles.collections.DoubleCollection;
@@ -580,7 +578,7 @@ public class Int2DoubleRBTreeMap extends AbstractInt2DoubleMap implements Int2Do
 	}
 	
 	@Override
-	public IntSortedSet keySet() {
+	public IntNavigableSet keySet() {
 		return navigableKeySet();
 	}
 	
@@ -1180,6 +1178,11 @@ public class Int2DoubleRBTreeMap extends AbstractInt2DoubleMap implements Int2Do
 		}
 		
 		@Override
+		public IntNavigableSet keySet() {
+			return navigableKeySet();
+		}
+		
+		@Override
 		public Int2DoubleNavigableMap subMap(int fromKey, boolean fromInclusive, int toKey, boolean toInclusive) {
 			if (!inRange(fromKey, fromInclusive)) throw new IllegalArgumentException("fromKey out of range");
 			if (!inRange(toKey, toInclusive)) throw new IllegalArgumentException("toKey out of range");
@@ -1259,6 +1262,11 @@ public class Int2DoubleRBTreeMap extends AbstractInt2DoubleMap implements Int2Do
 		public IntNavigableSet navigableKeySet() {
 			if(keySet == null) keySet = new KeySet(this);
 			return keySet;
+		}
+		
+		@Override
+		public IntNavigableSet keySet() {
+			return navigableKeySet();
 		}
 		
 		@Override
@@ -1391,7 +1399,7 @@ public class Int2DoubleRBTreeMap extends AbstractInt2DoubleMap implements Int2Do
 		}
 		
 		@Override
-		public IntSet keySet() {
+		public IntNavigableSet keySet() {
 			return navigableKeySet();
 		}
 		

@@ -32,7 +32,9 @@ public interface Float2BooleanNavigableMap extends Float2BooleanSortedMap, Navig
 	/** @return a Type Specific pollLastEntry */
 	@Override
 	public Float2BooleanMap.Entry pollLastEntry();
-	
+	/** @return a Type Specific Navigable Key Set */
+	@Override
+	public FloatNavigableSet keySet();
 	/**
 	 * Creates a Wrapped NavigableMap that is Synchronized
 	 * @return a new NavigableMap that is synchronized

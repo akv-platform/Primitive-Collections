@@ -19,7 +19,6 @@ import speiger.src.collections.objects.maps.interfaces.Object2BooleanNavigableMa
 import speiger.src.collections.objects.sets.AbstractObjectSet;
 import speiger.src.collections.objects.sets.ObjectNavigableSet;
 import speiger.src.collections.objects.sets.ObjectSet;
-import speiger.src.collections.objects.sets.ObjectSortedSet;
 import speiger.src.collections.objects.utils.maps.Object2BooleanMaps;
 import speiger.src.collections.booleans.collections.AbstractBooleanCollection;
 import speiger.src.collections.booleans.collections.BooleanCollection;
@@ -517,7 +516,7 @@ public class Object2BooleanRBTreeMap<T> extends AbstractObject2BooleanMap<T> imp
 	}
 	
 	@Override
-	public ObjectSortedSet<T> keySet() {
+	public ObjectNavigableSet<T> keySet() {
 		return navigableKeySet();
 	}
 	
@@ -1085,6 +1084,11 @@ public class Object2BooleanRBTreeMap<T> extends AbstractObject2BooleanMap<T> imp
 		}
 		
 		@Override
+		public ObjectNavigableSet<T> keySet() {
+			return navigableKeySet();
+		}
+		
+		@Override
 		public Object2BooleanNavigableMap<T> subMap(T fromKey, boolean fromInclusive, T toKey, boolean toInclusive) {
 			if (!inRange(fromKey, fromInclusive)) throw new IllegalArgumentException("fromKey out of range");
 			if (!inRange(toKey, toInclusive)) throw new IllegalArgumentException("toKey out of range");
@@ -1164,6 +1168,11 @@ public class Object2BooleanRBTreeMap<T> extends AbstractObject2BooleanMap<T> imp
 		public ObjectNavigableSet<T> navigableKeySet() {
 			if(keySet == null) keySet = new KeySet<>(this);
 			return keySet;
+		}
+		
+		@Override
+		public ObjectNavigableSet<T> keySet() {
+			return navigableKeySet();
 		}
 		
 		@Override
@@ -1290,7 +1299,7 @@ public class Object2BooleanRBTreeMap<T> extends AbstractObject2BooleanMap<T> imp
 		}
 		
 		@Override
-		public ObjectSet<T> keySet() {
+		public ObjectNavigableSet<T> keySet() {
 			return navigableKeySet();
 		}
 		

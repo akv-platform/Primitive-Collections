@@ -21,10 +21,12 @@ import speiger.src.collections.doubles.maps.interfaces.Double2FloatNavigableMap;
 import speiger.src.collections.doubles.maps.interfaces.Double2FloatSortedMap;
 import speiger.src.collections.doubles.maps.interfaces.Double2FloatOrderedMap;
 import speiger.src.collections.doubles.sets.DoubleNavigableSet;
+import speiger.src.collections.doubles.sets.DoubleSortedSet;
 import speiger.src.collections.doubles.sets.DoubleSet;
 import speiger.src.collections.doubles.utils.DoubleSets;
 import speiger.src.collections.floats.collections.FloatCollection;
 import speiger.src.collections.floats.functions.function.FloatFloatUnaryOperator;
+import speiger.src.collections.floats.functions.FloatSupplier;
 import speiger.src.collections.floats.utils.FloatCollections;
 import speiger.src.collections.floats.utils.FloatSets;
 
@@ -193,13 +195,13 @@ public class Double2FloatMaps
 	 * @param entry the Entry that should be made unmodifiable
 	 * @return a Unmodifyable Entry
 	 */
-	public static Double2FloatMap.Entry unmodifiable(Double2FloatMap.Entry entry) { return entry instanceof UnmodifyableEntry ? entry : new UnmodifyableEntry(entry); }
+	public static Double2FloatMap.Entry unmodifiable(Double2FloatMap.Entry entry) { return entry instanceof UnmodifyableEntry ? entry : (entry == null ? null : new UnmodifyableEntry(entry)); }
 	/**
 	 * A Helper function that creates a Unmodifyable Entry
 	 * @param entry the Entry that should be made unmodifiable
 	 * @return a Unmodifyable Entry
 	 */
-	public static Double2FloatMap.Entry unmodifiable(Map.Entry<Double, Float> entry) { return entry instanceof UnmodifyableEntry ? (UnmodifyableEntry)entry : new UnmodifyableEntry(entry); }
+	public static Double2FloatMap.Entry unmodifiable(Map.Entry<Double, Float> entry) { return entry instanceof UnmodifyableEntry ? (UnmodifyableEntry)entry : (entry == null ? null : new UnmodifyableEntry(entry)); }
 	
 	/**
 	 * Creates a Singleton map from the provided values.
@@ -324,9 +326,11 @@ public class Double2FloatMaps
 		}
 		
 		@Override
-		public Double2FloatNavigableMap descendingMap() { return Double2FloatMaps.synchronize(map.descendingMap()); }
+		public Double2FloatNavigableMap descendingMap() { return Double2FloatMaps.unmodifiable(map.descendingMap()); }
 		@Override
 		public DoubleNavigableSet navigableKeySet() { return DoubleSets.unmodifiable(map.navigableKeySet()); }
+		@Override
+		public DoubleNavigableSet keySet() { return DoubleSets.unmodifiable(map.keySet()); }
 		@Override
 		public DoubleNavigableSet descendingKeySet() { return DoubleSets.unmodifiable(map.descendingKeySet()); }
 		@Override
@@ -374,7 +378,7 @@ public class Double2FloatMaps
 		@Override
 		public Double2FloatMap.Entry ceilingEntry(double key) { return Double2FloatMaps.unmodifiable(map.ceilingEntry(key)); }
 		@Override
-		public Double2FloatNavigableMap copy() { throw new UnsupportedOperationException(); }
+		public Double2FloatNavigableMap copy() { return map.copy(); }
 	}
 	
 	/**
@@ -413,7 +417,7 @@ public class Double2FloatMaps
 		@Override
 		public float lastFloatValue() { return map.lastFloatValue(); }
 		@Override
-		public Double2FloatOrderedMap copy() { throw new UnsupportedOperationException(); }
+		public Double2FloatOrderedMap copy() { return map.copy(); }
 	}
 	
 	/**
@@ -436,6 +440,9 @@ public class Double2FloatMaps
 		@Override
 		public Double2FloatSortedMap tailMap(double fromKey) { return Double2FloatMaps.unmodifiable(map.tailMap(fromKey)); }
 		@Override
+		public DoubleSortedSet keySet() { return DoubleSets.unmodifiable(map.keySet()); }
+
+		@Override
 		public double firstDoubleKey() { return map.firstDoubleKey(); }
 		@Override
 		public double pollFirstDoubleKey() { return map.pollFirstDoubleKey(); }
@@ -448,7 +455,7 @@ public class Double2FloatMaps
 		@Override
 		public float lastFloatValue() { return map.lastFloatValue(); }
 		@Override
-		public Double2FloatSortedMap copy() { throw new UnsupportedOperationException(); }
+		public Double2FloatSortedMap copy() { return map.copy(); }
 	}
 	
 	/**
@@ -479,11 +486,26 @@ public class Double2FloatMaps
 		@Override
 		public boolean remove(double key, float value) { throw new UnsupportedOperationException(); }
 		@Override
-		public float get(double key) { return map.get(key); }
+		public float get(double key) {
+			float type = map.get(key);
+			return Float.floatToIntBits(type) == Float.floatToIntBits(map.getDefaultReturnValue()) ? getDefaultReturnValue() : type;
+		}
 		@Override
 		public float getOrDefault(double key, float defaultValue) { return map.getOrDefault(key, defaultValue); }
 		@Override
-		public Double2FloatMap copy() { throw new UnsupportedOperationException(); }
+		public float computeFloat(double key, DoubleFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public float computeFloatIfAbsent(double key, Double2FloatFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public float computeFloatIfPresent(double key, DoubleFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public float supplyFloatIfAbsent(double key, FloatSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public float mergeFloat(double key, float value, FloatFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllFloat(Double2FloatMap m, FloatFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public Double2FloatMap copy() { return map.copy(); }
 		
 		@Override
 		public DoubleSet keySet() { 
@@ -558,6 +580,8 @@ public class Double2FloatMaps
 		@Override
 		public DoubleNavigableSet descendingKeySet() { synchronized(mutex) { return DoubleSets.synchronize(map.descendingKeySet(), mutex); } }
 		@Override
+		public DoubleNavigableSet keySet() { synchronized(mutex) { return DoubleSets.synchronize(map.keySet(), mutex); } }
+		@Override
 		public Double2FloatMap.Entry firstEntry() { synchronized(mutex) { return map.firstEntry(); } }
 		@Override
 		public Double2FloatMap.Entry lastEntry() { synchronized(mutex) { return map.firstEntry(); } }
@@ -594,7 +618,7 @@ public class Double2FloatMaps
 		@Override
 		public Double2FloatMap.Entry ceilingEntry(double key) { synchronized(mutex) { return map.ceilingEntry(key); } }
 		@Override
-		public Double2FloatNavigableMap copy() { throw new UnsupportedOperationException(); }
+		public Double2FloatNavigableMap copy() { synchronized(mutex) { return map.copy(); } }
 		@Override
 		@Deprecated
 		public Double2FloatNavigableMap subMap(Double fromKey, boolean fromInclusive, Double toKey, boolean toInclusive) { synchronized(mutex) { return Double2FloatMaps.synchronize(map.subMap(fromKey, fromInclusive, toKey, toInclusive), mutex); } }
@@ -688,7 +712,7 @@ public class Double2FloatMaps
 		@Override
 		public float lastFloatValue() { synchronized(mutex) { return map.lastFloatValue(); } }
 		@Override
-		public Double2FloatOrderedMap copy() { throw new UnsupportedOperationException(); }
+		public Double2FloatOrderedMap copy() { synchronized(mutex) { return map.copy(); } }
 	}
 	
 	/**
@@ -716,6 +740,8 @@ public class Double2FloatMaps
 		@Override
 		public Double2FloatSortedMap tailMap(double fromKey) { synchronized(mutex) { return Double2FloatMaps.synchronize(map.tailMap(fromKey), mutex); } }
 		@Override
+		public DoubleSortedSet keySet() { synchronized(mutex) { return DoubleSets.synchronize(map.keySet(), mutex); } }
+		@Override
 		public double firstDoubleKey() { synchronized(mutex) { return map.firstDoubleKey(); } }
 		@Override
 		public double pollFirstDoubleKey() { synchronized(mutex) { return map.pollFirstDoubleKey(); } }
@@ -728,7 +754,7 @@ public class Double2FloatMaps
 		@Override
 		public float lastFloatValue() { synchronized(mutex) { return map.lastFloatValue(); } }
 		@Override
-		public Double2FloatSortedMap copy() { throw new UnsupportedOperationException(); }
+		public Double2FloatSortedMap copy() { synchronized(mutex) { return map.copy(); } }
 		@Override
 		@Deprecated
 		public Double firstKey() { synchronized(mutex) { return map.firstKey(); } }
@@ -820,6 +846,8 @@ public class Double2FloatMaps
 		@Override
 		public float computeFloatIfPresent(double key, DoubleFloatUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeFloatIfPresent(key, mappingFunction); } }
 		@Override
+		public float supplyFloatIfAbsent(double key, FloatSupplier valueProvider) { synchronized(mutex) { return map.supplyFloatIfAbsent(key, valueProvider); } }
+		@Override
 		public float mergeFloat(double key, float value, FloatFloatUnaryOperator mappingFunction) { synchronized(mutex) { return map.mergeFloat(key, value, mappingFunction); } }
 		@Override
 		public void mergeAllFloat(Double2FloatMap m, FloatFloatUnaryOperator mappingFunction) { synchronized(mutex) { map.mergeAllFloat(m, mappingFunction); } }
@@ -828,9 +856,9 @@ public class Double2FloatMaps
 		@Override
 		public void forEach(DoubleFloatConsumer action) { synchronized(mutex) { map.forEach(action); } }
 		@Override
-		public int size() { synchronized(mutex) { return super.size(); } }
+		public int size() { synchronized(mutex) { return map.size(); } }
 		@Override
-		public Double2FloatMap copy() { throw new UnsupportedOperationException(); }
+		public Double2FloatMap copy() { synchronized(mutex) { return map.copy(); } }
 		@Override
 		public DoubleSet keySet() {
 			if(keys == null) keys = DoubleSets.synchronize(map.keySet(), mutex);

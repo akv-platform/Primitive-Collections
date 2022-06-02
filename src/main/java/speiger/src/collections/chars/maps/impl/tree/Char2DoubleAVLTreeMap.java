@@ -21,8 +21,6 @@ import speiger.src.collections.chars.maps.interfaces.Char2DoubleMap;
 import speiger.src.collections.chars.maps.interfaces.Char2DoubleNavigableMap;
 import speiger.src.collections.chars.sets.AbstractCharSet;
 import speiger.src.collections.chars.sets.CharNavigableSet;
-import speiger.src.collections.chars.sets.CharSet;
-import speiger.src.collections.chars.sets.CharSortedSet;
 import speiger.src.collections.chars.utils.maps.Char2DoubleMaps;
 import speiger.src.collections.doubles.collections.AbstractDoubleCollection;
 import speiger.src.collections.doubles.collections.DoubleCollection;
@@ -580,7 +578,7 @@ public class Char2DoubleAVLTreeMap extends AbstractChar2DoubleMap implements Cha
 	}
 	
 	@Override
-	public CharSortedSet keySet() {
+	public CharNavigableSet keySet() {
 		return navigableKeySet();
 	}
 	
@@ -1337,7 +1335,7 @@ public class Char2DoubleAVLTreeMap extends AbstractChar2DoubleMap implements Cha
 		}
 		
 		@Override
-		public CharSet keySet() {
+		public CharNavigableSet keySet() {
 			return navigableKeySet();
 		}
 		

@@ -19,7 +19,6 @@ import speiger.src.collections.objects.maps.interfaces.Object2LongNavigableMap;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
 import speiger.src.collections.objects.sets.ObjectNavigableSet;
 import speiger.src.collections.objects.sets.ObjectSet;
-import speiger.src.collections.objects.sets.ObjectSortedSet;
 import speiger.src.collections.objects.utils.maps.Object2LongMaps;
 import speiger.src.collections.longs.collections.AbstractLongCollection;
 import speiger.src.collections.longs.collections.LongCollection;
@@ -577,7 +576,7 @@ public class Object2LongRBTreeMap<T> extends AbstractObject2LongMap<T> implement
 	}
 	
 	@Override
-	public ObjectSortedSet<T> keySet() {
+	public ObjectNavigableSet<T> keySet() {
 		return navigableKeySet();
 	}
 	
@@ -1145,6 +1144,11 @@ public class Object2LongRBTreeMap<T> extends AbstractObject2LongMap<T> implement
 		}
 		
 		@Override
+		public ObjectNavigableSet<T> keySet() {
+			return navigableKeySet();
+		}
+		
+		@Override
 		public Object2LongNavigableMap<T> subMap(T fromKey, boolean fromInclusive, T toKey, boolean toInclusive) {
 			if (!inRange(fromKey, fromInclusive)) throw new IllegalArgumentException("fromKey out of range");
 			if (!inRange(toKey, toInclusive)) throw new IllegalArgumentException("toKey out of range");
@@ -1224,6 +1228,11 @@ public class Object2LongRBTreeMap<T> extends AbstractObject2LongMap<T> implement
 		public ObjectNavigableSet<T> navigableKeySet() {
 			if(keySet == null) keySet = new KeySet<>(this);
 			return keySet;
+		}
+		
+		@Override
+		public ObjectNavigableSet<T> keySet() {
+			return navigableKeySet();
 		}
 		
 		@Override
@@ -1350,7 +1359,7 @@ public class Object2LongRBTreeMap<T> extends AbstractObject2LongMap<T> implement
 		}
 		
 		@Override
-		public ObjectSet<T> keySet() {
+		public ObjectNavigableSet<T> keySet() {
 			return navigableKeySet();
 		}
 		

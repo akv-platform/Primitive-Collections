@@ -21,8 +21,6 @@ import speiger.src.collections.chars.maps.interfaces.Char2ObjectMap;
 import speiger.src.collections.chars.maps.interfaces.Char2ObjectNavigableMap;
 import speiger.src.collections.chars.sets.AbstractCharSet;
 import speiger.src.collections.chars.sets.CharNavigableSet;
-import speiger.src.collections.chars.sets.CharSet;
-import speiger.src.collections.chars.sets.CharSortedSet;
 import speiger.src.collections.chars.utils.maps.Char2ObjectMaps;
 import speiger.src.collections.objects.collections.AbstractObjectCollection;
 import speiger.src.collections.objects.collections.ObjectCollection;
@@ -518,7 +516,7 @@ public class Char2ObjectRBTreeMap<V> extends AbstractChar2ObjectMap<V> implement
 	}
 	
 	@Override
-	public CharSortedSet keySet() {
+	public CharNavigableSet keySet() {
 		return navigableKeySet();
 	}
 	
@@ -1118,6 +1116,11 @@ public class Char2ObjectRBTreeMap<V> extends AbstractChar2ObjectMap<V> implement
 		}
 		
 		@Override
+		public CharNavigableSet keySet() {
+			return navigableKeySet();
+		}
+		
+		@Override
 		public Char2ObjectNavigableMap<V> subMap(char fromKey, boolean fromInclusive, char toKey, boolean toInclusive) {
 			if (!inRange(fromKey, fromInclusive)) throw new IllegalArgumentException("fromKey out of range");
 			if (!inRange(toKey, toInclusive)) throw new IllegalArgumentException("toKey out of range");
@@ -1197,6 +1200,11 @@ public class Char2ObjectRBTreeMap<V> extends AbstractChar2ObjectMap<V> implement
 		public CharNavigableSet navigableKeySet() {
 			if(keySet == null) keySet = new KeySet<>(this);
 			return keySet;
+		}
+		
+		@Override
+		public CharNavigableSet keySet() {
+			return navigableKeySet();
 		}
 		
 		@Override
@@ -1329,7 +1337,7 @@ public class Char2ObjectRBTreeMap<V> extends AbstractChar2ObjectMap<V> implement
 		}
 		
 		@Override
-		public CharSet keySet() {
+		public CharNavigableSet keySet() {
 			return navigableKeySet();
 		}
 		

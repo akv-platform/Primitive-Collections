@@ -21,10 +21,12 @@ import speiger.src.collections.bytes.maps.interfaces.Byte2BooleanNavigableMap;
 import speiger.src.collections.bytes.maps.interfaces.Byte2BooleanSortedMap;
 import speiger.src.collections.bytes.maps.interfaces.Byte2BooleanOrderedMap;
 import speiger.src.collections.bytes.sets.ByteNavigableSet;
+import speiger.src.collections.bytes.sets.ByteSortedSet;
 import speiger.src.collections.bytes.sets.ByteSet;
 import speiger.src.collections.bytes.utils.ByteSets;
 import speiger.src.collections.booleans.collections.BooleanCollection;
 import speiger.src.collections.booleans.functions.function.BooleanBooleanUnaryOperator;
+import speiger.src.collections.booleans.functions.BooleanSupplier;
 import speiger.src.collections.booleans.utils.BooleanCollections;
 import speiger.src.collections.booleans.utils.BooleanSets;
 
@@ -193,13 +195,13 @@ public class Byte2BooleanMaps
 	 * @param entry the Entry that should be made unmodifiable
 	 * @return a Unmodifyable Entry
 	 */
-	public static Byte2BooleanMap.Entry unmodifiable(Byte2BooleanMap.Entry entry) { return entry instanceof UnmodifyableEntry ? entry : new UnmodifyableEntry(entry); }
+	public static Byte2BooleanMap.Entry unmodifiable(Byte2BooleanMap.Entry entry) { return entry instanceof UnmodifyableEntry ? entry : (entry == null ? null : new UnmodifyableEntry(entry)); }
 	/**
 	 * A Helper function that creates a Unmodifyable Entry
 	 * @param entry the Entry that should be made unmodifiable
 	 * @return a Unmodifyable Entry
 	 */
-	public static Byte2BooleanMap.Entry unmodifiable(Map.Entry<Byte, Boolean> entry) { return entry instanceof UnmodifyableEntry ? (UnmodifyableEntry)entry : new UnmodifyableEntry(entry); }
+	public static Byte2BooleanMap.Entry unmodifiable(Map.Entry<Byte, Boolean> entry) { return entry instanceof UnmodifyableEntry ? (UnmodifyableEntry)entry : (entry == null ? null : new UnmodifyableEntry(entry)); }
 	
 	/**
 	 * Creates a Singleton map from the provided values.
@@ -316,9 +318,11 @@ public class Byte2BooleanMaps
 		}
 		
 		@Override
-		public Byte2BooleanNavigableMap descendingMap() { return Byte2BooleanMaps.synchronize(map.descendingMap()); }
+		public Byte2BooleanNavigableMap descendingMap() { return Byte2BooleanMaps.unmodifiable(map.descendingMap()); }
 		@Override
 		public ByteNavigableSet navigableKeySet() { return ByteSets.unmodifiable(map.navigableKeySet()); }
+		@Override
+		public ByteNavigableSet keySet() { return ByteSets.unmodifiable(map.keySet()); }
 		@Override
 		public ByteNavigableSet descendingKeySet() { return ByteSets.unmodifiable(map.descendingKeySet()); }
 		@Override
@@ -366,7 +370,7 @@ public class Byte2BooleanMaps
 		@Override
 		public Byte2BooleanMap.Entry ceilingEntry(byte key) { return Byte2BooleanMaps.unmodifiable(map.ceilingEntry(key)); }
 		@Override
-		public Byte2BooleanNavigableMap copy() { throw new UnsupportedOperationException(); }
+		public Byte2BooleanNavigableMap copy() { return map.copy(); }
 	}
 	
 	/**
@@ -405,7 +409,7 @@ public class Byte2BooleanMaps
 		@Override
 		public boolean lastBooleanValue() { return map.lastBooleanValue(); }
 		@Override
-		public Byte2BooleanOrderedMap copy() { throw new UnsupportedOperationException(); }
+		public Byte2BooleanOrderedMap copy() { return map.copy(); }
 	}
 	
 	/**
@@ -428,6 +432,9 @@ public class Byte2BooleanMaps
 		@Override
 		public Byte2BooleanSortedMap tailMap(byte fromKey) { return Byte2BooleanMaps.unmodifiable(map.tailMap(fromKey)); }
 		@Override
+		public ByteSortedSet keySet() { return ByteSets.unmodifiable(map.keySet()); }
+
+		@Override
 		public byte firstByteKey() { return map.firstByteKey(); }
 		@Override
 		public byte pollFirstByteKey() { return map.pollFirstByteKey(); }
@@ -440,7 +447,7 @@ public class Byte2BooleanMaps
 		@Override
 		public boolean lastBooleanValue() { return map.lastBooleanValue(); }
 		@Override
-		public Byte2BooleanSortedMap copy() { throw new UnsupportedOperationException(); }
+		public Byte2BooleanSortedMap copy() { return map.copy(); }
 	}
 	
 	/**
@@ -467,11 +474,26 @@ public class Byte2BooleanMaps
 		@Override
 		public boolean remove(byte key, boolean value) { throw new UnsupportedOperationException(); }
 		@Override
-		public boolean get(byte key) { return map.get(key); }
+		public boolean get(byte key) {
+			boolean type = map.get(key);
+			return type == map.getDefaultReturnValue() ? getDefaultReturnValue() : type;
+		}
 		@Override
 		public boolean getOrDefault(byte key, boolean defaultValue) { return map.getOrDefault(key, defaultValue); }
 		@Override
-		public Byte2BooleanMap copy() { throw new UnsupportedOperationException(); }
+		public boolean computeBoolean(byte key, ByteBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanIfAbsent(byte key, Byte2BooleanFunction mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanIfPresent(byte key, ByteBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean supplyBooleanIfAbsent(byte key, BooleanSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean mergeBoolean(byte key, boolean value, BooleanBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllBoolean(Byte2BooleanMap m, BooleanBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public Byte2BooleanMap copy() { return map.copy(); }
 		
 		@Override
 		public ByteSet keySet() { 
@@ -546,6 +568,8 @@ public class Byte2BooleanMaps
 		@Override
 		public ByteNavigableSet descendingKeySet() { synchronized(mutex) { return ByteSets.synchronize(map.descendingKeySet(), mutex); } }
 		@Override
+		public ByteNavigableSet keySet() { synchronized(mutex) { return ByteSets.synchronize(map.keySet(), mutex); } }
+		@Override
 		public Byte2BooleanMap.Entry firstEntry() { synchronized(mutex) { return map.firstEntry(); } }
 		@Override
 		public Byte2BooleanMap.Entry lastEntry() { synchronized(mutex) { return map.firstEntry(); } }
@@ -582,7 +606,7 @@ public class Byte2BooleanMaps
 		@Override
 		public Byte2BooleanMap.Entry ceilingEntry(byte key) { synchronized(mutex) { return map.ceilingEntry(key); } }
 		@Override
-		public Byte2BooleanNavigableMap copy() { throw new UnsupportedOperationException(); }
+		public Byte2BooleanNavigableMap copy() { synchronized(mutex) { return map.copy(); } }
 		@Override
 		@Deprecated
 		public Byte2BooleanNavigableMap subMap(Byte fromKey, boolean fromInclusive, Byte toKey, boolean toInclusive) { synchronized(mutex) { return Byte2BooleanMaps.synchronize(map.subMap(fromKey, fromInclusive, toKey, toInclusive), mutex); } }
@@ -676,7 +700,7 @@ public class Byte2BooleanMaps
 		@Override
 		public boolean lastBooleanValue() { synchronized(mutex) { return map.lastBooleanValue(); } }
 		@Override
-		public Byte2BooleanOrderedMap copy() { throw new UnsupportedOperationException(); }
+		public Byte2BooleanOrderedMap copy() { synchronized(mutex) { return map.copy(); } }
 	}
 	
 	/**
@@ -704,6 +728,8 @@ public class Byte2BooleanMaps
 		@Override
 		public Byte2BooleanSortedMap tailMap(byte fromKey) { synchronized(mutex) { return Byte2BooleanMaps.synchronize(map.tailMap(fromKey), mutex); } }
 		@Override
+		public ByteSortedSet keySet() { synchronized(mutex) { return ByteSets.synchronize(map.keySet(), mutex); } }
+		@Override
 		public byte firstByteKey() { synchronized(mutex) { return map.firstByteKey(); } }
 		@Override
 		public byte pollFirstByteKey() { synchronized(mutex) { return map.pollFirstByteKey(); } }
@@ -716,7 +742,7 @@ public class Byte2BooleanMaps
 		@Override
 		public boolean lastBooleanValue() { synchronized(mutex) { return map.lastBooleanValue(); } }
 		@Override
-		public Byte2BooleanSortedMap copy() { throw new UnsupportedOperationException(); }
+		public Byte2BooleanSortedMap copy() { synchronized(mutex) { return map.copy(); } }
 		@Override
 		@Deprecated
 		public Byte firstKey() { synchronized(mutex) { return map.firstKey(); } }
@@ -803,6 +829,8 @@ public class Byte2BooleanMaps
 		@Override
 		public boolean computeBooleanIfPresent(byte key, ByteBooleanUnaryOperator mappingFunction) { synchronized(mutex) { return map.computeBooleanIfPresent(key, mappingFunction); } }
 		@Override
+		public boolean supplyBooleanIfAbsent(byte key, BooleanSupplier valueProvider) { synchronized(mutex) { return map.supplyBooleanIfAbsent(key, valueProvider); } }
+		@Override
 		public boolean mergeBoolean(byte key, boolean value, BooleanBooleanUnaryOperator mappingFunction) { synchronized(mutex) { return map.mergeBoolean(key, value, mappingFunction); } }
 		@Override
 		public void mergeAllBoolean(Byte2BooleanMap m, BooleanBooleanUnaryOperator mappingFunction) { synchronized(mutex) { map.mergeAllBoolean(m, mappingFunction); } }
@@ -811,9 +839,9 @@ public class Byte2BooleanMaps
 		@Override
 		public void forEach(ByteBooleanConsumer action) { synchronized(mutex) { map.forEach(action); } }
 		@Override
-		public int size() { synchronized(mutex) { return super.size(); } }
+		public int size() { synchronized(mutex) { return map.size(); } }
 		@Override
-		public Byte2BooleanMap copy() { throw new UnsupportedOperationException(); }
+		public Byte2BooleanMap copy() { synchronized(mutex) { return map.copy(); } }
 		@Override
 		public ByteSet keySet() {
 			if(keys == null) keys = ByteSets.synchronize(map.keySet(), mutex);

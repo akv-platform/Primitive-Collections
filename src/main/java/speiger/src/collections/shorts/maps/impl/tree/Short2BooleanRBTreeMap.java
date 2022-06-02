@@ -20,8 +20,6 @@ import speiger.src.collections.shorts.maps.interfaces.Short2BooleanMap;
 import speiger.src.collections.shorts.maps.interfaces.Short2BooleanNavigableMap;
 import speiger.src.collections.shorts.sets.AbstractShortSet;
 import speiger.src.collections.shorts.sets.ShortNavigableSet;
-import speiger.src.collections.shorts.sets.ShortSet;
-import speiger.src.collections.shorts.sets.ShortSortedSet;
 import speiger.src.collections.shorts.utils.maps.Short2BooleanMaps;
 import speiger.src.collections.booleans.collections.AbstractBooleanCollection;
 import speiger.src.collections.booleans.collections.BooleanCollection;
@@ -521,7 +519,7 @@ public class Short2BooleanRBTreeMap extends AbstractShort2BooleanMap implements 
 	}
 	
 	@Override
-	public ShortSortedSet keySet() {
+	public ShortNavigableSet keySet() {
 		return navigableKeySet();
 	}
 	
@@ -1121,6 +1119,11 @@ public class Short2BooleanRBTreeMap extends AbstractShort2BooleanMap implements 
 		}
 		
 		@Override
+		public ShortNavigableSet keySet() {
+			return navigableKeySet();
+		}
+		
+		@Override
 		public Short2BooleanNavigableMap subMap(short fromKey, boolean fromInclusive, short toKey, boolean toInclusive) {
 			if (!inRange(fromKey, fromInclusive)) throw new IllegalArgumentException("fromKey out of range");
 			if (!inRange(toKey, toInclusive)) throw new IllegalArgumentException("toKey out of range");
@@ -1200,6 +1203,11 @@ public class Short2BooleanRBTreeMap extends AbstractShort2BooleanMap implements 
 		public ShortNavigableSet navigableKeySet() {
 			if(keySet == null) keySet = new KeySet(this);
 			return keySet;
+		}
+		
+		@Override
+		public ShortNavigableSet keySet() {
+			return navigableKeySet();
 		}
 		
 		@Override
@@ -1332,7 +1340,7 @@ public class Short2BooleanRBTreeMap extends AbstractShort2BooleanMap implements 
 		}
 		
 		@Override
-		public ShortSet keySet() {
+		public ShortNavigableSet keySet() {
 			return navigableKeySet();
 		}
 		

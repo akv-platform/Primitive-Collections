@@ -32,7 +32,9 @@ public interface Long2ShortNavigableMap extends Long2ShortSortedMap, NavigableMa
 	/** @return a Type Specific pollLastEntry */
 	@Override
 	public Long2ShortMap.Entry pollLastEntry();
-	
+	/** @return a Type Specific Navigable Key Set */
+	@Override
+	public LongNavigableSet keySet();
 	/**
 	 * Creates a Wrapped NavigableMap that is Synchronized
 	 * @return a new NavigableMap that is synchronized

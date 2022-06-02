@@ -20,8 +20,6 @@ import speiger.src.collections.chars.maps.interfaces.Char2BooleanMap;
 import speiger.src.collections.chars.maps.interfaces.Char2BooleanNavigableMap;
 import speiger.src.collections.chars.sets.AbstractCharSet;
 import speiger.src.collections.chars.sets.CharNavigableSet;
-import speiger.src.collections.chars.sets.CharSet;
-import speiger.src.collections.chars.sets.CharSortedSet;
 import speiger.src.collections.chars.utils.maps.Char2BooleanMaps;
 import speiger.src.collections.booleans.collections.AbstractBooleanCollection;
 import speiger.src.collections.booleans.collections.BooleanCollection;
@@ -521,7 +519,7 @@ public class Char2BooleanRBTreeMap extends AbstractChar2BooleanMap implements Ch
 	}
 	
 	@Override
-	public CharSortedSet keySet() {
+	public CharNavigableSet keySet() {
 		return navigableKeySet();
 	}
 	
@@ -1121,6 +1119,11 @@ public class Char2BooleanRBTreeMap extends AbstractChar2BooleanMap implements Ch
 		}
 		
 		@Override
+		public CharNavigableSet keySet() {
+			return navigableKeySet();
+		}
+		
+		@Override
 		public Char2BooleanNavigableMap subMap(char fromKey, boolean fromInclusive, char toKey, boolean toInclusive) {
 			if (!inRange(fromKey, fromInclusive)) throw new IllegalArgumentException("fromKey out of range");
 			if (!inRange(toKey, toInclusive)) throw new IllegalArgumentException("toKey out of range");
@@ -1200,6 +1203,11 @@ public class Char2BooleanRBTreeMap extends AbstractChar2BooleanMap implements Ch
 		public CharNavigableSet navigableKeySet() {
 			if(keySet == null) keySet = new KeySet(this);
 			return keySet;
+		}
+		
+		@Override
+		public CharNavigableSet keySet() {
+			return navigableKeySet();
 		}
 		
 		@Override
@@ -1332,7 +1340,7 @@ public class Char2BooleanRBTreeMap extends AbstractChar2BooleanMap implements Ch
 		}
 		
 		@Override
-		public CharSet keySet() {
+		public CharNavigableSet keySet() {
 			return navigableKeySet();
 		}
 		

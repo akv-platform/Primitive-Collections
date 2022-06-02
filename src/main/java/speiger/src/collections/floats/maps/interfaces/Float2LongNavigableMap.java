@@ -32,7 +32,9 @@ public interface Float2LongNavigableMap extends Float2LongSortedMap, NavigableMa
 	/** @return a Type Specific pollLastEntry */
 	@Override
 	public Float2LongMap.Entry pollLastEntry();
-	
+	/** @return a Type Specific Navigable Key Set */
+	@Override
+	public FloatNavigableSet keySet();
 	/**
 	 * Creates a Wrapped NavigableMap that is Synchronized
 	 * @return a new NavigableMap that is synchronized

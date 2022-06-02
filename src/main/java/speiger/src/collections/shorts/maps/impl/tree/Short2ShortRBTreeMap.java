@@ -20,8 +20,6 @@ import speiger.src.collections.shorts.maps.interfaces.Short2ShortMap;
 import speiger.src.collections.shorts.maps.interfaces.Short2ShortNavigableMap;
 import speiger.src.collections.shorts.sets.AbstractShortSet;
 import speiger.src.collections.shorts.sets.ShortNavigableSet;
-import speiger.src.collections.shorts.sets.ShortSet;
-import speiger.src.collections.shorts.sets.ShortSortedSet;
 import speiger.src.collections.shorts.utils.maps.Short2ShortMaps;
 import speiger.src.collections.shorts.collections.AbstractShortCollection;
 import speiger.src.collections.shorts.collections.ShortCollection;
@@ -574,7 +572,7 @@ public class Short2ShortRBTreeMap extends AbstractShort2ShortMap implements Shor
 	}
 	
 	@Override
-	public ShortSortedSet keySet() {
+	public ShortNavigableSet keySet() {
 		return navigableKeySet();
 	}
 	
@@ -1174,6 +1172,11 @@ public class Short2ShortRBTreeMap extends AbstractShort2ShortMap implements Shor
 		}
 		
 		@Override
+		public ShortNavigableSet keySet() {
+			return navigableKeySet();
+		}
+		
+		@Override
 		public Short2ShortNavigableMap subMap(short fromKey, boolean fromInclusive, short toKey, boolean toInclusive) {
 			if (!inRange(fromKey, fromInclusive)) throw new IllegalArgumentException("fromKey out of range");
 			if (!inRange(toKey, toInclusive)) throw new IllegalArgumentException("toKey out of range");
@@ -1253,6 +1256,11 @@ public class Short2ShortRBTreeMap extends AbstractShort2ShortMap implements Shor
 		public ShortNavigableSet navigableKeySet() {
 			if(keySet == null) keySet = new KeySet(this);
 			return keySet;
+		}
+		
+		@Override
+		public ShortNavigableSet keySet() {
+			return navigableKeySet();
 		}
 		
 		@Override
@@ -1385,7 +1393,7 @@ public class Short2ShortRBTreeMap extends AbstractShort2ShortMap implements Shor
 		}
 		
 		@Override
-		public ShortSet keySet() {
+		public ShortNavigableSet keySet() {
 			return navigableKeySet();
 		}
 		

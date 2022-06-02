@@ -4,7 +4,7 @@ import java.util.SortedMap;
 
 import speiger.src.collections.doubles.collections.DoubleCollection;
 import speiger.src.collections.chars.functions.CharComparator;
-import speiger.src.collections.chars.sets.CharSet;
+import speiger.src.collections.chars.sets.CharSortedSet;
 import speiger.src.collections.chars.utils.maps.Char2DoubleMaps;
 import speiger.src.collections.objects.sets.ObjectSortedSet;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
@@ -24,7 +24,7 @@ public interface Char2DoubleSortedMap extends SortedMap<Character, Double>, Char
 	public Char2DoubleSortedMap copy();
 	
 	@Override
-	public CharSet keySet();
+	public CharSortedSet keySet();
 	@Override
 	public DoubleCollection values();
 	

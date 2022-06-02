@@ -20,8 +20,6 @@ import speiger.src.collections.floats.maps.interfaces.Float2BooleanMap;
 import speiger.src.collections.floats.maps.interfaces.Float2BooleanNavigableMap;
 import speiger.src.collections.floats.sets.AbstractFloatSet;
 import speiger.src.collections.floats.sets.FloatNavigableSet;
-import speiger.src.collections.floats.sets.FloatSet;
-import speiger.src.collections.floats.sets.FloatSortedSet;
 import speiger.src.collections.floats.utils.maps.Float2BooleanMaps;
 import speiger.src.collections.booleans.collections.AbstractBooleanCollection;
 import speiger.src.collections.booleans.collections.BooleanCollection;
@@ -521,7 +519,7 @@ public class Float2BooleanAVLTreeMap extends AbstractFloat2BooleanMap implements
 	}
 	
 	@Override
-	public FloatSortedSet keySet() {
+	public FloatNavigableSet keySet() {
 		return navigableKeySet();
 	}
 	
@@ -1278,7 +1276,7 @@ public class Float2BooleanAVLTreeMap extends AbstractFloat2BooleanMap implements
 		}
 		
 		@Override
-		public FloatSet keySet() {
+		public FloatNavigableSet keySet() {
 			return navigableKeySet();
 		}
 		

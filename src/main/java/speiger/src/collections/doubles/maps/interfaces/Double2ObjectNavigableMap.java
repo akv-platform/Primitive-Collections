@@ -33,7 +33,9 @@ public interface Double2ObjectNavigableMap<V> extends Double2ObjectSortedMap<V>,
 	/** @return a Type Specific pollLastEntry */
 	@Override
 	public Double2ObjectMap.Entry<V> pollLastEntry();
-	
+	/** @return a Type Specific Navigable Key Set */
+	@Override
+	public DoubleNavigableSet keySet();
 	/**
 	 * Creates a Wrapped NavigableMap that is Synchronized
 	 * @return a new NavigableMap that is synchronized

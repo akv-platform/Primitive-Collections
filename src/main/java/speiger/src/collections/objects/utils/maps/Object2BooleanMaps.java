@@ -18,8 +18,10 @@ import speiger.src.collections.objects.maps.interfaces.Object2BooleanNavigableMa
 import speiger.src.collections.objects.maps.interfaces.Object2BooleanSortedMap;
 import speiger.src.collections.objects.maps.interfaces.Object2BooleanOrderedMap;
 import speiger.src.collections.objects.sets.ObjectNavigableSet;
+import speiger.src.collections.objects.sets.ObjectSortedSet;
 import speiger.src.collections.booleans.collections.BooleanCollection;
 import speiger.src.collections.booleans.functions.function.BooleanBooleanUnaryOperator;
+import speiger.src.collections.booleans.functions.BooleanSupplier;
 import speiger.src.collections.booleans.utils.BooleanCollections;
 import speiger.src.collections.booleans.utils.BooleanSets;
 
@@ -205,14 +207,14 @@ public class Object2BooleanMaps
 	 * @param <T> the type of elements maintained by this Collection
 	 * @return a Unmodifyable Entry
 	 */
-	public static <T> Object2BooleanMap.Entry<T> unmodifiable(Object2BooleanMap.Entry<T> entry) { return entry instanceof UnmodifyableEntry ? entry : new UnmodifyableEntry<>(entry); }
+	public static <T> Object2BooleanMap.Entry<T> unmodifiable(Object2BooleanMap.Entry<T> entry) { return entry instanceof UnmodifyableEntry ? entry : (entry == null ? null : new UnmodifyableEntry<>(entry)); }
 	/**
 	 * A Helper function that creates a Unmodifyable Entry
 	 * @param entry the Entry that should be made unmodifiable
 	 * @param <T> the type of elements maintained by this Collection
 	 * @return a Unmodifyable Entry
 	 */
-	public static <T> Object2BooleanMap.Entry<T> unmodifiable(Map.Entry<T, Boolean> entry) { return entry instanceof UnmodifyableEntry ? (UnmodifyableEntry<T>)entry : new UnmodifyableEntry<>(entry); }
+	public static <T> Object2BooleanMap.Entry<T> unmodifiable(Map.Entry<T, Boolean> entry) { return entry instanceof UnmodifyableEntry ? (UnmodifyableEntry<T>)entry : (entry == null ? null : new UnmodifyableEntry<>(entry)); }
 	
 	/**
 	 * Creates a Singleton map from the provided values.
@@ -334,9 +336,11 @@ public class Object2BooleanMaps
 		}
 		
 		@Override
-		public Object2BooleanNavigableMap<T> descendingMap() { return Object2BooleanMaps.synchronize(map.descendingMap()); }
+		public Object2BooleanNavigableMap<T> descendingMap() { return Object2BooleanMaps.unmodifiable(map.descendingMap()); }
 		@Override
 		public ObjectNavigableSet<T> navigableKeySet() { return ObjectSets.unmodifiable(map.navigableKeySet()); }
+		@Override
+		public ObjectNavigableSet<T> keySet() { return ObjectSets.unmodifiable(map.keySet()); }
 		@Override
 		public ObjectNavigableSet<T> descendingKeySet() { return ObjectSets.unmodifiable(map.descendingKeySet()); }
 		@Override
@@ -376,7 +380,7 @@ public class Object2BooleanMaps
 		@Override
 		public Object2BooleanMap.Entry<T> ceilingEntry(T key) { return Object2BooleanMaps.unmodifiable(map.ceilingEntry(key)); }
 		@Override
-		public Object2BooleanNavigableMap<T> copy() { throw new UnsupportedOperationException(); }
+		public Object2BooleanNavigableMap<T> copy() { return map.copy(); }
 	}
 	
 	/**
@@ -416,7 +420,7 @@ public class Object2BooleanMaps
 		@Override
 		public boolean lastBooleanValue() { return map.lastBooleanValue(); }
 		@Override
-		public Object2BooleanOrderedMap<T> copy() { throw new UnsupportedOperationException(); }
+		public Object2BooleanOrderedMap<T> copy() { return map.copy(); }
 	}
 	
 	/**
@@ -440,6 +444,9 @@ public class Object2BooleanMaps
 		@Override
 		public Object2BooleanSortedMap<T> tailMap(T fromKey) { return Object2BooleanMaps.unmodifiable(map.tailMap(fromKey)); }
 		@Override
+		public ObjectSortedSet<T> keySet() { return ObjectSets.unmodifiable(map.keySet()); }
+
+		@Override
 		public T firstKey() { return map.firstKey(); }
 		@Override
 		public T pollFirstKey() { return map.pollFirstKey(); }
@@ -452,7 +459,7 @@ public class Object2BooleanMaps
 		@Override
 		public boolean lastBooleanValue() { return map.lastBooleanValue(); }
 		@Override
-		public Object2BooleanSortedMap<T> copy() { throw new UnsupportedOperationException(); }
+		public Object2BooleanSortedMap<T> copy() { return map.copy(); }
 	}
 	
 	/**
@@ -480,11 +487,26 @@ public class Object2BooleanMaps
 		@Override
 		public boolean remove(T key, boolean value) { throw new UnsupportedOperationException(); }
 		@Override
-		public boolean getBoolean(T key) { return map.getBoolean(key); }
+		public boolean getBoolean(T key) {
+			boolean type = map.getBoolean(key);
+			return type == map.getDefaultReturnValue() ? getDefaultReturnValue() : type;
+		}
 		@Override
 		public boolean getOrDefault(T key, boolean defaultValue) { return map.getOrDefault(key, defaultValue); }
 		@Override
-		public Object2BooleanMap<T> copy() { throw new UnsupportedOperationException(); }
+		public boolean computeBoolean(T key, ObjectBooleanUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanIfAbsent(T key, Object2BooleanFunction<T> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean computeBooleanIfPresent(T key, ObjectBooleanUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean supplyBooleanIfAbsent(T key, BooleanSupplier valueProvider) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean mergeBoolean(T key, boolean value, BooleanBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void mergeAllBoolean(Object2BooleanMap<T> m, BooleanBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public Object2BooleanMap<T> copy() { return map.copy(); }
 		
 		@Override
 		public ObjectSet<T> keySet() { 
@@ -561,6 +583,8 @@ public class Object2BooleanMaps
 		@Override
 		public ObjectNavigableSet<T> descendingKeySet() { synchronized(mutex) { return ObjectSets.synchronize(map.descendingKeySet(), mutex); } }
 		@Override
+		public ObjectNavigableSet<T> keySet() { synchronized(mutex) { return ObjectSets.synchronize(map.keySet(), mutex); } }
+		@Override
 		public Object2BooleanMap.Entry<T> firstEntry() { synchronized(mutex) { return map.firstEntry(); } }
 		@Override
 		public Object2BooleanMap.Entry<T> lastEntry() { synchronized(mutex) { return map.firstEntry(); } }
@@ -597,7 +621,7 @@ public class Object2BooleanMaps
 		@Override
 		public Object2BooleanMap.Entry<T> ceilingEntry(T key) { synchronized(mutex) { return map.ceilingEntry(key); } }
 		@Override
-		public Object2BooleanNavigableMap<T> copy() { throw new UnsupportedOperationException(); }
+		public Object2BooleanNavigableMap<T> copy() { synchronized(mutex) { return map.copy(); } }
 	}
 	
 	/**
@@ -642,7 +666,7 @@ public class Object2BooleanMaps
 		@Override
 		public boolean lastBooleanValue() { synchronized(mutex) { return map.lastBooleanValue(); } }
 		@Override
-		public Object2BooleanOrderedMap<T> copy() { throw new UnsupportedOperationException(); }
+		public Object2BooleanOrderedMap<T> copy() { synchronized(mutex) { return map.copy(); } }
 	}
 	
 	/**
@@ -671,6 +695,8 @@ public class Object2BooleanMaps
 		@Override
 		public Object2BooleanSortedMap<T> tailMap(T fromKey) { synchronized(mutex) { return Object2BooleanMaps.synchronize(map.tailMap(fromKey), mutex); } }
 		@Override
+		public ObjectSortedSet<T> keySet() { synchronized(mutex) { return ObjectSets.synchronize(map.keySet(), mutex); } }
+		@Override
 		public T firstKey() { synchronized(mutex) { return map.firstKey(); } }
 		@Override
 		public T pollFirstKey() { synchronized(mutex) { return map.pollFirstKey(); } }
@@ -683,7 +709,7 @@ public class Object2BooleanMaps
 		@Override
 		public boolean lastBooleanValue() { synchronized(mutex) { return map.lastBooleanValue(); } }
 		@Override
-		public Object2BooleanSortedMap<T> copy() { throw new UnsupportedOperationException(); }
+		public Object2BooleanSortedMap<T> copy() { synchronized(mutex) { return map.copy(); } }
 	}
 	
 	/**
@@ -754,6 +780,8 @@ public class Object2BooleanMaps
 		@Override
 		public boolean computeBooleanIfPresent(T key, ObjectBooleanUnaryOperator<T> mappingFunction) { synchronized(mutex) { return map.computeBooleanIfPresent(key, mappingFunction); } }
 		@Override
+		public boolean supplyBooleanIfAbsent(T key, BooleanSupplier valueProvider) { synchronized(mutex) { return map.supplyBooleanIfAbsent(key, valueProvider); } }
+		@Override
 		public boolean mergeBoolean(T key, boolean value, BooleanBooleanUnaryOperator mappingFunction) { synchronized(mutex) { return map.mergeBoolean(key, value, mappingFunction); } }
 		@Override
 		public void mergeAllBoolean(Object2BooleanMap<T> m, BooleanBooleanUnaryOperator mappingFunction) { synchronized(mutex) { map.mergeAllBoolean(m, mappingFunction); } }
@@ -762,9 +790,9 @@ public class Object2BooleanMaps
 		@Override
 		public void forEach(ObjectBooleanConsumer<T> action) { synchronized(mutex) { map.forEach(action); } }
 		@Override
-		public int size() { synchronized(mutex) { return super.size(); } }
+		public int size() { synchronized(mutex) { return map.size(); } }
 		@Override
-		public Object2BooleanMap<T> copy() { throw new UnsupportedOperationException(); }
+		public Object2BooleanMap<T> copy() { synchronized(mutex) { return map.copy(); } }
 		@Override
 		public ObjectSet<T> keySet() {
 			if(keys == null) keys = ObjectSets.synchronize(map.keySet(), mutex);

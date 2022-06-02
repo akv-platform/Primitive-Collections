@@ -33,7 +33,9 @@ public interface Float2ObjectNavigableMap<V> extends Float2ObjectSortedMap<V>, N
 	/** @return a Type Specific pollLastEntry */
 	@Override
 	public Float2ObjectMap.Entry<V> pollLastEntry();
-	
+	/** @return a Type Specific Navigable Key Set */
+	@Override
+	public FloatNavigableSet keySet();
 	/**
 	 * Creates a Wrapped NavigableMap that is Synchronized
 	 * @return a new NavigableMap that is synchronized

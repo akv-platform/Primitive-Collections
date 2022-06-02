@@ -4,7 +4,7 @@ import java.util.SortedMap;
 
 import speiger.src.collections.ints.collections.IntCollection;
 import speiger.src.collections.chars.functions.CharComparator;
-import speiger.src.collections.chars.sets.CharSet;
+import speiger.src.collections.chars.sets.CharSortedSet;
 import speiger.src.collections.chars.utils.maps.Char2IntMaps;
 import speiger.src.collections.objects.sets.ObjectSortedSet;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
@@ -24,7 +24,7 @@ public interface Char2IntSortedMap extends SortedMap<Character, Integer>, Char2I
 	public Char2IntSortedMap copy();
 	
 	@Override
-	public CharSet keySet();
+	public CharSortedSet keySet();
 	@Override
 	public IntCollection values();
 	

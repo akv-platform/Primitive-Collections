@@ -21,8 +21,6 @@ import speiger.src.collections.longs.maps.interfaces.Long2ByteMap;
 import speiger.src.collections.longs.maps.interfaces.Long2ByteNavigableMap;
 import speiger.src.collections.longs.sets.AbstractLongSet;
 import speiger.src.collections.longs.sets.LongNavigableSet;
-import speiger.src.collections.longs.sets.LongSet;
-import speiger.src.collections.longs.sets.LongSortedSet;
 import speiger.src.collections.longs.utils.maps.Long2ByteMaps;
 import speiger.src.collections.bytes.collections.AbstractByteCollection;
 import speiger.src.collections.bytes.collections.ByteCollection;
@@ -580,7 +578,7 @@ public class Long2ByteAVLTreeMap extends AbstractLong2ByteMap implements Long2By
 	}
 	
 	@Override
-	public LongSortedSet keySet() {
+	public LongNavigableSet keySet() {
 		return navigableKeySet();
 	}
 	
@@ -1337,7 +1335,7 @@ public class Long2ByteAVLTreeMap extends AbstractLong2ByteMap implements Long2By
 		}
 		
 		@Override
-		public LongSet keySet() {
+		public LongNavigableSet keySet() {
 			return navigableKeySet();
 		}
 		

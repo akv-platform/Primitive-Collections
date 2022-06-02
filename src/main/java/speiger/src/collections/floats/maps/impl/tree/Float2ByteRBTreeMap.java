@@ -21,8 +21,6 @@ import speiger.src.collections.floats.maps.interfaces.Float2ByteMap;
 import speiger.src.collections.floats.maps.interfaces.Float2ByteNavigableMap;
 import speiger.src.collections.floats.sets.AbstractFloatSet;
 import speiger.src.collections.floats.sets.FloatNavigableSet;
-import speiger.src.collections.floats.sets.FloatSet;
-import speiger.src.collections.floats.sets.FloatSortedSet;
 import speiger.src.collections.floats.utils.maps.Float2ByteMaps;
 import speiger.src.collections.bytes.collections.AbstractByteCollection;
 import speiger.src.collections.bytes.collections.ByteCollection;
@@ -580,7 +578,7 @@ public class Float2ByteRBTreeMap extends AbstractFloat2ByteMap implements Float2
 	}
 	
 	@Override
-	public FloatSortedSet keySet() {
+	public FloatNavigableSet keySet() {
 		return navigableKeySet();
 	}
 	
@@ -1180,6 +1178,11 @@ public class Float2ByteRBTreeMap extends AbstractFloat2ByteMap implements Float2
 		}
 		
 		@Override
+		public FloatNavigableSet keySet() {
+			return navigableKeySet();
+		}
+		
+		@Override
 		public Float2ByteNavigableMap subMap(float fromKey, boolean fromInclusive, float toKey, boolean toInclusive) {
 			if (!inRange(fromKey, fromInclusive)) throw new IllegalArgumentException("fromKey out of range");
 			if (!inRange(toKey, toInclusive)) throw new IllegalArgumentException("toKey out of range");
@@ -1259,6 +1262,11 @@ public class Float2ByteRBTreeMap extends AbstractFloat2ByteMap implements Float2
 		public FloatNavigableSet navigableKeySet() {
 			if(keySet == null) keySet = new KeySet(this);
 			return keySet;
+		}
+		
+		@Override
+		public FloatNavigableSet keySet() {
+			return navigableKeySet();
 		}
 		
 		@Override
@@ -1391,7 +1399,7 @@ public class Float2ByteRBTreeMap extends AbstractFloat2ByteMap implements Float2
 		}
 		
 		@Override
-		public FloatSet keySet() {
+		public FloatNavigableSet keySet() {
 			return navigableKeySet();
 		}
 		

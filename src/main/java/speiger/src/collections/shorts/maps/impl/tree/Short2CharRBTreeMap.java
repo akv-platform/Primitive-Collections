@@ -21,8 +21,6 @@ import speiger.src.collections.shorts.maps.interfaces.Short2CharMap;
 import speiger.src.collections.shorts.maps.interfaces.Short2CharNavigableMap;
 import speiger.src.collections.shorts.sets.AbstractShortSet;
 import speiger.src.collections.shorts.sets.ShortNavigableSet;
-import speiger.src.collections.shorts.sets.ShortSet;
-import speiger.src.collections.shorts.sets.ShortSortedSet;
 import speiger.src.collections.shorts.utils.maps.Short2CharMaps;
 import speiger.src.collections.chars.collections.AbstractCharCollection;
 import speiger.src.collections.chars.collections.CharCollection;
@@ -580,7 +578,7 @@ public class Short2CharRBTreeMap extends AbstractShort2CharMap implements Short2
 	}
 	
 	@Override
-	public ShortSortedSet keySet() {
+	public ShortNavigableSet keySet() {
 		return navigableKeySet();
 	}
 	
@@ -1180,6 +1178,11 @@ public class Short2CharRBTreeMap extends AbstractShort2CharMap implements Short2
 		}
 		
 		@Override
+		public ShortNavigableSet keySet() {
+			return navigableKeySet();
+		}
+		
+		@Override
 		public Short2CharNavigableMap subMap(short fromKey, boolean fromInclusive, short toKey, boolean toInclusive) {
 			if (!inRange(fromKey, fromInclusive)) throw new IllegalArgumentException("fromKey out of range");
 			if (!inRange(toKey, toInclusive)) throw new IllegalArgumentException("toKey out of range");
@@ -1259,6 +1262,11 @@ public class Short2CharRBTreeMap extends AbstractShort2CharMap implements Short2
 		public ShortNavigableSet navigableKeySet() {
 			if(keySet == null) keySet = new KeySet(this);
 			return keySet;
+		}
+		
+		@Override
+		public ShortNavigableSet keySet() {
+			return navigableKeySet();
 		}
 		
 		@Override
@@ -1391,7 +1399,7 @@ public class Short2CharRBTreeMap extends AbstractShort2CharMap implements Short2
 		}
 		
 		@Override
-		public ShortSet keySet() {
+		public ShortNavigableSet keySet() {
 			return navigableKeySet();
 		}
 		
