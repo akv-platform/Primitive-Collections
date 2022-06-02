@@ -13,7 +13,9 @@ import com.google.common.collect.testing.features.TesterAnnotation;
 @SuppressWarnings({"rawtypes", "javadoc"})
 public enum SpecialFeature implements Feature<Collection> {
 	COPYING,
-	MAP_ENTRY;
+	MAP_ENTRY,
+	DESCENDING,
+	SUBMAP;
 
 	private final Set<Feature<? super Collection>> implied;
 

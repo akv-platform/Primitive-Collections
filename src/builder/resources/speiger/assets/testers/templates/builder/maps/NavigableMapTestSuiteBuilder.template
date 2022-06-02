@@ -38,10 +38,10 @@ public class NAVIGABLE_MAP_TEST_BUILDER KEY_VALUE_GENERIC_TYPE extends SORTED_MA
 	protected List<TestSuite> createDerivedSuites(FeatureSpecificTestSuiteBuilder<?, ? extends OneSizeTestContainerGenerator<Map<CLASS_TYPE, CLASS_VALUE_TYPE>, Map.Entry<CLASS_TYPE, CLASS_VALUE_TYPE>>> parentBuilder) {
 		List<TestSuite> derivedSuites = super.createDerivedSuites(parentBuilder);
 #ignore
-		if (!parentBuilder.getFeatures().contains(NoRecurse.DESCENDING)) {
+		if (!parentBuilder.getFeatures().contains(SpecialFeature.DESCENDING)) {
 			derivedSuites.add(createDescendingSuite(parentBuilder));
 		}
-		if (!parentBuilder.getFeatures().contains(NoRecurse.SUBMAP)) {
+		if (!parentBuilder.getFeatures().contains(SpecialFeature.SUBMAP)) {
 			derivedSuites.add(createSubmapSuite(parentBuilder, Bound.NO_BOUND, Bound.INCLUSIVE));
 			derivedSuites.add(createSubmapSuite(parentBuilder, Bound.EXCLUSIVE, Bound.NO_BOUND));
 			derivedSuites.add(createSubmapSuite(parentBuilder, Bound.EXCLUSIVE, Bound.EXCLUSIVE));
@@ -62,7 +62,7 @@ public class NAVIGABLE_MAP_TEST_BUILDER KEY_VALUE_GENERIC_TYPE extends SORTED_MA
 
 		List<Feature<?>> features = new ArrayList<>();
 #ignore
-		features.add(NoRecurse.DESCENDING);
+		features.add(SpecialFeature.DESCENDING);
 		features.addAll(parentBuilder.getFeatures());
 		features.remove(SpecialFeature.COPYING);
 #endignore

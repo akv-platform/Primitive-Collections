@@ -77,8 +77,8 @@ public class MAP_TESTS extends TestCase
 		suite.addTest(mapSuite("CONCURRENT_HASH_MAP", CONCURRENT_HASH_MAP::new, getFeatures(), -1));
 		suite.addTest(navigableMapSuite("RB_TREE_MAP", RB_TREE_MAP::new, getFeatures(), -1));
 		suite.addTest(navigableMapSuite("AVL_TREE_MAP", AVL_TREE_MAP::new, getFeatures(), -1));
-		suite.addTest(navigableMapSuite("Synchronized RB_TREE_MAP", (K, V) -> new RB_TREE_MAPKV_BRACES(K, V).synchronize(), getFeatures(), -1));
-		suite.addTest(navigableMapSuite("Unmodifiable RB_TREE_MAP", (K, V) -> new RB_TREE_MAPKV_BRACES(K, V).unmodifiable(), getImmutableFeatures(), -1));
+		suite.addTest(navigableMapSuite("Synchronized RB_TREE_MAP", (K, V) -> new RB_TREE_MAPKV_BRACES(K, V).synchronize(), getLimitedFeatures(), -1));
+		suite.addTest(navigableMapSuite("Unmodifiable RB_TREE_MAP", (K, V) -> new RB_TREE_MAPKV_BRACES(K, V).unmodifiable(), getLimitedImmutableFeatures(), -1));
 	}
 	
 	private static Test mapSuite(String name, BiFunction<KEY_STRING_TYPE[], VALUE_STRING_TYPE[], MAP KEY_VALUE_STRING_GENERIC_TYPE> factory, Collection<Feature<?>> features, int size) {
@@ -155,6 +155,14 @@ public class MAP_TESTS extends TestCase
 	
 	private static Collection<Feature<?>> getImmutableFeatures() {
 		return Arrays.asList(SpecialFeature.COPYING);
+	}
+	
+	private static Collection<Feature<?>> getLimitedFeatures() {
+		return Arrays.asList(MapFeature.GENERAL_PURPOSE, CollectionFeature.SUPPORTS_ITERATOR_REMOVE, SpecialFeature.SUBMAP, SpecialFeature.DESCENDING, SpecialFeature.COPYING);
+	}
+	
+	private static Collection<Feature<?>> getLimitedImmutableFeatures() {
+		return Arrays.asList(SpecialFeature.SUBMAP, SpecialFeature.DESCENDING, SpecialFeature.COPYING);
 	}
 #endignore
 #if TYPE_OBJECT

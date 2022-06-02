@@ -57,7 +57,7 @@ public class SORTED_MAP_TEST_BUILDER KEY_VALUE_GENERIC_TYPE extends MAP_TEST_BUI
 	protected List<TestSuite> createDerivedSuites(FeatureSpecificTestSuiteBuilder<?, ? extends OneSizeTestContainerGenerator<Map<CLASS_TYPE, CLASS_VALUE_TYPE>, Map.Entry<CLASS_TYPE, CLASS_VALUE_TYPE>>> parentBuilder) {
 		List<TestSuite> derivedSuites = super.createDerivedSuites(parentBuilder);
 #ignore
-		if (!parentBuilder.getFeatures().contains(NoRecurse.SUBMAP)) {
+		if (!parentBuilder.getFeatures().contains(SpecialFeature.SUBMAP)) {
 			derivedSuites.add(createSubmapSuite(parentBuilder, Bound.NO_BOUND, Bound.EXCLUSIVE));
 			derivedSuites.add(createSubmapSuite(parentBuilder, Bound.INCLUSIVE, Bound.NO_BOUND));
 			derivedSuites.add(createSubmapSuite(parentBuilder, Bound.INCLUSIVE, Bound.EXCLUSIVE));
@@ -75,7 +75,7 @@ public class SORTED_MAP_TEST_BUILDER KEY_VALUE_GENERIC_TYPE extends MAP_TEST_BUI
 		TEST_SORTED_MAP_GENERATOR KEY_VALUE_GENERIC_TYPE delegate = (TEST_SORTED_MAP_GENERATOR KEY_VALUE_GENERIC_TYPE) parentBuilder.getSubjectGenerator().getInnerGenerator();
 		List<Feature<?>> features = new ArrayList<>();
 #ignore
-		features.add(NoRecurse.SUBMAP);
+		features.add(SpecialFeature.SUBMAP);
 		features.addAll(parentBuilder.getFeatures());
 		features.remove(SpecialFeature.COPYING);
 #endignore
@@ -87,16 +87,5 @@ public class SORTED_MAP_TEST_BUILDER KEY_VALUE_GENERIC_TYPE extends MAP_TEST_BUI
 
 	SORTED_MAP_TEST_BUILDER KEY_VALUE_GENERIC_TYPE newBuilderUsing(TEST_SORTED_MAP_GENERATOR KEY_VALUE_GENERIC_TYPE delegate, Bound to, Bound from) {
 		return using(new DERIVED_MAP_GENERATORS.SortedMapGeneratorKV_BRACES(delegate, to, from));
-	}
-
-	enum NoRecurse implements Feature<Void> {
-#ignore
-		SUBMAP, DESCENDING;
-#endignore
-
-		@Override
-		public Set<Feature<? super Void>> getImpliedFeatures() {
-			return Collections.emptySet();
-		}
 	}
 }
