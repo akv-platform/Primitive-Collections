@@ -70,7 +70,7 @@ public class MAP_TESTS extends TestCase
 	public static void suite(TestSuite suite) {
 		suite.addTest(mapSuite("HASH_MAP", HASH_MAP::new, getFeatures(), -1));
 		suite.addTest(mapSuite("LINKED_HASH_MAP", LINKED_HASH_MAP::new, getFeatures(), -1));
-		suite.addTest(mapSuite("IMMUTABLE_HASH_MAP", IMMUTABLE_HASH_MAP::new, getImmutableFeatures(), -1));
+//		suite.addTest(mapSuite("IMMUTABLE_HASH_MAP", IMMUTABLE_HASH_MAP::new, getImmutableFeatures(), -1));
 		suite.addTest(mapSuite("CUSTOM_HASH_MAP", (K, V) -> new CUSTOM_HASH_MAPKV_BRACES(K, V, HashStrategy.INSTANCE), getFeatures(), -1));
 		suite.addTest(mapSuite("LINKED_CUSTOM_HASH_MAP", (K, V) -> new LINKED_CUSTOM_HASH_MAPKV_BRACES(K, V, HashStrategy.INSTANCE), getFeatures(), -1));
 		suite.addTest(mapSuite("ARRAY_MAP", ARRAY_MAP::new, getFeatures(), -1));
