@@ -1,6 +1,5 @@
 package speiger.src.builder;
 
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -89,18 +88,18 @@ public class PrimitiveCollectionsBuilder extends TemplateProcessor
 	@Override
 	protected void afterFinish()
 	{
-		if(!special && getVersion() > 8) 
-		{
-			Path basePath = Paths.get("src/main/java");
-			try(BufferedWriter writer = Files.newBufferedWriter(basePath.resolve("module-info.java")))
-			{
-				writer.write(getModuleInfo(basePath));
-			}
-			catch(Exception e)
-			{
-				e.printStackTrace();
-			}
-		}
+//		if(!special && getVersion() > 8) 
+//		{
+//			Path basePath = Paths.get("src/main/java");
+//			try(BufferedWriter writer = Files.newBufferedWriter(basePath.resolve("module-info.java")))
+//			{
+//				writer.write(getModuleInfo(basePath));
+//			}
+//			catch(Exception e)
+//			{
+//				e.printStackTrace();
+//			}
+//		}
 	}
 	
 	@Override
