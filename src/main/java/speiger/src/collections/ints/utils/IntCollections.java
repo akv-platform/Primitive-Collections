@@ -291,7 +291,7 @@ public class IntCollections
 		@Override
 		public boolean contains(int o) { return false; }
 		@Override
-		public boolean containsAll(IntCollection c) { return false; }
+		public boolean containsAll(IntCollection c) { return c.isEmpty(); }
 		@Override
 		public boolean containsAny(IntCollection c) { return false; }
 		@Override
@@ -299,7 +299,7 @@ public class IntCollections
 		public boolean containsAny(Collection<?> c) { return false; }
 		@Override
 		@Deprecated
-		public boolean containsAll(Collection<?> c) { return false; }
+		public boolean containsAll(Collection<?> c) { return c.isEmpty(); }
 		@Override
 		public int hashCode() { return 0; }
 		
@@ -333,11 +333,21 @@ public class IntCollections
 		@Override
 		public Object[] toArray() { return ObjectArrays.EMPTY_ARRAY; }
 		@Override
-		public <T> T[] toArray(T[] a) { return a; }
+		public <T> T[] toArray(T[] a) {
+			if(a != null && a.length > 0)
+				a[0] = null;
+			return a;
+		}
+		
 		@Override
 		public int[] toIntArray() { return IntArrays.EMPTY_ARRAY; }
 		@Override
-		public int[] toIntArray(int[] a) { return a; }
+		public int[] toIntArray(int[] a) {
+			if(a != null && a.length > 0)
+				a[0] = 0;
+			return a;
+		}
+		
 		@Override
 		public IntIterator iterator() { return IntIterators.empty(); }
 		@Override

@@ -285,7 +285,7 @@ public class ObjectIterators
 	 * @param <T> the type of array that the operation should be applied
 	 * @return a Iterator that is wrapping a array.
 	 */
-	public static <T> ArrayIterator<T> wrap(T[] a) {
+	public static <T> ArrayIterator<T> wrap(T... a) {
 		return wrap(a, 0, a.length);
 	}
 	
@@ -688,7 +688,7 @@ public class ObjectIterators
 		
 		@Override
 		public int previousIndex() {
-			return 0;
+			return -1;
 		}
 		
 		@Override

@@ -21,6 +21,7 @@ import speiger.src.testers.shorts.utils.ShortSamples;
 @SuppressWarnings("javadoc")
 public class SimpleShortTestGenerator<E extends ShortCollection> {
 	Function<short[], E> mapper;
+	
 	public SimpleShortTestGenerator(Function<short[], E> mapper) {
 		this.mapper = mapper;
 	}

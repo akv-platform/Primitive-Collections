@@ -497,7 +497,8 @@ public abstract class AbstractBooleanList extends AbstractBooleanCollection impl
 		
 		@Override
 		public void add(boolean e) {
-			AbstractBooleanList.this.add(index++, e);
+			AbstractBooleanList.this.add(index, e);
+			index++;
 			lastReturned = -1;
 		}
 		

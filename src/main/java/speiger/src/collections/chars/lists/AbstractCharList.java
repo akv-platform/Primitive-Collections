@@ -497,7 +497,8 @@ public abstract class AbstractCharList extends AbstractCharCollection implements
 		
 		@Override
 		public void add(char e) {
-			AbstractCharList.this.add(index++, e);
+			AbstractCharList.this.add(index, e);
+			index++;
 			lastReturned = -1;
 		}
 		

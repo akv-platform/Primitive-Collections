@@ -5,9 +5,7 @@ import java.util.Collection;
 import java.util.function.Function;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import com.google.common.collect.testing.features.CollectionSize;
 import com.google.common.collect.testing.features.ListFeature;
@@ -38,6 +36,7 @@ import speiger.src.collections.booleans.lists.BooleanList;
 import speiger.src.testers.booleans.builder.BooleanListTestSuiteBuilder;
 import speiger.src.testers.booleans.impl.SimpleBooleanTestGenerator;
 import speiger.src.testers.utils.SpecialFeature;
+import speiger.src.testers.utils.TestUtils;
 import speiger.src.testers.booleans.tests.collection.BooleanCollectionAddAllArrayTester;
 import speiger.src.testers.booleans.tests.collection.BooleanCollectionAddAllTester;
 import speiger.src.testers.booleans.tests.collection.BooleanCollectionAddTester;
@@ -68,88 +67,96 @@ public class BooleanListTests extends TestCase
 	}
 
 	public static void suite(TestSuite suite) {
-		listSuite(suite, "BooleanArrayList", BooleanArrayList::new, getFeatures(), false);
-		listSuite(suite, "BooleanLinkedList", BooleanLinkedList::new, getFeatures(), false);
-		listSuite(suite, "ImmutableBooleanList", ImmutableBooleanList::new, getImmutableFeatures(), true);
-		listSuite(suite, "Synchronized BooleanArrayList", T -> new BooleanArrayList(T).synchronize(), getFeatures(), false);
-		listSuite(suite, "Unmodifiable BooleanArrayList", T -> new BooleanArrayList(T).unmodifiable(), getImmutableFeatures(), true);
+		listSuite(suite, "BooleanArrayList", BooleanArrayList::new, getFeatures(), false, -1);
+		listSuite(suite, "BooleanLinkedList", BooleanLinkedList::new, getFeatures(), false, -1);
+		listSuite(suite, "ImmutableBooleanList", ImmutableBooleanList::new, getImmutableFeatures(), true, -1);
+		listSuite(suite, "Synchronized BooleanArrayList", T -> new BooleanArrayList(T).synchronize(), getFeatures(), false, -1);
+		listSuite(suite, "Unmodifiable BooleanArrayList", T -> new BooleanArrayList(T).unmodifiable(), getImmutableFeatures(), true, -1);
 	}
 	
-	private static void listSuite(TestSuite suite, String name, Function<boolean[], BooleanList> factory, Collection<Feature<?>> features, boolean immutable) {
+	private static void listSuite(TestSuite suite, String name, Function<boolean[], BooleanList> factory, Collection<Feature<?>> features, boolean immutable, int size) {
 		TestSuite data = new TestSuite(name);
-		data.addTest(BooleanListTestSuiteBuilder.using(new SimpleBooleanTestGenerator.Lists(factory))
+		Collection<CollectionSize> sizes = getSizes(size);
+		if(sizes.contains(CollectionSize.ZERO) || sizes.contains(CollectionSize.ANY)) {
+			data.addTest(BooleanListTestSuiteBuilder.using(new SimpleBooleanTestGenerator.Lists(factory))
 			.named(name+" [collection size: zero]").withFeatures(CollectionSize.ZERO).withFeatures(features).suppressing(getSurpression(CollectionSize.ZERO, immutable)).createTestSuite());
-		data.addTest(BooleanListTestSuiteBuilder.using(new SimpleBooleanTestGenerator.Lists(factory))
-			.named(name+" [collection size: one]").withFeatures(CollectionSize.ONE).withFeatures(features).suppressing(getSurpression(CollectionSize.ONE, immutable)).createTestSuite());
-		data.addTest(BooleanListTestSuiteBuilder.using(new SimpleBooleanTestGenerator.Lists(factory)).named(name)
-			.named(name+" [collection size: several]").withFeatures(CollectionSize.SEVERAL).withFeatures(features).suppressing(getSurpression(CollectionSize.SEVERAL, immutable)).createTestSuite());
+		}
+		if(sizes.contains(CollectionSize.ONE) || sizes.contains(CollectionSize.ANY)) {
+			data.addTest(BooleanListTestSuiteBuilder.using(new SimpleBooleanTestGenerator.Lists(factory))
+				.named(name+" [collection size: one]").withFeatures(CollectionSize.ONE).withFeatures(features).suppressing(getSurpression(CollectionSize.ONE, immutable)).createTestSuite());
+		}
+		if(sizes.contains(CollectionSize.SEVERAL) || sizes.contains(CollectionSize.ANY)) {
+			data.addTest(BooleanListTestSuiteBuilder.using(new SimpleBooleanTestGenerator.Lists(factory)).named(name)
+				.named(name+" [collection size: several]").withFeatures(CollectionSize.SEVERAL).withFeatures(features).suppressing(getSurpression(CollectionSize.SEVERAL, immutable)).createTestSuite());
+		}
 		suite.addTest(data);
 	}
 	
 	private static List<Method> getSurpression(CollectionSize size, boolean immutable) {
 		List<Method> list = new ArrayList<>();
 		if(size == CollectionSize.ONE) {
-			getSurpession(list, CollectionRetainAllTester.class, "testRetainAll_disjointPreviouslyNonEmpty");
+			TestUtils.getSurpession(list, CollectionRetainAllTester.class, "testRetainAll_disjointPreviouslyNonEmpty");
 			if(immutable) {
-				getSurpession(list, CollectionAddAllTester.class, "testAddAll_unsupportedNonePresent");
-				getSurpession(list, BooleanCollectionAddAllTester.class, "testAddAll_unsupportedNonePresent");
-				getSurpession(list, BooleanCollectionAddAllArrayTester.class, "testAddAllArray_unsupportedNonePresent");
+				TestUtils.getSurpession(list, CollectionAddAllTester.class, "testAddAll_unsupportedNonePresent");
+				TestUtils.getSurpession(list, BooleanCollectionAddAllTester.class, "testAddAll_unsupportedNonePresent");
+				TestUtils.getSurpession(list, BooleanCollectionAddAllArrayTester.class, "testAddAllArray_unsupportedNonePresent");
 			}
 		}
 		else {
-			getSurpession(list, CollectionContainsAllTester.class, "testContainsAll_disjoint", "testContainsAll_partialOverlap");
-			getSurpession(list, CollectionContainsTester.class, "testContains_no");
-			getSurpession(list, CollectionIteratorTester.class, "testIterator_removeAffectsBackingCollection");
-			getSurpession(list, CollectionRemoveAllTester.class, "testRemoveAll_nonePresent");
-			getSurpession(list, CollectionRemoveTester.class, "testRemove_present", "testRemove_notPresent");
-			getSurpession(list, CollectionRetainAllTester.class, "testRetainAll_disjointPreviouslyNonEmpty", "testRetainAll_containsDuplicatesSizeSeveral", "testRetainAll_partialOverlap");
-			getSurpession(list, BooleanCollectionContainsAllTester.class, "testContainsAll_disjoint", "testContainsAll_partialOverlap");
-			getSurpession(list, BooleanCollectionContainsTester.class, "testContains_no");
-			getSurpession(list, BooleanCollectionIteratorTester.class, "testIterator_removeAffectsBackingCollection");
-			getSurpession(list, BooleanCollectionRemoveAllTester.class, "testRemoveAll_nonePresentFetchRemoved", "testRemoveAll_someFetchRemovedElements", "testRemoveAll_nonePresent");
-			getSurpession(list, BooleanCollectionRetainAllTester.class, "testRetainAllExtra_containsDuplicatesSizeSeveral", "testRetainAllExtra_partialOverlap", "testRetainAll_containsDuplicatesSizeSeveral", "testRetainAll_partialOverlap");
-			getSurpession(list, ListAddAllAtIndexTester.class, "testAddAllAtIndex_negative", "testAddAllAtIndex_tooLarge");
-			getSurpession(list, ListAddAtIndexTester.class, "testAddAtIndex_tooLarge", "testAddAtIndex_negative");
-			getSurpession(list, ListEqualsTester.class, "testEquals_otherListWithDifferentElements");
-			getSurpession(list, ListIndexOfTester.class, "testFind_no");
-			getSurpession(list, ListLastIndexOfTester.class, "testLastIndexOf_duplicate", "testFind_no", "testFind_yes");
-			getSurpession(list, ListRetainAllTester.class, "testRetainAll_duplicatesRemoved", "testRetainAll_countIgnored");
-			getSurpession(list, ListSubListTester.class, "testSubList_lastIndexOf", "testSubList_contains", "testSubList_indexOf");
-			getSurpession(list, BooleanListAddAllAtIndexTester.class, "testAddAllAtIndex_negative", "testAddAllAtIndex_tooLarge");
-			getSurpession(list, BooleanListAddAllArrayAtIndexTester.class, "testAddAllArrayAtIndex_tooLarge", "testAddAllArrayAtIndex_negative");
-			getSurpession(list, BooleanListAddAtIndexTester.class, "testAddAtIndex_tooLarge", "testAddAtIndex_negative");
-			getSurpession(list, BooleanListEqualsTester.class, "testEquals_otherListWithDifferentElements");
-			getSurpession(list, BooleanListExtractElementsTester.class, "testRemoveElements");
-			getSurpession(list, BooleanListIndexOfTester.class, "testFind_no");
-			getSurpession(list, BooleanListLastIndexOfTester.class, "testLastIndexOf_duplicate", "testFind_no", "testFind_yes");
-			getSurpession(list, BooleanListRemoveElementsTester.class, "testRemoveElements");
-			getSurpession(list, BooleanListRetainAllTester.class, "testRetainAll_duplicatesRemoved", "testRetainAll_countIgnored");
-			getSurpession(list, BooleanListSubListTester.class, "testSubList_lastIndexOf", "testSubList_contains", "testSubList_indexOf");
+			TestUtils.getSurpession(list, CollectionContainsAllTester.class, "testContainsAll_disjoint", "testContainsAll_partialOverlap");
+			TestUtils.getSurpession(list, CollectionContainsTester.class, "testContains_no");
+			TestUtils.getSurpession(list, CollectionIteratorTester.class, "testIterator_removeAffectsBackingCollection");
+			TestUtils.getSurpession(list, CollectionRemoveAllTester.class, "testRemoveAll_nonePresent");
+			TestUtils.getSurpession(list, CollectionRemoveTester.class, "testRemove_present", "testRemove_notPresent");
+			TestUtils.getSurpession(list, CollectionRetainAllTester.class, "testRetainAll_disjointPreviouslyNonEmpty", "testRetainAll_containsDuplicatesSizeSeveral", "testRetainAll_partialOverlap");
+			TestUtils.getSurpession(list, BooleanCollectionContainsAllTester.class, "testContainsAll_disjoint", "testContainsAll_partialOverlap");
+			TestUtils.getSurpession(list, BooleanCollectionContainsTester.class, "testContains_no");
+			TestUtils.getSurpession(list, BooleanCollectionIteratorTester.class, "testIterator_removeAffectsBackingCollection");
+			TestUtils.getSurpession(list, BooleanCollectionRemoveAllTester.class, "testRemoveAll_nonePresentFetchRemoved", "testRemoveAll_someFetchRemovedElements", "testRemoveAll_nonePresent");
+			TestUtils.getSurpession(list, BooleanCollectionRetainAllTester.class, "testRetainAllExtra_containsDuplicatesSizeSeveral", "testRetainAllExtra_partialOverlap", "testRetainAll_containsDuplicatesSizeSeveral", "testRetainAll_partialOverlap");
+			TestUtils.getSurpession(list, ListAddAllAtIndexTester.class, "testAddAllAtIndex_negative", "testAddAllAtIndex_tooLarge");
+			TestUtils.getSurpession(list, ListAddAtIndexTester.class, "testAddAtIndex_tooLarge", "testAddAtIndex_negative");
+			TestUtils.getSurpession(list, ListEqualsTester.class, "testEquals_otherListWithDifferentElements");
+			TestUtils.getSurpession(list, ListIndexOfTester.class, "testFind_no");
+			TestUtils.getSurpession(list, ListLastIndexOfTester.class, "testLastIndexOf_duplicate", "testFind_no", "testFind_yes");
+			TestUtils.getSurpession(list, ListRetainAllTester.class, "testRetainAll_duplicatesRemoved", "testRetainAll_countIgnored");
+			TestUtils.getSurpession(list, ListSubListTester.class, "testSubList_lastIndexOf", "testSubList_contains", "testSubList_indexOf");
+			TestUtils.getSurpession(list, BooleanListAddAllAtIndexTester.class, "testAddAllAtIndex_negative", "testAddAllAtIndex_tooLarge");
+			TestUtils.getSurpession(list, BooleanListAddAllArrayAtIndexTester.class, "testAddAllArrayAtIndex_tooLarge", "testAddAllArrayAtIndex_negative");
+			TestUtils.getSurpession(list, BooleanListAddAtIndexTester.class, "testAddAtIndex_tooLarge", "testAddAtIndex_negative");
+			TestUtils.getSurpession(list, BooleanListEqualsTester.class, "testEquals_otherListWithDifferentElements");
+			TestUtils.getSurpession(list, BooleanListExtractElementsTester.class, "testRemoveElements");
+			TestUtils.getSurpession(list, BooleanListIndexOfTester.class, "testFind_no");
+			TestUtils.getSurpession(list, BooleanListLastIndexOfTester.class, "testLastIndexOf_duplicate", "testFind_no", "testFind_yes");
+			TestUtils.getSurpession(list, BooleanListRemoveElementsTester.class, "testRemoveElements");
+			TestUtils.getSurpession(list, BooleanListRetainAllTester.class, "testRetainAll_duplicatesRemoved", "testRetainAll_countIgnored");
+			TestUtils.getSurpession(list, BooleanListSubListTester.class, "testSubList_lastIndexOf", "testSubList_contains", "testSubList_indexOf");
 			if(immutable) {
-				getSurpession(list, CollectionAddAllTester.class, "testAddAll_unsupportedNonePresent");
-				getSurpession(list, CollectionAddTester.class, "testAdd_unsupportedNotPresent");
-				getSurpession(list, CollectionRemoveTester.class, "testRemove_unsupportedNotPresent");
-				getSurpession(list, BooleanCollectionAddAllTester.class, "testAddAll_unsupportedNonePresent");
-				getSurpession(list, BooleanCollectionAddAllArrayTester.class, "testAddAllArray_unsupportedNonePresent");
-				getSurpession(list, BooleanCollectionAddTester.class, "testAdd_unsupportedNotPresent");
-				getSurpession(list, ListAddAllAtIndexTester.class, "testAddAllAtIndex_unsupportedSomePresent");
-				getSurpession(list, ListAddAtIndexTester.class, "testAddAtIndex_unsupportedNotPresent");
-				getSurpession(list, BooleanListAddAllAtIndexTester.class, "testAddAllAtIndex_unsupportedSomePresent");
-				getSurpession(list, BooleanListAddAllArrayAtIndexTester.class, "testAddAllArrayAtIndex_unsupportedSomePresent");
-				getSurpession(list, BooleanListAddAtIndexTester.class, "testAddAtIndex_unsupportedNotPresent");
+				TestUtils.getSurpession(list, CollectionAddAllTester.class, "testAddAll_unsupportedNonePresent");
+				TestUtils.getSurpession(list, CollectionAddTester.class, "testAdd_unsupportedNotPresent");
+				TestUtils.getSurpession(list, CollectionRemoveTester.class, "testRemove_unsupportedNotPresent");
+				TestUtils.getSurpession(list, BooleanCollectionAddAllTester.class, "testAddAll_unsupportedNonePresent");
+				TestUtils.getSurpession(list, BooleanCollectionAddAllArrayTester.class, "testAddAllArray_unsupportedNonePresent");
+				TestUtils.getSurpession(list, BooleanCollectionAddTester.class, "testAdd_unsupportedNotPresent");
+				TestUtils.getSurpession(list, ListAddAllAtIndexTester.class, "testAddAllAtIndex_unsupportedSomePresent");
+				TestUtils.getSurpession(list, ListAddAtIndexTester.class, "testAddAtIndex_unsupportedNotPresent");
+				TestUtils.getSurpession(list, BooleanListAddAllAtIndexTester.class, "testAddAllAtIndex_unsupportedSomePresent");
+				TestUtils.getSurpession(list, BooleanListAddAllArrayAtIndexTester.class, "testAddAllArrayAtIndex_unsupportedSomePresent");
+				TestUtils.getSurpession(list, BooleanListAddAtIndexTester.class, "testAddAtIndex_unsupportedNotPresent");
 			}
 		}
 		return list;
 	}
 	
-	private static void getSurpession(List<Method> methods, Class<?> clz, String...args) {
-		Set<String> set = new HashSet<>(Arrays.asList(args));
-		try {
-			for(Method method : clz.getMethods()) {
-				if(set.contains(method.getName())) methods.add(method);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
+	private static Collection<CollectionSize> getSizes(int size) {
+		switch(size) {
+			case 0: return Arrays.asList(CollectionSize.ZERO);
+			case 1: return Arrays.asList(CollectionSize.ONE);
+			case 2: return Arrays.asList(CollectionSize.ZERO, CollectionSize.ONE);
+			case 3: return Arrays.asList(CollectionSize.SEVERAL);
+			case 4: return Arrays.asList(CollectionSize.ZERO, CollectionSize.SEVERAL);
+			case 5: return Arrays.asList(CollectionSize.ONE, CollectionSize.SEVERAL);
+			default: return Arrays.asList(CollectionSize.ANY);
 		}
 	}
 	

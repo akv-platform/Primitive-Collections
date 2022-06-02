@@ -1,6 +1,7 @@
 package speiger.src.collections.objects.utils;
 
 import java.util.NoSuchElementException;
+import java.util.Set;
 import java.util.Comparator;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.collections.ObjectIterator;
@@ -213,6 +214,13 @@ public class ObjectSets
 		@Override
 		public T addOrGet(T o) { throw new UnsupportedOperationException(); }
 		@Override
+		public boolean equals(Object o) {
+			if(o == this) return true;
+			if(!(o instanceof Set)) return false;
+			return ((Set<?>)o).isEmpty();
+		}
+		
+		@Override
 		public EmptySet<T> copy() { return this; }
 	}
 	
@@ -228,21 +236,17 @@ public class ObjectSets
 		@Override
 		@Deprecated
 		public boolean contains(Object o) { return n.contains(o); }
-		
 		@Override
 		public T lower(T e) { return n.lower(e); }
-		
 		@Override
 		public T floor(T e) { return n.floor(e); }
-		
 		@Override
 		public T ceiling(T e) { return n.ceiling(e); }
-		
 		@Override
 		public T higher(T e) { return n.higher(e); }
 		
 		@Override
-		public ObjectNavigableSet<T> copy() { throw new UnsupportedOperationException(); }
+		public ObjectNavigableSet<T> copy() { return n.copy(); }
 		
 		@Override
 		public ObjectNavigableSet<T> subSet(T fromElement, boolean fromInclusive, T toElement, boolean toInclusive) { return ObjectSets.unmodifiable(n.subSet(fromElement, fromInclusive, toElement, toInclusive)); }
@@ -398,13 +402,10 @@ public class ObjectSets
 
 		@Override
 		public T lower(T e) { synchronized(mutex) { return n.lower(e); } }
-		
 		@Override
 		public T floor(T e) { synchronized(mutex) { return n.floor(e); } }
-		
 		@Override
 		public T ceiling(T e) { synchronized(mutex) { return n.ceiling(e); } }
-		
 		@Override
 		public T higher(T e) { synchronized(mutex) { return n.higher(e); } }
 		

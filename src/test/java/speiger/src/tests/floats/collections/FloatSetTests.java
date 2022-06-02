@@ -21,6 +21,7 @@ import speiger.src.collections.floats.sets.FloatOpenHashSet;
 import speiger.src.collections.floats.sets.FloatOrderedSet;
 import speiger.src.collections.floats.sets.FloatRBTreeSet;
 import speiger.src.collections.floats.sets.FloatSet;
+import speiger.src.collections.floats.utils.FloatSets;
 import speiger.src.collections.floats.utils.FloatStrategy;
 import speiger.src.testers.floats.builder.FloatNavigableSetTestSuiteBuilder;
 import speiger.src.testers.floats.builder.FloatOrderedSetTestSuiteBuilder;
@@ -28,10 +29,10 @@ import speiger.src.testers.floats.builder.FloatSetTestSuiteBuilder;
 import speiger.src.testers.floats.impl.SimpleFloatTestGenerator;
 import speiger.src.testers.utils.SpecialFeature;
 
+
 @SuppressWarnings("javadoc")
 public class FloatSetTests extends TestCase
 {
-	
 	public static Test suite() {
 		TestSuite suite = new TestSuite("FloatSets");
 		suite(suite);
@@ -40,32 +41,35 @@ public class FloatSetTests extends TestCase
 	}
 	
 	public static void suite(TestSuite suite) {
-		suite.addTest(setSuite("FloatOpenHashSet", FloatOpenHashSet::new, getFeatures()));
-		suite.addTest(orderedSetSuite("FloatLinkedOpenHashSet", FloatLinkedOpenHashSet::new, getFeatures()));
-		suite.addTest(setSuite("FloatOpenCustomHashSet", T -> new FloatOpenCustomHashSet(T, HashStrategy.INSTANCE), getFeatures()));
-		suite.addTest(orderedSetSuite("FloatLinkedOpenCustomHashSet", T -> new FloatLinkedOpenCustomHashSet(T, HashStrategy.INSTANCE), getFeatures()));
-		suite.addTest(orderedSetSuite("ImmutableFloatOpenHashSet", ImmutableFloatOpenHashSet::new, getImmutableFeatures()));
-		suite.addTest(setSuite("FloatArraySet", FloatArraySet::new, getFeatures()));
-		suite.addTest(navigableSetSuite("FloatRBTreeSet", FloatRBTreeSet::new, getFeatures()));
-		suite.addTest(navigableSetSuite("FloatAVLTreeSet", FloatAVLTreeSet::new, getFeatures()));
-		suite.addTest(navigableSetSuite("Synchronized FloatRBTreeSet", T -> new FloatRBTreeSet(T).synchronize(), getFeatures()));
-		suite.addTest(navigableSetSuite("Unmodifiable FloatRBTreeSet", T -> new FloatRBTreeSet(T).unmodifiable(), getImmutableFeatures()));
+		suite.addTest(setSuite("FloatOpenHashSet", FloatOpenHashSet::new, getFeatures(), -1));
+		suite.addTest(orderedSetSuite("FloatLinkedOpenHashSet", FloatLinkedOpenHashSet::new, getFeatures(), -1));
+		suite.addTest(setSuite("FloatOpenCustomHashSet", T -> new FloatOpenCustomHashSet(T, HashStrategy.INSTANCE), getFeatures(), -1));
+		suite.addTest(orderedSetSuite("FloatLinkedOpenCustomHashSet", T -> new FloatLinkedOpenCustomHashSet(T, HashStrategy.INSTANCE), getFeatures(), -1));
+		suite.addTest(orderedSetSuite("ImmutableFloatOpenHashSet", ImmutableFloatOpenHashSet::new, getImmutableFeatures(), -1));
+		suite.addTest(setSuite("FloatArraySet", FloatArraySet::new, getFeatures(), -1));
+		suite.addTest(navigableSetSuite("FloatRBTreeSet", FloatRBTreeSet::new, getFeatures(), -1));
+		suite.addTest(navigableSetSuite("FloatAVLTreeSet", FloatAVLTreeSet::new, getFeatures(), -1));
+		suite.addTest(navigableSetSuite("Synchronized FloatRBTreeSet", T -> new FloatRBTreeSet(T).synchronize(), getFeatures(), -1));
+		suite.addTest(navigableSetSuite("Unmodifiable FloatRBTreeSet", T -> new FloatRBTreeSet(T).unmodifiable(), getImmutableFeatures(), -1));
+		suite.addTest(setSuite("Empty FloatSet", T -> FloatSets.empty(), getImmutableFeatures(), 0));
+		suite.addTest(setSuite("Singleton FloatSet", T -> FloatSets.singleton(T[0]), getImmutableFeatures(), 1));
+		suite.addTest(orderedSetSuite("Synchronized FloatLinkedOpenHashSet", T -> new FloatLinkedOpenHashSet(T).synchronize(), getFeatures(), -1));
+		suite.addTest(orderedSetSuite("Unmodifiable FloatLinkedOpenHashSet", T -> new FloatLinkedOpenHashSet(T).unmodifiable(), getImmutableFeatures(), -1));
 	}
 		
-	public static Test setSuite(String name, Function<float[], FloatSet> factory, Collection<Feature<?>> features) {
+	public static Test setSuite(String name, Function<float[], FloatSet> factory, Collection<Feature<?>> features, int size) {
 		return FloatSetTestSuiteBuilder.using(new SimpleFloatTestGenerator.Sets(factory)).named(name)
-			.withFeatures(CollectionSize.ANY).withFeatures(features).createTestSuite();
+			.withFeatures(getSizes(size)).withFeatures(features).createTestSuite();
 	}
 	
-	public static Test orderedSetSuite(String name, Function<float[], FloatOrderedSet> factory, Collection<Feature<?>> features) {
+	public static Test orderedSetSuite(String name, Function<float[], FloatOrderedSet> factory, Collection<Feature<?>> features, int size) {
 		return FloatOrderedSetTestSuiteBuilder.using(new SimpleFloatTestGenerator.OrderedSets(factory)).named(name)
-			.withFeatures(CollectionSize.ANY).withFeatures(features).createTestSuite();
+			.withFeatures(getSizes(size)).withFeatures(features).createTestSuite();
 	}
-
 	
-	public static Test navigableSetSuite(String name, Function<float[], FloatNavigableSet> factory, Collection<Feature<?>> features) {
+	public static Test navigableSetSuite(String name, Function<float[], FloatNavigableSet> factory, Collection<Feature<?>> features, int size) {
 		return FloatNavigableSetTestSuiteBuilder.using(new SimpleFloatTestGenerator.NavigableSets(factory)).named(name)
-			.withFeatures(CollectionSize.ANY).withFeatures(features).createTestSuite();
+			.withFeatures(getSizes(size)).withFeatures(features).createTestSuite();
 	}
 	
 	private static class HashStrategy implements FloatStrategy {
@@ -75,7 +79,19 @@ public class FloatSetTests extends TestCase
 		@Override
 		public boolean equals(float key, float value) { return Float.floatToIntBits(key) == Float.floatToIntBits(value); }
 	}
-
+	
+	private static Collection<CollectionSize> getSizes(int size) {
+		switch(size) {
+			case 0: return Arrays.asList(CollectionSize.ZERO);
+			case 1: return Arrays.asList(CollectionSize.ONE);
+			case 2: return Arrays.asList(CollectionSize.ZERO, CollectionSize.ONE);
+			case 3: return Arrays.asList(CollectionSize.SEVERAL);
+			case 4: return Arrays.asList(CollectionSize.ZERO, CollectionSize.SEVERAL);
+			case 5: return Arrays.asList(CollectionSize.ONE, CollectionSize.SEVERAL);
+			default: return Arrays.asList(CollectionSize.ANY);
+		}
+	}
+	
 	private static Collection<Feature<?>> getImmutableFeatures() {
 		return Arrays.asList(SpecialFeature.COPYING);
 	}

@@ -497,7 +497,8 @@ public abstract class AbstractIntList extends AbstractIntCollection implements I
 		
 		@Override
 		public void add(int e) {
-			AbstractIntList.this.add(index++, e);
+			AbstractIntList.this.add(index, e);
+			index++;
 			lastReturned = -1;
 		}
 		

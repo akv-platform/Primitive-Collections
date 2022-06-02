@@ -264,7 +264,7 @@ public class ObjectCollections
 		@Override
 		public boolean containsAny(Collection<?> c) { return false; }
 		@Override
-		public boolean containsAll(Collection<?> c) { return false; }
+		public boolean containsAll(Collection<?> c) { return c.isEmpty(); }
 		@Override
 		public int hashCode() { return 0; }
 		
@@ -291,7 +291,11 @@ public class ObjectCollections
 		@Override
 		public Object[] toArray() { return ObjectArrays.EMPTY_ARRAY; }
 		@Override
-		public <E> E[] toArray(E[] a) { return a; }
+		public <E> E[] toArray(E[] a) {
+			if(a != null && a.length > 0)
+				a[0] = null;
+			return a;
+		}
 		@Override
 		public ObjectIterator<T> iterator() { return ObjectIterators.empty(); }
 		@Override

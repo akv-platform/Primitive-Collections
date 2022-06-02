@@ -7,6 +7,7 @@ import com.google.common.collect.testing.features.CollectionFeature;
 
 import speiger.src.testers.utils.SpecialFeature;
 import speiger.src.collections.bytes.collections.ByteCollection;
+import speiger.src.collections.bytes.utils.ByteCollections;
 import speiger.src.testers.bytes.tests.base.AbstractByteCollectionTester;
 
 @Ignore
@@ -17,7 +18,9 @@ public class ByteCollectionCopyTester extends AbstractByteCollectionTester
 	@SpecialFeature.Require(SpecialFeature.COPYING)
 	public void testEquals() {
 		ByteCollection copy = collection.copy();
-		Assert.assertFalse("Copied Collection shouldn't match", copy == collection);
+		if(!(collection instanceof ByteCollections.EmptyCollection)) {
+			Assert.assertFalse("Copied Collection shouldn't match", copy == collection);
+		}
 		Assert.assertTrue("Copied Collection contents should match", copy.equals(collection));
 	}
 

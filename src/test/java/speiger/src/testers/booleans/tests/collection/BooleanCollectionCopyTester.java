@@ -7,6 +7,7 @@ import com.google.common.collect.testing.features.CollectionFeature;
 
 import speiger.src.testers.utils.SpecialFeature;
 import speiger.src.collections.booleans.collections.BooleanCollection;
+import speiger.src.collections.booleans.utils.BooleanCollections;
 import speiger.src.testers.booleans.tests.base.AbstractBooleanCollectionTester;
 
 @Ignore
@@ -17,7 +18,9 @@ public class BooleanCollectionCopyTester extends AbstractBooleanCollectionTester
 	@SpecialFeature.Require(SpecialFeature.COPYING)
 	public void testEquals() {
 		BooleanCollection copy = collection.copy();
-		Assert.assertFalse("Copied Collection shouldn't match", copy == collection);
+		if(!(collection instanceof BooleanCollections.EmptyCollection)) {
+			Assert.assertFalse("Copied Collection shouldn't match", copy == collection);
+		}
 		Assert.assertTrue("Copied Collection contents should match", copy.equals(collection));
 	}
 

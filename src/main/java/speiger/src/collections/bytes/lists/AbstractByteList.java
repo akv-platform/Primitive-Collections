@@ -497,7 +497,8 @@ public abstract class AbstractByteList extends AbstractByteCollection implements
 		
 		@Override
 		public void add(byte e) {
-			AbstractByteList.this.add(index++, e);
+			AbstractByteList.this.add(index, e);
+			index++;
 			lastReturned = -1;
 		}
 		

@@ -458,7 +458,8 @@ public abstract class AbstractObjectList<T> extends AbstractObjectCollection<T> 
 		
 		@Override
 		public void add(T e) {
-			AbstractObjectList.this.add(index++, e);
+			AbstractObjectList.this.add(index, e);
+			index++;
 			lastReturned = -1;
 		}
 		

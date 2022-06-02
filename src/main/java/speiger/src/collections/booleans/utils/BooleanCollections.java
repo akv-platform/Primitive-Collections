@@ -286,7 +286,7 @@ public class BooleanCollections
 		@Override
 		public boolean contains(boolean o) { return false; }
 		@Override
-		public boolean containsAll(BooleanCollection c) { return false; }
+		public boolean containsAll(BooleanCollection c) { return c.isEmpty(); }
 		@Override
 		public boolean containsAny(BooleanCollection c) { return false; }
 		@Override
@@ -294,7 +294,7 @@ public class BooleanCollections
 		public boolean containsAny(Collection<?> c) { return false; }
 		@Override
 		@Deprecated
-		public boolean containsAll(Collection<?> c) { return false; }
+		public boolean containsAll(Collection<?> c) { return c.isEmpty(); }
 		@Override
 		public int hashCode() { return 0; }
 		
@@ -326,11 +326,21 @@ public class BooleanCollections
 		@Override
 		public Object[] toArray() { return ObjectArrays.EMPTY_ARRAY; }
 		@Override
-		public <T> T[] toArray(T[] a) { return a; }
+		public <T> T[] toArray(T[] a) {
+			if(a != null && a.length > 0)
+				a[0] = null;
+			return a;
+		}
+		
 		@Override
 		public boolean[] toBooleanArray() { return BooleanArrays.EMPTY_ARRAY; }
 		@Override
-		public boolean[] toBooleanArray(boolean[] a) { return a; }
+		public boolean[] toBooleanArray(boolean[] a) {
+			if(a != null && a.length > 0)
+				a[0] = false;
+			return a;
+		}
+		
 		@Override
 		public BooleanIterator iterator() { return BooleanIterators.empty(); }
 		@Override

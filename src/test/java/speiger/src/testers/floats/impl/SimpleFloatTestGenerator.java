@@ -21,6 +21,7 @@ import speiger.src.testers.floats.utils.FloatSamples;
 @SuppressWarnings("javadoc")
 public class SimpleFloatTestGenerator<E extends FloatCollection> {
 	Function<float[], E> mapper;
+	
 	public SimpleFloatTestGenerator(Function<float[], E> mapper) {
 		this.mapper = mapper;
 	}

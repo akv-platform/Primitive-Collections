@@ -1,6 +1,7 @@
 package speiger.src.collections.bytes.utils;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 import java.util.RandomAccess;
@@ -295,7 +296,7 @@ public class ByteLists
 		public int lastIndexOf(byte e) { synchronized(mutex) { return l.lastIndexOf(e); } }
 		
 		@Override
-		public void addElements(int from, byte[] a, int offset, int length) { synchronized(mutex) { addElements(from, a, offset, length); } }
+		public void addElements(int from, byte[] a, int offset, int length) { synchronized(mutex) { l.addElements(from, a, offset, length); } }
 		
 		@Override
 		public byte[] getElements(int from, byte[] a, int offset, int length) { synchronized(mutex) { return l.getElements(from, a, offset, length); } }
@@ -502,6 +503,16 @@ public class ByteLists
 			if(index != 0)
 				throw new IndexOutOfBoundsException();
 			return ByteIterators.empty();
+		}
+		
+		@Override
+		public int hashCode() { return 1; }
+		
+		@Override
+		public boolean equals(Object o) {
+			if(o == this) return true;
+			if(!(o instanceof List)) return false;
+			return ((List<?>)o).isEmpty();
 		}
 		
 		@Override

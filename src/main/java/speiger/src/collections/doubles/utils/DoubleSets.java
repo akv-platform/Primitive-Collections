@@ -1,6 +1,7 @@
 package speiger.src.collections.doubles.utils;
 
 import java.util.NoSuchElementException;
+import java.util.Set;
 import speiger.src.collections.doubles.collections.DoubleBidirectionalIterator;
 import speiger.src.collections.doubles.functions.DoubleComparator;
 import speiger.src.collections.doubles.collections.DoubleIterator;
@@ -200,6 +201,13 @@ public class DoubleSets
 		@Override
 		public boolean remove(double o) { throw new UnsupportedOperationException(); }
 		@Override
+		public boolean equals(Object o) {
+			if(o == this) return true;
+			if(!(o instanceof Set)) return false;
+			return ((Set<?>)o).isEmpty();
+		}
+		
+		@Override
 		public EmptySet copy() { return this; }
 	}
 	
@@ -214,23 +222,36 @@ public class DoubleSets
 		
 		@Override
 		public boolean contains(double o) { return n.contains(o); }
-
+		@Override
+		@SuppressWarnings("deprecation")
+		public Double lower(Double e) { return n.lower(e); }
+		@Override
+		@SuppressWarnings("deprecation")
+		public Double floor(Double e) { return n.floor(e); }
+		@Override
+		@SuppressWarnings("deprecation")
+		public Double ceiling(Double e) { return n.ceiling(e); }
+		@Override
+		@SuppressWarnings("deprecation")
+		public Double higher(Double e) { return n.higher(e); }
+		
 		@Override
 		@Deprecated
 		public boolean contains(Object o) { return n.contains(o); }
-		
 		@Override
 		public double lower(double e) { return n.lower(e); }
-		
 		@Override
 		public double floor(double e) { return n.floor(e); }
-		
 		@Override
 		public double ceiling(double e) { return n.ceiling(e); }
-		
 		@Override
 		public double higher(double e) { return n.higher(e); }
 		
+		@Override
+		public Double pollFirst() { throw new UnsupportedOperationException(); }
+		@Override
+		public Double pollLast() { throw new UnsupportedOperationException(); }
+
 		@Override
 		public void setDefaultMaxValue(double e) { throw new UnsupportedOperationException(); }
 		
@@ -244,7 +265,7 @@ public class DoubleSets
 		public double getDefaultMinValue() { return n.getDefaultMinValue(); }
 		
 		@Override
-		public DoubleNavigableSet copy() { throw new UnsupportedOperationException(); }
+		public DoubleNavigableSet copy() { return n.copy(); }
 		
 		@Override
 		public DoubleNavigableSet subSet(double fromElement, boolean fromInclusive, double toElement, boolean toInclusive) { return DoubleSets.unmodifiable(n.subSet(fromElement, fromInclusive, toElement, toInclusive)); }
@@ -398,25 +419,31 @@ public class DoubleSets
 
 		@Override
 		public boolean contains(double o) { synchronized(mutex) { return n.contains(o); } }
-		
+		@Override
+		@SuppressWarnings("deprecation")
+		public Double lower(Double e) { synchronized(mutex) { return n.lower(e); } }
+		@Override
+		@SuppressWarnings("deprecation")
+		public Double floor(Double e) { synchronized(mutex) { return n.floor(e); } }
+		@Override
+		@SuppressWarnings("deprecation")
+		public Double ceiling(Double e) { synchronized(mutex) { return n.ceiling(e); } }
+		@Override
+		@SuppressWarnings("deprecation")
+		public Double higher(Double e) { synchronized(mutex) { return n.higher(e); } }
 		@Override
 		public double lower(double e) { synchronized(mutex) { return n.lower(e); } }
-		
 		@Override
 		public double floor(double e) { synchronized(mutex) { return n.floor(e); } }
-		
 		@Override
 		public double ceiling(double e) { synchronized(mutex) { return n.ceiling(e); } }
-		
 		@Override
 		public double higher(double e) { synchronized(mutex) { return n.higher(e); } }
 		
 		@Override
 		public void setDefaultMaxValue(double e) { synchronized(mutex) { n.setDefaultMaxValue(e); } }
-		
 		@Override
 		public double getDefaultMaxValue() { synchronized(mutex) { return n.getDefaultMaxValue(); } }
-		
 		@Override
 		public void setDefaultMinValue(double e) { synchronized(mutex) { n.setDefaultMinValue(e); } }
 		

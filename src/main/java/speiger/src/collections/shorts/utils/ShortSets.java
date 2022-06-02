@@ -1,6 +1,7 @@
 package speiger.src.collections.shorts.utils;
 
 import java.util.NoSuchElementException;
+import java.util.Set;
 import speiger.src.collections.shorts.collections.ShortBidirectionalIterator;
 import speiger.src.collections.shorts.functions.ShortComparator;
 import speiger.src.collections.shorts.collections.ShortIterator;
@@ -200,6 +201,13 @@ public class ShortSets
 		@Override
 		public boolean remove(short o) { throw new UnsupportedOperationException(); }
 		@Override
+		public boolean equals(Object o) {
+			if(o == this) return true;
+			if(!(o instanceof Set)) return false;
+			return ((Set<?>)o).isEmpty();
+		}
+		
+		@Override
 		public EmptySet copy() { return this; }
 	}
 	
@@ -214,23 +222,36 @@ public class ShortSets
 		
 		@Override
 		public boolean contains(short o) { return n.contains(o); }
-
+		@Override
+		@SuppressWarnings("deprecation")
+		public Short lower(Short e) { return n.lower(e); }
+		@Override
+		@SuppressWarnings("deprecation")
+		public Short floor(Short e) { return n.floor(e); }
+		@Override
+		@SuppressWarnings("deprecation")
+		public Short ceiling(Short e) { return n.ceiling(e); }
+		@Override
+		@SuppressWarnings("deprecation")
+		public Short higher(Short e) { return n.higher(e); }
+		
 		@Override
 		@Deprecated
 		public boolean contains(Object o) { return n.contains(o); }
-		
 		@Override
 		public short lower(short e) { return n.lower(e); }
-		
 		@Override
 		public short floor(short e) { return n.floor(e); }
-		
 		@Override
 		public short ceiling(short e) { return n.ceiling(e); }
-		
 		@Override
 		public short higher(short e) { return n.higher(e); }
 		
+		@Override
+		public Short pollFirst() { throw new UnsupportedOperationException(); }
+		@Override
+		public Short pollLast() { throw new UnsupportedOperationException(); }
+
 		@Override
 		public void setDefaultMaxValue(short e) { throw new UnsupportedOperationException(); }
 		
@@ -244,7 +265,7 @@ public class ShortSets
 		public short getDefaultMinValue() { return n.getDefaultMinValue(); }
 		
 		@Override
-		public ShortNavigableSet copy() { throw new UnsupportedOperationException(); }
+		public ShortNavigableSet copy() { return n.copy(); }
 		
 		@Override
 		public ShortNavigableSet subSet(short fromElement, boolean fromInclusive, short toElement, boolean toInclusive) { return ShortSets.unmodifiable(n.subSet(fromElement, fromInclusive, toElement, toInclusive)); }
@@ -398,25 +419,31 @@ public class ShortSets
 
 		@Override
 		public boolean contains(short o) { synchronized(mutex) { return n.contains(o); } }
-		
+		@Override
+		@SuppressWarnings("deprecation")
+		public Short lower(Short e) { synchronized(mutex) { return n.lower(e); } }
+		@Override
+		@SuppressWarnings("deprecation")
+		public Short floor(Short e) { synchronized(mutex) { return n.floor(e); } }
+		@Override
+		@SuppressWarnings("deprecation")
+		public Short ceiling(Short e) { synchronized(mutex) { return n.ceiling(e); } }
+		@Override
+		@SuppressWarnings("deprecation")
+		public Short higher(Short e) { synchronized(mutex) { return n.higher(e); } }
 		@Override
 		public short lower(short e) { synchronized(mutex) { return n.lower(e); } }
-		
 		@Override
 		public short floor(short e) { synchronized(mutex) { return n.floor(e); } }
-		
 		@Override
 		public short ceiling(short e) { synchronized(mutex) { return n.ceiling(e); } }
-		
 		@Override
 		public short higher(short e) { synchronized(mutex) { return n.higher(e); } }
 		
 		@Override
 		public void setDefaultMaxValue(short e) { synchronized(mutex) { n.setDefaultMaxValue(e); } }
-		
 		@Override
 		public short getDefaultMaxValue() { synchronized(mutex) { return n.getDefaultMaxValue(); } }
-		
 		@Override
 		public void setDefaultMinValue(short e) { synchronized(mutex) { n.setDefaultMinValue(e); } }
 		

@@ -291,7 +291,7 @@ public class ByteCollections
 		@Override
 		public boolean contains(byte o) { return false; }
 		@Override
-		public boolean containsAll(ByteCollection c) { return false; }
+		public boolean containsAll(ByteCollection c) { return c.isEmpty(); }
 		@Override
 		public boolean containsAny(ByteCollection c) { return false; }
 		@Override
@@ -299,7 +299,7 @@ public class ByteCollections
 		public boolean containsAny(Collection<?> c) { return false; }
 		@Override
 		@Deprecated
-		public boolean containsAll(Collection<?> c) { return false; }
+		public boolean containsAll(Collection<?> c) { return c.isEmpty(); }
 		@Override
 		public int hashCode() { return 0; }
 		
@@ -333,11 +333,21 @@ public class ByteCollections
 		@Override
 		public Object[] toArray() { return ObjectArrays.EMPTY_ARRAY; }
 		@Override
-		public <T> T[] toArray(T[] a) { return a; }
+		public <T> T[] toArray(T[] a) {
+			if(a != null && a.length > 0)
+				a[0] = null;
+			return a;
+		}
+		
 		@Override
 		public byte[] toByteArray() { return ByteArrays.EMPTY_ARRAY; }
 		@Override
-		public byte[] toByteArray(byte[] a) { return a; }
+		public byte[] toByteArray(byte[] a) {
+			if(a != null && a.length > 0)
+				a[0] = (byte)0;
+			return a;
+		}
+		
 		@Override
 		public ByteIterator iterator() { return ByteIterators.empty(); }
 		@Override

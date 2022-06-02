@@ -7,6 +7,7 @@ import com.google.common.collect.testing.features.CollectionFeature;
 
 import speiger.src.testers.utils.SpecialFeature;
 import speiger.src.collections.doubles.collections.DoubleCollection;
+import speiger.src.collections.doubles.utils.DoubleCollections;
 import speiger.src.testers.doubles.tests.base.AbstractDoubleCollectionTester;
 
 @Ignore
@@ -17,7 +18,9 @@ public class DoubleCollectionCopyTester extends AbstractDoubleCollectionTester
 	@SpecialFeature.Require(SpecialFeature.COPYING)
 	public void testEquals() {
 		DoubleCollection copy = collection.copy();
-		Assert.assertFalse("Copied Collection shouldn't match", copy == collection);
+		if(!(collection instanceof DoubleCollections.EmptyCollection)) {
+			Assert.assertFalse("Copied Collection shouldn't match", copy == collection);
+		}
 		Assert.assertTrue("Copied Collection contents should match", copy.equals(collection));
 	}
 

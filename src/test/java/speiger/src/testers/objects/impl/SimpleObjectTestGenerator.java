@@ -22,19 +22,23 @@ import speiger.src.testers.objects.utils.ObjectSamples;
 @SuppressWarnings("javadoc")
 public class SimpleObjectTestGenerator<T, E extends ObjectCollection<T>> {
 	Function<T[], E> mapper;
-	ObjectSamples<T> elements;
+	T[] keys;
 	
-	public SimpleObjectTestGenerator(Function<T[], E> mapper, ObjectSamples<T> elements) {
+	public SimpleObjectTestGenerator(Function<T[], E> mapper) {
 		this.mapper = mapper;
-		this.elements = elements;
 	}
-
+	
+	public SimpleObjectTestGenerator<T, E> setElements(T...keys) {
+		this.keys = keys;
+		return this;
+	}
+	
 	public ObjectSamples<T> getSamples() {
-		return elements;
+		return new ObjectSamples<>(keys[0], keys[1], keys[2], keys[3], keys[4]);
 	}
 	
 	public E create(Object... elements) {
-		T[] array = (T[])ObjectArrays.newArray(this.elements.e0().getClass(), elements.length);
+		T[] array = (T[])ObjectArrays.newArray(keys[0].getClass(), elements.length);
 		int i = 0;
 		for (Object e : elements) {
 			array[i++] = (T)e;
@@ -52,44 +56,36 @@ public class SimpleObjectTestGenerator<T, E extends ObjectCollection<T>> {
 	
 	public static class Collections<T> extends SimpleObjectTestGenerator<T, ObjectCollection<T>> implements TestObjectCollectionGenerator<T>
 	{
-		public Collections(Function<T[], ObjectCollection<T>> mapper, ObjectSamples<T> samples) {
-			super(mapper, samples);
+		public Collections(Function<T[], ObjectCollection<T>> mapper) {
+			super(mapper);
 		}
 	}
 	
 	public static class Lists<T> extends SimpleObjectTestGenerator<T, ObjectList<T>> implements TestObjectListGenerator<T>
 	{
-		public Lists(Function<T[], ObjectList<T>> mapper, ObjectSamples<T> samples) {
-			super(mapper, samples);
+		public Lists(Function<T[], ObjectList<T>> mapper) {
+			super(mapper);
 		}
 	}
 	
 	public static class Sets<T> extends SimpleObjectTestGenerator<T, ObjectSet<T>> implements TestObjectSetGenerator<T>
 	{
-		public Sets(Function<T[], ObjectSet<T>> mapper, ObjectSamples<T> samples) {
-			super(mapper, samples);
+		public Sets(Function<T[], ObjectSet<T>> mapper) {
+			super(mapper);
 		}
 	}
 	
 	public static class OrderedSets<T> extends SimpleObjectTestGenerator<T, ObjectOrderedSet<T>> implements TestObjectOrderedSetGenerator<T>
 	{
-		public OrderedSets(Function<T[], ObjectOrderedSet<T>> mapper, ObjectSamples<T> samples) {
-			super(mapper, samples);
+		public OrderedSets(Function<T[], ObjectOrderedSet<T>> mapper) {
+			super(mapper);
 		}
 	}
 	
 	public static class SortedSets<T> extends SimpleObjectTestGenerator<T, ObjectSortedSet<T>> implements TestObjectSortedSetGenerator<T>
 	{
-		T belowLesser;
-		T belowGreater;
-		T aboveLesser;
-		T aboveGreater;
-		public SortedSets(Function<T[], ObjectSortedSet<T>> mapper, ObjectSamples<T> samples, T belowLesser, T belowGreater, T aboveLesser, T aboveGreater) {
-			super(mapper, samples);
-			this.belowLesser = belowLesser;
-			this.belowGreater = belowGreater;
-			this.aboveLesser = aboveLesser;
-			this.aboveGreater = aboveGreater;
+		public SortedSets(Function<T[], ObjectSortedSet<T>> mapper) {
+			super(mapper);
 		}
 		
 		@Override
@@ -105,28 +101,21 @@ public class SimpleObjectTestGenerator<T, E extends ObjectCollection<T>> {
 		}
 		
 		@Override
-		public T belowSamplesLesser() { return belowLesser; }
+		public T belowSamplesLesser() { return keys[5]; }
 		@Override
-		public T belowSamplesGreater() { return belowGreater; }
+		public T belowSamplesGreater() { return keys[6]; }
 		@Override
-		public T aboveSamplesLesser() { return aboveLesser; }
+		public T aboveSamplesLesser() { return keys[7]; }
 		@Override
-		public T aboveSamplesGreater() { return aboveGreater; }
+		public T aboveSamplesGreater() { return keys[8]; }
 	}
 	
 	public static class NavigableSets<T> extends SimpleObjectTestGenerator<T, ObjectNavigableSet<T>> implements TestObjectNavigableSetGenerator<T>
 	{
-		T belowLesser;
-		T belowGreater;
-		T aboveLesser;
-		T aboveGreater;
-		public NavigableSets(Function<T[], ObjectNavigableSet<T>> mapper, ObjectSamples<T> samples, T belowLesser, T belowGreater, T aboveLesser, T aboveGreater) {
-			super(mapper, samples);
-			this.belowLesser = belowLesser;
-			this.belowGreater = belowGreater;
-			this.aboveLesser = aboveLesser;
-			this.aboveGreater = aboveGreater;
+		public NavigableSets(Function<T[], ObjectNavigableSet<T>> mapper) {
+			super(mapper);
 		}
+		
 		@Override
 		public ObjectIterable<T> order(ObjectList<T> insertionOrder) {
 			insertionOrder.sort(null);
@@ -140,12 +129,12 @@ public class SimpleObjectTestGenerator<T, E extends ObjectCollection<T>> {
 		}
 		
 		@Override
-		public T belowSamplesLesser() { return belowLesser; }
+		public T belowSamplesLesser() { return keys[5]; }
 		@Override
-		public T belowSamplesGreater() { return belowGreater; }
+		public T belowSamplesGreater() { return keys[6]; }
 		@Override
-		public T aboveSamplesLesser() { return aboveLesser; }
+		public T aboveSamplesLesser() { return keys[7]; }
 		@Override
-		public T aboveSamplesGreater() { return aboveGreater; }
+		public T aboveSamplesGreater() { return keys[8]; }
 	}
 }

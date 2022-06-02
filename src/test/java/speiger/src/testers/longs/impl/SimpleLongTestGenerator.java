@@ -21,6 +21,7 @@ import speiger.src.testers.longs.utils.LongSamples;
 @SuppressWarnings("javadoc")
 public class SimpleLongTestGenerator<E extends LongCollection> {
 	Function<long[], E> mapper;
+	
 	public SimpleLongTestGenerator(Function<long[], E> mapper) {
 		this.mapper = mapper;
 	}

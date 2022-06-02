@@ -497,7 +497,8 @@ public abstract class AbstractShortList extends AbstractShortCollection implemen
 		
 		@Override
 		public void add(short e) {
-			AbstractShortList.this.add(index++, e);
+			AbstractShortList.this.add(index, e);
+			index++;
 			lastReturned = -1;
 		}
 		

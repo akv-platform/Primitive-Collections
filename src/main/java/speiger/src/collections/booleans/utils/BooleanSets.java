@@ -1,6 +1,7 @@
 package speiger.src.collections.booleans.utils;
 
 import java.util.NoSuchElementException;
+import java.util.Set;
 import speiger.src.collections.booleans.collections.BooleanIterator;
 import speiger.src.collections.booleans.sets.AbstractBooleanSet;
 import speiger.src.collections.booleans.sets.BooleanSet;
@@ -71,6 +72,13 @@ public class BooleanSets
 	{
 		@Override
 		public boolean remove(boolean o) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean equals(Object o) {
+			if(o == this) return true;
+			if(!(o instanceof Set)) return false;
+			return ((Set<?>)o).isEmpty();
+		}
+		
 		@Override
 		public EmptySet copy() { return this; }
 	}

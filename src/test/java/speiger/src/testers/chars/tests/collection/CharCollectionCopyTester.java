@@ -7,6 +7,7 @@ import com.google.common.collect.testing.features.CollectionFeature;
 
 import speiger.src.testers.utils.SpecialFeature;
 import speiger.src.collections.chars.collections.CharCollection;
+import speiger.src.collections.chars.utils.CharCollections;
 import speiger.src.testers.chars.tests.base.AbstractCharCollectionTester;
 
 @Ignore
@@ -17,7 +18,9 @@ public class CharCollectionCopyTester extends AbstractCharCollectionTester
 	@SpecialFeature.Require(SpecialFeature.COPYING)
 	public void testEquals() {
 		CharCollection copy = collection.copy();
-		Assert.assertFalse("Copied Collection shouldn't match", copy == collection);
+		if(!(collection instanceof CharCollections.EmptyCollection)) {
+			Assert.assertFalse("Copied Collection shouldn't match", copy == collection);
+		}
 		Assert.assertTrue("Copied Collection contents should match", copy.equals(collection));
 	}
 

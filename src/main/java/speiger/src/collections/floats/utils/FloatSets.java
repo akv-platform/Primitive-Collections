@@ -1,6 +1,7 @@
 package speiger.src.collections.floats.utils;
 
 import java.util.NoSuchElementException;
+import java.util.Set;
 import speiger.src.collections.floats.collections.FloatBidirectionalIterator;
 import speiger.src.collections.floats.functions.FloatComparator;
 import speiger.src.collections.floats.collections.FloatIterator;
@@ -200,6 +201,13 @@ public class FloatSets
 		@Override
 		public boolean remove(float o) { throw new UnsupportedOperationException(); }
 		@Override
+		public boolean equals(Object o) {
+			if(o == this) return true;
+			if(!(o instanceof Set)) return false;
+			return ((Set<?>)o).isEmpty();
+		}
+		
+		@Override
 		public EmptySet copy() { return this; }
 	}
 	
@@ -214,23 +222,36 @@ public class FloatSets
 		
 		@Override
 		public boolean contains(float o) { return n.contains(o); }
-
+		@Override
+		@SuppressWarnings("deprecation")
+		public Float lower(Float e) { return n.lower(e); }
+		@Override
+		@SuppressWarnings("deprecation")
+		public Float floor(Float e) { return n.floor(e); }
+		@Override
+		@SuppressWarnings("deprecation")
+		public Float ceiling(Float e) { return n.ceiling(e); }
+		@Override
+		@SuppressWarnings("deprecation")
+		public Float higher(Float e) { return n.higher(e); }
+		
 		@Override
 		@Deprecated
 		public boolean contains(Object o) { return n.contains(o); }
-		
 		@Override
 		public float lower(float e) { return n.lower(e); }
-		
 		@Override
 		public float floor(float e) { return n.floor(e); }
-		
 		@Override
 		public float ceiling(float e) { return n.ceiling(e); }
-		
 		@Override
 		public float higher(float e) { return n.higher(e); }
 		
+		@Override
+		public Float pollFirst() { throw new UnsupportedOperationException(); }
+		@Override
+		public Float pollLast() { throw new UnsupportedOperationException(); }
+
 		@Override
 		public void setDefaultMaxValue(float e) { throw new UnsupportedOperationException(); }
 		
@@ -244,7 +265,7 @@ public class FloatSets
 		public float getDefaultMinValue() { return n.getDefaultMinValue(); }
 		
 		@Override
-		public FloatNavigableSet copy() { throw new UnsupportedOperationException(); }
+		public FloatNavigableSet copy() { return n.copy(); }
 		
 		@Override
 		public FloatNavigableSet subSet(float fromElement, boolean fromInclusive, float toElement, boolean toInclusive) { return FloatSets.unmodifiable(n.subSet(fromElement, fromInclusive, toElement, toInclusive)); }
@@ -398,25 +419,31 @@ public class FloatSets
 
 		@Override
 		public boolean contains(float o) { synchronized(mutex) { return n.contains(o); } }
-		
+		@Override
+		@SuppressWarnings("deprecation")
+		public Float lower(Float e) { synchronized(mutex) { return n.lower(e); } }
+		@Override
+		@SuppressWarnings("deprecation")
+		public Float floor(Float e) { synchronized(mutex) { return n.floor(e); } }
+		@Override
+		@SuppressWarnings("deprecation")
+		public Float ceiling(Float e) { synchronized(mutex) { return n.ceiling(e); } }
+		@Override
+		@SuppressWarnings("deprecation")
+		public Float higher(Float e) { synchronized(mutex) { return n.higher(e); } }
 		@Override
 		public float lower(float e) { synchronized(mutex) { return n.lower(e); } }
-		
 		@Override
 		public float floor(float e) { synchronized(mutex) { return n.floor(e); } }
-		
 		@Override
 		public float ceiling(float e) { synchronized(mutex) { return n.ceiling(e); } }
-		
 		@Override
 		public float higher(float e) { synchronized(mutex) { return n.higher(e); } }
 		
 		@Override
 		public void setDefaultMaxValue(float e) { synchronized(mutex) { n.setDefaultMaxValue(e); } }
-		
 		@Override
 		public float getDefaultMaxValue() { synchronized(mutex) { return n.getDefaultMaxValue(); } }
-		
 		@Override
 		public void setDefaultMinValue(float e) { synchronized(mutex) { n.setDefaultMinValue(e); } }
 		

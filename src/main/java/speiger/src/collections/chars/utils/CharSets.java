@@ -1,6 +1,7 @@
 package speiger.src.collections.chars.utils;
 
 import java.util.NoSuchElementException;
+import java.util.Set;
 import speiger.src.collections.chars.collections.CharBidirectionalIterator;
 import speiger.src.collections.chars.functions.CharComparator;
 import speiger.src.collections.chars.collections.CharIterator;
@@ -200,6 +201,13 @@ public class CharSets
 		@Override
 		public boolean remove(char o) { throw new UnsupportedOperationException(); }
 		@Override
+		public boolean equals(Object o) {
+			if(o == this) return true;
+			if(!(o instanceof Set)) return false;
+			return ((Set<?>)o).isEmpty();
+		}
+		
+		@Override
 		public EmptySet copy() { return this; }
 	}
 	
@@ -214,23 +222,36 @@ public class CharSets
 		
 		@Override
 		public boolean contains(char o) { return n.contains(o); }
-
+		@Override
+		@SuppressWarnings("deprecation")
+		public Character lower(Character e) { return n.lower(e); }
+		@Override
+		@SuppressWarnings("deprecation")
+		public Character floor(Character e) { return n.floor(e); }
+		@Override
+		@SuppressWarnings("deprecation")
+		public Character ceiling(Character e) { return n.ceiling(e); }
+		@Override
+		@SuppressWarnings("deprecation")
+		public Character higher(Character e) { return n.higher(e); }
+		
 		@Override
 		@Deprecated
 		public boolean contains(Object o) { return n.contains(o); }
-		
 		@Override
 		public char lower(char e) { return n.lower(e); }
-		
 		@Override
 		public char floor(char e) { return n.floor(e); }
-		
 		@Override
 		public char ceiling(char e) { return n.ceiling(e); }
-		
 		@Override
 		public char higher(char e) { return n.higher(e); }
 		
+		@Override
+		public Character pollFirst() { throw new UnsupportedOperationException(); }
+		@Override
+		public Character pollLast() { throw new UnsupportedOperationException(); }
+
 		@Override
 		public void setDefaultMaxValue(char e) { throw new UnsupportedOperationException(); }
 		
@@ -244,7 +265,7 @@ public class CharSets
 		public char getDefaultMinValue() { return n.getDefaultMinValue(); }
 		
 		@Override
-		public CharNavigableSet copy() { throw new UnsupportedOperationException(); }
+		public CharNavigableSet copy() { return n.copy(); }
 		
 		@Override
 		public CharNavigableSet subSet(char fromElement, boolean fromInclusive, char toElement, boolean toInclusive) { return CharSets.unmodifiable(n.subSet(fromElement, fromInclusive, toElement, toInclusive)); }
@@ -398,25 +419,31 @@ public class CharSets
 
 		@Override
 		public boolean contains(char o) { synchronized(mutex) { return n.contains(o); } }
-		
+		@Override
+		@SuppressWarnings("deprecation")
+		public Character lower(Character e) { synchronized(mutex) { return n.lower(e); } }
+		@Override
+		@SuppressWarnings("deprecation")
+		public Character floor(Character e) { synchronized(mutex) { return n.floor(e); } }
+		@Override
+		@SuppressWarnings("deprecation")
+		public Character ceiling(Character e) { synchronized(mutex) { return n.ceiling(e); } }
+		@Override
+		@SuppressWarnings("deprecation")
+		public Character higher(Character e) { synchronized(mutex) { return n.higher(e); } }
 		@Override
 		public char lower(char e) { synchronized(mutex) { return n.lower(e); } }
-		
 		@Override
 		public char floor(char e) { synchronized(mutex) { return n.floor(e); } }
-		
 		@Override
 		public char ceiling(char e) { synchronized(mutex) { return n.ceiling(e); } }
-		
 		@Override
 		public char higher(char e) { synchronized(mutex) { return n.higher(e); } }
 		
 		@Override
 		public void setDefaultMaxValue(char e) { synchronized(mutex) { n.setDefaultMaxValue(e); } }
-		
 		@Override
 		public char getDefaultMaxValue() { synchronized(mutex) { return n.getDefaultMaxValue(); } }
-		
 		@Override
 		public void setDefaultMinValue(char e) { synchronized(mutex) { n.setDefaultMinValue(e); } }
 		

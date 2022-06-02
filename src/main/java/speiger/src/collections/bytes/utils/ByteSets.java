@@ -1,6 +1,7 @@
 package speiger.src.collections.bytes.utils;
 
 import java.util.NoSuchElementException;
+import java.util.Set;
 import speiger.src.collections.bytes.collections.ByteBidirectionalIterator;
 import speiger.src.collections.bytes.functions.ByteComparator;
 import speiger.src.collections.bytes.collections.ByteIterator;
@@ -200,6 +201,13 @@ public class ByteSets
 		@Override
 		public boolean remove(byte o) { throw new UnsupportedOperationException(); }
 		@Override
+		public boolean equals(Object o) {
+			if(o == this) return true;
+			if(!(o instanceof Set)) return false;
+			return ((Set<?>)o).isEmpty();
+		}
+		
+		@Override
 		public EmptySet copy() { return this; }
 	}
 	
@@ -214,23 +222,36 @@ public class ByteSets
 		
 		@Override
 		public boolean contains(byte o) { return n.contains(o); }
-
+		@Override
+		@SuppressWarnings("deprecation")
+		public Byte lower(Byte e) { return n.lower(e); }
+		@Override
+		@SuppressWarnings("deprecation")
+		public Byte floor(Byte e) { return n.floor(e); }
+		@Override
+		@SuppressWarnings("deprecation")
+		public Byte ceiling(Byte e) { return n.ceiling(e); }
+		@Override
+		@SuppressWarnings("deprecation")
+		public Byte higher(Byte e) { return n.higher(e); }
+		
 		@Override
 		@Deprecated
 		public boolean contains(Object o) { return n.contains(o); }
-		
 		@Override
 		public byte lower(byte e) { return n.lower(e); }
-		
 		@Override
 		public byte floor(byte e) { return n.floor(e); }
-		
 		@Override
 		public byte ceiling(byte e) { return n.ceiling(e); }
-		
 		@Override
 		public byte higher(byte e) { return n.higher(e); }
 		
+		@Override
+		public Byte pollFirst() { throw new UnsupportedOperationException(); }
+		@Override
+		public Byte pollLast() { throw new UnsupportedOperationException(); }
+
 		@Override
 		public void setDefaultMaxValue(byte e) { throw new UnsupportedOperationException(); }
 		
@@ -244,7 +265,7 @@ public class ByteSets
 		public byte getDefaultMinValue() { return n.getDefaultMinValue(); }
 		
 		@Override
-		public ByteNavigableSet copy() { throw new UnsupportedOperationException(); }
+		public ByteNavigableSet copy() { return n.copy(); }
 		
 		@Override
 		public ByteNavigableSet subSet(byte fromElement, boolean fromInclusive, byte toElement, boolean toInclusive) { return ByteSets.unmodifiable(n.subSet(fromElement, fromInclusive, toElement, toInclusive)); }
@@ -398,25 +419,31 @@ public class ByteSets
 
 		@Override
 		public boolean contains(byte o) { synchronized(mutex) { return n.contains(o); } }
-		
+		@Override
+		@SuppressWarnings("deprecation")
+		public Byte lower(Byte e) { synchronized(mutex) { return n.lower(e); } }
+		@Override
+		@SuppressWarnings("deprecation")
+		public Byte floor(Byte e) { synchronized(mutex) { return n.floor(e); } }
+		@Override
+		@SuppressWarnings("deprecation")
+		public Byte ceiling(Byte e) { synchronized(mutex) { return n.ceiling(e); } }
+		@Override
+		@SuppressWarnings("deprecation")
+		public Byte higher(Byte e) { synchronized(mutex) { return n.higher(e); } }
 		@Override
 		public byte lower(byte e) { synchronized(mutex) { return n.lower(e); } }
-		
 		@Override
 		public byte floor(byte e) { synchronized(mutex) { return n.floor(e); } }
-		
 		@Override
 		public byte ceiling(byte e) { synchronized(mutex) { return n.ceiling(e); } }
-		
 		@Override
 		public byte higher(byte e) { synchronized(mutex) { return n.higher(e); } }
 		
 		@Override
 		public void setDefaultMaxValue(byte e) { synchronized(mutex) { n.setDefaultMaxValue(e); } }
-		
 		@Override
 		public byte getDefaultMaxValue() { synchronized(mutex) { return n.getDefaultMaxValue(); } }
-		
 		@Override
 		public void setDefaultMinValue(byte e) { synchronized(mutex) { n.setDefaultMinValue(e); } }
 		

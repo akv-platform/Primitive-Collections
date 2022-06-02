@@ -497,7 +497,8 @@ public abstract class AbstractLongList extends AbstractLongCollection implements
 		
 		@Override
 		public void add(long e) {
-			AbstractLongList.this.add(index++, e);
+			AbstractLongList.this.add(index, e);
+			index++;
 			lastReturned = -1;
 		}
 		

@@ -21,6 +21,7 @@ import speiger.src.testers.doubles.utils.DoubleSamples;
 @SuppressWarnings("javadoc")
 public class SimpleDoubleTestGenerator<E extends DoubleCollection> {
 	Function<double[], E> mapper;
+	
 	public SimpleDoubleTestGenerator(Function<double[], E> mapper) {
 		this.mapper = mapper;
 	}

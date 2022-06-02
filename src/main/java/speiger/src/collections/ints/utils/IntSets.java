@@ -1,6 +1,7 @@
 package speiger.src.collections.ints.utils;
 
 import java.util.NoSuchElementException;
+import java.util.Set;
 import speiger.src.collections.ints.collections.IntBidirectionalIterator;
 import speiger.src.collections.ints.functions.IntComparator;
 import speiger.src.collections.ints.collections.IntIterator;
@@ -200,6 +201,13 @@ public class IntSets
 		@Override
 		public boolean remove(int o) { throw new UnsupportedOperationException(); }
 		@Override
+		public boolean equals(Object o) {
+			if(o == this) return true;
+			if(!(o instanceof Set)) return false;
+			return ((Set<?>)o).isEmpty();
+		}
+		
+		@Override
 		public EmptySet copy() { return this; }
 	}
 	
@@ -214,23 +222,36 @@ public class IntSets
 		
 		@Override
 		public boolean contains(int o) { return n.contains(o); }
-
+		@Override
+		@SuppressWarnings("deprecation")
+		public Integer lower(Integer e) { return n.lower(e); }
+		@Override
+		@SuppressWarnings("deprecation")
+		public Integer floor(Integer e) { return n.floor(e); }
+		@Override
+		@SuppressWarnings("deprecation")
+		public Integer ceiling(Integer e) { return n.ceiling(e); }
+		@Override
+		@SuppressWarnings("deprecation")
+		public Integer higher(Integer e) { return n.higher(e); }
+		
 		@Override
 		@Deprecated
 		public boolean contains(Object o) { return n.contains(o); }
-		
 		@Override
 		public int lower(int e) { return n.lower(e); }
-		
 		@Override
 		public int floor(int e) { return n.floor(e); }
-		
 		@Override
 		public int ceiling(int e) { return n.ceiling(e); }
-		
 		@Override
 		public int higher(int e) { return n.higher(e); }
 		
+		@Override
+		public Integer pollFirst() { throw new UnsupportedOperationException(); }
+		@Override
+		public Integer pollLast() { throw new UnsupportedOperationException(); }
+
 		@Override
 		public void setDefaultMaxValue(int e) { throw new UnsupportedOperationException(); }
 		
@@ -244,7 +265,7 @@ public class IntSets
 		public int getDefaultMinValue() { return n.getDefaultMinValue(); }
 		
 		@Override
-		public IntNavigableSet copy() { throw new UnsupportedOperationException(); }
+		public IntNavigableSet copy() { return n.copy(); }
 		
 		@Override
 		public IntNavigableSet subSet(int fromElement, boolean fromInclusive, int toElement, boolean toInclusive) { return IntSets.unmodifiable(n.subSet(fromElement, fromInclusive, toElement, toInclusive)); }
@@ -398,25 +419,31 @@ public class IntSets
 
 		@Override
 		public boolean contains(int o) { synchronized(mutex) { return n.contains(o); } }
-		
+		@Override
+		@SuppressWarnings("deprecation")
+		public Integer lower(Integer e) { synchronized(mutex) { return n.lower(e); } }
+		@Override
+		@SuppressWarnings("deprecation")
+		public Integer floor(Integer e) { synchronized(mutex) { return n.floor(e); } }
+		@Override
+		@SuppressWarnings("deprecation")
+		public Integer ceiling(Integer e) { synchronized(mutex) { return n.ceiling(e); } }
+		@Override
+		@SuppressWarnings("deprecation")
+		public Integer higher(Integer e) { synchronized(mutex) { return n.higher(e); } }
 		@Override
 		public int lower(int e) { synchronized(mutex) { return n.lower(e); } }
-		
 		@Override
 		public int floor(int e) { synchronized(mutex) { return n.floor(e); } }
-		
 		@Override
 		public int ceiling(int e) { synchronized(mutex) { return n.ceiling(e); } }
-		
 		@Override
 		public int higher(int e) { synchronized(mutex) { return n.higher(e); } }
 		
 		@Override
 		public void setDefaultMaxValue(int e) { synchronized(mutex) { n.setDefaultMaxValue(e); } }
-		
 		@Override
 		public int getDefaultMaxValue() { synchronized(mutex) { return n.getDefaultMaxValue(); } }
-		
 		@Override
 		public void setDefaultMinValue(int e) { synchronized(mutex) { n.setDefaultMinValue(e); } }
 		

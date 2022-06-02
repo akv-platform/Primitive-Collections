@@ -497,7 +497,8 @@ public abstract class AbstractFloatList extends AbstractFloatCollection implemen
 		
 		@Override
 		public void add(float e) {
-			AbstractFloatList.this.add(index++, e);
+			AbstractFloatList.this.add(index, e);
+			index++;
 			lastReturned = -1;
 		}
 		

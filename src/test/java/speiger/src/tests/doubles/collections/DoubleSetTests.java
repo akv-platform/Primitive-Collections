@@ -21,6 +21,7 @@ import speiger.src.collections.doubles.sets.DoubleOpenHashSet;
 import speiger.src.collections.doubles.sets.DoubleOrderedSet;
 import speiger.src.collections.doubles.sets.DoubleRBTreeSet;
 import speiger.src.collections.doubles.sets.DoubleSet;
+import speiger.src.collections.doubles.utils.DoubleSets;
 import speiger.src.collections.doubles.utils.DoubleStrategy;
 import speiger.src.testers.doubles.builder.DoubleNavigableSetTestSuiteBuilder;
 import speiger.src.testers.doubles.builder.DoubleOrderedSetTestSuiteBuilder;
@@ -28,10 +29,10 @@ import speiger.src.testers.doubles.builder.DoubleSetTestSuiteBuilder;
 import speiger.src.testers.doubles.impl.SimpleDoubleTestGenerator;
 import speiger.src.testers.utils.SpecialFeature;
 
+
 @SuppressWarnings("javadoc")
 public class DoubleSetTests extends TestCase
 {
-	
 	public static Test suite() {
 		TestSuite suite = new TestSuite("DoubleSets");
 		suite(suite);
@@ -40,32 +41,35 @@ public class DoubleSetTests extends TestCase
 	}
 	
 	public static void suite(TestSuite suite) {
-		suite.addTest(setSuite("DoubleOpenHashSet", DoubleOpenHashSet::new, getFeatures()));
-		suite.addTest(orderedSetSuite("DoubleLinkedOpenHashSet", DoubleLinkedOpenHashSet::new, getFeatures()));
-		suite.addTest(setSuite("DoubleOpenCustomHashSet", T -> new DoubleOpenCustomHashSet(T, HashStrategy.INSTANCE), getFeatures()));
-		suite.addTest(orderedSetSuite("DoubleLinkedOpenCustomHashSet", T -> new DoubleLinkedOpenCustomHashSet(T, HashStrategy.INSTANCE), getFeatures()));
-		suite.addTest(orderedSetSuite("ImmutableDoubleOpenHashSet", ImmutableDoubleOpenHashSet::new, getImmutableFeatures()));
-		suite.addTest(setSuite("DoubleArraySet", DoubleArraySet::new, getFeatures()));
-		suite.addTest(navigableSetSuite("DoubleRBTreeSet", DoubleRBTreeSet::new, getFeatures()));
-		suite.addTest(navigableSetSuite("DoubleAVLTreeSet", DoubleAVLTreeSet::new, getFeatures()));
-		suite.addTest(navigableSetSuite("Synchronized DoubleRBTreeSet", T -> new DoubleRBTreeSet(T).synchronize(), getFeatures()));
-		suite.addTest(navigableSetSuite("Unmodifiable DoubleRBTreeSet", T -> new DoubleRBTreeSet(T).unmodifiable(), getImmutableFeatures()));
+		suite.addTest(setSuite("DoubleOpenHashSet", DoubleOpenHashSet::new, getFeatures(), -1));
+		suite.addTest(orderedSetSuite("DoubleLinkedOpenHashSet", DoubleLinkedOpenHashSet::new, getFeatures(), -1));
+		suite.addTest(setSuite("DoubleOpenCustomHashSet", T -> new DoubleOpenCustomHashSet(T, HashStrategy.INSTANCE), getFeatures(), -1));
+		suite.addTest(orderedSetSuite("DoubleLinkedOpenCustomHashSet", T -> new DoubleLinkedOpenCustomHashSet(T, HashStrategy.INSTANCE), getFeatures(), -1));
+		suite.addTest(orderedSetSuite("ImmutableDoubleOpenHashSet", ImmutableDoubleOpenHashSet::new, getImmutableFeatures(), -1));
+		suite.addTest(setSuite("DoubleArraySet", DoubleArraySet::new, getFeatures(), -1));
+		suite.addTest(navigableSetSuite("DoubleRBTreeSet", DoubleRBTreeSet::new, getFeatures(), -1));
+		suite.addTest(navigableSetSuite("DoubleAVLTreeSet", DoubleAVLTreeSet::new, getFeatures(), -1));
+		suite.addTest(navigableSetSuite("Synchronized DoubleRBTreeSet", T -> new DoubleRBTreeSet(T).synchronize(), getFeatures(), -1));
+		suite.addTest(navigableSetSuite("Unmodifiable DoubleRBTreeSet", T -> new DoubleRBTreeSet(T).unmodifiable(), getImmutableFeatures(), -1));
+		suite.addTest(setSuite("Empty DoubleSet", T -> DoubleSets.empty(), getImmutableFeatures(), 0));
+		suite.addTest(setSuite("Singleton DoubleSet", T -> DoubleSets.singleton(T[0]), getImmutableFeatures(), 1));
+		suite.addTest(orderedSetSuite("Synchronized DoubleLinkedOpenHashSet", T -> new DoubleLinkedOpenHashSet(T).synchronize(), getFeatures(), -1));
+		suite.addTest(orderedSetSuite("Unmodifiable DoubleLinkedOpenHashSet", T -> new DoubleLinkedOpenHashSet(T).unmodifiable(), getImmutableFeatures(), -1));
 	}
 		
-	public static Test setSuite(String name, Function<double[], DoubleSet> factory, Collection<Feature<?>> features) {
+	public static Test setSuite(String name, Function<double[], DoubleSet> factory, Collection<Feature<?>> features, int size) {
 		return DoubleSetTestSuiteBuilder.using(new SimpleDoubleTestGenerator.Sets(factory)).named(name)
-			.withFeatures(CollectionSize.ANY).withFeatures(features).createTestSuite();
+			.withFeatures(getSizes(size)).withFeatures(features).createTestSuite();
 	}
 	
-	public static Test orderedSetSuite(String name, Function<double[], DoubleOrderedSet> factory, Collection<Feature<?>> features) {
+	public static Test orderedSetSuite(String name, Function<double[], DoubleOrderedSet> factory, Collection<Feature<?>> features, int size) {
 		return DoubleOrderedSetTestSuiteBuilder.using(new SimpleDoubleTestGenerator.OrderedSets(factory)).named(name)
-			.withFeatures(CollectionSize.ANY).withFeatures(features).createTestSuite();
+			.withFeatures(getSizes(size)).withFeatures(features).createTestSuite();
 	}
-
 	
-	public static Test navigableSetSuite(String name, Function<double[], DoubleNavigableSet> factory, Collection<Feature<?>> features) {
+	public static Test navigableSetSuite(String name, Function<double[], DoubleNavigableSet> factory, Collection<Feature<?>> features, int size) {
 		return DoubleNavigableSetTestSuiteBuilder.using(new SimpleDoubleTestGenerator.NavigableSets(factory)).named(name)
-			.withFeatures(CollectionSize.ANY).withFeatures(features).createTestSuite();
+			.withFeatures(getSizes(size)).withFeatures(features).createTestSuite();
 	}
 	
 	private static class HashStrategy implements DoubleStrategy {
@@ -75,7 +79,19 @@ public class DoubleSetTests extends TestCase
 		@Override
 		public boolean equals(double key, double value) { return Double.doubleToLongBits(key) == Double.doubleToLongBits(value); }
 	}
-
+	
+	private static Collection<CollectionSize> getSizes(int size) {
+		switch(size) {
+			case 0: return Arrays.asList(CollectionSize.ZERO);
+			case 1: return Arrays.asList(CollectionSize.ONE);
+			case 2: return Arrays.asList(CollectionSize.ZERO, CollectionSize.ONE);
+			case 3: return Arrays.asList(CollectionSize.SEVERAL);
+			case 4: return Arrays.asList(CollectionSize.ZERO, CollectionSize.SEVERAL);
+			case 5: return Arrays.asList(CollectionSize.ONE, CollectionSize.SEVERAL);
+			default: return Arrays.asList(CollectionSize.ANY);
+		}
+	}
+	
 	private static Collection<Feature<?>> getImmutableFeatures() {
 		return Arrays.asList(SpecialFeature.COPYING);
 	}

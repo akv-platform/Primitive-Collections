@@ -291,7 +291,7 @@ public class LongCollections
 		@Override
 		public boolean contains(long o) { return false; }
 		@Override
-		public boolean containsAll(LongCollection c) { return false; }
+		public boolean containsAll(LongCollection c) { return c.isEmpty(); }
 		@Override
 		public boolean containsAny(LongCollection c) { return false; }
 		@Override
@@ -299,7 +299,7 @@ public class LongCollections
 		public boolean containsAny(Collection<?> c) { return false; }
 		@Override
 		@Deprecated
-		public boolean containsAll(Collection<?> c) { return false; }
+		public boolean containsAll(Collection<?> c) { return c.isEmpty(); }
 		@Override
 		public int hashCode() { return 0; }
 		
@@ -333,11 +333,21 @@ public class LongCollections
 		@Override
 		public Object[] toArray() { return ObjectArrays.EMPTY_ARRAY; }
 		@Override
-		public <T> T[] toArray(T[] a) { return a; }
+		public <T> T[] toArray(T[] a) {
+			if(a != null && a.length > 0)
+				a[0] = null;
+			return a;
+		}
+		
 		@Override
 		public long[] toLongArray() { return LongArrays.EMPTY_ARRAY; }
 		@Override
-		public long[] toLongArray(long[] a) { return a; }
+		public long[] toLongArray(long[] a) {
+			if(a != null && a.length > 0)
+				a[0] = 0L;
+			return a;
+		}
+		
 		@Override
 		public LongIterator iterator() { return LongIterators.empty(); }
 		@Override

@@ -291,7 +291,7 @@ public class DoubleCollections
 		@Override
 		public boolean contains(double o) { return false; }
 		@Override
-		public boolean containsAll(DoubleCollection c) { return false; }
+		public boolean containsAll(DoubleCollection c) { return c.isEmpty(); }
 		@Override
 		public boolean containsAny(DoubleCollection c) { return false; }
 		@Override
@@ -299,7 +299,7 @@ public class DoubleCollections
 		public boolean containsAny(Collection<?> c) { return false; }
 		@Override
 		@Deprecated
-		public boolean containsAll(Collection<?> c) { return false; }
+		public boolean containsAll(Collection<?> c) { return c.isEmpty(); }
 		@Override
 		public int hashCode() { return 0; }
 		
@@ -333,11 +333,21 @@ public class DoubleCollections
 		@Override
 		public Object[] toArray() { return ObjectArrays.EMPTY_ARRAY; }
 		@Override
-		public <T> T[] toArray(T[] a) { return a; }
+		public <T> T[] toArray(T[] a) {
+			if(a != null && a.length > 0)
+				a[0] = null;
+			return a;
+		}
+		
 		@Override
 		public double[] toDoubleArray() { return DoubleArrays.EMPTY_ARRAY; }
 		@Override
-		public double[] toDoubleArray(double[] a) { return a; }
+		public double[] toDoubleArray(double[] a) {
+			if(a != null && a.length > 0)
+				a[0] = 0D;
+			return a;
+		}
+		
 		@Override
 		public DoubleIterator iterator() { return DoubleIterators.empty(); }
 		@Override

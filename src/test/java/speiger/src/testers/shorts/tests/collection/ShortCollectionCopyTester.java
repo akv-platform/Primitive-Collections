@@ -7,6 +7,7 @@ import com.google.common.collect.testing.features.CollectionFeature;
 
 import speiger.src.testers.utils.SpecialFeature;
 import speiger.src.collections.shorts.collections.ShortCollection;
+import speiger.src.collections.shorts.utils.ShortCollections;
 import speiger.src.testers.shorts.tests.base.AbstractShortCollectionTester;
 
 @Ignore
@@ -17,7 +18,9 @@ public class ShortCollectionCopyTester extends AbstractShortCollectionTester
 	@SpecialFeature.Require(SpecialFeature.COPYING)
 	public void testEquals() {
 		ShortCollection copy = collection.copy();
-		Assert.assertFalse("Copied Collection shouldn't match", copy == collection);
+		if(!(collection instanceof ShortCollections.EmptyCollection)) {
+			Assert.assertFalse("Copied Collection shouldn't match", copy == collection);
+		}
 		Assert.assertTrue("Copied Collection contents should match", copy.equals(collection));
 	}
 

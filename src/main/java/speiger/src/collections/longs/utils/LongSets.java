@@ -1,6 +1,7 @@
 package speiger.src.collections.longs.utils;
 
 import java.util.NoSuchElementException;
+import java.util.Set;
 import speiger.src.collections.longs.collections.LongBidirectionalIterator;
 import speiger.src.collections.longs.functions.LongComparator;
 import speiger.src.collections.longs.collections.LongIterator;
@@ -200,6 +201,13 @@ public class LongSets
 		@Override
 		public boolean remove(long o) { throw new UnsupportedOperationException(); }
 		@Override
+		public boolean equals(Object o) {
+			if(o == this) return true;
+			if(!(o instanceof Set)) return false;
+			return ((Set<?>)o).isEmpty();
+		}
+		
+		@Override
 		public EmptySet copy() { return this; }
 	}
 	
@@ -214,23 +222,36 @@ public class LongSets
 		
 		@Override
 		public boolean contains(long o) { return n.contains(o); }
-
+		@Override
+		@SuppressWarnings("deprecation")
+		public Long lower(Long e) { return n.lower(e); }
+		@Override
+		@SuppressWarnings("deprecation")
+		public Long floor(Long e) { return n.floor(e); }
+		@Override
+		@SuppressWarnings("deprecation")
+		public Long ceiling(Long e) { return n.ceiling(e); }
+		@Override
+		@SuppressWarnings("deprecation")
+		public Long higher(Long e) { return n.higher(e); }
+		
 		@Override
 		@Deprecated
 		public boolean contains(Object o) { return n.contains(o); }
-		
 		@Override
 		public long lower(long e) { return n.lower(e); }
-		
 		@Override
 		public long floor(long e) { return n.floor(e); }
-		
 		@Override
 		public long ceiling(long e) { return n.ceiling(e); }
-		
 		@Override
 		public long higher(long e) { return n.higher(e); }
 		
+		@Override
+		public Long pollFirst() { throw new UnsupportedOperationException(); }
+		@Override
+		public Long pollLast() { throw new UnsupportedOperationException(); }
+
 		@Override
 		public void setDefaultMaxValue(long e) { throw new UnsupportedOperationException(); }
 		
@@ -244,7 +265,7 @@ public class LongSets
 		public long getDefaultMinValue() { return n.getDefaultMinValue(); }
 		
 		@Override
-		public LongNavigableSet copy() { throw new UnsupportedOperationException(); }
+		public LongNavigableSet copy() { return n.copy(); }
 		
 		@Override
 		public LongNavigableSet subSet(long fromElement, boolean fromInclusive, long toElement, boolean toInclusive) { return LongSets.unmodifiable(n.subSet(fromElement, fromInclusive, toElement, toInclusive)); }
@@ -398,25 +419,31 @@ public class LongSets
 
 		@Override
 		public boolean contains(long o) { synchronized(mutex) { return n.contains(o); } }
-		
+		@Override
+		@SuppressWarnings("deprecation")
+		public Long lower(Long e) { synchronized(mutex) { return n.lower(e); } }
+		@Override
+		@SuppressWarnings("deprecation")
+		public Long floor(Long e) { synchronized(mutex) { return n.floor(e); } }
+		@Override
+		@SuppressWarnings("deprecation")
+		public Long ceiling(Long e) { synchronized(mutex) { return n.ceiling(e); } }
+		@Override
+		@SuppressWarnings("deprecation")
+		public Long higher(Long e) { synchronized(mutex) { return n.higher(e); } }
 		@Override
 		public long lower(long e) { synchronized(mutex) { return n.lower(e); } }
-		
 		@Override
 		public long floor(long e) { synchronized(mutex) { return n.floor(e); } }
-		
 		@Override
 		public long ceiling(long e) { synchronized(mutex) { return n.ceiling(e); } }
-		
 		@Override
 		public long higher(long e) { synchronized(mutex) { return n.higher(e); } }
 		
 		@Override
 		public void setDefaultMaxValue(long e) { synchronized(mutex) { n.setDefaultMaxValue(e); } }
-		
 		@Override
 		public long getDefaultMaxValue() { synchronized(mutex) { return n.getDefaultMaxValue(); } }
-		
 		@Override
 		public void setDefaultMinValue(long e) { synchronized(mutex) { n.setDefaultMinValue(e); } }
 		

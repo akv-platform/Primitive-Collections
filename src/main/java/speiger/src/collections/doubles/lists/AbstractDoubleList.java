@@ -497,7 +497,8 @@ public abstract class AbstractDoubleList extends AbstractDoubleCollection implem
 		
 		@Override
 		public void add(double e) {
-			AbstractDoubleList.this.add(index++, e);
+			AbstractDoubleList.this.add(index, e);
+			index++;
 			lastReturned = -1;
 		}
 		

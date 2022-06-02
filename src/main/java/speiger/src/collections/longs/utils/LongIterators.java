@@ -263,7 +263,7 @@ public class LongIterators
 	 * @param a the array that should be wrapped
 	 * @return a Iterator that is wrapping a array.
 	 */
-	public static ArrayIterator wrap(long[] a) {
+	public static ArrayIterator wrap(long... a) {
 		return wrap(a, 0, a.length);
 	}
 	
@@ -699,7 +699,7 @@ public class LongIterators
 		
 		@Override
 		public int previousIndex() {
-			return 0;
+			return -1;
 		}
 		
 		@Override
