@@ -106,7 +106,9 @@ public class ABSTRACT_MAP_TESTER KEY_VALUE_GENERIC_TYPE extends AbstractObjectCo
 	protected void expectMissing(MAP.Entry KEY_VALUE_GENERIC_TYPE... entries) {
 		for (MAP.Entry KEY_VALUE_GENERIC_TYPE entry : entries) {
 			assertFalse("Should not contain entry " + entry, actualContents().contains(entry));
+#if !VALUE_BOOLEAN
 			assertFalse("Should not contain key " + entry.ENTRY_KEY() + " mapped to value " + entry.ENTRY_VALUE(), valueEquals(getMap().get(entry.ENTRY_KEY()), entry.ENTRY_VALUE()));
+#endif
 		}
 	}
 
@@ -133,11 +135,13 @@ public class ABSTRACT_MAP_TESTER KEY_VALUE_GENERIC_TYPE extends AbstractObjectCo
 		}
 		throw new IllegalArgumentException(String.format(Locale.ROOT, "key %s not found in entries %s", newEntry.ENTRY_KEY(), expected));
 	}
-
+	
+#if !VALUE_BOOLEAN
 	private static GENERIC_VALUE_BRACES boolean valueEquals(VALUE_TYPE a, VALUE_TYPE b) {
 		return VALUE_EQUALS(a, b);
 	}
 	
+#endif
 	protected MAP.Entry KEY_VALUE_GENERIC_TYPE entry(KEY_TYPE key, VALUE_TYPE value) {
 		return new ABSTRACT_MAP.BasicEntryKV_BRACES(key, value);
 	}
