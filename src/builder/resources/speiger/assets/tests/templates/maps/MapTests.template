@@ -68,17 +68,17 @@ public class MAP_TESTS extends TestCase
 	}
 
 	public static void suite(TestSuite suite) {
-//		suite.addTest(mapSuite("HASH_MAP", HASH_MAP::new, getFeatures(), -1));
-//		suite.addTest(mapSuite("LINKED_HASH_MAP", LINKED_HASH_MAP::new, getFeatures(), -1));
-//		suite.addTest(mapSuite("IMMUTABLE_HASH_MAP", IMMUTABLE_HASH_MAP::new, getImmutableFeatures(), -1));
-//		suite.addTest(mapSuite("CUSTOM_HASH_MAP", (K, V) -> new CUSTOM_HASH_MAPKV_BRACES(K, V, HashStrategy.INSTANCE), getFeatures(), -1));
-//		suite.addTest(mapSuite("LINKED_CUSTOM_HASH_MAP", (K, V) -> new LINKED_CUSTOM_HASH_MAPKV_BRACES(K, V, HashStrategy.INSTANCE), getFeatures(), -1));
-//		suite.addTest(mapSuite("ARRAY_MAP", ARRAY_MAP::new, getFeatures(), -1));
-//		suite.addTest(mapSuite("CONCURRENT_HASH_MAP", CONCURRENT_HASH_MAP::new, getFeatures(), -1));
-//		suite.addTest(navigableMapSuite("RB_TREE_MAP", RB_TREE_MAP::new, getFeatures(), -1));
-//		suite.addTest(navigableMapSuite("AVL_TREE_MAP", AVL_TREE_MAP::new, getFeatures(), -1));
+		suite.addTest(mapSuite("HASH_MAP", HASH_MAP::new, getFeatures(), -1));
+		suite.addTest(mapSuite("LINKED_HASH_MAP", LINKED_HASH_MAP::new, getFeatures(), -1));
+		suite.addTest(mapSuite("IMMUTABLE_HASH_MAP", IMMUTABLE_HASH_MAP::new, getImmutableFeatures(), -1));
+		suite.addTest(mapSuite("CUSTOM_HASH_MAP", (K, V) -> new CUSTOM_HASH_MAPKV_BRACES(K, V, HashStrategy.INSTANCE), getFeatures(), -1));
+		suite.addTest(mapSuite("LINKED_CUSTOM_HASH_MAP", (K, V) -> new LINKED_CUSTOM_HASH_MAPKV_BRACES(K, V, HashStrategy.INSTANCE), getFeatures(), -1));
+		suite.addTest(mapSuite("ARRAY_MAP", ARRAY_MAP::new, getFeatures(), -1));
+		suite.addTest(mapSuite("CONCURRENT_HASH_MAP", CONCURRENT_HASH_MAP::new, getFeatures(), -1));
+		suite.addTest(navigableMapSuite("RB_TREE_MAP", RB_TREE_MAP::new, getFeatures(), -1));
+		suite.addTest(navigableMapSuite("AVL_TREE_MAP", AVL_TREE_MAP::new, getFeatures(), -1));
 		suite.addTest(navigableMapSuite("Synchronized RB_TREE_MAP", (K, V) -> new RB_TREE_MAPKV_BRACES(K, V).synchronize(), getFeatures(), -1));
-//		suite.addTest(navigableMapSuite("RB_TREE_MAP", (K, V) -> new RB_TREE_MAPKV_BRACES(K, V).unmodifiable(), getImmutableFeatures(), -1));
+		suite.addTest(navigableMapSuite("RB_TREE_MAP", (K, V) -> new RB_TREE_MAPKV_BRACES(K, V).unmodifiable(), getImmutableFeatures(), -1));
 	}
 	
 	private static Test mapSuite(String name, BiFunction<KEY_STRING_TYPE[], VALUE_STRING_TYPE[], MAP KEY_VALUE_STRING_GENERIC_TYPE> factory, Collection<Feature<?>> features, int size) {
