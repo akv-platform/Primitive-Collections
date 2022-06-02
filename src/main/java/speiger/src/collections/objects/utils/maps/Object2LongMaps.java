@@ -501,7 +501,7 @@ public class Object2LongMaps
 		@Override
 		public long getLong(T key) {
 			long type = map.getLong(key);
-			return type == map.getDefaultReturnValue() ? getDefaultReturnValue() : type;
+			return type == map.getDefaultReturnValue() && !map.containsKey(key) ? getDefaultReturnValue() : type;
 		}
 		@Override
 		public long getOrDefault(T key, long defaultValue) { return map.getOrDefault(key, defaultValue); }
@@ -519,6 +519,8 @@ public class Object2LongMaps
 		public void mergeAllLong(Object2LongMap<T> m, LongLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public Object2LongMap<T> copy() { return map.copy(); }
+		@Override
+		public void clear() { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public ObjectSet<T> keySet() { 
@@ -599,7 +601,7 @@ public class Object2LongMaps
 		@Override
 		public Object2LongMap.Entry<T> firstEntry() { synchronized(mutex) { return map.firstEntry(); } }
 		@Override
-		public Object2LongMap.Entry<T> lastEntry() { synchronized(mutex) { return map.firstEntry(); } }
+		public Object2LongMap.Entry<T> lastEntry() { synchronized(mutex) { return map.lastEntry(); } }
 		@Override
 		public Object2LongMap.Entry<T> pollFirstEntry() { synchronized(mutex) { return map.pollFirstEntry(); } }
 		@Override

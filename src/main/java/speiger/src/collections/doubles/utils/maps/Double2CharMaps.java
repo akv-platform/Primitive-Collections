@@ -488,7 +488,7 @@ public class Double2CharMaps
 		@Override
 		public char get(double key) {
 			char type = map.get(key);
-			return type == map.getDefaultReturnValue() ? getDefaultReturnValue() : type;
+			return type == map.getDefaultReturnValue() && !map.containsKey(key) ? getDefaultReturnValue() : type;
 		}
 		@Override
 		public char getOrDefault(double key, char defaultValue) { return map.getOrDefault(key, defaultValue); }
@@ -506,6 +506,8 @@ public class Double2CharMaps
 		public void mergeAllChar(Double2CharMap m, CharCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public Double2CharMap copy() { return map.copy(); }
+		@Override
+		public void clear() { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public DoubleSet keySet() { 
@@ -584,7 +586,7 @@ public class Double2CharMaps
 		@Override
 		public Double2CharMap.Entry firstEntry() { synchronized(mutex) { return map.firstEntry(); } }
 		@Override
-		public Double2CharMap.Entry lastEntry() { synchronized(mutex) { return map.firstEntry(); } }
+		public Double2CharMap.Entry lastEntry() { synchronized(mutex) { return map.lastEntry(); } }
 		@Override
 		public Double2CharMap.Entry pollFirstEntry() { synchronized(mutex) { return map.pollFirstEntry(); } }
 		@Override

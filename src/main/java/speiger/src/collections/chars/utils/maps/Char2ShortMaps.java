@@ -488,7 +488,7 @@ public class Char2ShortMaps
 		@Override
 		public short get(char key) {
 			short type = map.get(key);
-			return type == map.getDefaultReturnValue() ? getDefaultReturnValue() : type;
+			return type == map.getDefaultReturnValue() && !map.containsKey(key) ? getDefaultReturnValue() : type;
 		}
 		@Override
 		public short getOrDefault(char key, short defaultValue) { return map.getOrDefault(key, defaultValue); }
@@ -506,6 +506,8 @@ public class Char2ShortMaps
 		public void mergeAllShort(Char2ShortMap m, ShortShortUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public Char2ShortMap copy() { return map.copy(); }
+		@Override
+		public void clear() { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public CharSet keySet() { 
@@ -584,7 +586,7 @@ public class Char2ShortMaps
 		@Override
 		public Char2ShortMap.Entry firstEntry() { synchronized(mutex) { return map.firstEntry(); } }
 		@Override
-		public Char2ShortMap.Entry lastEntry() { synchronized(mutex) { return map.firstEntry(); } }
+		public Char2ShortMap.Entry lastEntry() { synchronized(mutex) { return map.lastEntry(); } }
 		@Override
 		public Char2ShortMap.Entry pollFirstEntry() { synchronized(mutex) { return map.pollFirstEntry(); } }
 		@Override

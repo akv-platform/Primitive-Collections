@@ -501,7 +501,7 @@ public class Object2IntMaps
 		@Override
 		public int getInt(T key) {
 			int type = map.getInt(key);
-			return type == map.getDefaultReturnValue() ? getDefaultReturnValue() : type;
+			return type == map.getDefaultReturnValue() && !map.containsKey(key) ? getDefaultReturnValue() : type;
 		}
 		@Override
 		public int getOrDefault(T key, int defaultValue) { return map.getOrDefault(key, defaultValue); }
@@ -519,6 +519,8 @@ public class Object2IntMaps
 		public void mergeAllInt(Object2IntMap<T> m, IntIntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public Object2IntMap<T> copy() { return map.copy(); }
+		@Override
+		public void clear() { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public ObjectSet<T> keySet() { 
@@ -599,7 +601,7 @@ public class Object2IntMaps
 		@Override
 		public Object2IntMap.Entry<T> firstEntry() { synchronized(mutex) { return map.firstEntry(); } }
 		@Override
-		public Object2IntMap.Entry<T> lastEntry() { synchronized(mutex) { return map.firstEntry(); } }
+		public Object2IntMap.Entry<T> lastEntry() { synchronized(mutex) { return map.lastEntry(); } }
 		@Override
 		public Object2IntMap.Entry<T> pollFirstEntry() { synchronized(mutex) { return map.pollFirstEntry(); } }
 		@Override

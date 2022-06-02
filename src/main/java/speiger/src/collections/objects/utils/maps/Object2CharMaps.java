@@ -501,7 +501,7 @@ public class Object2CharMaps
 		@Override
 		public char getChar(T key) {
 			char type = map.getChar(key);
-			return type == map.getDefaultReturnValue() ? getDefaultReturnValue() : type;
+			return type == map.getDefaultReturnValue() && !map.containsKey(key) ? getDefaultReturnValue() : type;
 		}
 		@Override
 		public char getOrDefault(T key, char defaultValue) { return map.getOrDefault(key, defaultValue); }
@@ -519,6 +519,8 @@ public class Object2CharMaps
 		public void mergeAllChar(Object2CharMap<T> m, CharCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public Object2CharMap<T> copy() { return map.copy(); }
+		@Override
+		public void clear() { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public ObjectSet<T> keySet() { 
@@ -599,7 +601,7 @@ public class Object2CharMaps
 		@Override
 		public Object2CharMap.Entry<T> firstEntry() { synchronized(mutex) { return map.firstEntry(); } }
 		@Override
-		public Object2CharMap.Entry<T> lastEntry() { synchronized(mutex) { return map.firstEntry(); } }
+		public Object2CharMap.Entry<T> lastEntry() { synchronized(mutex) { return map.lastEntry(); } }
 		@Override
 		public Object2CharMap.Entry<T> pollFirstEntry() { synchronized(mutex) { return map.pollFirstEntry(); } }
 		@Override

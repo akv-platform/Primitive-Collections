@@ -476,7 +476,7 @@ public class Long2BooleanMaps
 		@Override
 		public boolean get(long key) {
 			boolean type = map.get(key);
-			return type == map.getDefaultReturnValue() ? getDefaultReturnValue() : type;
+			return type == map.getDefaultReturnValue() && !map.containsKey(key) ? getDefaultReturnValue() : type;
 		}
 		@Override
 		public boolean getOrDefault(long key, boolean defaultValue) { return map.getOrDefault(key, defaultValue); }
@@ -494,6 +494,8 @@ public class Long2BooleanMaps
 		public void mergeAllBoolean(Long2BooleanMap m, BooleanBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public Long2BooleanMap copy() { return map.copy(); }
+		@Override
+		public void clear() { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public LongSet keySet() { 
@@ -572,7 +574,7 @@ public class Long2BooleanMaps
 		@Override
 		public Long2BooleanMap.Entry firstEntry() { synchronized(mutex) { return map.firstEntry(); } }
 		@Override
-		public Long2BooleanMap.Entry lastEntry() { synchronized(mutex) { return map.firstEntry(); } }
+		public Long2BooleanMap.Entry lastEntry() { synchronized(mutex) { return map.lastEntry(); } }
 		@Override
 		public Long2BooleanMap.Entry pollFirstEntry() { synchronized(mutex) { return map.pollFirstEntry(); } }
 		@Override

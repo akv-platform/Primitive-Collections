@@ -488,7 +488,7 @@ public class Float2DoubleMaps
 		@Override
 		public double get(float key) {
 			double type = map.get(key);
-			return Double.doubleToLongBits(type) == Double.doubleToLongBits(map.getDefaultReturnValue()) ? getDefaultReturnValue() : type;
+			return Double.doubleToLongBits(type) == Double.doubleToLongBits(map.getDefaultReturnValue()) && !map.containsKey(key) ? getDefaultReturnValue() : type;
 		}
 		@Override
 		public double getOrDefault(float key, double defaultValue) { return map.getOrDefault(key, defaultValue); }
@@ -506,6 +506,8 @@ public class Float2DoubleMaps
 		public void mergeAllDouble(Float2DoubleMap m, DoubleDoubleUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public Float2DoubleMap copy() { return map.copy(); }
+		@Override
+		public void clear() { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public FloatSet keySet() { 
@@ -584,7 +586,7 @@ public class Float2DoubleMaps
 		@Override
 		public Float2DoubleMap.Entry firstEntry() { synchronized(mutex) { return map.firstEntry(); } }
 		@Override
-		public Float2DoubleMap.Entry lastEntry() { synchronized(mutex) { return map.firstEntry(); } }
+		public Float2DoubleMap.Entry lastEntry() { synchronized(mutex) { return map.lastEntry(); } }
 		@Override
 		public Float2DoubleMap.Entry pollFirstEntry() { synchronized(mutex) { return map.pollFirstEntry(); } }
 		@Override

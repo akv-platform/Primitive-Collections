@@ -476,7 +476,7 @@ public class Char2BooleanMaps
 		@Override
 		public boolean get(char key) {
 			boolean type = map.get(key);
-			return type == map.getDefaultReturnValue() ? getDefaultReturnValue() : type;
+			return type == map.getDefaultReturnValue() && !map.containsKey(key) ? getDefaultReturnValue() : type;
 		}
 		@Override
 		public boolean getOrDefault(char key, boolean defaultValue) { return map.getOrDefault(key, defaultValue); }
@@ -494,6 +494,8 @@ public class Char2BooleanMaps
 		public void mergeAllBoolean(Char2BooleanMap m, BooleanBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public Char2BooleanMap copy() { return map.copy(); }
+		@Override
+		public void clear() { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public CharSet keySet() { 
@@ -572,7 +574,7 @@ public class Char2BooleanMaps
 		@Override
 		public Char2BooleanMap.Entry firstEntry() { synchronized(mutex) { return map.firstEntry(); } }
 		@Override
-		public Char2BooleanMap.Entry lastEntry() { synchronized(mutex) { return map.firstEntry(); } }
+		public Char2BooleanMap.Entry lastEntry() { synchronized(mutex) { return map.lastEntry(); } }
 		@Override
 		public Char2BooleanMap.Entry pollFirstEntry() { synchronized(mutex) { return map.pollFirstEntry(); } }
 		@Override

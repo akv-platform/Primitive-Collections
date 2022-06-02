@@ -488,7 +488,7 @@ public class Char2ByteMaps
 		@Override
 		public byte get(char key) {
 			byte type = map.get(key);
-			return type == map.getDefaultReturnValue() ? getDefaultReturnValue() : type;
+			return type == map.getDefaultReturnValue() && !map.containsKey(key) ? getDefaultReturnValue() : type;
 		}
 		@Override
 		public byte getOrDefault(char key, byte defaultValue) { return map.getOrDefault(key, defaultValue); }
@@ -506,6 +506,8 @@ public class Char2ByteMaps
 		public void mergeAllByte(Char2ByteMap m, ByteByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public Char2ByteMap copy() { return map.copy(); }
+		@Override
+		public void clear() { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public CharSet keySet() { 
@@ -584,7 +586,7 @@ public class Char2ByteMaps
 		@Override
 		public Char2ByteMap.Entry firstEntry() { synchronized(mutex) { return map.firstEntry(); } }
 		@Override
-		public Char2ByteMap.Entry lastEntry() { synchronized(mutex) { return map.firstEntry(); } }
+		public Char2ByteMap.Entry lastEntry() { synchronized(mutex) { return map.lastEntry(); } }
 		@Override
 		public Char2ByteMap.Entry pollFirstEntry() { synchronized(mutex) { return map.pollFirstEntry(); } }
 		@Override

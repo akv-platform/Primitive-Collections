@@ -489,7 +489,7 @@ public class Object2BooleanMaps
 		@Override
 		public boolean getBoolean(T key) {
 			boolean type = map.getBoolean(key);
-			return type == map.getDefaultReturnValue() ? getDefaultReturnValue() : type;
+			return type == map.getDefaultReturnValue() && !map.containsKey(key) ? getDefaultReturnValue() : type;
 		}
 		@Override
 		public boolean getOrDefault(T key, boolean defaultValue) { return map.getOrDefault(key, defaultValue); }
@@ -507,6 +507,8 @@ public class Object2BooleanMaps
 		public void mergeAllBoolean(Object2BooleanMap<T> m, BooleanBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public Object2BooleanMap<T> copy() { return map.copy(); }
+		@Override
+		public void clear() { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public ObjectSet<T> keySet() { 
@@ -587,7 +589,7 @@ public class Object2BooleanMaps
 		@Override
 		public Object2BooleanMap.Entry<T> firstEntry() { synchronized(mutex) { return map.firstEntry(); } }
 		@Override
-		public Object2BooleanMap.Entry<T> lastEntry() { synchronized(mutex) { return map.firstEntry(); } }
+		public Object2BooleanMap.Entry<T> lastEntry() { synchronized(mutex) { return map.lastEntry(); } }
 		@Override
 		public Object2BooleanMap.Entry<T> pollFirstEntry() { synchronized(mutex) { return map.pollFirstEntry(); } }
 		@Override

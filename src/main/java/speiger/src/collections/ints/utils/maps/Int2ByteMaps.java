@@ -488,7 +488,7 @@ public class Int2ByteMaps
 		@Override
 		public byte get(int key) {
 			byte type = map.get(key);
-			return type == map.getDefaultReturnValue() ? getDefaultReturnValue() : type;
+			return type == map.getDefaultReturnValue() && !map.containsKey(key) ? getDefaultReturnValue() : type;
 		}
 		@Override
 		public byte getOrDefault(int key, byte defaultValue) { return map.getOrDefault(key, defaultValue); }
@@ -506,6 +506,8 @@ public class Int2ByteMaps
 		public void mergeAllByte(Int2ByteMap m, ByteByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public Int2ByteMap copy() { return map.copy(); }
+		@Override
+		public void clear() { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public IntSet keySet() { 
@@ -584,7 +586,7 @@ public class Int2ByteMaps
 		@Override
 		public Int2ByteMap.Entry firstEntry() { synchronized(mutex) { return map.firstEntry(); } }
 		@Override
-		public Int2ByteMap.Entry lastEntry() { synchronized(mutex) { return map.firstEntry(); } }
+		public Int2ByteMap.Entry lastEntry() { synchronized(mutex) { return map.lastEntry(); } }
 		@Override
 		public Int2ByteMap.Entry pollFirstEntry() { synchronized(mutex) { return map.pollFirstEntry(); } }
 		@Override

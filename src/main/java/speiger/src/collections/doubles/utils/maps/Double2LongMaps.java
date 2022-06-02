@@ -488,7 +488,7 @@ public class Double2LongMaps
 		@Override
 		public long get(double key) {
 			long type = map.get(key);
-			return type == map.getDefaultReturnValue() ? getDefaultReturnValue() : type;
+			return type == map.getDefaultReturnValue() && !map.containsKey(key) ? getDefaultReturnValue() : type;
 		}
 		@Override
 		public long getOrDefault(double key, long defaultValue) { return map.getOrDefault(key, defaultValue); }
@@ -506,6 +506,8 @@ public class Double2LongMaps
 		public void mergeAllLong(Double2LongMap m, LongLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public Double2LongMap copy() { return map.copy(); }
+		@Override
+		public void clear() { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public DoubleSet keySet() { 
@@ -584,7 +586,7 @@ public class Double2LongMaps
 		@Override
 		public Double2LongMap.Entry firstEntry() { synchronized(mutex) { return map.firstEntry(); } }
 		@Override
-		public Double2LongMap.Entry lastEntry() { synchronized(mutex) { return map.firstEntry(); } }
+		public Double2LongMap.Entry lastEntry() { synchronized(mutex) { return map.lastEntry(); } }
 		@Override
 		public Double2LongMap.Entry pollFirstEntry() { synchronized(mutex) { return map.pollFirstEntry(); } }
 		@Override

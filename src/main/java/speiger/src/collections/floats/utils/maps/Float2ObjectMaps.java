@@ -501,7 +501,7 @@ public class Float2ObjectMaps
 		@Override
 		public V get(float key) {
 			V type = map.get(key);
-			return Objects.equals(type, map.getDefaultReturnValue()) ? getDefaultReturnValue() : type;
+			return Objects.equals(type, map.getDefaultReturnValue()) && !map.containsKey(key) ? getDefaultReturnValue() : type;
 		}
 		@Override
 		public V getOrDefault(float key, V defaultValue) { return map.getOrDefault(key, defaultValue); }
@@ -519,6 +519,8 @@ public class Float2ObjectMaps
 		public void mergeAll(Float2ObjectMap<V> m, ObjectObjectUnaryOperator<V, V> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public Float2ObjectMap<V> copy() { return map.copy(); }
+		@Override
+		public void clear() { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public FloatSet keySet() { 
@@ -599,7 +601,7 @@ public class Float2ObjectMaps
 		@Override
 		public Float2ObjectMap.Entry<V> firstEntry() { synchronized(mutex) { return map.firstEntry(); } }
 		@Override
-		public Float2ObjectMap.Entry<V> lastEntry() { synchronized(mutex) { return map.firstEntry(); } }
+		public Float2ObjectMap.Entry<V> lastEntry() { synchronized(mutex) { return map.lastEntry(); } }
 		@Override
 		public Float2ObjectMap.Entry<V> pollFirstEntry() { synchronized(mutex) { return map.pollFirstEntry(); } }
 		@Override

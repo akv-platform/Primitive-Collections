@@ -488,7 +488,7 @@ public class Double2ShortMaps
 		@Override
 		public short get(double key) {
 			short type = map.get(key);
-			return type == map.getDefaultReturnValue() ? getDefaultReturnValue() : type;
+			return type == map.getDefaultReturnValue() && !map.containsKey(key) ? getDefaultReturnValue() : type;
 		}
 		@Override
 		public short getOrDefault(double key, short defaultValue) { return map.getOrDefault(key, defaultValue); }
@@ -506,6 +506,8 @@ public class Double2ShortMaps
 		public void mergeAllShort(Double2ShortMap m, ShortShortUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public Double2ShortMap copy() { return map.copy(); }
+		@Override
+		public void clear() { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public DoubleSet keySet() { 
@@ -584,7 +586,7 @@ public class Double2ShortMaps
 		@Override
 		public Double2ShortMap.Entry firstEntry() { synchronized(mutex) { return map.firstEntry(); } }
 		@Override
-		public Double2ShortMap.Entry lastEntry() { synchronized(mutex) { return map.firstEntry(); } }
+		public Double2ShortMap.Entry lastEntry() { synchronized(mutex) { return map.lastEntry(); } }
 		@Override
 		public Double2ShortMap.Entry pollFirstEntry() { synchronized(mutex) { return map.pollFirstEntry(); } }
 		@Override

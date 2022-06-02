@@ -488,7 +488,7 @@ public class Float2IntMaps
 		@Override
 		public int get(float key) {
 			int type = map.get(key);
-			return type == map.getDefaultReturnValue() ? getDefaultReturnValue() : type;
+			return type == map.getDefaultReturnValue() && !map.containsKey(key) ? getDefaultReturnValue() : type;
 		}
 		@Override
 		public int getOrDefault(float key, int defaultValue) { return map.getOrDefault(key, defaultValue); }
@@ -506,6 +506,8 @@ public class Float2IntMaps
 		public void mergeAllInt(Float2IntMap m, IntIntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public Float2IntMap copy() { return map.copy(); }
+		@Override
+		public void clear() { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public FloatSet keySet() { 
@@ -584,7 +586,7 @@ public class Float2IntMaps
 		@Override
 		public Float2IntMap.Entry firstEntry() { synchronized(mutex) { return map.firstEntry(); } }
 		@Override
-		public Float2IntMap.Entry lastEntry() { synchronized(mutex) { return map.firstEntry(); } }
+		public Float2IntMap.Entry lastEntry() { synchronized(mutex) { return map.lastEntry(); } }
 		@Override
 		public Float2IntMap.Entry pollFirstEntry() { synchronized(mutex) { return map.pollFirstEntry(); } }
 		@Override

@@ -488,7 +488,7 @@ public class Short2LongMaps
 		@Override
 		public long get(short key) {
 			long type = map.get(key);
-			return type == map.getDefaultReturnValue() ? getDefaultReturnValue() : type;
+			return type == map.getDefaultReturnValue() && !map.containsKey(key) ? getDefaultReturnValue() : type;
 		}
 		@Override
 		public long getOrDefault(short key, long defaultValue) { return map.getOrDefault(key, defaultValue); }
@@ -506,6 +506,8 @@ public class Short2LongMaps
 		public void mergeAllLong(Short2LongMap m, LongLongUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public Short2LongMap copy() { return map.copy(); }
+		@Override
+		public void clear() { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public ShortSet keySet() { 
@@ -584,7 +586,7 @@ public class Short2LongMaps
 		@Override
 		public Short2LongMap.Entry firstEntry() { synchronized(mutex) { return map.firstEntry(); } }
 		@Override
-		public Short2LongMap.Entry lastEntry() { synchronized(mutex) { return map.firstEntry(); } }
+		public Short2LongMap.Entry lastEntry() { synchronized(mutex) { return map.lastEntry(); } }
 		@Override
 		public Short2LongMap.Entry pollFirstEntry() { synchronized(mutex) { return map.pollFirstEntry(); } }
 		@Override

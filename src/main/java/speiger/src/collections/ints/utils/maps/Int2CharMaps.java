@@ -488,7 +488,7 @@ public class Int2CharMaps
 		@Override
 		public char get(int key) {
 			char type = map.get(key);
-			return type == map.getDefaultReturnValue() ? getDefaultReturnValue() : type;
+			return type == map.getDefaultReturnValue() && !map.containsKey(key) ? getDefaultReturnValue() : type;
 		}
 		@Override
 		public char getOrDefault(int key, char defaultValue) { return map.getOrDefault(key, defaultValue); }
@@ -506,6 +506,8 @@ public class Int2CharMaps
 		public void mergeAllChar(Int2CharMap m, CharCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public Int2CharMap copy() { return map.copy(); }
+		@Override
+		public void clear() { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public IntSet keySet() { 
@@ -584,7 +586,7 @@ public class Int2CharMaps
 		@Override
 		public Int2CharMap.Entry firstEntry() { synchronized(mutex) { return map.firstEntry(); } }
 		@Override
-		public Int2CharMap.Entry lastEntry() { synchronized(mutex) { return map.firstEntry(); } }
+		public Int2CharMap.Entry lastEntry() { synchronized(mutex) { return map.lastEntry(); } }
 		@Override
 		public Int2CharMap.Entry pollFirstEntry() { synchronized(mutex) { return map.pollFirstEntry(); } }
 		@Override

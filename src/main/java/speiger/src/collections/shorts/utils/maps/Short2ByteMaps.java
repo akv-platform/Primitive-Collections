@@ -488,7 +488,7 @@ public class Short2ByteMaps
 		@Override
 		public byte get(short key) {
 			byte type = map.get(key);
-			return type == map.getDefaultReturnValue() ? getDefaultReturnValue() : type;
+			return type == map.getDefaultReturnValue() && !map.containsKey(key) ? getDefaultReturnValue() : type;
 		}
 		@Override
 		public byte getOrDefault(short key, byte defaultValue) { return map.getOrDefault(key, defaultValue); }
@@ -506,6 +506,8 @@ public class Short2ByteMaps
 		public void mergeAllByte(Short2ByteMap m, ByteByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public Short2ByteMap copy() { return map.copy(); }
+		@Override
+		public void clear() { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public ShortSet keySet() { 
@@ -584,7 +586,7 @@ public class Short2ByteMaps
 		@Override
 		public Short2ByteMap.Entry firstEntry() { synchronized(mutex) { return map.firstEntry(); } }
 		@Override
-		public Short2ByteMap.Entry lastEntry() { synchronized(mutex) { return map.firstEntry(); } }
+		public Short2ByteMap.Entry lastEntry() { synchronized(mutex) { return map.lastEntry(); } }
 		@Override
 		public Short2ByteMap.Entry pollFirstEntry() { synchronized(mutex) { return map.pollFirstEntry(); } }
 		@Override

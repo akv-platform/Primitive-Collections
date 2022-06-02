@@ -486,7 +486,7 @@ public class Float2FloatMaps
 		@Override
 		public float get(float key) {
 			float type = map.get(key);
-			return Float.floatToIntBits(type) == Float.floatToIntBits(map.getDefaultReturnValue()) ? getDefaultReturnValue() : type;
+			return Float.floatToIntBits(type) == Float.floatToIntBits(map.getDefaultReturnValue()) && !map.containsKey(key) ? getDefaultReturnValue() : type;
 		}
 		@Override
 		public float getOrDefault(float key, float defaultValue) { return map.getOrDefault(key, defaultValue); }
@@ -504,6 +504,8 @@ public class Float2FloatMaps
 		public void mergeAllFloat(Float2FloatMap m, FloatFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public Float2FloatMap copy() { return map.copy(); }
+		@Override
+		public void clear() { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public FloatSet keySet() { 
@@ -582,7 +584,7 @@ public class Float2FloatMaps
 		@Override
 		public Float2FloatMap.Entry firstEntry() { synchronized(mutex) { return map.firstEntry(); } }
 		@Override
-		public Float2FloatMap.Entry lastEntry() { synchronized(mutex) { return map.firstEntry(); } }
+		public Float2FloatMap.Entry lastEntry() { synchronized(mutex) { return map.lastEntry(); } }
 		@Override
 		public Float2FloatMap.Entry pollFirstEntry() { synchronized(mutex) { return map.pollFirstEntry(); } }
 		@Override

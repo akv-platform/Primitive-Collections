@@ -501,7 +501,7 @@ public class Double2ObjectMaps
 		@Override
 		public V get(double key) {
 			V type = map.get(key);
-			return Objects.equals(type, map.getDefaultReturnValue()) ? getDefaultReturnValue() : type;
+			return Objects.equals(type, map.getDefaultReturnValue()) && !map.containsKey(key) ? getDefaultReturnValue() : type;
 		}
 		@Override
 		public V getOrDefault(double key, V defaultValue) { return map.getOrDefault(key, defaultValue); }
@@ -519,6 +519,8 @@ public class Double2ObjectMaps
 		public void mergeAll(Double2ObjectMap<V> m, ObjectObjectUnaryOperator<V, V> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public Double2ObjectMap<V> copy() { return map.copy(); }
+		@Override
+		public void clear() { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public DoubleSet keySet() { 
@@ -599,7 +601,7 @@ public class Double2ObjectMaps
 		@Override
 		public Double2ObjectMap.Entry<V> firstEntry() { synchronized(mutex) { return map.firstEntry(); } }
 		@Override
-		public Double2ObjectMap.Entry<V> lastEntry() { synchronized(mutex) { return map.firstEntry(); } }
+		public Double2ObjectMap.Entry<V> lastEntry() { synchronized(mutex) { return map.lastEntry(); } }
 		@Override
 		public Double2ObjectMap.Entry<V> pollFirstEntry() { synchronized(mutex) { return map.pollFirstEntry(); } }
 		@Override

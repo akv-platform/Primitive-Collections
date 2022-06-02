@@ -503,7 +503,7 @@ public class Object2ObjectMaps
 		@Override
 		public V getObject(T key) {
 			V type = map.getObject(key);
-			return Objects.equals(type, map.getDefaultReturnValue()) ? getDefaultReturnValue() : type;
+			return Objects.equals(type, map.getDefaultReturnValue()) && !map.containsKey(key) ? getDefaultReturnValue() : type;
 		}
 		@Override
 		public V compute(T key, ObjectObjectUnaryOperator<T, V> mappingFunction) { throw new UnsupportedOperationException(); }
@@ -519,6 +519,8 @@ public class Object2ObjectMaps
 		public void mergeAll(Object2ObjectMap<T, V> m, ObjectObjectUnaryOperator<V, V> mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
 		public Object2ObjectMap<T, V> copy() { return map.copy(); }
+		@Override
+		public void clear() { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public ObjectSet<T> keySet() { 
@@ -601,7 +603,7 @@ public class Object2ObjectMaps
 		@Override
 		public Object2ObjectMap.Entry<T, V> firstEntry() { synchronized(mutex) { return map.firstEntry(); } }
 		@Override
-		public Object2ObjectMap.Entry<T, V> lastEntry() { synchronized(mutex) { return map.firstEntry(); } }
+		public Object2ObjectMap.Entry<T, V> lastEntry() { synchronized(mutex) { return map.lastEntry(); } }
 		@Override
 		public Object2ObjectMap.Entry<T, V> pollFirstEntry() { synchronized(mutex) { return map.pollFirstEntry(); } }
 		@Override
