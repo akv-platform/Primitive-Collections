@@ -6,8 +6,19 @@ import com.google.common.collect.testing.AbstractTester;
 import com.google.common.collect.testing.features.CollectionFeature;
 
 import junit.framework.TestSuite;
+import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
+import speiger.src.testers.PACKAGE.builder.ORDERED_SET_TEST_BUILDER;
+import speiger.src.testers.PACKAGE.builder.SET_TEST_BUILDER;
+import speiger.src.testers.PACKAGE.generators.TEST_ORDERED_SET_GENERATOR;
+import speiger.src.testers.PACKAGE.generators.TEST_SET_GENERATOR;
 import speiger.src.testers.PACKAGE.generators.maps.TEST_ORDERED_MAP_GENERATOR;
 import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEOrderedMapNavigationTester;
+#if !TYPE_OBJECT
+import speiger.src.testers.objects.builder.ObjectSetTestSuiteBuilder;
+import speiger.src.testers.objects.generators.TestObjectSetGenerator;
+#endif
+import speiger.src.testers.objects.builder.ObjectSortedSetTestSuiteBuilder;
+import speiger.src.testers.objects.generators.TestObjectSortedSetGenerator;
 
 @SuppressWarnings("javadoc")
 public class ORDERED_MAP_TEST_BUILDER KEY_VALUE_GENERIC_TYPE extends MAP_TEST_BUILDER KEY_VALUE_GENERIC_TYPE
@@ -30,5 +41,13 @@ public class ORDERED_MAP_TEST_BUILDER KEY_VALUE_GENERIC_TYPE extends MAP_TEST_BU
 		withFeatures(CollectionFeature.KNOWN_ORDER);
 #endignore
 		return super.createTestSuite();
+	}
+	
+	protected ObjectSetTestSuiteBuilder<MAP.Entry KEY_VALUE_GENERIC_TYPE> createDerivedEntrySetSuite(TestObjectSetGenerator<MAP.Entry KEY_VALUE_GENERIC_TYPE> entrySetGenerator) {
+		return ObjectSortedSetTestSuiteBuilder.using((TestObjectSortedSetGenerator<MAP.Entry KEY_VALUE_GENERIC_TYPE>)entrySetGenerator);
+	}
+	
+	protected SET_TEST_BUILDER KEY_GENERIC_TYPE createDerivedKeySetSuite(TEST_SET_GENERATOR KEY_GENERIC_TYPE generator) {
+		return ORDERED_SET_TEST_BUILDER.using((TEST_ORDERED_SET_GENERATOR KEY_GENERIC_TYPE)generator);
 	}
 }

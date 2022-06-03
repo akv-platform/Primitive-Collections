@@ -23,16 +23,19 @@ import speiger.src.collections.PACKAGE.maps.interfaces.NAVIGABLE_MAP;
 import speiger.src.collections.PACKAGE.maps.interfaces.SORTED_MAP;
 #if !TYPE_OBJECT
 import speiger.src.collections.PACKAGE.sets.SET;
+import speiger.src.collections.PACKAGE.sets.ORDERED_SET;
 #endif
 import speiger.src.collections.PACKAGE.sets.SORTED_SET;
 import speiger.src.collections.PACKAGE.sets.NAVIGABLE_SET;
 #if !TYPE_OBJECT
 import speiger.src.testers.PACKAGE.generators.TEST_SET_GENERATOR;
 #endif
+import speiger.src.testers.PACKAGE.generators.TEST_ORDERED_SET_GENERATOR;
 import speiger.src.testers.PACKAGE.generators.TEST_SORTED_SET_GENERATOR;
 import speiger.src.testers.PACKAGE.generators.TEST_NAVIGABLE_SET_GENERATOR;
 import speiger.src.testers.PACKAGE.generators.maps.TEST_MAP_GENERATOR;
 import speiger.src.testers.PACKAGE.generators.maps.TEST_SORTED_MAP_GENERATOR;
+import speiger.src.testers.PACKAGE.generators.maps.TEST_ORDERED_MAP_GENERATOR;
 #if !TYPE_OBJECT
 import speiger.src.testers.PACKAGE.utils.SAMPLE_ELEMENTS;
 #endif
@@ -50,9 +53,13 @@ import speiger.src.collections.objects.collections.ObjectIterable;
 import speiger.src.collections.objects.lists.ObjectArrayList;
 import speiger.src.collections.objects.lists.ObjectList;
 import speiger.src.collections.objects.sets.ObjectSet;
+import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.objects.utils.ObjectIterators;
 import speiger.src.collections.objects.utils.ObjectLists;
 import speiger.src.testers.objects.generators.TestObjectSetGenerator;
+#if !TYPE_OBJECT
+import speiger.src.testers.objects.generators.TestObjectOrderedSetGenerator;
+#endif
 import speiger.src.testers.objects.utils.ObjectSamples;
 
 @SuppressWarnings("javadoc")
@@ -227,7 +234,26 @@ public class DERIVED_MAP_GENERATORS {
 			return parent.create(elements);
 		}
 	}
-
+	
+	public static GENERIC_KEY_VALUE_BRACES TestObjectSetGenerator<MAP.Entry KEY_VALUE_GENERIC_TYPE> entrySetGenerator(OneSizeTestContainerGenerator<Map<CLASS_TYPE, CLASS_VALUE_TYPE>, Map.Entry<CLASS_TYPE, CLASS_VALUE_TYPE>> inner) {
+		if(inner.getInnerGenerator() instanceof TEST_ORDERED_MAP_GENERATOR) {
+			ObjectSet<Entry KEY_VALUE_GENERIC_TYPE> set = ((TEST_ORDERED_MAP_GENERATOR KEY_VALUE_GENERIC_TYPE) inner.getInnerGenerator()).create().ENTRY_SET();
+			if(set instanceof ObjectOrderedSet) return new OrderedMapEntrySetGeneratorKV_BRACES(inner);
+		}
+		return new MapEntrySetGeneratorKV_BRACES(inner);
+	}
+	
+	public static class OrderedMapEntrySetGenerator KEY_VALUE_GENERIC_TYPE extends MapEntrySetGenerator KEY_VALUE_GENERIC_TYPE implements TestObjectOrderedSetGenerator<MAP.Entry KEY_VALUE_GENERIC_TYPE> {
+		
+		public OrderedMapEntrySetGenerator(OneSizeTestContainerGenerator<Map<CLASS_TYPE, CLASS_VALUE_TYPE>, Map.Entry<CLASS_TYPE, CLASS_VALUE_TYPE>> inner) {
+			super(inner);
+		}
+		
+		public ObjectOrderedSet<Entry KEY_VALUE_GENERIC_TYPE> create(Object... elements) {
+			return (ObjectOrderedSet<Entry KEY_VALUE_GENERIC_TYPE>)super.create(elements);
+		}
+	}
+	
 	public static class MapEntrySetGenerator KEY_VALUE_GENERIC_TYPE implements TestObjectSetGenerator<MAP.Entry KEY_VALUE_GENERIC_TYPE> {
 		TEST_MAP_GENERATOR KEY_VALUE_GENERIC_TYPE generator;
 
@@ -266,6 +292,10 @@ public class DERIVED_MAP_GENERATORS {
 			SET KEY_GENERIC_TYPE set = ((TEST_SORTED_MAP_GENERATOR KEY_VALUE_GENERIC_TYPE) inner.getInnerGenerator()).create().keySet();
 			if(set instanceof NAVIGABLE_SET) return new MapNavigableKeySetGeneratorKV_BRACES(inner);
 			if(set instanceof SORTED_SET) return new MapSortedKeySetGeneratorKV_BRACES(inner);
+		}
+		if(inner.getInnerGenerator() instanceof TEST_ORDERED_MAP_GENERATOR) {
+			SET KEY_GENERIC_TYPE set = ((TEST_ORDERED_MAP_GENERATOR KEY_VALUE_GENERIC_TYPE) inner.getInnerGenerator()).create().keySet();
+			if(set instanceof ORDERED_SET) return new MapOrderedKeySetGeneratorKV_BRACES(inner);
 		}
 		return new MapKeySetGeneratorKV_BRACES(inner);
 	}
@@ -328,7 +358,26 @@ public class DERIVED_MAP_GENERATORS {
 			return generator.aboveSamplesGreater().ENTRY_KEY();
 		}
 	}
+	
+	public static class MapOrderedKeySetGenerator KEY_VALUE_GENERIC_TYPE extends MapKeySetGenerator KEY_VALUE_GENERIC_TYPE implements TEST_ORDERED_SET_GENERATOR KEY_GENERIC_TYPE {
+		
+		public MapOrderedKeySetGenerator(OneSizeTestContainerGenerator<Map<CLASS_TYPE, CLASS_VALUE_TYPE>, Map.Entry<CLASS_TYPE, CLASS_VALUE_TYPE>> inner) {
+			super(inner);
+		}
 
+#if !TYPE_OBJECT
+		@Override
+		public ORDERED_SET KEY_GENERIC_TYPE create(KEY_TYPE... elements) {
+			return (ORDERED_SET KEY_GENERIC_TYPE) super.create(elements);
+		}
+
+#endif
+		@Override
+		public ORDERED_SET KEY_GENERIC_TYPE create(Object... elements) {
+			return (ORDERED_SET KEY_GENERIC_TYPE) super.create(elements);
+		}
+	}
+	
 	public static class MapKeySetGenerator KEY_VALUE_GENERIC_TYPE implements TEST_SET_GENERATOR KEY_GENERIC_TYPE {
 		TEST_MAP_GENERATOR KEY_VALUE_GENERIC_TYPE generator;
 		SAMPLE_ELEMENTS KEY_GENERIC_TYPE samples;

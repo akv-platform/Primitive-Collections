@@ -112,7 +112,7 @@ public class MAP_TEST_BUILDER KEY_VALUE_GENERIC_TYPE extends MapTestSuiteBuilder
 	protected List<TestSuite> createDerivedSuites(FeatureSpecificTestSuiteBuilder<?, ? extends OneSizeTestContainerGenerator<Map<CLASS_TYPE, CLASS_VALUE_TYPE>, Map.Entry<CLASS_TYPE, CLASS_VALUE_TYPE>>> parentBuilder) {
 		List<TestSuite> derivedSuites = new ArrayList<>();
 		derivedSuites.add(createDerivedEntrySetSuite(
-				new DERIVED_MAP_GENERATORS.MapEntrySetGeneratorKV_BRACES(parentBuilder.getSubjectGenerator()))
+				DERIVED_MAP_GENERATORS.entrySetGenerator(parentBuilder.getSubjectGenerator()))
 						.withFeatures(computeEntrySetFeatures(parentBuilder.getFeatures()))
 						.named(parentBuilder.getName() + " entrySet")
 						.suppressing(getEntrySetSuppressing(parentBuilder.getSuppressedTests()))
