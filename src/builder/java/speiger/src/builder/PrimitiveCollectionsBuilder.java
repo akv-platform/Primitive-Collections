@@ -168,7 +168,7 @@ public class PrimitiveCollectionsBuilder extends TemplateProcessor
 		addBiClass("MapAddToTester", "MapClearTester", "MapComputeIfAbsentTester", "MapComputeIfPresentTester", "MapComputeTester", "MapCopyTester", "MapContainsKeyTester", "MapContainsValueTester", "MapCreatorTester", "MapEntrySetTester",
 			"MapEqualsTester", "MapForEachTester", "MapGetOrDefaultTester", "MapGetTester", "MapHashCodeTester", "MapIsEmptyTester", "MapMergeTester", "MapPutAllArrayTester", "MapPutAllTester", "MapPutIfAbsentTester", "MapPutTester",
 			"MapRemoveEntryTester", "MapRemoveOrDefaultTester", "MapRemoveTester", "MapReplaceAllTester", "MapReplaceEntryTester", "MapReplaceTester", "MapSizeTester", "MapSupplyIfAbsentTester", "MapToStringTester",
-			"NavigableMapNavigationTester", "SortedMapNavigationTester", "OrderedMapNavigationTester");
+			"NavigableMapNavigationTester", "SortedMapNavigationTester", "OrderedMapNavigationTester", "OrderedMapMoveTester");
 		
 		addBlockage(ClassType.OBJECT, "CollectionStreamTester", "ListFillBufferTester");
 		addBlockage(ClassType.BOOLEAN, "TestOrderedSetGenerator", "TestSortedSetGenerator", "TestNavigableSetGenerator", "CollectionRemoveIfTester", "CollectionStreamTester", "ListFillBufferTester", "ListReplaceAllTester", "NavigableSetNavigationTester", "SetTests");

@@ -261,7 +261,7 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 	
 	@Override
 	public boolean moveToFirst(KEY_TYPE key) {
-		if(KEY_EQUALS(FIRST_ENTRY_KEY(), key)) return false;
+		if(isEmpty() || KEY_EQUALS(FIRST_ENTRY_KEY(), key)) return false;
 		if(KEY_EQUALS_NULL(key)) {
 			if(containsNull) {
 				moveToFirstIndex(nullIndex);
@@ -283,7 +283,7 @@ public class LINKED_HASH_MAP KEY_VALUE_GENERIC_TYPE extends HASH_MAP KEY_VALUE_G
 	
 	@Override
 	public boolean moveToLast(KEY_TYPE key) {
-		if(KEY_EQUALS(LAST_ENTRY_KEY(), key)) return false;
+		if(isEmpty() || KEY_EQUALS(LAST_ENTRY_KEY(), key)) return false;
 		if(KEY_EQUALS_NULL(key)) {
 			if(containsNull) {
 				moveToLastIndex(nullIndex);

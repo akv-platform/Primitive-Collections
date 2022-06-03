@@ -19,6 +19,8 @@ import speiger.src.collections.objects.collections.ObjectIterable;
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.sets.ObjectSet;
 #if !TYPE_BOOLEAN
+import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
+import speiger.src.collections.objects.utils.ObjectIterators;
 import speiger.src.collections.objects.utils.ObjectSets;
 #if !TYPE_OBJECT
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
@@ -541,7 +543,7 @@ public class MAPS
 				
 		@Override
 		public ObjectOrderedSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> ENTRY_SET() {
-			if(entrySet == null) entrySet = new UnmodifyableEntrySetKV_BRACES(map.ENTRY_SET());
+			if(entrySet == null) entrySet = new UnmodifyableOrderedEntrySetKV_BRACES(map.ENTRY_SET());
 			return (ObjectOrderedSet<MAP.Entry KEY_VALUE_GENERIC_TYPE>)entrySet;
 		}
 	}
@@ -641,6 +643,10 @@ public class MAPS
 		@Override
 		public void BULK_MERGE(MAP KEY_VALUE_GENERIC_TYPE m, VALUE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
+		public void REPLACE_VALUES(UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void REPLACE_VALUES(MAP KEY_VALUE_GENERIC_TYPE m) { throw new UnsupportedOperationException(); }
+		@Override
 		public MAP KEY_VALUE_GENERIC_TYPE copy() { return map.copy(); }
 		@Override
 		public void clear() { throw new UnsupportedOperationException(); }
@@ -662,6 +668,45 @@ public class MAPS
 			if(entrySet == null) entrySet = new UnmodifyableEntrySetKV_BRACES(map.ENTRY_SET());
 			return entrySet;
 		}
+	}
+	
+	
+	/**
+	 * The Unmodifyable Ordered Set implementation for the Unmodifyable Ordered Map implementation
+	 * @Type(T)
+	 * @ValueType(V)
+	 */
+	public static class UnmodifyableOrderedEntrySet KEY_VALUE_GENERIC_TYPE extends UnmodifyableEntrySet KEY_VALUE_GENERIC_TYPE implements ObjectOrderedSet<MAP.Entry KEY_VALUE_GENERIC_TYPE>
+	{
+		ObjectOrderedSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> set;
+		
+		UnmodifyableOrderedEntrySet(ObjectOrderedSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> c) {
+			super(c);
+			set = c;
+		}
+
+		@Override
+		public boolean addAndMoveToFirst(MAP.Entry KEY_VALUE_GENERIC_TYPE o) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean addAndMoveToLast(MAP.Entry KEY_VALUE_GENERIC_TYPE o) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean moveToFirst(MAP.Entry KEY_VALUE_GENERIC_TYPE o) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean moveToLast(MAP.Entry KEY_VALUE_GENERIC_TYPE o) { throw new UnsupportedOperationException(); }
+		@Override
+		public ObjectOrderedSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> copy() { return set.copy(); }
+		@Override
+		public ObjectBidirectionalIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> iterator() { return ObjectIterators.unmodifiable(set.iterator()); }
+		@Override
+		public ObjectBidirectionalIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> iterator(MAP.Entry KEY_VALUE_GENERIC_TYPE fromElement) { return ObjectIterators.unmodifiable(set.iterator(fromElement)); }
+		@Override
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE first() { return set.first(); }
+		@Override
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE pollFirst() { throw new UnsupportedOperationException(); }
+		@Override
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE last() { return set.last(); }
+		@Override
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE pollLast() { throw new UnsupportedOperationException(); }
 	}
 	
 	/**

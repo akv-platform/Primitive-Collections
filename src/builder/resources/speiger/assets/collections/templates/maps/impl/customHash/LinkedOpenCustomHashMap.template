@@ -284,7 +284,7 @@ public class LINKED_CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends CUSTOM_HASH_M
 	
 	@Override
 	public boolean moveToFirst(KEY_TYPE key) {
-		if(strategy.equals(FIRST_ENTRY_KEY(), key)) return false;
+		if(isEmpty() || strategy.equals(FIRST_ENTRY_KEY(), key)) return false;
 		if(strategy.equals(key, EMPTY_KEY_VALUE)) {
 			if(containsNull) {
 				moveToFirstIndex(nullIndex);
@@ -306,7 +306,7 @@ public class LINKED_CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends CUSTOM_HASH_M
 	
 	@Override
 	public boolean moveToLast(KEY_TYPE key) {
-		if(strategy.equals(LAST_ENTRY_KEY(), key)) return false;
+		if(isEmpty() || strategy.equals(LAST_ENTRY_KEY(), key)) return false;
 		if(strategy.equals(key, EMPTY_KEY_VALUE)) {
 			if(containsNull) {
 				moveToLastIndex(nullIndex);
