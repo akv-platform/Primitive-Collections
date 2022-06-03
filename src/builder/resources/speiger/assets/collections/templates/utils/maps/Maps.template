@@ -21,6 +21,7 @@ import speiger.src.collections.objects.sets.ObjectSet;
 #if !TYPE_BOOLEAN
 import speiger.src.collections.objects.utils.ObjectSets;
 #if !TYPE_OBJECT
+import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.PACKAGE.functions.COMPARATOR;
 #endif
 import speiger.src.collections.PACKAGE.functions.consumer.BI_CONSUMER;
@@ -35,6 +36,7 @@ import speiger.src.collections.PACKAGE.maps.interfaces.SORTED_MAP;
 import speiger.src.collections.PACKAGE.maps.interfaces.ORDERED_MAP;
 import speiger.src.collections.PACKAGE.sets.NAVIGABLE_SET;
 import speiger.src.collections.PACKAGE.sets.SORTED_SET;
+import speiger.src.collections.PACKAGE.sets.ORDERED_SET;
 #if !TYPE_OBJECT
 import speiger.src.collections.PACKAGE.sets.SET;
 import speiger.src.collections.PACKAGE.utils.SETS;
@@ -531,6 +533,17 @@ public class MAPS
 		public VALUE_TYPE LAST_ENTRY_VALUE() { return map.LAST_ENTRY_VALUE(); }
 		@Override
 		public ORDERED_MAP KEY_VALUE_GENERIC_TYPE copy() { return map.copy(); }
+		@Override
+		public ORDERED_SET KEY_GENERIC_TYPE keySet() { 
+			if(keys == null) keys = SETS.unmodifiable(map.keySet()); 
+			return (ORDERED_SET KEY_GENERIC_TYPE)keys;
+		}
+				
+		@Override
+		public ObjectOrderedSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> ENTRY_SET() {
+			if(entrySet == null) entrySet = new UnmodifyableEntrySetKV_BRACES(map.ENTRY_SET());
+			return (ObjectOrderedSet<MAP.Entry KEY_VALUE_GENERIC_TYPE>)entrySet;
+		}
 	}
 	
 	/**
@@ -846,6 +859,17 @@ public class MAPS
 		public VALUE_TYPE LAST_ENTRY_VALUE() { synchronized(mutex) { return map.LAST_ENTRY_VALUE(); } }
 		@Override
 		public ORDERED_MAP KEY_VALUE_GENERIC_TYPE copy() { synchronized(mutex) { return map.copy(); } }
+		@Override
+		public ORDERED_SET KEY_GENERIC_TYPE keySet() {
+			if(keys == null) keys = SETS.synchronize(map.keySet(), mutex);
+			return (ORDERED_SET KEY_GENERIC_TYPE)keys;
+		}
+		
+		@Override
+		public ObjectOrderedSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> ENTRY_SET() {
+			if(entrySet == null) entrySet = ObjectSets.synchronize(map.ENTRY_SET(), mutex);
+			return (ObjectOrderedSet<MAP.Entry KEY_VALUE_GENERIC_TYPE>)entrySet;
+		}
 	}
 	
 	/**

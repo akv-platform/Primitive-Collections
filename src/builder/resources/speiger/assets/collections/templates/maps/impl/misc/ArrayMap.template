@@ -27,7 +27,6 @@ import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
 import speiger.src.collections.PACKAGE.maps.interfaces.ORDERED_MAP;
 import speiger.src.collections.PACKAGE.sets.ABSTRACT_SET;
 import speiger.src.collections.PACKAGE.sets.ORDERED_SET;
-import speiger.src.collections.PACKAGE.sets.SET;
 import speiger.src.collections.PACKAGE.utils.maps.MAPS;
 import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_ABSTRACT_COLLECTION;
 import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_COLLECTION;
@@ -90,7 +89,7 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 	/** Amount of Elements stored in the ArrayMap */
 	protected int size = 0;
 	/** KeySet cache */
-	protected SET KEY_GENERIC_TYPE keySet;
+	protected ORDERED_SET KEY_GENERIC_TYPE keySet;
 	/** Values cache */
 	protected VALUE_COLLECTION VALUE_GENERIC_TYPE valuesC;
 	/** EntrySet cache */
@@ -437,7 +436,7 @@ public class ARRAY_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GEN
 	}
 	
 	@Override
-	public SET KEY_GENERIC_TYPE keySet() {
+	public ORDERED_SET KEY_GENERIC_TYPE keySet() {
 		if(keySet == null) keySet = new KeySet();
 		return keySet;
 	}
