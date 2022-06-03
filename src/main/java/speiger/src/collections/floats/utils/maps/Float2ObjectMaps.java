@@ -446,11 +446,11 @@ public class Float2ObjectMaps
 		@Override
 		public float firstFloatKey() { return map.firstFloatKey(); }
 		@Override
-		public float pollFirstFloatKey() { return map.pollFirstFloatKey(); }
+		public float pollFirstFloatKey() { throw new UnsupportedOperationException(); }
 		@Override
 		public float lastFloatKey() { return map.lastFloatKey(); }
 		@Override
-		public float pollLastFloatKey() { return map.pollLastFloatKey(); }
+		public float pollLastFloatKey() { throw new UnsupportedOperationException(); }
 		@Override
 		public V firstValue() { return map.firstValue(); }
 		@Override

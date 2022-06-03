@@ -423,11 +423,11 @@ public class Byte2BooleanMaps
 		@Override
 		public byte firstByteKey() { return map.firstByteKey(); }
 		@Override
-		public byte pollFirstByteKey() { return map.pollFirstByteKey(); }
+		public byte pollFirstByteKey() { throw new UnsupportedOperationException(); }
 		@Override
 		public byte lastByteKey() { return map.lastByteKey(); }
 		@Override
-		public byte pollLastByteKey() { return map.pollLastByteKey(); }
+		public byte pollLastByteKey() { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean firstBooleanValue() { return map.firstBooleanValue(); }
 		@Override

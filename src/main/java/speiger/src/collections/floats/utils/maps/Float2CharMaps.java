@@ -431,11 +431,11 @@ public class Float2CharMaps
 		@Override
 		public float firstFloatKey() { return map.firstFloatKey(); }
 		@Override
-		public float pollFirstFloatKey() { return map.pollFirstFloatKey(); }
+		public float pollFirstFloatKey() { throw new UnsupportedOperationException(); }
 		@Override
 		public float lastFloatKey() { return map.lastFloatKey(); }
 		@Override
-		public float pollLastFloatKey() { return map.pollLastFloatKey(); }
+		public float pollLastFloatKey() { throw new UnsupportedOperationException(); }
 		@Override
 		public char firstCharValue() { return map.firstCharValue(); }
 		@Override

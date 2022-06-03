@@ -431,11 +431,11 @@ public class Double2CharMaps
 		@Override
 		public double firstDoubleKey() { return map.firstDoubleKey(); }
 		@Override
-		public double pollFirstDoubleKey() { return map.pollFirstDoubleKey(); }
+		public double pollFirstDoubleKey() { throw new UnsupportedOperationException(); }
 		@Override
 		public double lastDoubleKey() { return map.lastDoubleKey(); }
 		@Override
-		public double pollLastDoubleKey() { return map.pollLastDoubleKey(); }
+		public double pollLastDoubleKey() { throw new UnsupportedOperationException(); }
 		@Override
 		public char firstCharValue() { return map.firstCharValue(); }
 		@Override

@@ -431,11 +431,11 @@ public class Byte2DoubleMaps
 		@Override
 		public byte firstByteKey() { return map.firstByteKey(); }
 		@Override
-		public byte pollFirstByteKey() { return map.pollFirstByteKey(); }
+		public byte pollFirstByteKey() { throw new UnsupportedOperationException(); }
 		@Override
 		public byte lastByteKey() { return map.lastByteKey(); }
 		@Override
-		public byte pollLastByteKey() { return map.pollLastByteKey(); }
+		public byte pollLastByteKey() { throw new UnsupportedOperationException(); }
 		@Override
 		public double firstDoubleValue() { return map.firstDoubleValue(); }
 		@Override

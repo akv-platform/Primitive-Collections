@@ -431,11 +431,11 @@ public class Long2IntMaps
 		@Override
 		public long firstLongKey() { return map.firstLongKey(); }
 		@Override
-		public long pollFirstLongKey() { return map.pollFirstLongKey(); }
+		public long pollFirstLongKey() { throw new UnsupportedOperationException(); }
 		@Override
 		public long lastLongKey() { return map.lastLongKey(); }
 		@Override
-		public long pollLastLongKey() { return map.pollLastLongKey(); }
+		public long pollLastLongKey() { throw new UnsupportedOperationException(); }
 		@Override
 		public int firstIntValue() { return map.firstIntValue(); }
 		@Override

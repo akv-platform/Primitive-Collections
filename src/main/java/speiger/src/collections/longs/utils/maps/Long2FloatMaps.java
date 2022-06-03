@@ -431,11 +431,11 @@ public class Long2FloatMaps
 		@Override
 		public long firstLongKey() { return map.firstLongKey(); }
 		@Override
-		public long pollFirstLongKey() { return map.pollFirstLongKey(); }
+		public long pollFirstLongKey() { throw new UnsupportedOperationException(); }
 		@Override
 		public long lastLongKey() { return map.lastLongKey(); }
 		@Override
-		public long pollLastLongKey() { return map.pollLastLongKey(); }
+		public long pollLastLongKey() { throw new UnsupportedOperationException(); }
 		@Override
 		public float firstFloatValue() { return map.firstFloatValue(); }
 		@Override

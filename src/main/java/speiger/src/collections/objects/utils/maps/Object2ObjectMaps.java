@@ -448,11 +448,11 @@ public class Object2ObjectMaps
 		@Override
 		public T firstKey() { return map.firstKey(); }
 		@Override
-		public T pollFirstKey() { return map.pollFirstKey(); }
+		public T pollFirstKey() { throw new UnsupportedOperationException(); }
 		@Override
 		public T lastKey() { return map.lastKey(); }
 		@Override
-		public T pollLastKey() { return map.pollLastKey(); }
+		public T pollLastKey() { throw new UnsupportedOperationException(); }
 		@Override
 		public V firstValue() { return map.firstValue(); }
 		@Override

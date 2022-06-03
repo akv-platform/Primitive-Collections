@@ -431,11 +431,11 @@ public class Int2FloatMaps
 		@Override
 		public int firstIntKey() { return map.firstIntKey(); }
 		@Override
-		public int pollFirstIntKey() { return map.pollFirstIntKey(); }
+		public int pollFirstIntKey() { throw new UnsupportedOperationException(); }
 		@Override
 		public int lastIntKey() { return map.lastIntKey(); }
 		@Override
-		public int pollLastIntKey() { return map.pollLastIntKey(); }
+		public int pollLastIntKey() { throw new UnsupportedOperationException(); }
 		@Override
 		public float firstFloatValue() { return map.firstFloatValue(); }
 		@Override

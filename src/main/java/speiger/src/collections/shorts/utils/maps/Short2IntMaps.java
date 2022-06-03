@@ -431,11 +431,11 @@ public class Short2IntMaps
 		@Override
 		public short firstShortKey() { return map.firstShortKey(); }
 		@Override
-		public short pollFirstShortKey() { return map.pollFirstShortKey(); }
+		public short pollFirstShortKey() { throw new UnsupportedOperationException(); }
 		@Override
 		public short lastShortKey() { return map.lastShortKey(); }
 		@Override
-		public short pollLastShortKey() { return map.pollLastShortKey(); }
+		public short pollLastShortKey() { throw new UnsupportedOperationException(); }
 		@Override
 		public int firstIntValue() { return map.firstIntValue(); }
 		@Override

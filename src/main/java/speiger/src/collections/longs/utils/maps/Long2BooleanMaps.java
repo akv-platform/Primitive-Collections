@@ -423,11 +423,11 @@ public class Long2BooleanMaps
 		@Override
 		public long firstLongKey() { return map.firstLongKey(); }
 		@Override
-		public long pollFirstLongKey() { return map.pollFirstLongKey(); }
+		public long pollFirstLongKey() { throw new UnsupportedOperationException(); }
 		@Override
 		public long lastLongKey() { return map.lastLongKey(); }
 		@Override
-		public long pollLastLongKey() { return map.pollLastLongKey(); }
+		public long pollLastLongKey() { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean firstBooleanValue() { return map.firstBooleanValue(); }
 		@Override

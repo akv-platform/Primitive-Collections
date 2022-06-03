@@ -431,11 +431,11 @@ public class Short2CharMaps
 		@Override
 		public short firstShortKey() { return map.firstShortKey(); }
 		@Override
-		public short pollFirstShortKey() { return map.pollFirstShortKey(); }
+		public short pollFirstShortKey() { throw new UnsupportedOperationException(); }
 		@Override
 		public short lastShortKey() { return map.lastShortKey(); }
 		@Override
-		public short pollLastShortKey() { return map.pollLastShortKey(); }
+		public short pollLastShortKey() { throw new UnsupportedOperationException(); }
 		@Override
 		public char firstCharValue() { return map.firstCharValue(); }
 		@Override
