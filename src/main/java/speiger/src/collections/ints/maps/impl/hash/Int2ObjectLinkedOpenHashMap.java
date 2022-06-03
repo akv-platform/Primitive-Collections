@@ -230,7 +230,7 @@ public class Int2ObjectLinkedOpenHashMap<V> extends Int2ObjectOpenHashMap<V> imp
 	
 	@Override
 	public boolean moveToFirst(int key) {
-		if(firstIntKey() == key) return false;
+		if(isEmpty() || firstIntKey() == key) return false;
 		if(key == 0) {
 			if(containsNull) {
 				moveToFirstIndex(nullIndex);
@@ -252,7 +252,7 @@ public class Int2ObjectLinkedOpenHashMap<V> extends Int2ObjectOpenHashMap<V> imp
 	
 	@Override
 	public boolean moveToLast(int key) {
-		if(lastIntKey() == key) return false;
+		if(isEmpty() || lastIntKey() == key) return false;
 		if(key == 0) {
 			if(containsNull) {
 				moveToLastIndex(nullIndex);

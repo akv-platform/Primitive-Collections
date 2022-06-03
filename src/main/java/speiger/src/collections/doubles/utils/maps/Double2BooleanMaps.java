@@ -10,6 +10,8 @@ import java.util.function.Function;
 import speiger.src.collections.objects.collections.ObjectIterable;
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.sets.ObjectSet;
+import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
+import speiger.src.collections.objects.utils.ObjectIterators;
 import speiger.src.collections.objects.utils.ObjectSets;
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.doubles.functions.DoubleComparator;
@@ -444,7 +446,7 @@ public class Double2BooleanMaps
 				
 		@Override
 		public ObjectOrderedSet<Double2BooleanMap.Entry> double2BooleanEntrySet() {
-			if(entrySet == null) entrySet = new UnmodifyableEntrySet(map.double2BooleanEntrySet());
+			if(entrySet == null) entrySet = new UnmodifyableOrderedEntrySet(map.double2BooleanEntrySet());
 			return (ObjectOrderedSet<Double2BooleanMap.Entry>)entrySet;
 		}
 	}
@@ -530,6 +532,10 @@ public class Double2BooleanMaps
 		@Override
 		public void mergeAllBoolean(Double2BooleanMap m, BooleanBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
+		public void replaceBooleans(DoubleBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void replaceBooleans(Double2BooleanMap m) { throw new UnsupportedOperationException(); }
+		@Override
 		public Double2BooleanMap copy() { return map.copy(); }
 		@Override
 		public void clear() { throw new UnsupportedOperationException(); }
@@ -551,6 +557,43 @@ public class Double2BooleanMaps
 			if(entrySet == null) entrySet = new UnmodifyableEntrySet(map.double2BooleanEntrySet());
 			return entrySet;
 		}
+	}
+	
+	
+	/**
+	 * The Unmodifyable Ordered Set implementation for the Unmodifyable Ordered Map implementation
+	 */
+	public static class UnmodifyableOrderedEntrySet extends UnmodifyableEntrySet implements ObjectOrderedSet<Double2BooleanMap.Entry>
+	{
+		ObjectOrderedSet<Double2BooleanMap.Entry> set;
+		
+		UnmodifyableOrderedEntrySet(ObjectOrderedSet<Double2BooleanMap.Entry> c) {
+			super(c);
+			set = c;
+		}
+
+		@Override
+		public boolean addAndMoveToFirst(Double2BooleanMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean addAndMoveToLast(Double2BooleanMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean moveToFirst(Double2BooleanMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean moveToLast(Double2BooleanMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public ObjectOrderedSet<Double2BooleanMap.Entry> copy() { return set.copy(); }
+		@Override
+		public ObjectBidirectionalIterator<Double2BooleanMap.Entry> iterator() { return ObjectIterators.unmodifiable(set.iterator()); }
+		@Override
+		public ObjectBidirectionalIterator<Double2BooleanMap.Entry> iterator(Double2BooleanMap.Entry fromElement) { return ObjectIterators.unmodifiable(set.iterator(fromElement)); }
+		@Override
+		public Double2BooleanMap.Entry first() { return set.first(); }
+		@Override
+		public Double2BooleanMap.Entry pollFirst() { throw new UnsupportedOperationException(); }
+		@Override
+		public Double2BooleanMap.Entry last() { return set.last(); }
+		@Override
+		public Double2BooleanMap.Entry pollLast() { throw new UnsupportedOperationException(); }
 	}
 	
 	/**

@@ -248,7 +248,7 @@ public class Object2DoubleLinkedOpenCustomHashMap<T> extends Object2DoubleOpenCu
 	
 	@Override
 	public boolean moveToFirst(T key) {
-		if(strategy.equals(firstKey(), key)) return false;
+		if(isEmpty() || strategy.equals(firstKey(), key)) return false;
 		if(strategy.equals(key, null)) {
 			if(containsNull) {
 				moveToFirstIndex(nullIndex);
@@ -270,7 +270,7 @@ public class Object2DoubleLinkedOpenCustomHashMap<T> extends Object2DoubleOpenCu
 	
 	@Override
 	public boolean moveToLast(T key) {
-		if(strategy.equals(lastKey(), key)) return false;
+		if(isEmpty() || strategy.equals(lastKey(), key)) return false;
 		if(strategy.equals(key, null)) {
 			if(containsNull) {
 				moveToLastIndex(nullIndex);

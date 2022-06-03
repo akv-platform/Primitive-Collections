@@ -10,6 +10,8 @@ import java.util.function.Function;
 import speiger.src.collections.objects.collections.ObjectIterable;
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.sets.ObjectSet;
+import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
+import speiger.src.collections.objects.utils.ObjectIterators;
 import speiger.src.collections.objects.utils.ObjectSets;
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.bytes.functions.ByteComparator;
@@ -452,7 +454,7 @@ public class Byte2ShortMaps
 				
 		@Override
 		public ObjectOrderedSet<Byte2ShortMap.Entry> byte2ShortEntrySet() {
-			if(entrySet == null) entrySet = new UnmodifyableEntrySet(map.byte2ShortEntrySet());
+			if(entrySet == null) entrySet = new UnmodifyableOrderedEntrySet(map.byte2ShortEntrySet());
 			return (ObjectOrderedSet<Byte2ShortMap.Entry>)entrySet;
 		}
 	}
@@ -542,6 +544,10 @@ public class Byte2ShortMaps
 		@Override
 		public void mergeAllShort(Byte2ShortMap m, ShortShortUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
+		public void replaceShorts(ByteShortUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void replaceShorts(Byte2ShortMap m) { throw new UnsupportedOperationException(); }
+		@Override
 		public Byte2ShortMap copy() { return map.copy(); }
 		@Override
 		public void clear() { throw new UnsupportedOperationException(); }
@@ -563,6 +569,43 @@ public class Byte2ShortMaps
 			if(entrySet == null) entrySet = new UnmodifyableEntrySet(map.byte2ShortEntrySet());
 			return entrySet;
 		}
+	}
+	
+	
+	/**
+	 * The Unmodifyable Ordered Set implementation for the Unmodifyable Ordered Map implementation
+	 */
+	public static class UnmodifyableOrderedEntrySet extends UnmodifyableEntrySet implements ObjectOrderedSet<Byte2ShortMap.Entry>
+	{
+		ObjectOrderedSet<Byte2ShortMap.Entry> set;
+		
+		UnmodifyableOrderedEntrySet(ObjectOrderedSet<Byte2ShortMap.Entry> c) {
+			super(c);
+			set = c;
+		}
+
+		@Override
+		public boolean addAndMoveToFirst(Byte2ShortMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean addAndMoveToLast(Byte2ShortMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean moveToFirst(Byte2ShortMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean moveToLast(Byte2ShortMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public ObjectOrderedSet<Byte2ShortMap.Entry> copy() { return set.copy(); }
+		@Override
+		public ObjectBidirectionalIterator<Byte2ShortMap.Entry> iterator() { return ObjectIterators.unmodifiable(set.iterator()); }
+		@Override
+		public ObjectBidirectionalIterator<Byte2ShortMap.Entry> iterator(Byte2ShortMap.Entry fromElement) { return ObjectIterators.unmodifiable(set.iterator(fromElement)); }
+		@Override
+		public Byte2ShortMap.Entry first() { return set.first(); }
+		@Override
+		public Byte2ShortMap.Entry pollFirst() { throw new UnsupportedOperationException(); }
+		@Override
+		public Byte2ShortMap.Entry last() { return set.last(); }
+		@Override
+		public Byte2ShortMap.Entry pollLast() { throw new UnsupportedOperationException(); }
 	}
 	
 	/**

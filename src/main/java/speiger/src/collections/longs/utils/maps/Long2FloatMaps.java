@@ -10,6 +10,8 @@ import java.util.function.Function;
 import speiger.src.collections.objects.collections.ObjectIterable;
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.sets.ObjectSet;
+import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
+import speiger.src.collections.objects.utils.ObjectIterators;
 import speiger.src.collections.objects.utils.ObjectSets;
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.longs.functions.LongComparator;
@@ -452,7 +454,7 @@ public class Long2FloatMaps
 				
 		@Override
 		public ObjectOrderedSet<Long2FloatMap.Entry> long2FloatEntrySet() {
-			if(entrySet == null) entrySet = new UnmodifyableEntrySet(map.long2FloatEntrySet());
+			if(entrySet == null) entrySet = new UnmodifyableOrderedEntrySet(map.long2FloatEntrySet());
 			return (ObjectOrderedSet<Long2FloatMap.Entry>)entrySet;
 		}
 	}
@@ -542,6 +544,10 @@ public class Long2FloatMaps
 		@Override
 		public void mergeAllFloat(Long2FloatMap m, FloatFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
+		public void replaceFloats(LongFloatUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void replaceFloats(Long2FloatMap m) { throw new UnsupportedOperationException(); }
+		@Override
 		public Long2FloatMap copy() { return map.copy(); }
 		@Override
 		public void clear() { throw new UnsupportedOperationException(); }
@@ -563,6 +569,43 @@ public class Long2FloatMaps
 			if(entrySet == null) entrySet = new UnmodifyableEntrySet(map.long2FloatEntrySet());
 			return entrySet;
 		}
+	}
+	
+	
+	/**
+	 * The Unmodifyable Ordered Set implementation for the Unmodifyable Ordered Map implementation
+	 */
+	public static class UnmodifyableOrderedEntrySet extends UnmodifyableEntrySet implements ObjectOrderedSet<Long2FloatMap.Entry>
+	{
+		ObjectOrderedSet<Long2FloatMap.Entry> set;
+		
+		UnmodifyableOrderedEntrySet(ObjectOrderedSet<Long2FloatMap.Entry> c) {
+			super(c);
+			set = c;
+		}
+
+		@Override
+		public boolean addAndMoveToFirst(Long2FloatMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean addAndMoveToLast(Long2FloatMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean moveToFirst(Long2FloatMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean moveToLast(Long2FloatMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public ObjectOrderedSet<Long2FloatMap.Entry> copy() { return set.copy(); }
+		@Override
+		public ObjectBidirectionalIterator<Long2FloatMap.Entry> iterator() { return ObjectIterators.unmodifiable(set.iterator()); }
+		@Override
+		public ObjectBidirectionalIterator<Long2FloatMap.Entry> iterator(Long2FloatMap.Entry fromElement) { return ObjectIterators.unmodifiable(set.iterator(fromElement)); }
+		@Override
+		public Long2FloatMap.Entry first() { return set.first(); }
+		@Override
+		public Long2FloatMap.Entry pollFirst() { throw new UnsupportedOperationException(); }
+		@Override
+		public Long2FloatMap.Entry last() { return set.last(); }
+		@Override
+		public Long2FloatMap.Entry pollLast() { throw new UnsupportedOperationException(); }
 	}
 	
 	/**

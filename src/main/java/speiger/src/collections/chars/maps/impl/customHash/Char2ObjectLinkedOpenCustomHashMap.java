@@ -253,7 +253,7 @@ public class Char2ObjectLinkedOpenCustomHashMap<V> extends Char2ObjectOpenCustom
 	
 	@Override
 	public boolean moveToFirst(char key) {
-		if(strategy.equals(firstCharKey(), key)) return false;
+		if(isEmpty() || strategy.equals(firstCharKey(), key)) return false;
 		if(strategy.equals(key, (char)0)) {
 			if(containsNull) {
 				moveToFirstIndex(nullIndex);
@@ -275,7 +275,7 @@ public class Char2ObjectLinkedOpenCustomHashMap<V> extends Char2ObjectOpenCustom
 	
 	@Override
 	public boolean moveToLast(char key) {
-		if(strategy.equals(lastCharKey(), key)) return false;
+		if(isEmpty() || strategy.equals(lastCharKey(), key)) return false;
 		if(strategy.equals(key, (char)0)) {
 			if(containsNull) {
 				moveToLastIndex(nullIndex);

@@ -10,6 +10,8 @@ import java.util.function.Function;
 import speiger.src.collections.objects.collections.ObjectIterable;
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.sets.ObjectSet;
+import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
+import speiger.src.collections.objects.utils.ObjectIterators;
 import speiger.src.collections.objects.utils.ObjectSets;
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.doubles.functions.DoubleComparator;
@@ -452,7 +454,7 @@ public class Double2ByteMaps
 				
 		@Override
 		public ObjectOrderedSet<Double2ByteMap.Entry> double2ByteEntrySet() {
-			if(entrySet == null) entrySet = new UnmodifyableEntrySet(map.double2ByteEntrySet());
+			if(entrySet == null) entrySet = new UnmodifyableOrderedEntrySet(map.double2ByteEntrySet());
 			return (ObjectOrderedSet<Double2ByteMap.Entry>)entrySet;
 		}
 	}
@@ -542,6 +544,10 @@ public class Double2ByteMaps
 		@Override
 		public void mergeAllByte(Double2ByteMap m, ByteByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
+		public void replaceBytes(DoubleByteUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void replaceBytes(Double2ByteMap m) { throw new UnsupportedOperationException(); }
+		@Override
 		public Double2ByteMap copy() { return map.copy(); }
 		@Override
 		public void clear() { throw new UnsupportedOperationException(); }
@@ -563,6 +569,43 @@ public class Double2ByteMaps
 			if(entrySet == null) entrySet = new UnmodifyableEntrySet(map.double2ByteEntrySet());
 			return entrySet;
 		}
+	}
+	
+	
+	/**
+	 * The Unmodifyable Ordered Set implementation for the Unmodifyable Ordered Map implementation
+	 */
+	public static class UnmodifyableOrderedEntrySet extends UnmodifyableEntrySet implements ObjectOrderedSet<Double2ByteMap.Entry>
+	{
+		ObjectOrderedSet<Double2ByteMap.Entry> set;
+		
+		UnmodifyableOrderedEntrySet(ObjectOrderedSet<Double2ByteMap.Entry> c) {
+			super(c);
+			set = c;
+		}
+
+		@Override
+		public boolean addAndMoveToFirst(Double2ByteMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean addAndMoveToLast(Double2ByteMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean moveToFirst(Double2ByteMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean moveToLast(Double2ByteMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public ObjectOrderedSet<Double2ByteMap.Entry> copy() { return set.copy(); }
+		@Override
+		public ObjectBidirectionalIterator<Double2ByteMap.Entry> iterator() { return ObjectIterators.unmodifiable(set.iterator()); }
+		@Override
+		public ObjectBidirectionalIterator<Double2ByteMap.Entry> iterator(Double2ByteMap.Entry fromElement) { return ObjectIterators.unmodifiable(set.iterator(fromElement)); }
+		@Override
+		public Double2ByteMap.Entry first() { return set.first(); }
+		@Override
+		public Double2ByteMap.Entry pollFirst() { throw new UnsupportedOperationException(); }
+		@Override
+		public Double2ByteMap.Entry last() { return set.last(); }
+		@Override
+		public Double2ByteMap.Entry pollLast() { throw new UnsupportedOperationException(); }
 	}
 	
 	/**

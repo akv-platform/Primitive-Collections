@@ -10,6 +10,8 @@ import java.util.function.Function;
 import speiger.src.collections.objects.collections.ObjectIterable;
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.sets.ObjectSet;
+import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
+import speiger.src.collections.objects.utils.ObjectIterators;
 import speiger.src.collections.objects.utils.ObjectSets;
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.bytes.functions.ByteComparator;
@@ -444,7 +446,7 @@ public class Byte2BooleanMaps
 				
 		@Override
 		public ObjectOrderedSet<Byte2BooleanMap.Entry> byte2BooleanEntrySet() {
-			if(entrySet == null) entrySet = new UnmodifyableEntrySet(map.byte2BooleanEntrySet());
+			if(entrySet == null) entrySet = new UnmodifyableOrderedEntrySet(map.byte2BooleanEntrySet());
 			return (ObjectOrderedSet<Byte2BooleanMap.Entry>)entrySet;
 		}
 	}
@@ -530,6 +532,10 @@ public class Byte2BooleanMaps
 		@Override
 		public void mergeAllBoolean(Byte2BooleanMap m, BooleanBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
+		public void replaceBooleans(ByteBooleanUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void replaceBooleans(Byte2BooleanMap m) { throw new UnsupportedOperationException(); }
+		@Override
 		public Byte2BooleanMap copy() { return map.copy(); }
 		@Override
 		public void clear() { throw new UnsupportedOperationException(); }
@@ -551,6 +557,43 @@ public class Byte2BooleanMaps
 			if(entrySet == null) entrySet = new UnmodifyableEntrySet(map.byte2BooleanEntrySet());
 			return entrySet;
 		}
+	}
+	
+	
+	/**
+	 * The Unmodifyable Ordered Set implementation for the Unmodifyable Ordered Map implementation
+	 */
+	public static class UnmodifyableOrderedEntrySet extends UnmodifyableEntrySet implements ObjectOrderedSet<Byte2BooleanMap.Entry>
+	{
+		ObjectOrderedSet<Byte2BooleanMap.Entry> set;
+		
+		UnmodifyableOrderedEntrySet(ObjectOrderedSet<Byte2BooleanMap.Entry> c) {
+			super(c);
+			set = c;
+		}
+
+		@Override
+		public boolean addAndMoveToFirst(Byte2BooleanMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean addAndMoveToLast(Byte2BooleanMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean moveToFirst(Byte2BooleanMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean moveToLast(Byte2BooleanMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public ObjectOrderedSet<Byte2BooleanMap.Entry> copy() { return set.copy(); }
+		@Override
+		public ObjectBidirectionalIterator<Byte2BooleanMap.Entry> iterator() { return ObjectIterators.unmodifiable(set.iterator()); }
+		@Override
+		public ObjectBidirectionalIterator<Byte2BooleanMap.Entry> iterator(Byte2BooleanMap.Entry fromElement) { return ObjectIterators.unmodifiable(set.iterator(fromElement)); }
+		@Override
+		public Byte2BooleanMap.Entry first() { return set.first(); }
+		@Override
+		public Byte2BooleanMap.Entry pollFirst() { throw new UnsupportedOperationException(); }
+		@Override
+		public Byte2BooleanMap.Entry last() { return set.last(); }
+		@Override
+		public Byte2BooleanMap.Entry pollLast() { throw new UnsupportedOperationException(); }
 	}
 	
 	/**

@@ -256,7 +256,7 @@ public class Int2LongLinkedOpenCustomHashMap extends Int2LongOpenCustomHashMap i
 	
 	@Override
 	public boolean moveToFirst(int key) {
-		if(strategy.equals(firstIntKey(), key)) return false;
+		if(isEmpty() || strategy.equals(firstIntKey(), key)) return false;
 		if(strategy.equals(key, 0)) {
 			if(containsNull) {
 				moveToFirstIndex(nullIndex);
@@ -278,7 +278,7 @@ public class Int2LongLinkedOpenCustomHashMap extends Int2LongOpenCustomHashMap i
 	
 	@Override
 	public boolean moveToLast(int key) {
-		if(strategy.equals(lastIntKey(), key)) return false;
+		if(isEmpty() || strategy.equals(lastIntKey(), key)) return false;
 		if(strategy.equals(key, 0)) {
 			if(containsNull) {
 				moveToLastIndex(nullIndex);

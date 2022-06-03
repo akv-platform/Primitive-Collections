@@ -4,6 +4,7 @@ import org.junit.Ignore;
 
 #ignore
 import static com.google.common.collect.testing.features.CollectionFeature.SUPPORTS_ADD;
+import static com.google.common.collect.testing.features.CollectionFeature.SUPPORTS_REMOVE;
 import static com.google.common.collect.testing.features.CollectionSize.SEVERAL;
 import static org.junit.Assert.assertNotEquals;
 #endignore
@@ -159,7 +160,7 @@ public class FILE_KEY_TYPEOrderedSetMoveTester KEY_GENERIC_TYPE extends ABSTRACT
 	}
 	
 #ignore
-	@CollectionFeature.Require(absent = SUPPORTS_ADD)
+	@CollectionFeature.Require(absent = {SUPPORTS_ADD, SUPPORTS_REMOVE})
 #endignore
 	public void testmoveToFirstUnsupported()
 	{
@@ -172,7 +173,7 @@ public class FILE_KEY_TYPEOrderedSetMoveTester KEY_GENERIC_TYPE extends ABSTRACT
 	}
 	
 #ignore
-	@CollectionFeature.Require(absent = SUPPORTS_ADD)
+	@CollectionFeature.Require(absent = {SUPPORTS_ADD, SUPPORTS_REMOVE})
 #endignore
 	public void testmoveToLastUnsupported()
 	{

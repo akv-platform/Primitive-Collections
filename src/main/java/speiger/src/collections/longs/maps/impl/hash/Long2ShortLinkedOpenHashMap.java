@@ -233,7 +233,7 @@ public class Long2ShortLinkedOpenHashMap extends Long2ShortOpenHashMap implement
 	
 	@Override
 	public boolean moveToFirst(long key) {
-		if(firstLongKey() == key) return false;
+		if(isEmpty() || firstLongKey() == key) return false;
 		if(key == 0) {
 			if(containsNull) {
 				moveToFirstIndex(nullIndex);
@@ -255,7 +255,7 @@ public class Long2ShortLinkedOpenHashMap extends Long2ShortOpenHashMap implement
 	
 	@Override
 	public boolean moveToLast(long key) {
-		if(lastLongKey() == key) return false;
+		if(isEmpty() || lastLongKey() == key) return false;
 		if(key == 0) {
 			if(containsNull) {
 				moveToLastIndex(nullIndex);

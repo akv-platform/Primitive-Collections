@@ -228,7 +228,7 @@ public class Byte2ByteLinkedOpenHashMap extends Byte2ByteOpenHashMap implements 
 	
 	@Override
 	public boolean moveToFirst(byte key) {
-		if(firstByteKey() == key) return false;
+		if(isEmpty() || firstByteKey() == key) return false;
 		if(key == (byte)0) {
 			if(containsNull) {
 				moveToFirstIndex(nullIndex);
@@ -250,7 +250,7 @@ public class Byte2ByteLinkedOpenHashMap extends Byte2ByteOpenHashMap implements 
 	
 	@Override
 	public boolean moveToLast(byte key) {
-		if(lastByteKey() == key) return false;
+		if(isEmpty() || lastByteKey() == key) return false;
 		if(key == (byte)0) {
 			if(containsNull) {
 				moveToLastIndex(nullIndex);

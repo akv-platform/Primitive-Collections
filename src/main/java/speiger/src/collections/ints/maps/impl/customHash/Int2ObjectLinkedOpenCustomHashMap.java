@@ -253,7 +253,7 @@ public class Int2ObjectLinkedOpenCustomHashMap<V> extends Int2ObjectOpenCustomHa
 	
 	@Override
 	public boolean moveToFirst(int key) {
-		if(strategy.equals(firstIntKey(), key)) return false;
+		if(isEmpty() || strategy.equals(firstIntKey(), key)) return false;
 		if(strategy.equals(key, 0)) {
 			if(containsNull) {
 				moveToFirstIndex(nullIndex);
@@ -275,7 +275,7 @@ public class Int2ObjectLinkedOpenCustomHashMap<V> extends Int2ObjectOpenCustomHa
 	
 	@Override
 	public boolean moveToLast(int key) {
-		if(strategy.equals(lastIntKey(), key)) return false;
+		if(isEmpty() || strategy.equals(lastIntKey(), key)) return false;
 		if(strategy.equals(key, 0)) {
 			if(containsNull) {
 				moveToLastIndex(nullIndex);

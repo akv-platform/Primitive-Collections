@@ -225,7 +225,7 @@ public class Object2IntLinkedOpenHashMap<T> extends Object2IntOpenHashMap<T> imp
 	
 	@Override
 	public boolean moveToFirst(T key) {
-		if(Objects.equals(firstKey(), key)) return false;
+		if(isEmpty() || Objects.equals(firstKey(), key)) return false;
 		if(key == null) {
 			if(containsNull) {
 				moveToFirstIndex(nullIndex);
@@ -247,7 +247,7 @@ public class Object2IntLinkedOpenHashMap<T> extends Object2IntOpenHashMap<T> imp
 	
 	@Override
 	public boolean moveToLast(T key) {
-		if(Objects.equals(lastKey(), key)) return false;
+		if(isEmpty() || Objects.equals(lastKey(), key)) return false;
 		if(key == null) {
 			if(containsNull) {
 				moveToLastIndex(nullIndex);

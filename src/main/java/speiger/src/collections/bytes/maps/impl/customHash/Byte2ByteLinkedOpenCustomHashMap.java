@@ -251,7 +251,7 @@ public class Byte2ByteLinkedOpenCustomHashMap extends Byte2ByteOpenCustomHashMap
 	
 	@Override
 	public boolean moveToFirst(byte key) {
-		if(strategy.equals(firstByteKey(), key)) return false;
+		if(isEmpty() || strategy.equals(firstByteKey(), key)) return false;
 		if(strategy.equals(key, (byte)0)) {
 			if(containsNull) {
 				moveToFirstIndex(nullIndex);
@@ -273,7 +273,7 @@ public class Byte2ByteLinkedOpenCustomHashMap extends Byte2ByteOpenCustomHashMap
 	
 	@Override
 	public boolean moveToLast(byte key) {
-		if(strategy.equals(lastByteKey(), key)) return false;
+		if(isEmpty() || strategy.equals(lastByteKey(), key)) return false;
 		if(strategy.equals(key, (byte)0)) {
 			if(containsNull) {
 				moveToLastIndex(nullIndex);

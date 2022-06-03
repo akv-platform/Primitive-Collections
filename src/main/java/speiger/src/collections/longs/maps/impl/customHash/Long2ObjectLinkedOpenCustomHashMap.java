@@ -253,7 +253,7 @@ public class Long2ObjectLinkedOpenCustomHashMap<V> extends Long2ObjectOpenCustom
 	
 	@Override
 	public boolean moveToFirst(long key) {
-		if(strategy.equals(firstLongKey(), key)) return false;
+		if(isEmpty() || strategy.equals(firstLongKey(), key)) return false;
 		if(strategy.equals(key, 0L)) {
 			if(containsNull) {
 				moveToFirstIndex(nullIndex);
@@ -275,7 +275,7 @@ public class Long2ObjectLinkedOpenCustomHashMap<V> extends Long2ObjectOpenCustom
 	
 	@Override
 	public boolean moveToLast(long key) {
-		if(strategy.equals(lastLongKey(), key)) return false;
+		if(isEmpty() || strategy.equals(lastLongKey(), key)) return false;
 		if(strategy.equals(key, 0L)) {
 			if(containsNull) {
 				moveToLastIndex(nullIndex);

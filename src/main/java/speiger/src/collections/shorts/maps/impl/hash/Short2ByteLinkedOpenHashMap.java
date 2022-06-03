@@ -233,7 +233,7 @@ public class Short2ByteLinkedOpenHashMap extends Short2ByteOpenHashMap implement
 	
 	@Override
 	public boolean moveToFirst(short key) {
-		if(firstShortKey() == key) return false;
+		if(isEmpty() || firstShortKey() == key) return false;
 		if(key == (short)0) {
 			if(containsNull) {
 				moveToFirstIndex(nullIndex);
@@ -255,7 +255,7 @@ public class Short2ByteLinkedOpenHashMap extends Short2ByteOpenHashMap implement
 	
 	@Override
 	public boolean moveToLast(short key) {
-		if(lastShortKey() == key) return false;
+		if(isEmpty() || lastShortKey() == key) return false;
 		if(key == (short)0) {
 			if(containsNull) {
 				moveToLastIndex(nullIndex);

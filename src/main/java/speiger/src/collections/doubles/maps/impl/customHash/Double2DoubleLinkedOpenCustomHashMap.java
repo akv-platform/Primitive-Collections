@@ -251,7 +251,7 @@ public class Double2DoubleLinkedOpenCustomHashMap extends Double2DoubleOpenCusto
 	
 	@Override
 	public boolean moveToFirst(double key) {
-		if(strategy.equals(firstDoubleKey(), key)) return false;
+		if(isEmpty() || strategy.equals(firstDoubleKey(), key)) return false;
 		if(strategy.equals(key, 0D)) {
 			if(containsNull) {
 				moveToFirstIndex(nullIndex);
@@ -273,7 +273,7 @@ public class Double2DoubleLinkedOpenCustomHashMap extends Double2DoubleOpenCusto
 	
 	@Override
 	public boolean moveToLast(double key) {
-		if(strategy.equals(lastDoubleKey(), key)) return false;
+		if(isEmpty() || strategy.equals(lastDoubleKey(), key)) return false;
 		if(strategy.equals(key, 0D)) {
 			if(containsNull) {
 				moveToLastIndex(nullIndex);

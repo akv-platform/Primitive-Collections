@@ -8,6 +8,8 @@ import java.util.function.Consumer;
 import speiger.src.collections.objects.collections.ObjectIterable;
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.sets.ObjectSet;
+import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
+import speiger.src.collections.objects.utils.ObjectIterators;
 import speiger.src.collections.objects.utils.ObjectSets;
 import speiger.src.collections.objects.functions.consumer.ObjectIntConsumer;
 import speiger.src.collections.objects.functions.function.Object2IntFunction;
@@ -462,7 +464,7 @@ public class Object2IntMaps
 				
 		@Override
 		public ObjectOrderedSet<Object2IntMap.Entry<T>> object2IntEntrySet() {
-			if(entrySet == null) entrySet = new UnmodifyableEntrySet<>(map.object2IntEntrySet());
+			if(entrySet == null) entrySet = new UnmodifyableOrderedEntrySet<>(map.object2IntEntrySet());
 			return (ObjectOrderedSet<Object2IntMap.Entry<T>>)entrySet;
 		}
 	}
@@ -554,6 +556,10 @@ public class Object2IntMaps
 		@Override
 		public void mergeAllInt(Object2IntMap<T> m, IntIntUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
+		public void replaceInts(ObjectIntUnaryOperator<T> mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void replaceInts(Object2IntMap<T> m) { throw new UnsupportedOperationException(); }
+		@Override
 		public Object2IntMap<T> copy() { return map.copy(); }
 		@Override
 		public void clear() { throw new UnsupportedOperationException(); }
@@ -575,6 +581,44 @@ public class Object2IntMaps
 			if(entrySet == null) entrySet = new UnmodifyableEntrySet<>(map.object2IntEntrySet());
 			return entrySet;
 		}
+	}
+	
+	
+	/**
+	 * The Unmodifyable Ordered Set implementation for the Unmodifyable Ordered Map implementation
+	 * @param <T> the type of elements maintained by this Collection
+	 */
+	public static class UnmodifyableOrderedEntrySet<T> extends UnmodifyableEntrySet<T> implements ObjectOrderedSet<Object2IntMap.Entry<T>>
+	{
+		ObjectOrderedSet<Object2IntMap.Entry<T>> set;
+		
+		UnmodifyableOrderedEntrySet(ObjectOrderedSet<Object2IntMap.Entry<T>> c) {
+			super(c);
+			set = c;
+		}
+
+		@Override
+		public boolean addAndMoveToFirst(Object2IntMap.Entry<T> o) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean addAndMoveToLast(Object2IntMap.Entry<T> o) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean moveToFirst(Object2IntMap.Entry<T> o) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean moveToLast(Object2IntMap.Entry<T> o) { throw new UnsupportedOperationException(); }
+		@Override
+		public ObjectOrderedSet<Object2IntMap.Entry<T>> copy() { return set.copy(); }
+		@Override
+		public ObjectBidirectionalIterator<Object2IntMap.Entry<T>> iterator() { return ObjectIterators.unmodifiable(set.iterator()); }
+		@Override
+		public ObjectBidirectionalIterator<Object2IntMap.Entry<T>> iterator(Object2IntMap.Entry<T> fromElement) { return ObjectIterators.unmodifiable(set.iterator(fromElement)); }
+		@Override
+		public Object2IntMap.Entry<T> first() { return set.first(); }
+		@Override
+		public Object2IntMap.Entry<T> pollFirst() { throw new UnsupportedOperationException(); }
+		@Override
+		public Object2IntMap.Entry<T> last() { return set.last(); }
+		@Override
+		public Object2IntMap.Entry<T> pollLast() { throw new UnsupportedOperationException(); }
 	}
 	
 	/**

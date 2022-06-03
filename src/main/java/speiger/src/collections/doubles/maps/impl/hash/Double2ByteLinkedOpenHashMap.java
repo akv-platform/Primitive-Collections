@@ -233,7 +233,7 @@ public class Double2ByteLinkedOpenHashMap extends Double2ByteOpenHashMap impleme
 	
 	@Override
 	public boolean moveToFirst(double key) {
-		if(Double.doubleToLongBits(firstDoubleKey()) == Double.doubleToLongBits(key)) return false;
+		if(isEmpty() || Double.doubleToLongBits(firstDoubleKey()) == Double.doubleToLongBits(key)) return false;
 		if(Double.doubleToLongBits(key) == 0) {
 			if(containsNull) {
 				moveToFirstIndex(nullIndex);
@@ -255,7 +255,7 @@ public class Double2ByteLinkedOpenHashMap extends Double2ByteOpenHashMap impleme
 	
 	@Override
 	public boolean moveToLast(double key) {
-		if(Double.doubleToLongBits(lastDoubleKey()) == Double.doubleToLongBits(key)) return false;
+		if(isEmpty() || Double.doubleToLongBits(lastDoubleKey()) == Double.doubleToLongBits(key)) return false;
 		if(Double.doubleToLongBits(key) == 0) {
 			if(containsNull) {
 				moveToLastIndex(nullIndex);

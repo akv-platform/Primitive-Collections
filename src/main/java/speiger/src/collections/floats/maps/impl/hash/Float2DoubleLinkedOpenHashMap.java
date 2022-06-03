@@ -233,7 +233,7 @@ public class Float2DoubleLinkedOpenHashMap extends Float2DoubleOpenHashMap imple
 	
 	@Override
 	public boolean moveToFirst(float key) {
-		if(Float.floatToIntBits(firstFloatKey()) == Float.floatToIntBits(key)) return false;
+		if(isEmpty() || Float.floatToIntBits(firstFloatKey()) == Float.floatToIntBits(key)) return false;
 		if(Float.floatToIntBits(key) == 0) {
 			if(containsNull) {
 				moveToFirstIndex(nullIndex);
@@ -255,7 +255,7 @@ public class Float2DoubleLinkedOpenHashMap extends Float2DoubleOpenHashMap imple
 	
 	@Override
 	public boolean moveToLast(float key) {
-		if(Float.floatToIntBits(lastFloatKey()) == Float.floatToIntBits(key)) return false;
+		if(isEmpty() || Float.floatToIntBits(lastFloatKey()) == Float.floatToIntBits(key)) return false;
 		if(Float.floatToIntBits(key) == 0) {
 			if(containsNull) {
 				moveToLastIndex(nullIndex);

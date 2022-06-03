@@ -256,7 +256,7 @@ public class Float2ShortLinkedOpenCustomHashMap extends Float2ShortOpenCustomHas
 	
 	@Override
 	public boolean moveToFirst(float key) {
-		if(strategy.equals(firstFloatKey(), key)) return false;
+		if(isEmpty() || strategy.equals(firstFloatKey(), key)) return false;
 		if(strategy.equals(key, 0F)) {
 			if(containsNull) {
 				moveToFirstIndex(nullIndex);
@@ -278,7 +278,7 @@ public class Float2ShortLinkedOpenCustomHashMap extends Float2ShortOpenCustomHas
 	
 	@Override
 	public boolean moveToLast(float key) {
-		if(strategy.equals(lastFloatKey(), key)) return false;
+		if(isEmpty() || strategy.equals(lastFloatKey(), key)) return false;
 		if(strategy.equals(key, 0F)) {
 			if(containsNull) {
 				moveToLastIndex(nullIndex);

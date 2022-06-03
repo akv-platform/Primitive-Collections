@@ -10,6 +10,8 @@ import java.util.function.Function;
 import speiger.src.collections.objects.collections.ObjectIterable;
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.sets.ObjectSet;
+import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
+import speiger.src.collections.objects.utils.ObjectIterators;
 import speiger.src.collections.objects.utils.ObjectSets;
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.ints.functions.IntComparator;
@@ -452,7 +454,7 @@ public class Int2CharMaps
 				
 		@Override
 		public ObjectOrderedSet<Int2CharMap.Entry> int2CharEntrySet() {
-			if(entrySet == null) entrySet = new UnmodifyableEntrySet(map.int2CharEntrySet());
+			if(entrySet == null) entrySet = new UnmodifyableOrderedEntrySet(map.int2CharEntrySet());
 			return (ObjectOrderedSet<Int2CharMap.Entry>)entrySet;
 		}
 	}
@@ -542,6 +544,10 @@ public class Int2CharMaps
 		@Override
 		public void mergeAllChar(Int2CharMap m, CharCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
 		@Override
+		public void replaceChars(IntCharUnaryOperator mappingFunction) { throw new UnsupportedOperationException(); }
+		@Override
+		public void replaceChars(Int2CharMap m) { throw new UnsupportedOperationException(); }
+		@Override
 		public Int2CharMap copy() { return map.copy(); }
 		@Override
 		public void clear() { throw new UnsupportedOperationException(); }
@@ -563,6 +569,43 @@ public class Int2CharMaps
 			if(entrySet == null) entrySet = new UnmodifyableEntrySet(map.int2CharEntrySet());
 			return entrySet;
 		}
+	}
+	
+	
+	/**
+	 * The Unmodifyable Ordered Set implementation for the Unmodifyable Ordered Map implementation
+	 */
+	public static class UnmodifyableOrderedEntrySet extends UnmodifyableEntrySet implements ObjectOrderedSet<Int2CharMap.Entry>
+	{
+		ObjectOrderedSet<Int2CharMap.Entry> set;
+		
+		UnmodifyableOrderedEntrySet(ObjectOrderedSet<Int2CharMap.Entry> c) {
+			super(c);
+			set = c;
+		}
+
+		@Override
+		public boolean addAndMoveToFirst(Int2CharMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean addAndMoveToLast(Int2CharMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean moveToFirst(Int2CharMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public boolean moveToLast(Int2CharMap.Entry o) { throw new UnsupportedOperationException(); }
+		@Override
+		public ObjectOrderedSet<Int2CharMap.Entry> copy() { return set.copy(); }
+		@Override
+		public ObjectBidirectionalIterator<Int2CharMap.Entry> iterator() { return ObjectIterators.unmodifiable(set.iterator()); }
+		@Override
+		public ObjectBidirectionalIterator<Int2CharMap.Entry> iterator(Int2CharMap.Entry fromElement) { return ObjectIterators.unmodifiable(set.iterator(fromElement)); }
+		@Override
+		public Int2CharMap.Entry first() { return set.first(); }
+		@Override
+		public Int2CharMap.Entry pollFirst() { throw new UnsupportedOperationException(); }
+		@Override
+		public Int2CharMap.Entry last() { return set.last(); }
+		@Override
+		public Int2CharMap.Entry pollLast() { throw new UnsupportedOperationException(); }
 	}
 	
 	/**

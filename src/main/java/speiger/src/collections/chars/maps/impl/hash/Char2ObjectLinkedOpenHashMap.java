@@ -230,7 +230,7 @@ public class Char2ObjectLinkedOpenHashMap<V> extends Char2ObjectOpenHashMap<V> i
 	
 	@Override
 	public boolean moveToFirst(char key) {
-		if(firstCharKey() == key) return false;
+		if(isEmpty() || firstCharKey() == key) return false;
 		if(key == (char)0) {
 			if(containsNull) {
 				moveToFirstIndex(nullIndex);
@@ -252,7 +252,7 @@ public class Char2ObjectLinkedOpenHashMap<V> extends Char2ObjectOpenHashMap<V> i
 	
 	@Override
 	public boolean moveToLast(char key) {
-		if(lastCharKey() == key) return false;
+		if(isEmpty() || lastCharKey() == key) return false;
 		if(key == (char)0) {
 			if(containsNull) {
 				moveToLastIndex(nullIndex);

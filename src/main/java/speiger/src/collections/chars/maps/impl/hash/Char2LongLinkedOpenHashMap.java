@@ -233,7 +233,7 @@ public class Char2LongLinkedOpenHashMap extends Char2LongOpenHashMap implements 
 	
 	@Override
 	public boolean moveToFirst(char key) {
-		if(firstCharKey() == key) return false;
+		if(isEmpty() || firstCharKey() == key) return false;
 		if(key == (char)0) {
 			if(containsNull) {
 				moveToFirstIndex(nullIndex);
@@ -255,7 +255,7 @@ public class Char2LongLinkedOpenHashMap extends Char2LongOpenHashMap implements 
 	
 	@Override
 	public boolean moveToLast(char key) {
-		if(lastCharKey() == key) return false;
+		if(isEmpty() || lastCharKey() == key) return false;
 		if(key == (char)0) {
 			if(containsNull) {
 				moveToLastIndex(nullIndex);

@@ -256,7 +256,7 @@ public class Short2DoubleLinkedOpenCustomHashMap extends Short2DoubleOpenCustomH
 	
 	@Override
 	public boolean moveToFirst(short key) {
-		if(strategy.equals(firstShortKey(), key)) return false;
+		if(isEmpty() || strategy.equals(firstShortKey(), key)) return false;
 		if(strategy.equals(key, (short)0)) {
 			if(containsNull) {
 				moveToFirstIndex(nullIndex);
@@ -278,7 +278,7 @@ public class Short2DoubleLinkedOpenCustomHashMap extends Short2DoubleOpenCustomH
 	
 	@Override
 	public boolean moveToLast(short key) {
-		if(strategy.equals(lastShortKey(), key)) return false;
+		if(isEmpty() || strategy.equals(lastShortKey(), key)) return false;
 		if(strategy.equals(key, (short)0)) {
 			if(containsNull) {
 				moveToLastIndex(nullIndex);

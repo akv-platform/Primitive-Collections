@@ -233,7 +233,7 @@ public class Int2CharLinkedOpenHashMap extends Int2CharOpenHashMap implements In
 	
 	@Override
 	public boolean moveToFirst(int key) {
-		if(firstIntKey() == key) return false;
+		if(isEmpty() || firstIntKey() == key) return false;
 		if(key == 0) {
 			if(containsNull) {
 				moveToFirstIndex(nullIndex);
@@ -255,7 +255,7 @@ public class Int2CharLinkedOpenHashMap extends Int2CharOpenHashMap implements In
 	
 	@Override
 	public boolean moveToLast(int key) {
-		if(lastIntKey() == key) return false;
+		if(isEmpty() || lastIntKey() == key) return false;
 		if(key == 0) {
 			if(containsNull) {
 				moveToLastIndex(nullIndex);

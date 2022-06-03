@@ -16,9 +16,9 @@ import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEOrder
 #if !TYPE_OBJECT
 import speiger.src.testers.objects.builder.ObjectSetTestSuiteBuilder;
 import speiger.src.testers.objects.generators.TestObjectSetGenerator;
+import speiger.src.testers.objects.builder.ObjectOrderedSetTestSuiteBuilder;
+import speiger.src.testers.objects.generators.TestObjectOrderedSetGenerator;
 #endif
-import speiger.src.testers.objects.builder.ObjectSortedSetTestSuiteBuilder;
-import speiger.src.testers.objects.generators.TestObjectSortedSetGenerator;
 
 @SuppressWarnings("javadoc")
 public class ORDERED_MAP_TEST_BUILDER KEY_VALUE_GENERIC_TYPE extends MAP_TEST_BUILDER KEY_VALUE_GENERIC_TYPE
@@ -44,7 +44,7 @@ public class ORDERED_MAP_TEST_BUILDER KEY_VALUE_GENERIC_TYPE extends MAP_TEST_BU
 	}
 	
 	protected ObjectSetTestSuiteBuilder<MAP.Entry KEY_VALUE_GENERIC_TYPE> createDerivedEntrySetSuite(TestObjectSetGenerator<MAP.Entry KEY_VALUE_GENERIC_TYPE> entrySetGenerator) {
-		return ObjectSortedSetTestSuiteBuilder.using((TestObjectSortedSetGenerator<MAP.Entry KEY_VALUE_GENERIC_TYPE>)entrySetGenerator);
+		return ObjectOrderedSetTestSuiteBuilder.using((TestObjectOrderedSetGenerator<MAP.Entry KEY_VALUE_GENERIC_TYPE>)entrySetGenerator);
 	}
 	
 	protected SET_TEST_BUILDER KEY_GENERIC_TYPE createDerivedKeySetSuite(TEST_SET_GENERATOR KEY_GENERIC_TYPE generator) {
