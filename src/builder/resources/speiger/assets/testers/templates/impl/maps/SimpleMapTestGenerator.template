@@ -9,6 +9,7 @@ import java.util.function.BiFunction;
 
 import speiger.src.collections.PACKAGE.maps.abstracts.ABSTRACT_MAP;
 import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
+import speiger.src.collections.PACKAGE.maps.interfaces.ORDERED_MAP;
 import speiger.src.collections.PACKAGE.maps.interfaces.SORTED_MAP;
 import speiger.src.collections.objects.collections.ObjectIterable;
 #if TYPE_OBJECT || VALUE_OBJECT
@@ -16,6 +17,7 @@ import speiger.src.collections.objects.utils.ObjectArrays;
 #endif
 import speiger.src.collections.objects.lists.ObjectList;
 import speiger.src.testers.PACKAGE.generators.maps.TEST_MAP_GENERATOR;
+import speiger.src.testers.PACKAGE.generators.maps.TEST_ORDERED_MAP_GENERATOR;
 import speiger.src.testers.PACKAGE.generators.maps.TEST_SORTED_MAP_GENERATOR;
 import speiger.src.testers.objects.utils.ObjectSamples;
 
@@ -103,6 +105,13 @@ public class SIMPLE_MAP_TEST_GENERATOR KEY_VALUE_SPECIAL_GENERIC_TYPE<E extends 
 	public static class Maps KEY_VALUE_GENERIC_TYPE extends SIMPLE_MAP_TEST_GENERATOR KEY_VALUE_SPECIAL_GENERIC_TYPE<MAP KEY_VALUE_GENERIC_TYPE> implements TEST_MAP_GENERATOR KEY_VALUE_GENERIC_TYPE
 	{
 		public Maps(BiFunction<KEY_TYPE[], VALUE_TYPE[], MAP KEY_VALUE_GENERIC_TYPE> mapper) {
+			super(mapper);
+		}
+	}
+	
+	public static class OrderedMaps KEY_VALUE_GENERIC_TYPE extends SIMPLE_MAP_TEST_GENERATOR KEY_VALUE_SPECIAL_GENERIC_TYPE<ORDERED_MAP KEY_VALUE_GENERIC_TYPE> implements TEST_ORDERED_MAP_GENERATOR KEY_VALUE_GENERIC_TYPE
+	{
+		public OrderedMaps(BiFunction<KEY_TYPE[], VALUE_TYPE[], ORDERED_MAP KEY_VALUE_GENERIC_TYPE> mapper) {
 			super(mapper);
 		}
 	}
