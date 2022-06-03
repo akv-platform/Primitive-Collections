@@ -18,7 +18,6 @@ import speiger.src.collections.floats.maps.interfaces.Float2LongMap;
 import speiger.src.collections.floats.maps.interfaces.Float2LongOrderedMap;
 import speiger.src.collections.floats.sets.AbstractFloatSet;
 import speiger.src.collections.floats.sets.FloatOrderedSet;
-import speiger.src.collections.floats.sets.FloatSet;
 import speiger.src.collections.floats.utils.FloatStrategy;
 import speiger.src.collections.longs.collections.AbstractLongCollection;
 import speiger.src.collections.longs.collections.LongCollection;
@@ -34,7 +33,7 @@ import speiger.src.collections.objects.functions.function.ObjectObjectUnaryOpera
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.lists.ObjectListIterator;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
-import speiger.src.collections.objects.sets.ObjectSet;
+import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.utils.HashUtil;
 
 /**
@@ -393,15 +392,15 @@ public class Float2LongLinkedOpenCustomHashMap extends Float2LongOpenCustomHashM
 	}
 	
 	@Override
-	public ObjectSet<Float2LongMap.Entry> float2LongEntrySet() {
+	public ObjectOrderedSet<Float2LongMap.Entry> float2LongEntrySet() {
 		if(entrySet == null) entrySet = new MapEntrySet();
-		return entrySet;
+		return (ObjectOrderedSet<Float2LongMap.Entry>)entrySet;
 	}
 	
 	@Override
-	public FloatSet keySet() {
+	public FloatOrderedSet keySet() {
 		if(keySet == null) keySet = new KeySet();
-		return keySet;
+		return (FloatOrderedSet)keySet;
 	}
 	
 	@Override

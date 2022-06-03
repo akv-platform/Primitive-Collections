@@ -18,7 +18,6 @@ import speiger.src.collections.longs.maps.interfaces.Long2BooleanMap;
 import speiger.src.collections.longs.maps.interfaces.Long2BooleanOrderedMap;
 import speiger.src.collections.longs.sets.AbstractLongSet;
 import speiger.src.collections.longs.sets.LongOrderedSet;
-import speiger.src.collections.longs.sets.LongSet;
 import speiger.src.collections.booleans.collections.AbstractBooleanCollection;
 import speiger.src.collections.booleans.collections.BooleanCollection;
 import speiger.src.collections.booleans.collections.BooleanIterator;
@@ -33,7 +32,7 @@ import speiger.src.collections.objects.functions.function.ObjectObjectUnaryOpera
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.lists.ObjectListIterator;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
-import speiger.src.collections.objects.sets.ObjectSet;
+import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.utils.HashUtil;
 
 /**
@@ -391,15 +390,15 @@ public class Long2BooleanLinkedOpenHashMap extends Long2BooleanOpenHashMap imple
 	}
 	
 	@Override
-	public ObjectSet<Long2BooleanMap.Entry> long2BooleanEntrySet() {
+	public ObjectOrderedSet<Long2BooleanMap.Entry> long2BooleanEntrySet() {
 		if(entrySet == null) entrySet = new MapEntrySet();
-		return entrySet;
+		return (ObjectOrderedSet<Long2BooleanMap.Entry>)entrySet;
 	}
 	
 	@Override
-	public LongSet keySet() {
+	public LongOrderedSet keySet() {
 		if(keySet == null) keySet = new KeySet();
-		return keySet;
+		return (LongOrderedSet)keySet;
 	}
 	
 	@Override

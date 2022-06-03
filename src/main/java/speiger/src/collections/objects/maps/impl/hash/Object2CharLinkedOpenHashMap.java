@@ -15,7 +15,6 @@ import speiger.src.collections.objects.maps.interfaces.Object2CharMap;
 import speiger.src.collections.objects.maps.interfaces.Object2CharOrderedMap;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
-import speiger.src.collections.objects.sets.ObjectSet;
 import speiger.src.collections.chars.collections.AbstractCharCollection;
 import speiger.src.collections.chars.collections.CharCollection;
 import speiger.src.collections.chars.collections.CharIterator;
@@ -383,15 +382,15 @@ public class Object2CharLinkedOpenHashMap<T> extends Object2CharOpenHashMap<T> i
 	}
 	
 	@Override
-	public ObjectSet<Object2CharMap.Entry<T>> object2CharEntrySet() {
+	public ObjectOrderedSet<Object2CharMap.Entry<T>> object2CharEntrySet() {
 		if(entrySet == null) entrySet = new MapEntrySet();
-		return entrySet;
+		return (ObjectOrderedSet<Object2CharMap.Entry<T>>)entrySet;
 	}
 	
 	@Override
-	public ObjectSet<T> keySet() {
+	public ObjectOrderedSet<T> keySet() {
 		if(keySet == null) keySet = new KeySet();
-		return keySet;
+		return (ObjectOrderedSet<T>)keySet;
 	}
 	
 	@Override

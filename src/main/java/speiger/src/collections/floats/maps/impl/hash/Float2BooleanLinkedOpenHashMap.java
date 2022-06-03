@@ -18,7 +18,6 @@ import speiger.src.collections.floats.maps.interfaces.Float2BooleanMap;
 import speiger.src.collections.floats.maps.interfaces.Float2BooleanOrderedMap;
 import speiger.src.collections.floats.sets.AbstractFloatSet;
 import speiger.src.collections.floats.sets.FloatOrderedSet;
-import speiger.src.collections.floats.sets.FloatSet;
 import speiger.src.collections.booleans.collections.AbstractBooleanCollection;
 import speiger.src.collections.booleans.collections.BooleanCollection;
 import speiger.src.collections.booleans.collections.BooleanIterator;
@@ -33,7 +32,7 @@ import speiger.src.collections.objects.functions.function.ObjectObjectUnaryOpera
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.lists.ObjectListIterator;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
-import speiger.src.collections.objects.sets.ObjectSet;
+import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.utils.HashUtil;
 
 /**
@@ -391,15 +390,15 @@ public class Float2BooleanLinkedOpenHashMap extends Float2BooleanOpenHashMap imp
 	}
 	
 	@Override
-	public ObjectSet<Float2BooleanMap.Entry> float2BooleanEntrySet() {
+	public ObjectOrderedSet<Float2BooleanMap.Entry> float2BooleanEntrySet() {
 		if(entrySet == null) entrySet = new MapEntrySet();
-		return entrySet;
+		return (ObjectOrderedSet<Float2BooleanMap.Entry>)entrySet;
 	}
 	
 	@Override
-	public FloatSet keySet() {
+	public FloatOrderedSet keySet() {
 		if(keySet == null) keySet = new KeySet();
-		return keySet;
+		return (FloatOrderedSet)keySet;
 	}
 	
 	@Override

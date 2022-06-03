@@ -15,7 +15,6 @@ import speiger.src.collections.objects.maps.interfaces.Object2ByteMap;
 import speiger.src.collections.objects.maps.interfaces.Object2ByteOrderedMap;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
-import speiger.src.collections.objects.sets.ObjectSet;
 import speiger.src.collections.bytes.collections.AbstractByteCollection;
 import speiger.src.collections.bytes.collections.ByteCollection;
 import speiger.src.collections.bytes.collections.ByteIterator;
@@ -383,15 +382,15 @@ public class Object2ByteLinkedOpenHashMap<T> extends Object2ByteOpenHashMap<T> i
 	}
 	
 	@Override
-	public ObjectSet<Object2ByteMap.Entry<T>> object2ByteEntrySet() {
+	public ObjectOrderedSet<Object2ByteMap.Entry<T>> object2ByteEntrySet() {
 		if(entrySet == null) entrySet = new MapEntrySet();
-		return entrySet;
+		return (ObjectOrderedSet<Object2ByteMap.Entry<T>>)entrySet;
 	}
 	
 	@Override
-	public ObjectSet<T> keySet() {
+	public ObjectOrderedSet<T> keySet() {
 		if(keySet == null) keySet = new KeySet();
-		return keySet;
+		return (ObjectOrderedSet<T>)keySet;
 	}
 	
 	@Override

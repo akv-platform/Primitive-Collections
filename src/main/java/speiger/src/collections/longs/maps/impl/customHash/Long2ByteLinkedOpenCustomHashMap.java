@@ -18,7 +18,6 @@ import speiger.src.collections.longs.maps.interfaces.Long2ByteMap;
 import speiger.src.collections.longs.maps.interfaces.Long2ByteOrderedMap;
 import speiger.src.collections.longs.sets.AbstractLongSet;
 import speiger.src.collections.longs.sets.LongOrderedSet;
-import speiger.src.collections.longs.sets.LongSet;
 import speiger.src.collections.longs.utils.LongStrategy;
 import speiger.src.collections.bytes.collections.AbstractByteCollection;
 import speiger.src.collections.bytes.collections.ByteCollection;
@@ -34,7 +33,7 @@ import speiger.src.collections.objects.functions.function.ObjectObjectUnaryOpera
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.lists.ObjectListIterator;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
-import speiger.src.collections.objects.sets.ObjectSet;
+import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.utils.HashUtil;
 
 /**
@@ -393,15 +392,15 @@ public class Long2ByteLinkedOpenCustomHashMap extends Long2ByteOpenCustomHashMap
 	}
 	
 	@Override
-	public ObjectSet<Long2ByteMap.Entry> long2ByteEntrySet() {
+	public ObjectOrderedSet<Long2ByteMap.Entry> long2ByteEntrySet() {
 		if(entrySet == null) entrySet = new MapEntrySet();
-		return entrySet;
+		return (ObjectOrderedSet<Long2ByteMap.Entry>)entrySet;
 	}
 	
 	@Override
-	public LongSet keySet() {
+	public LongOrderedSet keySet() {
 		if(keySet == null) keySet = new KeySet();
-		return keySet;
+		return (LongOrderedSet)keySet;
 	}
 	
 	@Override

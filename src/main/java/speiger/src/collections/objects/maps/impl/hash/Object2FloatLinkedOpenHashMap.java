@@ -15,7 +15,6 @@ import speiger.src.collections.objects.maps.interfaces.Object2FloatMap;
 import speiger.src.collections.objects.maps.interfaces.Object2FloatOrderedMap;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
-import speiger.src.collections.objects.sets.ObjectSet;
 import speiger.src.collections.floats.collections.AbstractFloatCollection;
 import speiger.src.collections.floats.collections.FloatCollection;
 import speiger.src.collections.floats.collections.FloatIterator;
@@ -383,15 +382,15 @@ public class Object2FloatLinkedOpenHashMap<T> extends Object2FloatOpenHashMap<T>
 	}
 	
 	@Override
-	public ObjectSet<Object2FloatMap.Entry<T>> object2FloatEntrySet() {
+	public ObjectOrderedSet<Object2FloatMap.Entry<T>> object2FloatEntrySet() {
 		if(entrySet == null) entrySet = new MapEntrySet();
-		return entrySet;
+		return (ObjectOrderedSet<Object2FloatMap.Entry<T>>)entrySet;
 	}
 	
 	@Override
-	public ObjectSet<T> keySet() {
+	public ObjectOrderedSet<T> keySet() {
 		if(keySet == null) keySet = new KeySet();
-		return keySet;
+		return (ObjectOrderedSet<T>)keySet;
 	}
 	
 	@Override

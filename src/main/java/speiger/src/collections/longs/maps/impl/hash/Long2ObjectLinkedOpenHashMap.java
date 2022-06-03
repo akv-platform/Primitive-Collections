@@ -18,7 +18,6 @@ import speiger.src.collections.longs.maps.interfaces.Long2ObjectMap;
 import speiger.src.collections.longs.maps.interfaces.Long2ObjectOrderedMap;
 import speiger.src.collections.longs.sets.AbstractLongSet;
 import speiger.src.collections.longs.sets.LongOrderedSet;
-import speiger.src.collections.longs.sets.LongSet;
 import speiger.src.collections.objects.collections.AbstractObjectCollection;
 import speiger.src.collections.objects.collections.ObjectCollection;
 import speiger.src.collections.objects.collections.ObjectIterator;
@@ -29,7 +28,7 @@ import speiger.src.collections.objects.functions.function.Object2BooleanFunction
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.lists.ObjectListIterator;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
-import speiger.src.collections.objects.sets.ObjectSet;
+import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.utils.HashUtil;
 
 /**
@@ -377,15 +376,15 @@ public class Long2ObjectLinkedOpenHashMap<V> extends Long2ObjectOpenHashMap<V> i
 	}
 	
 	@Override
-	public ObjectSet<Long2ObjectMap.Entry<V>> long2ObjectEntrySet() {
+	public ObjectOrderedSet<Long2ObjectMap.Entry<V>> long2ObjectEntrySet() {
 		if(entrySet == null) entrySet = new MapEntrySet();
-		return entrySet;
+		return (ObjectOrderedSet<Long2ObjectMap.Entry<V>>)entrySet;
 	}
 	
 	@Override
-	public LongSet keySet() {
+	public LongOrderedSet keySet() {
 		if(keySet == null) keySet = new KeySet();
-		return keySet;
+		return (LongOrderedSet)keySet;
 	}
 	
 	@Override

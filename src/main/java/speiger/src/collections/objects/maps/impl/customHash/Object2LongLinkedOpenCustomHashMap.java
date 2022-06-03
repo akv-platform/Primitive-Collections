@@ -15,7 +15,6 @@ import speiger.src.collections.objects.maps.interfaces.Object2LongMap;
 import speiger.src.collections.objects.maps.interfaces.Object2LongOrderedMap;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
-import speiger.src.collections.objects.sets.ObjectSet;
 import speiger.src.collections.objects.utils.ObjectStrategy;
 import speiger.src.collections.longs.collections.AbstractLongCollection;
 import speiger.src.collections.longs.collections.LongCollection;
@@ -385,15 +384,15 @@ public class Object2LongLinkedOpenCustomHashMap<T> extends Object2LongOpenCustom
 	}
 	
 	@Override
-	public ObjectSet<Object2LongMap.Entry<T>> object2LongEntrySet() {
+	public ObjectOrderedSet<Object2LongMap.Entry<T>> object2LongEntrySet() {
 		if(entrySet == null) entrySet = new MapEntrySet();
-		return entrySet;
+		return (ObjectOrderedSet<Object2LongMap.Entry<T>>)entrySet;
 	}
 	
 	@Override
-	public ObjectSet<T> keySet() {
+	public ObjectOrderedSet<T> keySet() {
 		if(keySet == null) keySet = new KeySet();
-		return keySet;
+		return (ObjectOrderedSet<T>)keySet;
 	}
 	
 	@Override

@@ -18,7 +18,6 @@ import speiger.src.collections.chars.maps.interfaces.Char2ObjectMap;
 import speiger.src.collections.chars.maps.interfaces.Char2ObjectOrderedMap;
 import speiger.src.collections.chars.sets.AbstractCharSet;
 import speiger.src.collections.chars.sets.CharOrderedSet;
-import speiger.src.collections.chars.sets.CharSet;
 import speiger.src.collections.chars.utils.CharStrategy;
 import speiger.src.collections.objects.collections.AbstractObjectCollection;
 import speiger.src.collections.objects.collections.ObjectCollection;
@@ -30,7 +29,7 @@ import speiger.src.collections.objects.functions.function.Object2BooleanFunction
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.lists.ObjectListIterator;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
-import speiger.src.collections.objects.sets.ObjectSet;
+import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.utils.HashUtil;
 
 /**
@@ -390,15 +389,15 @@ public class Char2ObjectLinkedOpenCustomHashMap<V> extends Char2ObjectOpenCustom
 	}
 	
 	@Override
-	public ObjectSet<Char2ObjectMap.Entry<V>> char2ObjectEntrySet() {
+	public ObjectOrderedSet<Char2ObjectMap.Entry<V>> char2ObjectEntrySet() {
 		if(entrySet == null) entrySet = new MapEntrySet();
-		return entrySet;
+		return (ObjectOrderedSet<Char2ObjectMap.Entry<V>>)entrySet;
 	}
 	
 	@Override
-	public CharSet keySet() {
+	public CharOrderedSet keySet() {
 		if(keySet == null) keySet = new KeySet();
-		return keySet;
+		return (CharOrderedSet)keySet;
 	}
 	
 	@Override

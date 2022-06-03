@@ -18,7 +18,6 @@ import speiger.src.collections.ints.maps.interfaces.Int2DoubleMap;
 import speiger.src.collections.ints.maps.interfaces.Int2DoubleOrderedMap;
 import speiger.src.collections.ints.sets.AbstractIntSet;
 import speiger.src.collections.ints.sets.IntOrderedSet;
-import speiger.src.collections.ints.sets.IntSet;
 import speiger.src.collections.doubles.collections.AbstractDoubleCollection;
 import speiger.src.collections.doubles.collections.DoubleCollection;
 import speiger.src.collections.doubles.collections.DoubleIterator;
@@ -33,7 +32,7 @@ import speiger.src.collections.objects.functions.function.ObjectObjectUnaryOpera
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.lists.ObjectListIterator;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
-import speiger.src.collections.objects.sets.ObjectSet;
+import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.utils.HashUtil;
 
 /**
@@ -391,15 +390,15 @@ public class Int2DoubleLinkedOpenHashMap extends Int2DoubleOpenHashMap implement
 	}
 	
 	@Override
-	public ObjectSet<Int2DoubleMap.Entry> int2DoubleEntrySet() {
+	public ObjectOrderedSet<Int2DoubleMap.Entry> int2DoubleEntrySet() {
 		if(entrySet == null) entrySet = new MapEntrySet();
-		return entrySet;
+		return (ObjectOrderedSet<Int2DoubleMap.Entry>)entrySet;
 	}
 	
 	@Override
-	public IntSet keySet() {
+	public IntOrderedSet keySet() {
 		if(keySet == null) keySet = new KeySet();
-		return keySet;
+		return (IntOrderedSet)keySet;
 	}
 	
 	@Override

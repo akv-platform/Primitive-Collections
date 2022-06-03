@@ -18,7 +18,6 @@ import speiger.src.collections.floats.maps.interfaces.Float2CharMap;
 import speiger.src.collections.floats.maps.interfaces.Float2CharOrderedMap;
 import speiger.src.collections.floats.sets.AbstractFloatSet;
 import speiger.src.collections.floats.sets.FloatOrderedSet;
-import speiger.src.collections.floats.sets.FloatSet;
 import speiger.src.collections.floats.utils.FloatStrategy;
 import speiger.src.collections.chars.collections.AbstractCharCollection;
 import speiger.src.collections.chars.collections.CharCollection;
@@ -34,7 +33,7 @@ import speiger.src.collections.objects.functions.function.ObjectObjectUnaryOpera
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.lists.ObjectListIterator;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
-import speiger.src.collections.objects.sets.ObjectSet;
+import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.utils.HashUtil;
 
 /**
@@ -393,15 +392,15 @@ public class Float2CharLinkedOpenCustomHashMap extends Float2CharOpenCustomHashM
 	}
 	
 	@Override
-	public ObjectSet<Float2CharMap.Entry> float2CharEntrySet() {
+	public ObjectOrderedSet<Float2CharMap.Entry> float2CharEntrySet() {
 		if(entrySet == null) entrySet = new MapEntrySet();
-		return entrySet;
+		return (ObjectOrderedSet<Float2CharMap.Entry>)entrySet;
 	}
 	
 	@Override
-	public FloatSet keySet() {
+	public FloatOrderedSet keySet() {
 		if(keySet == null) keySet = new KeySet();
-		return keySet;
+		return (FloatOrderedSet)keySet;
 	}
 	
 	@Override

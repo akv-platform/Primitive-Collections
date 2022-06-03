@@ -18,7 +18,6 @@ import speiger.src.collections.floats.maps.interfaces.Float2ObjectMap;
 import speiger.src.collections.floats.maps.interfaces.Float2ObjectOrderedMap;
 import speiger.src.collections.floats.sets.AbstractFloatSet;
 import speiger.src.collections.floats.sets.FloatOrderedSet;
-import speiger.src.collections.floats.sets.FloatSet;
 import speiger.src.collections.objects.collections.AbstractObjectCollection;
 import speiger.src.collections.objects.collections.ObjectCollection;
 import speiger.src.collections.objects.collections.ObjectIterator;
@@ -29,7 +28,7 @@ import speiger.src.collections.objects.functions.function.Object2BooleanFunction
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.lists.ObjectListIterator;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
-import speiger.src.collections.objects.sets.ObjectSet;
+import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.utils.HashUtil;
 
 /**
@@ -377,15 +376,15 @@ public class Float2ObjectLinkedOpenHashMap<V> extends Float2ObjectOpenHashMap<V>
 	}
 	
 	@Override
-	public ObjectSet<Float2ObjectMap.Entry<V>> float2ObjectEntrySet() {
+	public ObjectOrderedSet<Float2ObjectMap.Entry<V>> float2ObjectEntrySet() {
 		if(entrySet == null) entrySet = new MapEntrySet();
-		return entrySet;
+		return (ObjectOrderedSet<Float2ObjectMap.Entry<V>>)entrySet;
 	}
 	
 	@Override
-	public FloatSet keySet() {
+	public FloatOrderedSet keySet() {
 		if(keySet == null) keySet = new KeySet();
-		return keySet;
+		return (FloatOrderedSet)keySet;
 	}
 	
 	@Override

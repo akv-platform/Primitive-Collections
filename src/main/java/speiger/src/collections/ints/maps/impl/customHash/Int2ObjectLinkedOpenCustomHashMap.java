@@ -18,7 +18,6 @@ import speiger.src.collections.ints.maps.interfaces.Int2ObjectMap;
 import speiger.src.collections.ints.maps.interfaces.Int2ObjectOrderedMap;
 import speiger.src.collections.ints.sets.AbstractIntSet;
 import speiger.src.collections.ints.sets.IntOrderedSet;
-import speiger.src.collections.ints.sets.IntSet;
 import speiger.src.collections.ints.utils.IntStrategy;
 import speiger.src.collections.objects.collections.AbstractObjectCollection;
 import speiger.src.collections.objects.collections.ObjectCollection;
@@ -30,7 +29,7 @@ import speiger.src.collections.objects.functions.function.Object2BooleanFunction
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.lists.ObjectListIterator;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
-import speiger.src.collections.objects.sets.ObjectSet;
+import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.utils.HashUtil;
 
 /**
@@ -390,15 +389,15 @@ public class Int2ObjectLinkedOpenCustomHashMap<V> extends Int2ObjectOpenCustomHa
 	}
 	
 	@Override
-	public ObjectSet<Int2ObjectMap.Entry<V>> int2ObjectEntrySet() {
+	public ObjectOrderedSet<Int2ObjectMap.Entry<V>> int2ObjectEntrySet() {
 		if(entrySet == null) entrySet = new MapEntrySet();
-		return entrySet;
+		return (ObjectOrderedSet<Int2ObjectMap.Entry<V>>)entrySet;
 	}
 	
 	@Override
-	public IntSet keySet() {
+	public IntOrderedSet keySet() {
 		if(keySet == null) keySet = new KeySet();
-		return keySet;
+		return (IntOrderedSet)keySet;
 	}
 	
 	@Override

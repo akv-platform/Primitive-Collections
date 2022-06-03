@@ -15,7 +15,6 @@ import speiger.src.collections.objects.maps.interfaces.Object2IntMap;
 import speiger.src.collections.objects.maps.interfaces.Object2IntOrderedMap;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
-import speiger.src.collections.objects.sets.ObjectSet;
 import speiger.src.collections.ints.collections.AbstractIntCollection;
 import speiger.src.collections.ints.collections.IntCollection;
 import speiger.src.collections.ints.collections.IntIterator;
@@ -383,15 +382,15 @@ public class Object2IntLinkedOpenHashMap<T> extends Object2IntOpenHashMap<T> imp
 	}
 	
 	@Override
-	public ObjectSet<Object2IntMap.Entry<T>> object2IntEntrySet() {
+	public ObjectOrderedSet<Object2IntMap.Entry<T>> object2IntEntrySet() {
 		if(entrySet == null) entrySet = new MapEntrySet();
-		return entrySet;
+		return (ObjectOrderedSet<Object2IntMap.Entry<T>>)entrySet;
 	}
 	
 	@Override
-	public ObjectSet<T> keySet() {
+	public ObjectOrderedSet<T> keySet() {
 		if(keySet == null) keySet = new KeySet();
-		return keySet;
+		return (ObjectOrderedSet<T>)keySet;
 	}
 	
 	@Override

@@ -18,7 +18,6 @@ import speiger.src.collections.chars.maps.interfaces.Char2BooleanMap;
 import speiger.src.collections.chars.maps.interfaces.Char2BooleanOrderedMap;
 import speiger.src.collections.chars.sets.AbstractCharSet;
 import speiger.src.collections.chars.sets.CharOrderedSet;
-import speiger.src.collections.chars.sets.CharSet;
 import speiger.src.collections.chars.utils.CharStrategy;
 import speiger.src.collections.booleans.collections.AbstractBooleanCollection;
 import speiger.src.collections.booleans.collections.BooleanCollection;
@@ -34,7 +33,7 @@ import speiger.src.collections.objects.functions.function.ObjectObjectUnaryOpera
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.lists.ObjectListIterator;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
-import speiger.src.collections.objects.sets.ObjectSet;
+import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.utils.HashUtil;
 
 /**
@@ -393,15 +392,15 @@ public class Char2BooleanLinkedOpenCustomHashMap extends Char2BooleanOpenCustomH
 	}
 	
 	@Override
-	public ObjectSet<Char2BooleanMap.Entry> char2BooleanEntrySet() {
+	public ObjectOrderedSet<Char2BooleanMap.Entry> char2BooleanEntrySet() {
 		if(entrySet == null) entrySet = new MapEntrySet();
-		return entrySet;
+		return (ObjectOrderedSet<Char2BooleanMap.Entry>)entrySet;
 	}
 	
 	@Override
-	public CharSet keySet() {
+	public CharOrderedSet keySet() {
 		if(keySet == null) keySet = new KeySet();
-		return keySet;
+		return (CharOrderedSet)keySet;
 	}
 	
 	@Override

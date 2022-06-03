@@ -15,7 +15,6 @@ import speiger.src.collections.objects.maps.interfaces.Object2ShortMap;
 import speiger.src.collections.objects.maps.interfaces.Object2ShortOrderedMap;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
-import speiger.src.collections.objects.sets.ObjectSet;
 import speiger.src.collections.shorts.collections.AbstractShortCollection;
 import speiger.src.collections.shorts.collections.ShortCollection;
 import speiger.src.collections.shorts.collections.ShortIterator;
@@ -383,15 +382,15 @@ public class Object2ShortLinkedOpenHashMap<T> extends Object2ShortOpenHashMap<T>
 	}
 	
 	@Override
-	public ObjectSet<Object2ShortMap.Entry<T>> object2ShortEntrySet() {
+	public ObjectOrderedSet<Object2ShortMap.Entry<T>> object2ShortEntrySet() {
 		if(entrySet == null) entrySet = new MapEntrySet();
-		return entrySet;
+		return (ObjectOrderedSet<Object2ShortMap.Entry<T>>)entrySet;
 	}
 	
 	@Override
-	public ObjectSet<T> keySet() {
+	public ObjectOrderedSet<T> keySet() {
 		if(keySet == null) keySet = new KeySet();
-		return keySet;
+		return (ObjectOrderedSet<T>)keySet;
 	}
 	
 	@Override

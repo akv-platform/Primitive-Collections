@@ -18,7 +18,6 @@ import speiger.src.collections.ints.maps.interfaces.Int2ByteMap;
 import speiger.src.collections.ints.maps.interfaces.Int2ByteOrderedMap;
 import speiger.src.collections.ints.sets.AbstractIntSet;
 import speiger.src.collections.ints.sets.IntOrderedSet;
-import speiger.src.collections.ints.sets.IntSet;
 import speiger.src.collections.ints.utils.IntStrategy;
 import speiger.src.collections.bytes.collections.AbstractByteCollection;
 import speiger.src.collections.bytes.collections.ByteCollection;
@@ -34,7 +33,7 @@ import speiger.src.collections.objects.functions.function.ObjectObjectUnaryOpera
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.lists.ObjectListIterator;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
-import speiger.src.collections.objects.sets.ObjectSet;
+import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.utils.HashUtil;
 
 /**
@@ -393,15 +392,15 @@ public class Int2ByteLinkedOpenCustomHashMap extends Int2ByteOpenCustomHashMap i
 	}
 	
 	@Override
-	public ObjectSet<Int2ByteMap.Entry> int2ByteEntrySet() {
+	public ObjectOrderedSet<Int2ByteMap.Entry> int2ByteEntrySet() {
 		if(entrySet == null) entrySet = new MapEntrySet();
-		return entrySet;
+		return (ObjectOrderedSet<Int2ByteMap.Entry>)entrySet;
 	}
 	
 	@Override
-	public IntSet keySet() {
+	public IntOrderedSet keySet() {
 		if(keySet == null) keySet = new KeySet();
-		return keySet;
+		return (IntOrderedSet)keySet;
 	}
 	
 	@Override

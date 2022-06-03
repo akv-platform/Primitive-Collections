@@ -18,7 +18,6 @@ import speiger.src.collections.shorts.maps.interfaces.Short2IntMap;
 import speiger.src.collections.shorts.maps.interfaces.Short2IntOrderedMap;
 import speiger.src.collections.shorts.sets.AbstractShortSet;
 import speiger.src.collections.shorts.sets.ShortOrderedSet;
-import speiger.src.collections.shorts.sets.ShortSet;
 import speiger.src.collections.shorts.utils.ShortStrategy;
 import speiger.src.collections.ints.collections.AbstractIntCollection;
 import speiger.src.collections.ints.collections.IntCollection;
@@ -34,7 +33,7 @@ import speiger.src.collections.objects.functions.function.ObjectObjectUnaryOpera
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.lists.ObjectListIterator;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
-import speiger.src.collections.objects.sets.ObjectSet;
+import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.utils.HashUtil;
 
 /**
@@ -393,15 +392,15 @@ public class Short2IntLinkedOpenCustomHashMap extends Short2IntOpenCustomHashMap
 	}
 	
 	@Override
-	public ObjectSet<Short2IntMap.Entry> short2IntEntrySet() {
+	public ObjectOrderedSet<Short2IntMap.Entry> short2IntEntrySet() {
 		if(entrySet == null) entrySet = new MapEntrySet();
-		return entrySet;
+		return (ObjectOrderedSet<Short2IntMap.Entry>)entrySet;
 	}
 	
 	@Override
-	public ShortSet keySet() {
+	public ShortOrderedSet keySet() {
 		if(keySet == null) keySet = new KeySet();
-		return keySet;
+		return (ShortOrderedSet)keySet;
 	}
 	
 	@Override

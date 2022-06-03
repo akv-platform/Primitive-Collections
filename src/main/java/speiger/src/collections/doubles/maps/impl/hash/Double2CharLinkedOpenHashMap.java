@@ -18,7 +18,6 @@ import speiger.src.collections.doubles.maps.interfaces.Double2CharMap;
 import speiger.src.collections.doubles.maps.interfaces.Double2CharOrderedMap;
 import speiger.src.collections.doubles.sets.AbstractDoubleSet;
 import speiger.src.collections.doubles.sets.DoubleOrderedSet;
-import speiger.src.collections.doubles.sets.DoubleSet;
 import speiger.src.collections.chars.collections.AbstractCharCollection;
 import speiger.src.collections.chars.collections.CharCollection;
 import speiger.src.collections.chars.collections.CharIterator;
@@ -33,7 +32,7 @@ import speiger.src.collections.objects.functions.function.ObjectObjectUnaryOpera
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.lists.ObjectListIterator;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
-import speiger.src.collections.objects.sets.ObjectSet;
+import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.utils.HashUtil;
 
 /**
@@ -391,15 +390,15 @@ public class Double2CharLinkedOpenHashMap extends Double2CharOpenHashMap impleme
 	}
 	
 	@Override
-	public ObjectSet<Double2CharMap.Entry> double2CharEntrySet() {
+	public ObjectOrderedSet<Double2CharMap.Entry> double2CharEntrySet() {
 		if(entrySet == null) entrySet = new MapEntrySet();
-		return entrySet;
+		return (ObjectOrderedSet<Double2CharMap.Entry>)entrySet;
 	}
 	
 	@Override
-	public DoubleSet keySet() {
+	public DoubleOrderedSet keySet() {
 		if(keySet == null) keySet = new KeySet();
-		return keySet;
+		return (DoubleOrderedSet)keySet;
 	}
 	
 	@Override

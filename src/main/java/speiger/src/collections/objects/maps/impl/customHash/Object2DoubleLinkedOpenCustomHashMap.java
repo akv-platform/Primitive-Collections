@@ -15,7 +15,6 @@ import speiger.src.collections.objects.maps.interfaces.Object2DoubleMap;
 import speiger.src.collections.objects.maps.interfaces.Object2DoubleOrderedMap;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
-import speiger.src.collections.objects.sets.ObjectSet;
 import speiger.src.collections.objects.utils.ObjectStrategy;
 import speiger.src.collections.doubles.collections.AbstractDoubleCollection;
 import speiger.src.collections.doubles.collections.DoubleCollection;
@@ -385,15 +384,15 @@ public class Object2DoubleLinkedOpenCustomHashMap<T> extends Object2DoubleOpenCu
 	}
 	
 	@Override
-	public ObjectSet<Object2DoubleMap.Entry<T>> object2DoubleEntrySet() {
+	public ObjectOrderedSet<Object2DoubleMap.Entry<T>> object2DoubleEntrySet() {
 		if(entrySet == null) entrySet = new MapEntrySet();
-		return entrySet;
+		return (ObjectOrderedSet<Object2DoubleMap.Entry<T>>)entrySet;
 	}
 	
 	@Override
-	public ObjectSet<T> keySet() {
+	public ObjectOrderedSet<T> keySet() {
 		if(keySet == null) keySet = new KeySet();
-		return keySet;
+		return (ObjectOrderedSet<T>)keySet;
 	}
 	
 	@Override

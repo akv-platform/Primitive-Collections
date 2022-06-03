@@ -16,7 +16,6 @@ import speiger.src.collections.objects.maps.interfaces.Object2BooleanMap;
 import speiger.src.collections.objects.maps.interfaces.Object2BooleanOrderedMap;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
-import speiger.src.collections.objects.sets.ObjectSet;
 import speiger.src.collections.booleans.collections.AbstractBooleanCollection;
 import speiger.src.collections.booleans.collections.BooleanCollection;
 import speiger.src.collections.booleans.collections.BooleanIterator;
@@ -383,15 +382,15 @@ public class Object2BooleanLinkedOpenHashMap<T> extends Object2BooleanOpenHashMa
 	}
 	
 	@Override
-	public ObjectSet<Object2BooleanMap.Entry<T>> object2BooleanEntrySet() {
+	public ObjectOrderedSet<Object2BooleanMap.Entry<T>> object2BooleanEntrySet() {
 		if(entrySet == null) entrySet = new MapEntrySet();
-		return entrySet;
+		return (ObjectOrderedSet<Object2BooleanMap.Entry<T>>)entrySet;
 	}
 	
 	@Override
-	public ObjectSet<T> keySet() {
+	public ObjectOrderedSet<T> keySet() {
 		if(keySet == null) keySet = new KeySet();
-		return keySet;
+		return (ObjectOrderedSet<T>)keySet;
 	}
 	
 	@Override

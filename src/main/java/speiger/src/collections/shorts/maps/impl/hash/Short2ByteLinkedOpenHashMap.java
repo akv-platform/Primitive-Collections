@@ -18,7 +18,6 @@ import speiger.src.collections.shorts.maps.interfaces.Short2ByteMap;
 import speiger.src.collections.shorts.maps.interfaces.Short2ByteOrderedMap;
 import speiger.src.collections.shorts.sets.AbstractShortSet;
 import speiger.src.collections.shorts.sets.ShortOrderedSet;
-import speiger.src.collections.shorts.sets.ShortSet;
 import speiger.src.collections.bytes.collections.AbstractByteCollection;
 import speiger.src.collections.bytes.collections.ByteCollection;
 import speiger.src.collections.bytes.collections.ByteIterator;
@@ -33,7 +32,7 @@ import speiger.src.collections.objects.functions.function.ObjectObjectUnaryOpera
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.lists.ObjectListIterator;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
-import speiger.src.collections.objects.sets.ObjectSet;
+import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.utils.HashUtil;
 
 /**
@@ -391,15 +390,15 @@ public class Short2ByteLinkedOpenHashMap extends Short2ByteOpenHashMap implement
 	}
 	
 	@Override
-	public ObjectSet<Short2ByteMap.Entry> short2ByteEntrySet() {
+	public ObjectOrderedSet<Short2ByteMap.Entry> short2ByteEntrySet() {
 		if(entrySet == null) entrySet = new MapEntrySet();
-		return entrySet;
+		return (ObjectOrderedSet<Short2ByteMap.Entry>)entrySet;
 	}
 	
 	@Override
-	public ShortSet keySet() {
+	public ShortOrderedSet keySet() {
 		if(keySet == null) keySet = new KeySet();
-		return keySet;
+		return (ShortOrderedSet)keySet;
 	}
 	
 	@Override

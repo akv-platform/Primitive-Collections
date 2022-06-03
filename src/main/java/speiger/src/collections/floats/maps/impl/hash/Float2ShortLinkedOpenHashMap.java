@@ -18,7 +18,6 @@ import speiger.src.collections.floats.maps.interfaces.Float2ShortMap;
 import speiger.src.collections.floats.maps.interfaces.Float2ShortOrderedMap;
 import speiger.src.collections.floats.sets.AbstractFloatSet;
 import speiger.src.collections.floats.sets.FloatOrderedSet;
-import speiger.src.collections.floats.sets.FloatSet;
 import speiger.src.collections.shorts.collections.AbstractShortCollection;
 import speiger.src.collections.shorts.collections.ShortCollection;
 import speiger.src.collections.shorts.collections.ShortIterator;
@@ -33,7 +32,7 @@ import speiger.src.collections.objects.functions.function.ObjectObjectUnaryOpera
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.lists.ObjectListIterator;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
-import speiger.src.collections.objects.sets.ObjectSet;
+import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.utils.HashUtil;
 
 /**
@@ -391,15 +390,15 @@ public class Float2ShortLinkedOpenHashMap extends Float2ShortOpenHashMap impleme
 	}
 	
 	@Override
-	public ObjectSet<Float2ShortMap.Entry> float2ShortEntrySet() {
+	public ObjectOrderedSet<Float2ShortMap.Entry> float2ShortEntrySet() {
 		if(entrySet == null) entrySet = new MapEntrySet();
-		return entrySet;
+		return (ObjectOrderedSet<Float2ShortMap.Entry>)entrySet;
 	}
 	
 	@Override
-	public FloatSet keySet() {
+	public FloatOrderedSet keySet() {
 		if(keySet == null) keySet = new KeySet();
-		return keySet;
+		return (FloatOrderedSet)keySet;
 	}
 	
 	@Override
