@@ -520,11 +520,11 @@ public class MAPS
 		@Override
 		public KEY_TYPE FIRST_ENTRY_KEY() { return map.FIRST_ENTRY_KEY(); }
 		@Override
-		public KEY_TYPE POLL_FIRST_ENTRY_KEY() { return map.POLL_FIRST_ENTRY_KEY(); }
+		public KEY_TYPE POLL_FIRST_ENTRY_KEY() { throw new UnsupportedOperationException(); }
 		@Override
 		public KEY_TYPE LAST_ENTRY_KEY() { return map.LAST_ENTRY_KEY(); }
 		@Override
-		public KEY_TYPE POLL_LAST_ENTRY_KEY() { return map.POLL_LAST_ENTRY_KEY(); }
+		public KEY_TYPE POLL_LAST_ENTRY_KEY() { throw new UnsupportedOperationException(); }
 		@Override
 		public VALUE_TYPE FIRST_ENTRY_VALUE() { return map.FIRST_ENTRY_VALUE(); }
 		@Override
