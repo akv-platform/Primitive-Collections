@@ -1,6 +1,7 @@
 package speiger.src.collections.chars.maps.interfaces;
 
 import speiger.src.collections.chars.utils.maps.Char2FloatMaps;
+import speiger.src.collections.chars.sets.CharOrderedSet;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
 /**
@@ -92,6 +93,10 @@ public interface Char2FloatOrderedMap extends Char2FloatMap
 	
 	@Override
 	public Char2FloatOrderedMap copy();
+	@Override
+	public CharOrderedSet keySet();
+	@Override
+	public ObjectOrderedSet<Char2FloatMap.Entry> char2FloatEntrySet();
 	
 	/**
 	 * Creates a Wrapped SortedMap that is Synchronized

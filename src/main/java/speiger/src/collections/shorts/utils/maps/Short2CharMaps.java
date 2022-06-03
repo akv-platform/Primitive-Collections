@@ -11,6 +11,7 @@ import speiger.src.collections.objects.collections.ObjectIterable;
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.sets.ObjectSet;
 import speiger.src.collections.objects.utils.ObjectSets;
+import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.shorts.functions.ShortComparator;
 import speiger.src.collections.shorts.functions.consumer.ShortCharConsumer;
 import speiger.src.collections.shorts.functions.function.Short2CharFunction;
@@ -22,6 +23,7 @@ import speiger.src.collections.shorts.maps.interfaces.Short2CharSortedMap;
 import speiger.src.collections.shorts.maps.interfaces.Short2CharOrderedMap;
 import speiger.src.collections.shorts.sets.ShortNavigableSet;
 import speiger.src.collections.shorts.sets.ShortSortedSet;
+import speiger.src.collections.shorts.sets.ShortOrderedSet;
 import speiger.src.collections.shorts.sets.ShortSet;
 import speiger.src.collections.shorts.utils.ShortSets;
 import speiger.src.collections.chars.collections.CharCollection;
@@ -442,6 +444,17 @@ public class Short2CharMaps
 		public char lastCharValue() { return map.lastCharValue(); }
 		@Override
 		public Short2CharOrderedMap copy() { return map.copy(); }
+		@Override
+		public ShortOrderedSet keySet() { 
+			if(keys == null) keys = ShortSets.unmodifiable(map.keySet()); 
+			return (ShortOrderedSet)keys;
+		}
+				
+		@Override
+		public ObjectOrderedSet<Short2CharMap.Entry> short2CharEntrySet() {
+			if(entrySet == null) entrySet = new UnmodifyableEntrySet(map.short2CharEntrySet());
+			return (ObjectOrderedSet<Short2CharMap.Entry>)entrySet;
+		}
 	}
 	
 	/**
@@ -739,6 +752,17 @@ public class Short2CharMaps
 		public char lastCharValue() { synchronized(mutex) { return map.lastCharValue(); } }
 		@Override
 		public Short2CharOrderedMap copy() { synchronized(mutex) { return map.copy(); } }
+		@Override
+		public ShortOrderedSet keySet() {
+			if(keys == null) keys = ShortSets.synchronize(map.keySet(), mutex);
+			return (ShortOrderedSet)keys;
+		}
+		
+		@Override
+		public ObjectOrderedSet<Short2CharMap.Entry> short2CharEntrySet() {
+			if(entrySet == null) entrySet = ObjectSets.synchronize(map.short2CharEntrySet(), mutex);
+			return (ObjectOrderedSet<Short2CharMap.Entry>)entrySet;
+		}
 	}
 	
 	/**

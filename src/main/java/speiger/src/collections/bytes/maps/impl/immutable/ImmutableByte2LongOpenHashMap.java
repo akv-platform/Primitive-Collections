@@ -27,7 +27,6 @@ import speiger.src.collections.objects.functions.function.Object2BooleanFunction
 import speiger.src.collections.objects.functions.consumer.ObjectLongConsumer;
 import speiger.src.collections.longs.functions.function.Long2BooleanFunction;
 import speiger.src.collections.bytes.sets.AbstractByteSet;
-import speiger.src.collections.bytes.sets.ByteSet;
 import speiger.src.collections.longs.collections.AbstractLongCollection;
 import speiger.src.collections.longs.collections.LongCollection;
 import speiger.src.collections.longs.collections.LongIterator;
@@ -40,7 +39,7 @@ import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.functions.function.ObjectObjectUnaryOperator;
 import speiger.src.collections.objects.lists.ObjectListIterator;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
-import speiger.src.collections.objects.sets.ObjectSet;
+import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.utils.HashUtil;
 import speiger.src.collections.utils.SanityChecks;
 
@@ -68,9 +67,9 @@ public class ImmutableByte2LongOpenHashMap extends AbstractByte2LongMap implemen
 	/** The Last Index in the Map */
 	protected int lastIndex = -1;
 	/** EntrySet cache */
-	protected transient FastEntrySet entrySet;
+	protected transient FastOrderedSet entrySet;
 	/** KeySet cache */
-	protected transient ByteSet keySet;
+	protected transient ByteOrderedSet keySet;
 	/** Values cache */
 	protected transient LongCollection valuesC;
 	
@@ -366,13 +365,13 @@ public class ImmutableByte2LongOpenHashMap extends AbstractByte2LongMap implemen
 	}	
 
 	@Override
-	public ObjectSet<Byte2LongMap.Entry> byte2LongEntrySet() {
+	public ObjectOrderedSet<Byte2LongMap.Entry> byte2LongEntrySet() {
 		if(entrySet == null) entrySet = new MapEntrySet();
 		return entrySet;
 	}
 	
 	@Override
-	public ByteSet keySet() {
+	public ByteOrderedSet keySet() {
 		if(keySet == null) keySet = new KeySet();
 		return keySet;
 	}

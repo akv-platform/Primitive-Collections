@@ -27,7 +27,6 @@ import speiger.src.collections.objects.functions.function.Object2BooleanFunction
 import speiger.src.collections.objects.functions.consumer.ObjectDoubleConsumer;
 import speiger.src.collections.doubles.functions.function.Double2BooleanFunction;
 import speiger.src.collections.floats.sets.AbstractFloatSet;
-import speiger.src.collections.floats.sets.FloatSet;
 import speiger.src.collections.doubles.collections.AbstractDoubleCollection;
 import speiger.src.collections.doubles.collections.DoubleCollection;
 import speiger.src.collections.doubles.collections.DoubleIterator;
@@ -40,7 +39,7 @@ import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.functions.function.ObjectObjectUnaryOperator;
 import speiger.src.collections.objects.lists.ObjectListIterator;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
-import speiger.src.collections.objects.sets.ObjectSet;
+import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.utils.HashUtil;
 import speiger.src.collections.utils.SanityChecks;
 
@@ -68,9 +67,9 @@ public class ImmutableFloat2DoubleOpenHashMap extends AbstractFloat2DoubleMap im
 	/** The Last Index in the Map */
 	protected int lastIndex = -1;
 	/** EntrySet cache */
-	protected transient FastEntrySet entrySet;
+	protected transient FastOrderedSet entrySet;
 	/** KeySet cache */
-	protected transient FloatSet keySet;
+	protected transient FloatOrderedSet keySet;
 	/** Values cache */
 	protected transient DoubleCollection valuesC;
 	
@@ -366,13 +365,13 @@ public class ImmutableFloat2DoubleOpenHashMap extends AbstractFloat2DoubleMap im
 	}	
 
 	@Override
-	public ObjectSet<Float2DoubleMap.Entry> float2DoubleEntrySet() {
+	public ObjectOrderedSet<Float2DoubleMap.Entry> float2DoubleEntrySet() {
 		if(entrySet == null) entrySet = new MapEntrySet();
 		return entrySet;
 	}
 	
 	@Override
-	public FloatSet keySet() {
+	public FloatOrderedSet keySet() {
 		if(keySet == null) keySet = new KeySet();
 		return keySet;
 	}

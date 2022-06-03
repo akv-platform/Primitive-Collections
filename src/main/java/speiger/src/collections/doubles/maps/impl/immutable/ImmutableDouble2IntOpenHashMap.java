@@ -27,7 +27,6 @@ import speiger.src.collections.objects.functions.function.Object2BooleanFunction
 import speiger.src.collections.objects.functions.consumer.ObjectIntConsumer;
 import speiger.src.collections.ints.functions.function.Int2BooleanFunction;
 import speiger.src.collections.doubles.sets.AbstractDoubleSet;
-import speiger.src.collections.doubles.sets.DoubleSet;
 import speiger.src.collections.ints.collections.AbstractIntCollection;
 import speiger.src.collections.ints.collections.IntCollection;
 import speiger.src.collections.ints.collections.IntIterator;
@@ -40,7 +39,7 @@ import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.functions.function.ObjectObjectUnaryOperator;
 import speiger.src.collections.objects.lists.ObjectListIterator;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
-import speiger.src.collections.objects.sets.ObjectSet;
+import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.utils.HashUtil;
 import speiger.src.collections.utils.SanityChecks;
 
@@ -68,9 +67,9 @@ public class ImmutableDouble2IntOpenHashMap extends AbstractDouble2IntMap implem
 	/** The Last Index in the Map */
 	protected int lastIndex = -1;
 	/** EntrySet cache */
-	protected transient FastEntrySet entrySet;
+	protected transient FastOrderedSet entrySet;
 	/** KeySet cache */
-	protected transient DoubleSet keySet;
+	protected transient DoubleOrderedSet keySet;
 	/** Values cache */
 	protected transient IntCollection valuesC;
 	
@@ -366,13 +365,13 @@ public class ImmutableDouble2IntOpenHashMap extends AbstractDouble2IntMap implem
 	}	
 
 	@Override
-	public ObjectSet<Double2IntMap.Entry> double2IntEntrySet() {
+	public ObjectOrderedSet<Double2IntMap.Entry> double2IntEntrySet() {
 		if(entrySet == null) entrySet = new MapEntrySet();
 		return entrySet;
 	}
 	
 	@Override
-	public DoubleSet keySet() {
+	public DoubleOrderedSet keySet() {
 		if(keySet == null) keySet = new KeySet();
 		return keySet;
 	}

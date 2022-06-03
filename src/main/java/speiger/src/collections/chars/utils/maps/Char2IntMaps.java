@@ -11,6 +11,7 @@ import speiger.src.collections.objects.collections.ObjectIterable;
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.sets.ObjectSet;
 import speiger.src.collections.objects.utils.ObjectSets;
+import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.chars.functions.CharComparator;
 import speiger.src.collections.chars.functions.consumer.CharIntConsumer;
 import speiger.src.collections.chars.functions.function.Char2IntFunction;
@@ -22,6 +23,7 @@ import speiger.src.collections.chars.maps.interfaces.Char2IntSortedMap;
 import speiger.src.collections.chars.maps.interfaces.Char2IntOrderedMap;
 import speiger.src.collections.chars.sets.CharNavigableSet;
 import speiger.src.collections.chars.sets.CharSortedSet;
+import speiger.src.collections.chars.sets.CharOrderedSet;
 import speiger.src.collections.chars.sets.CharSet;
 import speiger.src.collections.chars.utils.CharSets;
 import speiger.src.collections.ints.collections.IntCollection;
@@ -442,6 +444,17 @@ public class Char2IntMaps
 		public int lastIntValue() { return map.lastIntValue(); }
 		@Override
 		public Char2IntOrderedMap copy() { return map.copy(); }
+		@Override
+		public CharOrderedSet keySet() { 
+			if(keys == null) keys = CharSets.unmodifiable(map.keySet()); 
+			return (CharOrderedSet)keys;
+		}
+				
+		@Override
+		public ObjectOrderedSet<Char2IntMap.Entry> char2IntEntrySet() {
+			if(entrySet == null) entrySet = new UnmodifyableEntrySet(map.char2IntEntrySet());
+			return (ObjectOrderedSet<Char2IntMap.Entry>)entrySet;
+		}
 	}
 	
 	/**
@@ -739,6 +752,17 @@ public class Char2IntMaps
 		public int lastIntValue() { synchronized(mutex) { return map.lastIntValue(); } }
 		@Override
 		public Char2IntOrderedMap copy() { synchronized(mutex) { return map.copy(); } }
+		@Override
+		public CharOrderedSet keySet() {
+			if(keys == null) keys = CharSets.synchronize(map.keySet(), mutex);
+			return (CharOrderedSet)keys;
+		}
+		
+		@Override
+		public ObjectOrderedSet<Char2IntMap.Entry> char2IntEntrySet() {
+			if(entrySet == null) entrySet = ObjectSets.synchronize(map.char2IntEntrySet(), mutex);
+			return (ObjectOrderedSet<Char2IntMap.Entry>)entrySet;
+		}
 	}
 	
 	/**

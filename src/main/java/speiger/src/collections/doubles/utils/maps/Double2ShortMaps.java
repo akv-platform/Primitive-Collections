@@ -11,6 +11,7 @@ import speiger.src.collections.objects.collections.ObjectIterable;
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.sets.ObjectSet;
 import speiger.src.collections.objects.utils.ObjectSets;
+import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.doubles.functions.DoubleComparator;
 import speiger.src.collections.doubles.functions.consumer.DoubleShortConsumer;
 import speiger.src.collections.doubles.functions.function.Double2ShortFunction;
@@ -22,6 +23,7 @@ import speiger.src.collections.doubles.maps.interfaces.Double2ShortSortedMap;
 import speiger.src.collections.doubles.maps.interfaces.Double2ShortOrderedMap;
 import speiger.src.collections.doubles.sets.DoubleNavigableSet;
 import speiger.src.collections.doubles.sets.DoubleSortedSet;
+import speiger.src.collections.doubles.sets.DoubleOrderedSet;
 import speiger.src.collections.doubles.sets.DoubleSet;
 import speiger.src.collections.doubles.utils.DoubleSets;
 import speiger.src.collections.shorts.collections.ShortCollection;
@@ -442,6 +444,17 @@ public class Double2ShortMaps
 		public short lastShortValue() { return map.lastShortValue(); }
 		@Override
 		public Double2ShortOrderedMap copy() { return map.copy(); }
+		@Override
+		public DoubleOrderedSet keySet() { 
+			if(keys == null) keys = DoubleSets.unmodifiable(map.keySet()); 
+			return (DoubleOrderedSet)keys;
+		}
+				
+		@Override
+		public ObjectOrderedSet<Double2ShortMap.Entry> double2ShortEntrySet() {
+			if(entrySet == null) entrySet = new UnmodifyableEntrySet(map.double2ShortEntrySet());
+			return (ObjectOrderedSet<Double2ShortMap.Entry>)entrySet;
+		}
 	}
 	
 	/**
@@ -739,6 +752,17 @@ public class Double2ShortMaps
 		public short lastShortValue() { synchronized(mutex) { return map.lastShortValue(); } }
 		@Override
 		public Double2ShortOrderedMap copy() { synchronized(mutex) { return map.copy(); } }
+		@Override
+		public DoubleOrderedSet keySet() {
+			if(keys == null) keys = DoubleSets.synchronize(map.keySet(), mutex);
+			return (DoubleOrderedSet)keys;
+		}
+		
+		@Override
+		public ObjectOrderedSet<Double2ShortMap.Entry> double2ShortEntrySet() {
+			if(entrySet == null) entrySet = ObjectSets.synchronize(map.double2ShortEntrySet(), mutex);
+			return (ObjectOrderedSet<Double2ShortMap.Entry>)entrySet;
+		}
 	}
 	
 	/**

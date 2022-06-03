@@ -11,6 +11,7 @@ import speiger.src.collections.objects.collections.ObjectIterable;
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.sets.ObjectSet;
 import speiger.src.collections.objects.utils.ObjectSets;
+import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.longs.functions.LongComparator;
 import speiger.src.collections.longs.functions.consumer.LongIntConsumer;
 import speiger.src.collections.longs.functions.function.Long2IntFunction;
@@ -22,6 +23,7 @@ import speiger.src.collections.longs.maps.interfaces.Long2IntSortedMap;
 import speiger.src.collections.longs.maps.interfaces.Long2IntOrderedMap;
 import speiger.src.collections.longs.sets.LongNavigableSet;
 import speiger.src.collections.longs.sets.LongSortedSet;
+import speiger.src.collections.longs.sets.LongOrderedSet;
 import speiger.src.collections.longs.sets.LongSet;
 import speiger.src.collections.longs.utils.LongSets;
 import speiger.src.collections.ints.collections.IntCollection;
@@ -442,6 +444,17 @@ public class Long2IntMaps
 		public int lastIntValue() { return map.lastIntValue(); }
 		@Override
 		public Long2IntOrderedMap copy() { return map.copy(); }
+		@Override
+		public LongOrderedSet keySet() { 
+			if(keys == null) keys = LongSets.unmodifiable(map.keySet()); 
+			return (LongOrderedSet)keys;
+		}
+				
+		@Override
+		public ObjectOrderedSet<Long2IntMap.Entry> long2IntEntrySet() {
+			if(entrySet == null) entrySet = new UnmodifyableEntrySet(map.long2IntEntrySet());
+			return (ObjectOrderedSet<Long2IntMap.Entry>)entrySet;
+		}
 	}
 	
 	/**
@@ -739,6 +752,17 @@ public class Long2IntMaps
 		public int lastIntValue() { synchronized(mutex) { return map.lastIntValue(); } }
 		@Override
 		public Long2IntOrderedMap copy() { synchronized(mutex) { return map.copy(); } }
+		@Override
+		public LongOrderedSet keySet() {
+			if(keys == null) keys = LongSets.synchronize(map.keySet(), mutex);
+			return (LongOrderedSet)keys;
+		}
+		
+		@Override
+		public ObjectOrderedSet<Long2IntMap.Entry> long2IntEntrySet() {
+			if(entrySet == null) entrySet = ObjectSets.synchronize(map.long2IntEntrySet(), mutex);
+			return (ObjectOrderedSet<Long2IntMap.Entry>)entrySet;
+		}
 	}
 	
 	/**

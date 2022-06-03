@@ -93,6 +93,10 @@ public interface Object2CharOrderedMap<T> extends Object2CharMap<T>
 	
 	@Override
 	public Object2CharOrderedMap<T> copy();
+	@Override
+	public ObjectOrderedSet<T> keySet();
+	@Override
+	public ObjectOrderedSet<Object2CharMap.Entry<T>> object2CharEntrySet();
 	
 	/**
 	 * Creates a Wrapped SortedMap that is Synchronized

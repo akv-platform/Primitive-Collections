@@ -1,6 +1,7 @@
 package speiger.src.collections.doubles.maps.interfaces;
 
 import speiger.src.collections.doubles.utils.maps.Double2FloatMaps;
+import speiger.src.collections.doubles.sets.DoubleOrderedSet;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
 /**
@@ -92,6 +93,10 @@ public interface Double2FloatOrderedMap extends Double2FloatMap
 	
 	@Override
 	public Double2FloatOrderedMap copy();
+	@Override
+	public DoubleOrderedSet keySet();
+	@Override
+	public ObjectOrderedSet<Double2FloatMap.Entry> double2FloatEntrySet();
 	
 	/**
 	 * Creates a Wrapped SortedMap that is Synchronized

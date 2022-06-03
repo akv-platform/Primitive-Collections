@@ -21,7 +21,6 @@ import speiger.src.collections.chars.maps.interfaces.Char2DoubleMap;
 import speiger.src.collections.chars.maps.interfaces.Char2DoubleOrderedMap;
 import speiger.src.collections.chars.sets.AbstractCharSet;
 import speiger.src.collections.chars.sets.CharOrderedSet;
-import speiger.src.collections.chars.sets.CharSet;
 import speiger.src.collections.chars.utils.maps.Char2DoubleMaps;
 import speiger.src.collections.doubles.collections.AbstractDoubleCollection;
 import speiger.src.collections.doubles.collections.DoubleCollection;
@@ -59,7 +58,7 @@ public class Char2DoubleArrayMap extends AbstractChar2DoubleMap implements Char2
 	/** Amount of Elements stored in the ArrayMap */
 	protected int size = 0;
 	/** KeySet cache */
-	protected CharSet keySet;
+	protected CharOrderedSet keySet;
 	/** Values cache */
 	protected DoubleCollection valuesC;
 	/** EntrySet cache */
@@ -387,7 +386,7 @@ public class Char2DoubleArrayMap extends AbstractChar2DoubleMap implements Char2
 	}
 	
 	@Override
-	public CharSet keySet() {
+	public CharOrderedSet keySet() {
 		if(keySet == null) keySet = new KeySet();
 		return keySet;
 	}

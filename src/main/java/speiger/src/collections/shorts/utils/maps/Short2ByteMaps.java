@@ -11,6 +11,7 @@ import speiger.src.collections.objects.collections.ObjectIterable;
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.sets.ObjectSet;
 import speiger.src.collections.objects.utils.ObjectSets;
+import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.shorts.functions.ShortComparator;
 import speiger.src.collections.shorts.functions.consumer.ShortByteConsumer;
 import speiger.src.collections.shorts.functions.function.Short2ByteFunction;
@@ -22,6 +23,7 @@ import speiger.src.collections.shorts.maps.interfaces.Short2ByteSortedMap;
 import speiger.src.collections.shorts.maps.interfaces.Short2ByteOrderedMap;
 import speiger.src.collections.shorts.sets.ShortNavigableSet;
 import speiger.src.collections.shorts.sets.ShortSortedSet;
+import speiger.src.collections.shorts.sets.ShortOrderedSet;
 import speiger.src.collections.shorts.sets.ShortSet;
 import speiger.src.collections.shorts.utils.ShortSets;
 import speiger.src.collections.bytes.collections.ByteCollection;
@@ -442,6 +444,17 @@ public class Short2ByteMaps
 		public byte lastByteValue() { return map.lastByteValue(); }
 		@Override
 		public Short2ByteOrderedMap copy() { return map.copy(); }
+		@Override
+		public ShortOrderedSet keySet() { 
+			if(keys == null) keys = ShortSets.unmodifiable(map.keySet()); 
+			return (ShortOrderedSet)keys;
+		}
+				
+		@Override
+		public ObjectOrderedSet<Short2ByteMap.Entry> short2ByteEntrySet() {
+			if(entrySet == null) entrySet = new UnmodifyableEntrySet(map.short2ByteEntrySet());
+			return (ObjectOrderedSet<Short2ByteMap.Entry>)entrySet;
+		}
 	}
 	
 	/**
@@ -739,6 +752,17 @@ public class Short2ByteMaps
 		public byte lastByteValue() { synchronized(mutex) { return map.lastByteValue(); } }
 		@Override
 		public Short2ByteOrderedMap copy() { synchronized(mutex) { return map.copy(); } }
+		@Override
+		public ShortOrderedSet keySet() {
+			if(keys == null) keys = ShortSets.synchronize(map.keySet(), mutex);
+			return (ShortOrderedSet)keys;
+		}
+		
+		@Override
+		public ObjectOrderedSet<Short2ByteMap.Entry> short2ByteEntrySet() {
+			if(entrySet == null) entrySet = ObjectSets.synchronize(map.short2ByteEntrySet(), mutex);
+			return (ObjectOrderedSet<Short2ByteMap.Entry>)entrySet;
+		}
 	}
 	
 	/**

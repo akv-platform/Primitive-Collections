@@ -27,7 +27,6 @@ import speiger.src.collections.objects.functions.function.Object2BooleanFunction
 import speiger.src.collections.objects.functions.consumer.ObjectIntConsumer;
 import speiger.src.collections.ints.functions.function.Int2BooleanFunction;
 import speiger.src.collections.floats.sets.AbstractFloatSet;
-import speiger.src.collections.floats.sets.FloatSet;
 import speiger.src.collections.ints.collections.AbstractIntCollection;
 import speiger.src.collections.ints.collections.IntCollection;
 import speiger.src.collections.ints.collections.IntIterator;
@@ -40,7 +39,7 @@ import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.functions.function.ObjectObjectUnaryOperator;
 import speiger.src.collections.objects.lists.ObjectListIterator;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
-import speiger.src.collections.objects.sets.ObjectSet;
+import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.utils.HashUtil;
 import speiger.src.collections.utils.SanityChecks;
 
@@ -68,9 +67,9 @@ public class ImmutableFloat2IntOpenHashMap extends AbstractFloat2IntMap implemen
 	/** The Last Index in the Map */
 	protected int lastIndex = -1;
 	/** EntrySet cache */
-	protected transient FastEntrySet entrySet;
+	protected transient FastOrderedSet entrySet;
 	/** KeySet cache */
-	protected transient FloatSet keySet;
+	protected transient FloatOrderedSet keySet;
 	/** Values cache */
 	protected transient IntCollection valuesC;
 	
@@ -366,13 +365,13 @@ public class ImmutableFloat2IntOpenHashMap extends AbstractFloat2IntMap implemen
 	}	
 
 	@Override
-	public ObjectSet<Float2IntMap.Entry> float2IntEntrySet() {
+	public ObjectOrderedSet<Float2IntMap.Entry> float2IntEntrySet() {
 		if(entrySet == null) entrySet = new MapEntrySet();
 		return entrySet;
 	}
 	
 	@Override
-	public FloatSet keySet() {
+	public FloatOrderedSet keySet() {
 		if(keySet == null) keySet = new KeySet();
 		return keySet;
 	}

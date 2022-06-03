@@ -19,6 +19,7 @@ import speiger.src.collections.objects.maps.interfaces.Object2DoubleSortedMap;
 import speiger.src.collections.objects.maps.interfaces.Object2DoubleOrderedMap;
 import speiger.src.collections.objects.sets.ObjectNavigableSet;
 import speiger.src.collections.objects.sets.ObjectSortedSet;
+import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.doubles.collections.DoubleCollection;
 import speiger.src.collections.doubles.functions.function.DoubleDoubleUnaryOperator;
 import speiger.src.collections.doubles.functions.DoubleSupplier;
@@ -453,6 +454,17 @@ public class Object2DoubleMaps
 		public double lastDoubleValue() { return map.lastDoubleValue(); }
 		@Override
 		public Object2DoubleOrderedMap<T> copy() { return map.copy(); }
+		@Override
+		public ObjectOrderedSet<T> keySet() { 
+			if(keys == null) keys = ObjectSets.unmodifiable(map.keySet()); 
+			return (ObjectOrderedSet<T>)keys;
+		}
+				
+		@Override
+		public ObjectOrderedSet<Object2DoubleMap.Entry<T>> object2DoubleEntrySet() {
+			if(entrySet == null) entrySet = new UnmodifyableEntrySet<>(map.object2DoubleEntrySet());
+			return (ObjectOrderedSet<Object2DoubleMap.Entry<T>>)entrySet;
+		}
 	}
 	
 	/**
@@ -705,6 +717,17 @@ public class Object2DoubleMaps
 		public double lastDoubleValue() { synchronized(mutex) { return map.lastDoubleValue(); } }
 		@Override
 		public Object2DoubleOrderedMap<T> copy() { synchronized(mutex) { return map.copy(); } }
+		@Override
+		public ObjectOrderedSet<T> keySet() {
+			if(keys == null) keys = ObjectSets.synchronize(map.keySet(), mutex);
+			return (ObjectOrderedSet<T>)keys;
+		}
+		
+		@Override
+		public ObjectOrderedSet<Object2DoubleMap.Entry<T>> object2DoubleEntrySet() {
+			if(entrySet == null) entrySet = ObjectSets.synchronize(map.object2DoubleEntrySet(), mutex);
+			return (ObjectOrderedSet<Object2DoubleMap.Entry<T>>)entrySet;
+		}
 	}
 	
 	/**

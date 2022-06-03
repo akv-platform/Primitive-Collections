@@ -20,7 +20,6 @@ import speiger.src.collections.ints.maps.interfaces.Int2BooleanMap;
 import speiger.src.collections.ints.maps.interfaces.Int2BooleanOrderedMap;
 import speiger.src.collections.ints.sets.AbstractIntSet;
 import speiger.src.collections.ints.sets.IntOrderedSet;
-import speiger.src.collections.ints.sets.IntSet;
 import speiger.src.collections.ints.utils.maps.Int2BooleanMaps;
 import speiger.src.collections.booleans.collections.AbstractBooleanCollection;
 import speiger.src.collections.booleans.collections.BooleanCollection;
@@ -58,7 +57,7 @@ public class Int2BooleanArrayMap extends AbstractInt2BooleanMap implements Int2B
 	/** Amount of Elements stored in the ArrayMap */
 	protected int size = 0;
 	/** KeySet cache */
-	protected IntSet keySet;
+	protected IntOrderedSet keySet;
 	/** Values cache */
 	protected BooleanCollection valuesC;
 	/** EntrySet cache */
@@ -364,7 +363,7 @@ public class Int2BooleanArrayMap extends AbstractInt2BooleanMap implements Int2B
 	}
 	
 	@Override
-	public IntSet keySet() {
+	public IntOrderedSet keySet() {
 		if(keySet == null) keySet = new KeySet();
 		return keySet;
 	}

@@ -1,6 +1,7 @@
 package speiger.src.collections.shorts.maps.interfaces;
 
 import speiger.src.collections.shorts.utils.maps.Short2CharMaps;
+import speiger.src.collections.shorts.sets.ShortOrderedSet;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
 /**
@@ -92,6 +93,10 @@ public interface Short2CharOrderedMap extends Short2CharMap
 	
 	@Override
 	public Short2CharOrderedMap copy();
+	@Override
+	public ShortOrderedSet keySet();
+	@Override
+	public ObjectOrderedSet<Short2CharMap.Entry> short2CharEntrySet();
 	
 	/**
 	 * Creates a Wrapped SortedMap that is Synchronized

@@ -11,6 +11,7 @@ import speiger.src.collections.objects.collections.ObjectIterable;
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.sets.ObjectSet;
 import speiger.src.collections.objects.utils.ObjectSets;
+import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.longs.functions.LongComparator;
 import speiger.src.collections.longs.functions.consumer.LongBooleanConsumer;
 import speiger.src.collections.longs.functions.function.Long2BooleanFunction;
@@ -22,6 +23,7 @@ import speiger.src.collections.longs.maps.interfaces.Long2BooleanSortedMap;
 import speiger.src.collections.longs.maps.interfaces.Long2BooleanOrderedMap;
 import speiger.src.collections.longs.sets.LongNavigableSet;
 import speiger.src.collections.longs.sets.LongSortedSet;
+import speiger.src.collections.longs.sets.LongOrderedSet;
 import speiger.src.collections.longs.sets.LongSet;
 import speiger.src.collections.longs.utils.LongSets;
 import speiger.src.collections.booleans.collections.BooleanCollection;
@@ -434,6 +436,17 @@ public class Long2BooleanMaps
 		public boolean lastBooleanValue() { return map.lastBooleanValue(); }
 		@Override
 		public Long2BooleanOrderedMap copy() { return map.copy(); }
+		@Override
+		public LongOrderedSet keySet() { 
+			if(keys == null) keys = LongSets.unmodifiable(map.keySet()); 
+			return (LongOrderedSet)keys;
+		}
+				
+		@Override
+		public ObjectOrderedSet<Long2BooleanMap.Entry> long2BooleanEntrySet() {
+			if(entrySet == null) entrySet = new UnmodifyableEntrySet(map.long2BooleanEntrySet());
+			return (ObjectOrderedSet<Long2BooleanMap.Entry>)entrySet;
+		}
 	}
 	
 	/**
@@ -727,6 +740,17 @@ public class Long2BooleanMaps
 		public boolean lastBooleanValue() { synchronized(mutex) { return map.lastBooleanValue(); } }
 		@Override
 		public Long2BooleanOrderedMap copy() { synchronized(mutex) { return map.copy(); } }
+		@Override
+		public LongOrderedSet keySet() {
+			if(keys == null) keys = LongSets.synchronize(map.keySet(), mutex);
+			return (LongOrderedSet)keys;
+		}
+		
+		@Override
+		public ObjectOrderedSet<Long2BooleanMap.Entry> long2BooleanEntrySet() {
+			if(entrySet == null) entrySet = ObjectSets.synchronize(map.long2BooleanEntrySet(), mutex);
+			return (ObjectOrderedSet<Long2BooleanMap.Entry>)entrySet;
+		}
 	}
 	
 	/**

@@ -11,6 +11,7 @@ import speiger.src.collections.objects.collections.ObjectIterable;
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.sets.ObjectSet;
 import speiger.src.collections.objects.utils.ObjectSets;
+import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.ints.functions.IntComparator;
 import speiger.src.collections.ints.functions.consumer.IntBooleanConsumer;
 import speiger.src.collections.ints.functions.function.Int2BooleanFunction;
@@ -22,6 +23,7 @@ import speiger.src.collections.ints.maps.interfaces.Int2BooleanSortedMap;
 import speiger.src.collections.ints.maps.interfaces.Int2BooleanOrderedMap;
 import speiger.src.collections.ints.sets.IntNavigableSet;
 import speiger.src.collections.ints.sets.IntSortedSet;
+import speiger.src.collections.ints.sets.IntOrderedSet;
 import speiger.src.collections.ints.sets.IntSet;
 import speiger.src.collections.ints.utils.IntSets;
 import speiger.src.collections.booleans.collections.BooleanCollection;
@@ -434,6 +436,17 @@ public class Int2BooleanMaps
 		public boolean lastBooleanValue() { return map.lastBooleanValue(); }
 		@Override
 		public Int2BooleanOrderedMap copy() { return map.copy(); }
+		@Override
+		public IntOrderedSet keySet() { 
+			if(keys == null) keys = IntSets.unmodifiable(map.keySet()); 
+			return (IntOrderedSet)keys;
+		}
+				
+		@Override
+		public ObjectOrderedSet<Int2BooleanMap.Entry> int2BooleanEntrySet() {
+			if(entrySet == null) entrySet = new UnmodifyableEntrySet(map.int2BooleanEntrySet());
+			return (ObjectOrderedSet<Int2BooleanMap.Entry>)entrySet;
+		}
 	}
 	
 	/**
@@ -727,6 +740,17 @@ public class Int2BooleanMaps
 		public boolean lastBooleanValue() { synchronized(mutex) { return map.lastBooleanValue(); } }
 		@Override
 		public Int2BooleanOrderedMap copy() { synchronized(mutex) { return map.copy(); } }
+		@Override
+		public IntOrderedSet keySet() {
+			if(keys == null) keys = IntSets.synchronize(map.keySet(), mutex);
+			return (IntOrderedSet)keys;
+		}
+		
+		@Override
+		public ObjectOrderedSet<Int2BooleanMap.Entry> int2BooleanEntrySet() {
+			if(entrySet == null) entrySet = ObjectSets.synchronize(map.int2BooleanEntrySet(), mutex);
+			return (ObjectOrderedSet<Int2BooleanMap.Entry>)entrySet;
+		}
 	}
 	
 	/**

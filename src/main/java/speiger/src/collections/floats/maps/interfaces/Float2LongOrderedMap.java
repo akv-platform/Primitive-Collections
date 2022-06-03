@@ -1,6 +1,7 @@
 package speiger.src.collections.floats.maps.interfaces;
 
 import speiger.src.collections.floats.utils.maps.Float2LongMaps;
+import speiger.src.collections.floats.sets.FloatOrderedSet;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
 /**
@@ -92,6 +93,10 @@ public interface Float2LongOrderedMap extends Float2LongMap
 	
 	@Override
 	public Float2LongOrderedMap copy();
+	@Override
+	public FloatOrderedSet keySet();
+	@Override
+	public ObjectOrderedSet<Float2LongMap.Entry> float2LongEntrySet();
 	
 	/**
 	 * Creates a Wrapped SortedMap that is Synchronized

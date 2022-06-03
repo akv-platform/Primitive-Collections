@@ -11,6 +11,7 @@ import speiger.src.collections.objects.collections.ObjectIterable;
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.sets.ObjectSet;
 import speiger.src.collections.objects.utils.ObjectSets;
+import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.shorts.functions.ShortComparator;
 import speiger.src.collections.shorts.functions.consumer.ShortBooleanConsumer;
 import speiger.src.collections.shorts.functions.function.Short2BooleanFunction;
@@ -22,6 +23,7 @@ import speiger.src.collections.shorts.maps.interfaces.Short2BooleanSortedMap;
 import speiger.src.collections.shorts.maps.interfaces.Short2BooleanOrderedMap;
 import speiger.src.collections.shorts.sets.ShortNavigableSet;
 import speiger.src.collections.shorts.sets.ShortSortedSet;
+import speiger.src.collections.shorts.sets.ShortOrderedSet;
 import speiger.src.collections.shorts.sets.ShortSet;
 import speiger.src.collections.shorts.utils.ShortSets;
 import speiger.src.collections.booleans.collections.BooleanCollection;
@@ -434,6 +436,17 @@ public class Short2BooleanMaps
 		public boolean lastBooleanValue() { return map.lastBooleanValue(); }
 		@Override
 		public Short2BooleanOrderedMap copy() { return map.copy(); }
+		@Override
+		public ShortOrderedSet keySet() { 
+			if(keys == null) keys = ShortSets.unmodifiable(map.keySet()); 
+			return (ShortOrderedSet)keys;
+		}
+				
+		@Override
+		public ObjectOrderedSet<Short2BooleanMap.Entry> short2BooleanEntrySet() {
+			if(entrySet == null) entrySet = new UnmodifyableEntrySet(map.short2BooleanEntrySet());
+			return (ObjectOrderedSet<Short2BooleanMap.Entry>)entrySet;
+		}
 	}
 	
 	/**
@@ -727,6 +740,17 @@ public class Short2BooleanMaps
 		public boolean lastBooleanValue() { synchronized(mutex) { return map.lastBooleanValue(); } }
 		@Override
 		public Short2BooleanOrderedMap copy() { synchronized(mutex) { return map.copy(); } }
+		@Override
+		public ShortOrderedSet keySet() {
+			if(keys == null) keys = ShortSets.synchronize(map.keySet(), mutex);
+			return (ShortOrderedSet)keys;
+		}
+		
+		@Override
+		public ObjectOrderedSet<Short2BooleanMap.Entry> short2BooleanEntrySet() {
+			if(entrySet == null) entrySet = ObjectSets.synchronize(map.short2BooleanEntrySet(), mutex);
+			return (ObjectOrderedSet<Short2BooleanMap.Entry>)entrySet;
+		}
 	}
 	
 	/**

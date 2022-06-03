@@ -11,6 +11,7 @@ import speiger.src.collections.objects.collections.ObjectIterable;
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.sets.ObjectSet;
 import speiger.src.collections.objects.utils.ObjectSets;
+import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.chars.functions.CharComparator;
 import speiger.src.collections.chars.functions.consumer.CharDoubleConsumer;
 import speiger.src.collections.chars.functions.function.Char2DoubleFunction;
@@ -22,6 +23,7 @@ import speiger.src.collections.chars.maps.interfaces.Char2DoubleSortedMap;
 import speiger.src.collections.chars.maps.interfaces.Char2DoubleOrderedMap;
 import speiger.src.collections.chars.sets.CharNavigableSet;
 import speiger.src.collections.chars.sets.CharSortedSet;
+import speiger.src.collections.chars.sets.CharOrderedSet;
 import speiger.src.collections.chars.sets.CharSet;
 import speiger.src.collections.chars.utils.CharSets;
 import speiger.src.collections.doubles.collections.DoubleCollection;
@@ -442,6 +444,17 @@ public class Char2DoubleMaps
 		public double lastDoubleValue() { return map.lastDoubleValue(); }
 		@Override
 		public Char2DoubleOrderedMap copy() { return map.copy(); }
+		@Override
+		public CharOrderedSet keySet() { 
+			if(keys == null) keys = CharSets.unmodifiable(map.keySet()); 
+			return (CharOrderedSet)keys;
+		}
+				
+		@Override
+		public ObjectOrderedSet<Char2DoubleMap.Entry> char2DoubleEntrySet() {
+			if(entrySet == null) entrySet = new UnmodifyableEntrySet(map.char2DoubleEntrySet());
+			return (ObjectOrderedSet<Char2DoubleMap.Entry>)entrySet;
+		}
 	}
 	
 	/**
@@ -739,6 +752,17 @@ public class Char2DoubleMaps
 		public double lastDoubleValue() { synchronized(mutex) { return map.lastDoubleValue(); } }
 		@Override
 		public Char2DoubleOrderedMap copy() { synchronized(mutex) { return map.copy(); } }
+		@Override
+		public CharOrderedSet keySet() {
+			if(keys == null) keys = CharSets.synchronize(map.keySet(), mutex);
+			return (CharOrderedSet)keys;
+		}
+		
+		@Override
+		public ObjectOrderedSet<Char2DoubleMap.Entry> char2DoubleEntrySet() {
+			if(entrySet == null) entrySet = ObjectSets.synchronize(map.char2DoubleEntrySet(), mutex);
+			return (ObjectOrderedSet<Char2DoubleMap.Entry>)entrySet;
+		}
 	}
 	
 	/**

@@ -1,6 +1,7 @@
 package speiger.src.collections.chars.maps.interfaces;
 
 import speiger.src.collections.chars.utils.maps.Char2ByteMaps;
+import speiger.src.collections.chars.sets.CharOrderedSet;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
 /**
@@ -92,6 +93,10 @@ public interface Char2ByteOrderedMap extends Char2ByteMap
 	
 	@Override
 	public Char2ByteOrderedMap copy();
+	@Override
+	public CharOrderedSet keySet();
+	@Override
+	public ObjectOrderedSet<Char2ByteMap.Entry> char2ByteEntrySet();
 	
 	/**
 	 * Creates a Wrapped SortedMap that is Synchronized

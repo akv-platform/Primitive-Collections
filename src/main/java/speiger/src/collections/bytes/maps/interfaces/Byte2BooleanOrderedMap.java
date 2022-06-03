@@ -1,6 +1,7 @@
 package speiger.src.collections.bytes.maps.interfaces;
 
 import speiger.src.collections.bytes.utils.maps.Byte2BooleanMaps;
+import speiger.src.collections.bytes.sets.ByteOrderedSet;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
 /**
@@ -92,6 +93,10 @@ public interface Byte2BooleanOrderedMap extends Byte2BooleanMap
 	
 	@Override
 	public Byte2BooleanOrderedMap copy();
+	@Override
+	public ByteOrderedSet keySet();
+	@Override
+	public ObjectOrderedSet<Byte2BooleanMap.Entry> byte2BooleanEntrySet();
 	
 	/**
 	 * Creates a Wrapped SortedMap that is Synchronized

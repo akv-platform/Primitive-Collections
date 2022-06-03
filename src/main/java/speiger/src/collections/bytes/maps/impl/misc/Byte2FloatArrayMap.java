@@ -21,7 +21,6 @@ import speiger.src.collections.bytes.maps.interfaces.Byte2FloatMap;
 import speiger.src.collections.bytes.maps.interfaces.Byte2FloatOrderedMap;
 import speiger.src.collections.bytes.sets.AbstractByteSet;
 import speiger.src.collections.bytes.sets.ByteOrderedSet;
-import speiger.src.collections.bytes.sets.ByteSet;
 import speiger.src.collections.bytes.utils.maps.Byte2FloatMaps;
 import speiger.src.collections.floats.collections.AbstractFloatCollection;
 import speiger.src.collections.floats.collections.FloatCollection;
@@ -59,7 +58,7 @@ public class Byte2FloatArrayMap extends AbstractByte2FloatMap implements Byte2Fl
 	/** Amount of Elements stored in the ArrayMap */
 	protected int size = 0;
 	/** KeySet cache */
-	protected ByteSet keySet;
+	protected ByteOrderedSet keySet;
 	/** Values cache */
 	protected FloatCollection valuesC;
 	/** EntrySet cache */
@@ -387,7 +386,7 @@ public class Byte2FloatArrayMap extends AbstractByte2FloatMap implements Byte2Fl
 	}
 	
 	@Override
-	public ByteSet keySet() {
+	public ByteOrderedSet keySet() {
 		if(keySet == null) keySet = new KeySet();
 		return keySet;
 	}

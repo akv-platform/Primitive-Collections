@@ -20,7 +20,6 @@ import speiger.src.collections.bytes.maps.interfaces.Byte2ByteMap;
 import speiger.src.collections.bytes.maps.interfaces.Byte2ByteOrderedMap;
 import speiger.src.collections.bytes.sets.AbstractByteSet;
 import speiger.src.collections.bytes.sets.ByteOrderedSet;
-import speiger.src.collections.bytes.sets.ByteSet;
 import speiger.src.collections.bytes.utils.maps.Byte2ByteMaps;
 import speiger.src.collections.bytes.collections.AbstractByteCollection;
 import speiger.src.collections.bytes.collections.ByteCollection;
@@ -54,7 +53,7 @@ public class Byte2ByteArrayMap extends AbstractByte2ByteMap implements Byte2Byte
 	/** Amount of Elements stored in the ArrayMap */
 	protected int size = 0;
 	/** KeySet cache */
-	protected ByteSet keySet;
+	protected ByteOrderedSet keySet;
 	/** Values cache */
 	protected ByteCollection valuesC;
 	/** EntrySet cache */
@@ -382,7 +381,7 @@ public class Byte2ByteArrayMap extends AbstractByte2ByteMap implements Byte2Byte
 	}
 	
 	@Override
-	public ByteSet keySet() {
+	public ByteOrderedSet keySet() {
 		if(keySet == null) keySet = new KeySet();
 		return keySet;
 	}

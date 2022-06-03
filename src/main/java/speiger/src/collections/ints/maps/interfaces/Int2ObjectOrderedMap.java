@@ -1,6 +1,7 @@
 package speiger.src.collections.ints.maps.interfaces;
 
 import speiger.src.collections.ints.utils.maps.Int2ObjectMaps;
+import speiger.src.collections.ints.sets.IntOrderedSet;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
 /**
@@ -93,6 +94,10 @@ public interface Int2ObjectOrderedMap<V> extends Int2ObjectMap<V>
 	
 	@Override
 	public Int2ObjectOrderedMap<V> copy();
+	@Override
+	public IntOrderedSet keySet();
+	@Override
+	public ObjectOrderedSet<Int2ObjectMap.Entry<V>> int2ObjectEntrySet();
 	
 	/**
 	 * Creates a Wrapped SortedMap that is Synchronized

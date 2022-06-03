@@ -18,7 +18,6 @@ import speiger.src.collections.objects.maps.interfaces.Object2ShortMap;
 import speiger.src.collections.objects.maps.interfaces.Object2ShortOrderedMap;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
-import speiger.src.collections.objects.sets.ObjectSet;
 import speiger.src.collections.objects.utils.maps.Object2ShortMaps;
 import speiger.src.collections.shorts.collections.AbstractShortCollection;
 import speiger.src.collections.shorts.collections.ShortCollection;
@@ -52,7 +51,7 @@ public class Object2ShortArrayMap<T> extends AbstractObject2ShortMap<T> implemen
 	/** Amount of Elements stored in the ArrayMap */
 	protected int size = 0;
 	/** KeySet cache */
-	protected ObjectSet<T> keySet;
+	protected ObjectOrderedSet<T> keySet;
 	/** Values cache */
 	protected ShortCollection valuesC;
 	/** EntrySet cache */
@@ -375,7 +374,7 @@ public class Object2ShortArrayMap<T> extends AbstractObject2ShortMap<T> implemen
 	}
 	
 	@Override
-	public ObjectSet<T> keySet() {
+	public ObjectOrderedSet<T> keySet() {
 		if(keySet == null) keySet = new KeySet();
 		return keySet;
 	}

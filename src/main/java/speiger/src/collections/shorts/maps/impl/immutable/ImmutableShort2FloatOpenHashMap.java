@@ -27,7 +27,6 @@ import speiger.src.collections.objects.functions.function.Object2BooleanFunction
 import speiger.src.collections.objects.functions.consumer.ObjectFloatConsumer;
 import speiger.src.collections.floats.functions.function.Float2BooleanFunction;
 import speiger.src.collections.shorts.sets.AbstractShortSet;
-import speiger.src.collections.shorts.sets.ShortSet;
 import speiger.src.collections.floats.collections.AbstractFloatCollection;
 import speiger.src.collections.floats.collections.FloatCollection;
 import speiger.src.collections.floats.collections.FloatIterator;
@@ -40,7 +39,7 @@ import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.functions.function.ObjectObjectUnaryOperator;
 import speiger.src.collections.objects.lists.ObjectListIterator;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
-import speiger.src.collections.objects.sets.ObjectSet;
+import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.utils.HashUtil;
 import speiger.src.collections.utils.SanityChecks;
 
@@ -68,9 +67,9 @@ public class ImmutableShort2FloatOpenHashMap extends AbstractShort2FloatMap impl
 	/** The Last Index in the Map */
 	protected int lastIndex = -1;
 	/** EntrySet cache */
-	protected transient FastEntrySet entrySet;
+	protected transient FastOrderedSet entrySet;
 	/** KeySet cache */
-	protected transient ShortSet keySet;
+	protected transient ShortOrderedSet keySet;
 	/** Values cache */
 	protected transient FloatCollection valuesC;
 	
@@ -366,13 +365,13 @@ public class ImmutableShort2FloatOpenHashMap extends AbstractShort2FloatMap impl
 	}	
 
 	@Override
-	public ObjectSet<Short2FloatMap.Entry> short2FloatEntrySet() {
+	public ObjectOrderedSet<Short2FloatMap.Entry> short2FloatEntrySet() {
 		if(entrySet == null) entrySet = new MapEntrySet();
 		return entrySet;
 	}
 	
 	@Override
-	public ShortSet keySet() {
+	public ShortOrderedSet keySet() {
 		if(keySet == null) keySet = new KeySet();
 		return keySet;
 	}

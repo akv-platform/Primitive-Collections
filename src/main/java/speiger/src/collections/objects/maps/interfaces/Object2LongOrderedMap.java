@@ -93,6 +93,10 @@ public interface Object2LongOrderedMap<T> extends Object2LongMap<T>
 	
 	@Override
 	public Object2LongOrderedMap<T> copy();
+	@Override
+	public ObjectOrderedSet<T> keySet();
+	@Override
+	public ObjectOrderedSet<Object2LongMap.Entry<T>> object2LongEntrySet();
 	
 	/**
 	 * Creates a Wrapped SortedMap that is Synchronized

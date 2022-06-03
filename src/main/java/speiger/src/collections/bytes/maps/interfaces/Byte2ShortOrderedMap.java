@@ -1,6 +1,7 @@
 package speiger.src.collections.bytes.maps.interfaces;
 
 import speiger.src.collections.bytes.utils.maps.Byte2ShortMaps;
+import speiger.src.collections.bytes.sets.ByteOrderedSet;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
 /**
@@ -92,6 +93,10 @@ public interface Byte2ShortOrderedMap extends Byte2ShortMap
 	
 	@Override
 	public Byte2ShortOrderedMap copy();
+	@Override
+	public ByteOrderedSet keySet();
+	@Override
+	public ObjectOrderedSet<Byte2ShortMap.Entry> byte2ShortEntrySet();
 	
 	/**
 	 * Creates a Wrapped SortedMap that is Synchronized

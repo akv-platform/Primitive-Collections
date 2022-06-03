@@ -1,6 +1,7 @@
 package speiger.src.collections.doubles.maps.interfaces;
 
 import speiger.src.collections.doubles.utils.maps.Double2DoubleMaps;
+import speiger.src.collections.doubles.sets.DoubleOrderedSet;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
 /**
@@ -92,6 +93,10 @@ public interface Double2DoubleOrderedMap extends Double2DoubleMap
 	
 	@Override
 	public Double2DoubleOrderedMap copy();
+	@Override
+	public DoubleOrderedSet keySet();
+	@Override
+	public ObjectOrderedSet<Double2DoubleMap.Entry> double2DoubleEntrySet();
 	
 	/**
 	 * Creates a Wrapped SortedMap that is Synchronized

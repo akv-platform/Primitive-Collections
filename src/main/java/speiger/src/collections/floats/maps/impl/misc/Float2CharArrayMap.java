@@ -21,7 +21,6 @@ import speiger.src.collections.floats.maps.interfaces.Float2CharMap;
 import speiger.src.collections.floats.maps.interfaces.Float2CharOrderedMap;
 import speiger.src.collections.floats.sets.AbstractFloatSet;
 import speiger.src.collections.floats.sets.FloatOrderedSet;
-import speiger.src.collections.floats.sets.FloatSet;
 import speiger.src.collections.floats.utils.maps.Float2CharMaps;
 import speiger.src.collections.chars.collections.AbstractCharCollection;
 import speiger.src.collections.chars.collections.CharCollection;
@@ -59,7 +58,7 @@ public class Float2CharArrayMap extends AbstractFloat2CharMap implements Float2C
 	/** Amount of Elements stored in the ArrayMap */
 	protected int size = 0;
 	/** KeySet cache */
-	protected FloatSet keySet;
+	protected FloatOrderedSet keySet;
 	/** Values cache */
 	protected CharCollection valuesC;
 	/** EntrySet cache */
@@ -387,7 +386,7 @@ public class Float2CharArrayMap extends AbstractFloat2CharMap implements Float2C
 	}
 	
 	@Override
-	public FloatSet keySet() {
+	public FloatOrderedSet keySet() {
 		if(keySet == null) keySet = new KeySet();
 		return keySet;
 	}

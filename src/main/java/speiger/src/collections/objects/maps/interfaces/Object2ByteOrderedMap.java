@@ -93,6 +93,10 @@ public interface Object2ByteOrderedMap<T> extends Object2ByteMap<T>
 	
 	@Override
 	public Object2ByteOrderedMap<T> copy();
+	@Override
+	public ObjectOrderedSet<T> keySet();
+	@Override
+	public ObjectOrderedSet<Object2ByteMap.Entry<T>> object2ByteEntrySet();
 	
 	/**
 	 * Creates a Wrapped SortedMap that is Synchronized

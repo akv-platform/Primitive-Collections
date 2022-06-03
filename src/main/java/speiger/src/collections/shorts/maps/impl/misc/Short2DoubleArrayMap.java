@@ -21,7 +21,6 @@ import speiger.src.collections.shorts.maps.interfaces.Short2DoubleMap;
 import speiger.src.collections.shorts.maps.interfaces.Short2DoubleOrderedMap;
 import speiger.src.collections.shorts.sets.AbstractShortSet;
 import speiger.src.collections.shorts.sets.ShortOrderedSet;
-import speiger.src.collections.shorts.sets.ShortSet;
 import speiger.src.collections.shorts.utils.maps.Short2DoubleMaps;
 import speiger.src.collections.doubles.collections.AbstractDoubleCollection;
 import speiger.src.collections.doubles.collections.DoubleCollection;
@@ -59,7 +58,7 @@ public class Short2DoubleArrayMap extends AbstractShort2DoubleMap implements Sho
 	/** Amount of Elements stored in the ArrayMap */
 	protected int size = 0;
 	/** KeySet cache */
-	protected ShortSet keySet;
+	protected ShortOrderedSet keySet;
 	/** Values cache */
 	protected DoubleCollection valuesC;
 	/** EntrySet cache */
@@ -387,7 +386,7 @@ public class Short2DoubleArrayMap extends AbstractShort2DoubleMap implements Sho
 	}
 	
 	@Override
-	public ShortSet keySet() {
+	public ShortOrderedSet keySet() {
 		if(keySet == null) keySet = new KeySet();
 		return keySet;
 	}

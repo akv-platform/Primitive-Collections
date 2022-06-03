@@ -1,6 +1,7 @@
 package speiger.src.collections.floats.maps.interfaces;
 
 import speiger.src.collections.floats.utils.maps.Float2ObjectMaps;
+import speiger.src.collections.floats.sets.FloatOrderedSet;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
 /**
@@ -93,6 +94,10 @@ public interface Float2ObjectOrderedMap<V> extends Float2ObjectMap<V>
 	
 	@Override
 	public Float2ObjectOrderedMap<V> copy();
+	@Override
+	public FloatOrderedSet keySet();
+	@Override
+	public ObjectOrderedSet<Float2ObjectMap.Entry<V>> float2ObjectEntrySet();
 	
 	/**
 	 * Creates a Wrapped SortedMap that is Synchronized

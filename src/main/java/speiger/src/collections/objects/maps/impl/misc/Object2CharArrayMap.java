@@ -18,7 +18,6 @@ import speiger.src.collections.objects.maps.interfaces.Object2CharMap;
 import speiger.src.collections.objects.maps.interfaces.Object2CharOrderedMap;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
-import speiger.src.collections.objects.sets.ObjectSet;
 import speiger.src.collections.objects.utils.maps.Object2CharMaps;
 import speiger.src.collections.chars.collections.AbstractCharCollection;
 import speiger.src.collections.chars.collections.CharCollection;
@@ -52,7 +51,7 @@ public class Object2CharArrayMap<T> extends AbstractObject2CharMap<T> implements
 	/** Amount of Elements stored in the ArrayMap */
 	protected int size = 0;
 	/** KeySet cache */
-	protected ObjectSet<T> keySet;
+	protected ObjectOrderedSet<T> keySet;
 	/** Values cache */
 	protected CharCollection valuesC;
 	/** EntrySet cache */
@@ -375,7 +374,7 @@ public class Object2CharArrayMap<T> extends AbstractObject2CharMap<T> implements
 	}
 	
 	@Override
-	public ObjectSet<T> keySet() {
+	public ObjectOrderedSet<T> keySet() {
 		if(keySet == null) keySet = new KeySet();
 		return keySet;
 	}

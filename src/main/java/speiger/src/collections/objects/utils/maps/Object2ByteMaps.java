@@ -19,6 +19,7 @@ import speiger.src.collections.objects.maps.interfaces.Object2ByteSortedMap;
 import speiger.src.collections.objects.maps.interfaces.Object2ByteOrderedMap;
 import speiger.src.collections.objects.sets.ObjectNavigableSet;
 import speiger.src.collections.objects.sets.ObjectSortedSet;
+import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.bytes.collections.ByteCollection;
 import speiger.src.collections.bytes.functions.function.ByteByteUnaryOperator;
 import speiger.src.collections.bytes.functions.ByteSupplier;
@@ -453,6 +454,17 @@ public class Object2ByteMaps
 		public byte lastByteValue() { return map.lastByteValue(); }
 		@Override
 		public Object2ByteOrderedMap<T> copy() { return map.copy(); }
+		@Override
+		public ObjectOrderedSet<T> keySet() { 
+			if(keys == null) keys = ObjectSets.unmodifiable(map.keySet()); 
+			return (ObjectOrderedSet<T>)keys;
+		}
+				
+		@Override
+		public ObjectOrderedSet<Object2ByteMap.Entry<T>> object2ByteEntrySet() {
+			if(entrySet == null) entrySet = new UnmodifyableEntrySet<>(map.object2ByteEntrySet());
+			return (ObjectOrderedSet<Object2ByteMap.Entry<T>>)entrySet;
+		}
 	}
 	
 	/**
@@ -705,6 +717,17 @@ public class Object2ByteMaps
 		public byte lastByteValue() { synchronized(mutex) { return map.lastByteValue(); } }
 		@Override
 		public Object2ByteOrderedMap<T> copy() { synchronized(mutex) { return map.copy(); } }
+		@Override
+		public ObjectOrderedSet<T> keySet() {
+			if(keys == null) keys = ObjectSets.synchronize(map.keySet(), mutex);
+			return (ObjectOrderedSet<T>)keys;
+		}
+		
+		@Override
+		public ObjectOrderedSet<Object2ByteMap.Entry<T>> object2ByteEntrySet() {
+			if(entrySet == null) entrySet = ObjectSets.synchronize(map.object2ByteEntrySet(), mutex);
+			return (ObjectOrderedSet<Object2ByteMap.Entry<T>>)entrySet;
+		}
 	}
 	
 	/**

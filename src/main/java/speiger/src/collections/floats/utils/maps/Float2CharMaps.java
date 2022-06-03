@@ -11,6 +11,7 @@ import speiger.src.collections.objects.collections.ObjectIterable;
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.sets.ObjectSet;
 import speiger.src.collections.objects.utils.ObjectSets;
+import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.floats.functions.FloatComparator;
 import speiger.src.collections.floats.functions.consumer.FloatCharConsumer;
 import speiger.src.collections.floats.functions.function.Float2CharFunction;
@@ -22,6 +23,7 @@ import speiger.src.collections.floats.maps.interfaces.Float2CharSortedMap;
 import speiger.src.collections.floats.maps.interfaces.Float2CharOrderedMap;
 import speiger.src.collections.floats.sets.FloatNavigableSet;
 import speiger.src.collections.floats.sets.FloatSortedSet;
+import speiger.src.collections.floats.sets.FloatOrderedSet;
 import speiger.src.collections.floats.sets.FloatSet;
 import speiger.src.collections.floats.utils.FloatSets;
 import speiger.src.collections.chars.collections.CharCollection;
@@ -442,6 +444,17 @@ public class Float2CharMaps
 		public char lastCharValue() { return map.lastCharValue(); }
 		@Override
 		public Float2CharOrderedMap copy() { return map.copy(); }
+		@Override
+		public FloatOrderedSet keySet() { 
+			if(keys == null) keys = FloatSets.unmodifiable(map.keySet()); 
+			return (FloatOrderedSet)keys;
+		}
+				
+		@Override
+		public ObjectOrderedSet<Float2CharMap.Entry> float2CharEntrySet() {
+			if(entrySet == null) entrySet = new UnmodifyableEntrySet(map.float2CharEntrySet());
+			return (ObjectOrderedSet<Float2CharMap.Entry>)entrySet;
+		}
 	}
 	
 	/**
@@ -739,6 +752,17 @@ public class Float2CharMaps
 		public char lastCharValue() { synchronized(mutex) { return map.lastCharValue(); } }
 		@Override
 		public Float2CharOrderedMap copy() { synchronized(mutex) { return map.copy(); } }
+		@Override
+		public FloatOrderedSet keySet() {
+			if(keys == null) keys = FloatSets.synchronize(map.keySet(), mutex);
+			return (FloatOrderedSet)keys;
+		}
+		
+		@Override
+		public ObjectOrderedSet<Float2CharMap.Entry> float2CharEntrySet() {
+			if(entrySet == null) entrySet = ObjectSets.synchronize(map.float2CharEntrySet(), mutex);
+			return (ObjectOrderedSet<Float2CharMap.Entry>)entrySet;
+		}
 	}
 	
 	/**

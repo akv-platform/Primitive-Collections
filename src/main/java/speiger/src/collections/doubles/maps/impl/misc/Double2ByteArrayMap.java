@@ -21,7 +21,6 @@ import speiger.src.collections.doubles.maps.interfaces.Double2ByteMap;
 import speiger.src.collections.doubles.maps.interfaces.Double2ByteOrderedMap;
 import speiger.src.collections.doubles.sets.AbstractDoubleSet;
 import speiger.src.collections.doubles.sets.DoubleOrderedSet;
-import speiger.src.collections.doubles.sets.DoubleSet;
 import speiger.src.collections.doubles.utils.maps.Double2ByteMaps;
 import speiger.src.collections.bytes.collections.AbstractByteCollection;
 import speiger.src.collections.bytes.collections.ByteCollection;
@@ -59,7 +58,7 @@ public class Double2ByteArrayMap extends AbstractDouble2ByteMap implements Doubl
 	/** Amount of Elements stored in the ArrayMap */
 	protected int size = 0;
 	/** KeySet cache */
-	protected DoubleSet keySet;
+	protected DoubleOrderedSet keySet;
 	/** Values cache */
 	protected ByteCollection valuesC;
 	/** EntrySet cache */
@@ -387,7 +386,7 @@ public class Double2ByteArrayMap extends AbstractDouble2ByteMap implements Doubl
 	}
 	
 	@Override
-	public DoubleSet keySet() {
+	public DoubleOrderedSet keySet() {
 		if(keySet == null) keySet = new KeySet();
 		return keySet;
 	}

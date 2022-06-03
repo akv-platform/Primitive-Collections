@@ -19,6 +19,7 @@ import speiger.src.collections.objects.maps.interfaces.Object2ObjectSortedMap;
 import speiger.src.collections.objects.maps.interfaces.Object2ObjectOrderedMap;
 import speiger.src.collections.objects.sets.ObjectNavigableSet;
 import speiger.src.collections.objects.sets.ObjectSortedSet;
+import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.objects.collections.ObjectCollection;
 import speiger.src.collections.objects.functions.ObjectSupplier;
 import speiger.src.collections.objects.utils.ObjectCollections;
@@ -459,6 +460,17 @@ public class Object2ObjectMaps
 		public V lastValue() { return map.lastValue(); }
 		@Override
 		public Object2ObjectOrderedMap<T, V> copy() { return map.copy(); }
+		@Override
+		public ObjectOrderedSet<T> keySet() { 
+			if(keys == null) keys = ObjectSets.unmodifiable(map.keySet()); 
+			return (ObjectOrderedSet<T>)keys;
+		}
+				
+		@Override
+		public ObjectOrderedSet<Object2ObjectMap.Entry<T, V>> object2ObjectEntrySet() {
+			if(entrySet == null) entrySet = new UnmodifyableEntrySet<>(map.object2ObjectEntrySet());
+			return (ObjectOrderedSet<Object2ObjectMap.Entry<T, V>>)entrySet;
+		}
 	}
 	
 	/**
@@ -708,6 +720,17 @@ public class Object2ObjectMaps
 		public V lastValue() { synchronized(mutex) { return map.lastValue(); } }
 		@Override
 		public Object2ObjectOrderedMap<T, V> copy() { synchronized(mutex) { return map.copy(); } }
+		@Override
+		public ObjectOrderedSet<T> keySet() {
+			if(keys == null) keys = ObjectSets.synchronize(map.keySet(), mutex);
+			return (ObjectOrderedSet<T>)keys;
+		}
+		
+		@Override
+		public ObjectOrderedSet<Object2ObjectMap.Entry<T, V>> object2ObjectEntrySet() {
+			if(entrySet == null) entrySet = ObjectSets.synchronize(map.object2ObjectEntrySet(), mutex);
+			return (ObjectOrderedSet<Object2ObjectMap.Entry<T, V>>)entrySet;
+		}
 	}
 	
 	/**

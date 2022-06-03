@@ -21,7 +21,6 @@ import speiger.src.collections.ints.maps.interfaces.Int2FloatMap;
 import speiger.src.collections.ints.maps.interfaces.Int2FloatOrderedMap;
 import speiger.src.collections.ints.sets.AbstractIntSet;
 import speiger.src.collections.ints.sets.IntOrderedSet;
-import speiger.src.collections.ints.sets.IntSet;
 import speiger.src.collections.ints.utils.maps.Int2FloatMaps;
 import speiger.src.collections.floats.collections.AbstractFloatCollection;
 import speiger.src.collections.floats.collections.FloatCollection;
@@ -59,7 +58,7 @@ public class Int2FloatArrayMap extends AbstractInt2FloatMap implements Int2Float
 	/** Amount of Elements stored in the ArrayMap */
 	protected int size = 0;
 	/** KeySet cache */
-	protected IntSet keySet;
+	protected IntOrderedSet keySet;
 	/** Values cache */
 	protected FloatCollection valuesC;
 	/** EntrySet cache */
@@ -387,7 +386,7 @@ public class Int2FloatArrayMap extends AbstractInt2FloatMap implements Int2Float
 	}
 	
 	@Override
-	public IntSet keySet() {
+	public IntOrderedSet keySet() {
 		if(keySet == null) keySet = new KeySet();
 		return keySet;
 	}

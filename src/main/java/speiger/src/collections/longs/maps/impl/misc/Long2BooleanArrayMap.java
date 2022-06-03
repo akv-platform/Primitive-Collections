@@ -20,7 +20,6 @@ import speiger.src.collections.longs.maps.interfaces.Long2BooleanMap;
 import speiger.src.collections.longs.maps.interfaces.Long2BooleanOrderedMap;
 import speiger.src.collections.longs.sets.AbstractLongSet;
 import speiger.src.collections.longs.sets.LongOrderedSet;
-import speiger.src.collections.longs.sets.LongSet;
 import speiger.src.collections.longs.utils.maps.Long2BooleanMaps;
 import speiger.src.collections.booleans.collections.AbstractBooleanCollection;
 import speiger.src.collections.booleans.collections.BooleanCollection;
@@ -58,7 +57,7 @@ public class Long2BooleanArrayMap extends AbstractLong2BooleanMap implements Lon
 	/** Amount of Elements stored in the ArrayMap */
 	protected int size = 0;
 	/** KeySet cache */
-	protected LongSet keySet;
+	protected LongOrderedSet keySet;
 	/** Values cache */
 	protected BooleanCollection valuesC;
 	/** EntrySet cache */
@@ -364,7 +363,7 @@ public class Long2BooleanArrayMap extends AbstractLong2BooleanMap implements Lon
 	}
 	
 	@Override
-	public LongSet keySet() {
+	public LongOrderedSet keySet() {
 		if(keySet == null) keySet = new KeySet();
 		return keySet;
 	}

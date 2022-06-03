@@ -19,6 +19,7 @@ import speiger.src.collections.objects.maps.interfaces.Object2LongSortedMap;
 import speiger.src.collections.objects.maps.interfaces.Object2LongOrderedMap;
 import speiger.src.collections.objects.sets.ObjectNavigableSet;
 import speiger.src.collections.objects.sets.ObjectSortedSet;
+import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.longs.collections.LongCollection;
 import speiger.src.collections.longs.functions.function.LongLongUnaryOperator;
 import speiger.src.collections.longs.functions.LongSupplier;
@@ -453,6 +454,17 @@ public class Object2LongMaps
 		public long lastLongValue() { return map.lastLongValue(); }
 		@Override
 		public Object2LongOrderedMap<T> copy() { return map.copy(); }
+		@Override
+		public ObjectOrderedSet<T> keySet() { 
+			if(keys == null) keys = ObjectSets.unmodifiable(map.keySet()); 
+			return (ObjectOrderedSet<T>)keys;
+		}
+				
+		@Override
+		public ObjectOrderedSet<Object2LongMap.Entry<T>> object2LongEntrySet() {
+			if(entrySet == null) entrySet = new UnmodifyableEntrySet<>(map.object2LongEntrySet());
+			return (ObjectOrderedSet<Object2LongMap.Entry<T>>)entrySet;
+		}
 	}
 	
 	/**
@@ -705,6 +717,17 @@ public class Object2LongMaps
 		public long lastLongValue() { synchronized(mutex) { return map.lastLongValue(); } }
 		@Override
 		public Object2LongOrderedMap<T> copy() { synchronized(mutex) { return map.copy(); } }
+		@Override
+		public ObjectOrderedSet<T> keySet() {
+			if(keys == null) keys = ObjectSets.synchronize(map.keySet(), mutex);
+			return (ObjectOrderedSet<T>)keys;
+		}
+		
+		@Override
+		public ObjectOrderedSet<Object2LongMap.Entry<T>> object2LongEntrySet() {
+			if(entrySet == null) entrySet = ObjectSets.synchronize(map.object2LongEntrySet(), mutex);
+			return (ObjectOrderedSet<Object2LongMap.Entry<T>>)entrySet;
+		}
 	}
 	
 	/**

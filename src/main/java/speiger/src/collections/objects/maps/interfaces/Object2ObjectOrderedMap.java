@@ -94,6 +94,10 @@ public interface Object2ObjectOrderedMap<T, V> extends Object2ObjectMap<T, V>
 	
 	@Override
 	public Object2ObjectOrderedMap<T, V> copy();
+	@Override
+	public ObjectOrderedSet<T> keySet();
+	@Override
+	public ObjectOrderedSet<Object2ObjectMap.Entry<T, V>> object2ObjectEntrySet();
 	
 	/**
 	 * Creates a Wrapped SortedMap that is Synchronized

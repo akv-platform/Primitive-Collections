@@ -14,7 +14,6 @@ import speiger.src.collections.objects.lists.ObjectListIterator;
 import speiger.src.collections.objects.maps.interfaces.Object2ObjectOrderedMap;
 import speiger.src.collections.objects.maps.abstracts.AbstractObject2ObjectMap;
 import speiger.src.collections.objects.maps.interfaces.Object2ObjectMap;
-import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.objects.utils.maps.Object2ObjectMaps;
 import speiger.src.collections.objects.functions.function.Object2BooleanFunction;
 import speiger.src.collections.objects.collections.AbstractObjectCollection;
@@ -23,7 +22,7 @@ import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.functions.ObjectSupplier;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
-import speiger.src.collections.objects.sets.ObjectSet;
+import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.utils.HashUtil;
 import speiger.src.collections.utils.SanityChecks;
 
@@ -53,9 +52,9 @@ public class ImmutableObject2ObjectOpenHashMap<T, V> extends AbstractObject2Obje
 	/** The Last Index in the Map */
 	protected int lastIndex = -1;
 	/** EntrySet cache */
-	protected transient FastEntrySet<T, V> entrySet;
+	protected transient FastOrderedSet<T, V> entrySet;
 	/** KeySet cache */
-	protected transient ObjectSet<T> keySet;
+	protected transient ObjectOrderedSet<T> keySet;
 	/** Values cache */
 	protected transient ObjectCollection<V> valuesC;
 	
@@ -304,13 +303,13 @@ public class ImmutableObject2ObjectOpenHashMap<T, V> extends AbstractObject2Obje
 	}	
 
 	@Override
-	public ObjectSet<Object2ObjectMap.Entry<T, V>> object2ObjectEntrySet() {
+	public ObjectOrderedSet<Object2ObjectMap.Entry<T, V>> object2ObjectEntrySet() {
 		if(entrySet == null) entrySet = new MapEntrySet();
 		return entrySet;
 	}
 	
 	@Override
-	public ObjectSet<T> keySet() {
+	public ObjectOrderedSet<T> keySet() {
 		if(keySet == null) keySet = new KeySet();
 		return keySet;
 	}

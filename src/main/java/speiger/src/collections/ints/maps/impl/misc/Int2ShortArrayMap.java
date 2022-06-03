@@ -21,7 +21,6 @@ import speiger.src.collections.ints.maps.interfaces.Int2ShortMap;
 import speiger.src.collections.ints.maps.interfaces.Int2ShortOrderedMap;
 import speiger.src.collections.ints.sets.AbstractIntSet;
 import speiger.src.collections.ints.sets.IntOrderedSet;
-import speiger.src.collections.ints.sets.IntSet;
 import speiger.src.collections.ints.utils.maps.Int2ShortMaps;
 import speiger.src.collections.shorts.collections.AbstractShortCollection;
 import speiger.src.collections.shorts.collections.ShortCollection;
@@ -59,7 +58,7 @@ public class Int2ShortArrayMap extends AbstractInt2ShortMap implements Int2Short
 	/** Amount of Elements stored in the ArrayMap */
 	protected int size = 0;
 	/** KeySet cache */
-	protected IntSet keySet;
+	protected IntOrderedSet keySet;
 	/** Values cache */
 	protected ShortCollection valuesC;
 	/** EntrySet cache */
@@ -387,7 +386,7 @@ public class Int2ShortArrayMap extends AbstractInt2ShortMap implements Int2Short
 	}
 	
 	@Override
-	public IntSet keySet() {
+	public IntOrderedSet keySet() {
 		if(keySet == null) keySet = new KeySet();
 		return keySet;
 	}

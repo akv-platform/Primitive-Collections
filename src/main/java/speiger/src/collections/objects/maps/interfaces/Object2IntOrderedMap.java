@@ -93,6 +93,10 @@ public interface Object2IntOrderedMap<T> extends Object2IntMap<T>
 	
 	@Override
 	public Object2IntOrderedMap<T> copy();
+	@Override
+	public ObjectOrderedSet<T> keySet();
+	@Override
+	public ObjectOrderedSet<Object2IntMap.Entry<T>> object2IntEntrySet();
 	
 	/**
 	 * Creates a Wrapped SortedMap that is Synchronized

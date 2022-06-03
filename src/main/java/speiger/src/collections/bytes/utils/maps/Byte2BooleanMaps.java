@@ -11,6 +11,7 @@ import speiger.src.collections.objects.collections.ObjectIterable;
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.sets.ObjectSet;
 import speiger.src.collections.objects.utils.ObjectSets;
+import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.bytes.functions.ByteComparator;
 import speiger.src.collections.bytes.functions.consumer.ByteBooleanConsumer;
 import speiger.src.collections.bytes.functions.function.Byte2BooleanFunction;
@@ -22,6 +23,7 @@ import speiger.src.collections.bytes.maps.interfaces.Byte2BooleanSortedMap;
 import speiger.src.collections.bytes.maps.interfaces.Byte2BooleanOrderedMap;
 import speiger.src.collections.bytes.sets.ByteNavigableSet;
 import speiger.src.collections.bytes.sets.ByteSortedSet;
+import speiger.src.collections.bytes.sets.ByteOrderedSet;
 import speiger.src.collections.bytes.sets.ByteSet;
 import speiger.src.collections.bytes.utils.ByteSets;
 import speiger.src.collections.booleans.collections.BooleanCollection;
@@ -434,6 +436,17 @@ public class Byte2BooleanMaps
 		public boolean lastBooleanValue() { return map.lastBooleanValue(); }
 		@Override
 		public Byte2BooleanOrderedMap copy() { return map.copy(); }
+		@Override
+		public ByteOrderedSet keySet() { 
+			if(keys == null) keys = ByteSets.unmodifiable(map.keySet()); 
+			return (ByteOrderedSet)keys;
+		}
+				
+		@Override
+		public ObjectOrderedSet<Byte2BooleanMap.Entry> byte2BooleanEntrySet() {
+			if(entrySet == null) entrySet = new UnmodifyableEntrySet(map.byte2BooleanEntrySet());
+			return (ObjectOrderedSet<Byte2BooleanMap.Entry>)entrySet;
+		}
 	}
 	
 	/**
@@ -727,6 +740,17 @@ public class Byte2BooleanMaps
 		public boolean lastBooleanValue() { synchronized(mutex) { return map.lastBooleanValue(); } }
 		@Override
 		public Byte2BooleanOrderedMap copy() { synchronized(mutex) { return map.copy(); } }
+		@Override
+		public ByteOrderedSet keySet() {
+			if(keys == null) keys = ByteSets.synchronize(map.keySet(), mutex);
+			return (ByteOrderedSet)keys;
+		}
+		
+		@Override
+		public ObjectOrderedSet<Byte2BooleanMap.Entry> byte2BooleanEntrySet() {
+			if(entrySet == null) entrySet = ObjectSets.synchronize(map.byte2BooleanEntrySet(), mutex);
+			return (ObjectOrderedSet<Byte2BooleanMap.Entry>)entrySet;
+		}
 	}
 	
 	/**

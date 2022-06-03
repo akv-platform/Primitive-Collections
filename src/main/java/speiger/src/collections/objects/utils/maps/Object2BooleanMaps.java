@@ -19,6 +19,7 @@ import speiger.src.collections.objects.maps.interfaces.Object2BooleanSortedMap;
 import speiger.src.collections.objects.maps.interfaces.Object2BooleanOrderedMap;
 import speiger.src.collections.objects.sets.ObjectNavigableSet;
 import speiger.src.collections.objects.sets.ObjectSortedSet;
+import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.booleans.collections.BooleanCollection;
 import speiger.src.collections.booleans.functions.function.BooleanBooleanUnaryOperator;
 import speiger.src.collections.booleans.functions.BooleanSupplier;
@@ -445,6 +446,17 @@ public class Object2BooleanMaps
 		public boolean lastBooleanValue() { return map.lastBooleanValue(); }
 		@Override
 		public Object2BooleanOrderedMap<T> copy() { return map.copy(); }
+		@Override
+		public ObjectOrderedSet<T> keySet() { 
+			if(keys == null) keys = ObjectSets.unmodifiable(map.keySet()); 
+			return (ObjectOrderedSet<T>)keys;
+		}
+				
+		@Override
+		public ObjectOrderedSet<Object2BooleanMap.Entry<T>> object2BooleanEntrySet() {
+			if(entrySet == null) entrySet = new UnmodifyableEntrySet<>(map.object2BooleanEntrySet());
+			return (ObjectOrderedSet<Object2BooleanMap.Entry<T>>)entrySet;
+		}
 	}
 	
 	/**
@@ -693,6 +705,17 @@ public class Object2BooleanMaps
 		public boolean lastBooleanValue() { synchronized(mutex) { return map.lastBooleanValue(); } }
 		@Override
 		public Object2BooleanOrderedMap<T> copy() { synchronized(mutex) { return map.copy(); } }
+		@Override
+		public ObjectOrderedSet<T> keySet() {
+			if(keys == null) keys = ObjectSets.synchronize(map.keySet(), mutex);
+			return (ObjectOrderedSet<T>)keys;
+		}
+		
+		@Override
+		public ObjectOrderedSet<Object2BooleanMap.Entry<T>> object2BooleanEntrySet() {
+			if(entrySet == null) entrySet = ObjectSets.synchronize(map.object2BooleanEntrySet(), mutex);
+			return (ObjectOrderedSet<Object2BooleanMap.Entry<T>>)entrySet;
+		}
 	}
 	
 	/**

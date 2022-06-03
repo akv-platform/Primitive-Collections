@@ -21,7 +21,6 @@ import speiger.src.collections.chars.maps.interfaces.Char2LongMap;
 import speiger.src.collections.chars.maps.interfaces.Char2LongOrderedMap;
 import speiger.src.collections.chars.sets.AbstractCharSet;
 import speiger.src.collections.chars.sets.CharOrderedSet;
-import speiger.src.collections.chars.sets.CharSet;
 import speiger.src.collections.chars.utils.maps.Char2LongMaps;
 import speiger.src.collections.longs.collections.AbstractLongCollection;
 import speiger.src.collections.longs.collections.LongCollection;
@@ -59,7 +58,7 @@ public class Char2LongArrayMap extends AbstractChar2LongMap implements Char2Long
 	/** Amount of Elements stored in the ArrayMap */
 	protected int size = 0;
 	/** KeySet cache */
-	protected CharSet keySet;
+	protected CharOrderedSet keySet;
 	/** Values cache */
 	protected LongCollection valuesC;
 	/** EntrySet cache */
@@ -387,7 +386,7 @@ public class Char2LongArrayMap extends AbstractChar2LongMap implements Char2Long
 	}
 	
 	@Override
-	public CharSet keySet() {
+	public CharOrderedSet keySet() {
 		if(keySet == null) keySet = new KeySet();
 		return keySet;
 	}

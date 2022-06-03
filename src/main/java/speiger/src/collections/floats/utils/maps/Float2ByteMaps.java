@@ -11,6 +11,7 @@ import speiger.src.collections.objects.collections.ObjectIterable;
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.sets.ObjectSet;
 import speiger.src.collections.objects.utils.ObjectSets;
+import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.floats.functions.FloatComparator;
 import speiger.src.collections.floats.functions.consumer.FloatByteConsumer;
 import speiger.src.collections.floats.functions.function.Float2ByteFunction;
@@ -22,6 +23,7 @@ import speiger.src.collections.floats.maps.interfaces.Float2ByteSortedMap;
 import speiger.src.collections.floats.maps.interfaces.Float2ByteOrderedMap;
 import speiger.src.collections.floats.sets.FloatNavigableSet;
 import speiger.src.collections.floats.sets.FloatSortedSet;
+import speiger.src.collections.floats.sets.FloatOrderedSet;
 import speiger.src.collections.floats.sets.FloatSet;
 import speiger.src.collections.floats.utils.FloatSets;
 import speiger.src.collections.bytes.collections.ByteCollection;
@@ -442,6 +444,17 @@ public class Float2ByteMaps
 		public byte lastByteValue() { return map.lastByteValue(); }
 		@Override
 		public Float2ByteOrderedMap copy() { return map.copy(); }
+		@Override
+		public FloatOrderedSet keySet() { 
+			if(keys == null) keys = FloatSets.unmodifiable(map.keySet()); 
+			return (FloatOrderedSet)keys;
+		}
+				
+		@Override
+		public ObjectOrderedSet<Float2ByteMap.Entry> float2ByteEntrySet() {
+			if(entrySet == null) entrySet = new UnmodifyableEntrySet(map.float2ByteEntrySet());
+			return (ObjectOrderedSet<Float2ByteMap.Entry>)entrySet;
+		}
 	}
 	
 	/**
@@ -739,6 +752,17 @@ public class Float2ByteMaps
 		public byte lastByteValue() { synchronized(mutex) { return map.lastByteValue(); } }
 		@Override
 		public Float2ByteOrderedMap copy() { synchronized(mutex) { return map.copy(); } }
+		@Override
+		public FloatOrderedSet keySet() {
+			if(keys == null) keys = FloatSets.synchronize(map.keySet(), mutex);
+			return (FloatOrderedSet)keys;
+		}
+		
+		@Override
+		public ObjectOrderedSet<Float2ByteMap.Entry> float2ByteEntrySet() {
+			if(entrySet == null) entrySet = ObjectSets.synchronize(map.float2ByteEntrySet(), mutex);
+			return (ObjectOrderedSet<Float2ByteMap.Entry>)entrySet;
+		}
 	}
 	
 	/**

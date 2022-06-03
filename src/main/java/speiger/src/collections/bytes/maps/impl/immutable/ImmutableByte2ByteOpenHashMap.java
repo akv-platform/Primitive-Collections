@@ -24,7 +24,6 @@ import speiger.src.collections.bytes.utils.ByteArrays;
 import speiger.src.collections.objects.functions.consumer.ObjectObjectConsumer;
 import speiger.src.collections.objects.functions.function.Object2BooleanFunction;
 import speiger.src.collections.bytes.sets.AbstractByteSet;
-import speiger.src.collections.bytes.sets.ByteSet;
 import speiger.src.collections.bytes.collections.AbstractByteCollection;
 import speiger.src.collections.bytes.collections.ByteCollection;
 import speiger.src.collections.bytes.collections.ByteIterator;
@@ -33,7 +32,7 @@ import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.functions.function.ObjectObjectUnaryOperator;
 import speiger.src.collections.objects.lists.ObjectListIterator;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
-import speiger.src.collections.objects.sets.ObjectSet;
+import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.utils.HashUtil;
 import speiger.src.collections.utils.SanityChecks;
 
@@ -61,9 +60,9 @@ public class ImmutableByte2ByteOpenHashMap extends AbstractByte2ByteMap implemen
 	/** The Last Index in the Map */
 	protected int lastIndex = -1;
 	/** EntrySet cache */
-	protected transient FastEntrySet entrySet;
+	protected transient FastOrderedSet entrySet;
 	/** KeySet cache */
-	protected transient ByteSet keySet;
+	protected transient ByteOrderedSet keySet;
 	/** Values cache */
 	protected transient ByteCollection valuesC;
 	
@@ -359,13 +358,13 @@ public class ImmutableByte2ByteOpenHashMap extends AbstractByte2ByteMap implemen
 	}	
 
 	@Override
-	public ObjectSet<Byte2ByteMap.Entry> byte2ByteEntrySet() {
+	public ObjectOrderedSet<Byte2ByteMap.Entry> byte2ByteEntrySet() {
 		if(entrySet == null) entrySet = new MapEntrySet();
 		return entrySet;
 	}
 	
 	@Override
-	public ByteSet keySet() {
+	public ByteOrderedSet keySet() {
 		if(keySet == null) keySet = new KeySet();
 		return keySet;
 	}

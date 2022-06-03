@@ -11,6 +11,7 @@ import speiger.src.collections.objects.collections.ObjectIterable;
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.sets.ObjectSet;
 import speiger.src.collections.objects.utils.ObjectSets;
+import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.longs.functions.LongComparator;
 import speiger.src.collections.longs.functions.consumer.LongByteConsumer;
 import speiger.src.collections.longs.functions.function.Long2ByteFunction;
@@ -22,6 +23,7 @@ import speiger.src.collections.longs.maps.interfaces.Long2ByteSortedMap;
 import speiger.src.collections.longs.maps.interfaces.Long2ByteOrderedMap;
 import speiger.src.collections.longs.sets.LongNavigableSet;
 import speiger.src.collections.longs.sets.LongSortedSet;
+import speiger.src.collections.longs.sets.LongOrderedSet;
 import speiger.src.collections.longs.sets.LongSet;
 import speiger.src.collections.longs.utils.LongSets;
 import speiger.src.collections.bytes.collections.ByteCollection;
@@ -442,6 +444,17 @@ public class Long2ByteMaps
 		public byte lastByteValue() { return map.lastByteValue(); }
 		@Override
 		public Long2ByteOrderedMap copy() { return map.copy(); }
+		@Override
+		public LongOrderedSet keySet() { 
+			if(keys == null) keys = LongSets.unmodifiable(map.keySet()); 
+			return (LongOrderedSet)keys;
+		}
+				
+		@Override
+		public ObjectOrderedSet<Long2ByteMap.Entry> long2ByteEntrySet() {
+			if(entrySet == null) entrySet = new UnmodifyableEntrySet(map.long2ByteEntrySet());
+			return (ObjectOrderedSet<Long2ByteMap.Entry>)entrySet;
+		}
 	}
 	
 	/**
@@ -739,6 +752,17 @@ public class Long2ByteMaps
 		public byte lastByteValue() { synchronized(mutex) { return map.lastByteValue(); } }
 		@Override
 		public Long2ByteOrderedMap copy() { synchronized(mutex) { return map.copy(); } }
+		@Override
+		public LongOrderedSet keySet() {
+			if(keys == null) keys = LongSets.synchronize(map.keySet(), mutex);
+			return (LongOrderedSet)keys;
+		}
+		
+		@Override
+		public ObjectOrderedSet<Long2ByteMap.Entry> long2ByteEntrySet() {
+			if(entrySet == null) entrySet = ObjectSets.synchronize(map.long2ByteEntrySet(), mutex);
+			return (ObjectOrderedSet<Long2ByteMap.Entry>)entrySet;
+		}
 	}
 	
 	/**

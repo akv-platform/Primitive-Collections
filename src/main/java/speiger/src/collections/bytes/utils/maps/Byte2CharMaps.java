@@ -11,6 +11,7 @@ import speiger.src.collections.objects.collections.ObjectIterable;
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.sets.ObjectSet;
 import speiger.src.collections.objects.utils.ObjectSets;
+import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.bytes.functions.ByteComparator;
 import speiger.src.collections.bytes.functions.consumer.ByteCharConsumer;
 import speiger.src.collections.bytes.functions.function.Byte2CharFunction;
@@ -22,6 +23,7 @@ import speiger.src.collections.bytes.maps.interfaces.Byte2CharSortedMap;
 import speiger.src.collections.bytes.maps.interfaces.Byte2CharOrderedMap;
 import speiger.src.collections.bytes.sets.ByteNavigableSet;
 import speiger.src.collections.bytes.sets.ByteSortedSet;
+import speiger.src.collections.bytes.sets.ByteOrderedSet;
 import speiger.src.collections.bytes.sets.ByteSet;
 import speiger.src.collections.bytes.utils.ByteSets;
 import speiger.src.collections.chars.collections.CharCollection;
@@ -442,6 +444,17 @@ public class Byte2CharMaps
 		public char lastCharValue() { return map.lastCharValue(); }
 		@Override
 		public Byte2CharOrderedMap copy() { return map.copy(); }
+		@Override
+		public ByteOrderedSet keySet() { 
+			if(keys == null) keys = ByteSets.unmodifiable(map.keySet()); 
+			return (ByteOrderedSet)keys;
+		}
+				
+		@Override
+		public ObjectOrderedSet<Byte2CharMap.Entry> byte2CharEntrySet() {
+			if(entrySet == null) entrySet = new UnmodifyableEntrySet(map.byte2CharEntrySet());
+			return (ObjectOrderedSet<Byte2CharMap.Entry>)entrySet;
+		}
 	}
 	
 	/**
@@ -739,6 +752,17 @@ public class Byte2CharMaps
 		public char lastCharValue() { synchronized(mutex) { return map.lastCharValue(); } }
 		@Override
 		public Byte2CharOrderedMap copy() { synchronized(mutex) { return map.copy(); } }
+		@Override
+		public ByteOrderedSet keySet() {
+			if(keys == null) keys = ByteSets.synchronize(map.keySet(), mutex);
+			return (ByteOrderedSet)keys;
+		}
+		
+		@Override
+		public ObjectOrderedSet<Byte2CharMap.Entry> byte2CharEntrySet() {
+			if(entrySet == null) entrySet = ObjectSets.synchronize(map.byte2CharEntrySet(), mutex);
+			return (ObjectOrderedSet<Byte2CharMap.Entry>)entrySet;
+		}
 	}
 	
 	/**

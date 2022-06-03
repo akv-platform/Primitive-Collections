@@ -21,7 +21,6 @@ import speiger.src.collections.bytes.maps.interfaces.Byte2LongMap;
 import speiger.src.collections.bytes.maps.interfaces.Byte2LongOrderedMap;
 import speiger.src.collections.bytes.sets.AbstractByteSet;
 import speiger.src.collections.bytes.sets.ByteOrderedSet;
-import speiger.src.collections.bytes.sets.ByteSet;
 import speiger.src.collections.bytes.utils.maps.Byte2LongMaps;
 import speiger.src.collections.longs.collections.AbstractLongCollection;
 import speiger.src.collections.longs.collections.LongCollection;
@@ -59,7 +58,7 @@ public class Byte2LongArrayMap extends AbstractByte2LongMap implements Byte2Long
 	/** Amount of Elements stored in the ArrayMap */
 	protected int size = 0;
 	/** KeySet cache */
-	protected ByteSet keySet;
+	protected ByteOrderedSet keySet;
 	/** Values cache */
 	protected LongCollection valuesC;
 	/** EntrySet cache */
@@ -387,7 +386,7 @@ public class Byte2LongArrayMap extends AbstractByte2LongMap implements Byte2Long
 	}
 	
 	@Override
-	public ByteSet keySet() {
+	public ByteOrderedSet keySet() {
 		if(keySet == null) keySet = new KeySet();
 		return keySet;
 	}

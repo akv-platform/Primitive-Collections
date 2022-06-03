@@ -18,7 +18,6 @@ import speiger.src.collections.objects.maps.interfaces.Object2ByteMap;
 import speiger.src.collections.objects.maps.interfaces.Object2ByteOrderedMap;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
-import speiger.src.collections.objects.sets.ObjectSet;
 import speiger.src.collections.objects.utils.maps.Object2ByteMaps;
 import speiger.src.collections.bytes.collections.AbstractByteCollection;
 import speiger.src.collections.bytes.collections.ByteCollection;
@@ -52,7 +51,7 @@ public class Object2ByteArrayMap<T> extends AbstractObject2ByteMap<T> implements
 	/** Amount of Elements stored in the ArrayMap */
 	protected int size = 0;
 	/** KeySet cache */
-	protected ObjectSet<T> keySet;
+	protected ObjectOrderedSet<T> keySet;
 	/** Values cache */
 	protected ByteCollection valuesC;
 	/** EntrySet cache */
@@ -375,7 +374,7 @@ public class Object2ByteArrayMap<T> extends AbstractObject2ByteMap<T> implements
 	}
 	
 	@Override
-	public ObjectSet<T> keySet() {
+	public ObjectOrderedSet<T> keySet() {
 		if(keySet == null) keySet = new KeySet();
 		return keySet;
 	}

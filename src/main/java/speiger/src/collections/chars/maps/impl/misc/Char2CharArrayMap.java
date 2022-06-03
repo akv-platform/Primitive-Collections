@@ -20,7 +20,6 @@ import speiger.src.collections.chars.maps.interfaces.Char2CharMap;
 import speiger.src.collections.chars.maps.interfaces.Char2CharOrderedMap;
 import speiger.src.collections.chars.sets.AbstractCharSet;
 import speiger.src.collections.chars.sets.CharOrderedSet;
-import speiger.src.collections.chars.sets.CharSet;
 import speiger.src.collections.chars.utils.maps.Char2CharMaps;
 import speiger.src.collections.chars.collections.AbstractCharCollection;
 import speiger.src.collections.chars.collections.CharCollection;
@@ -54,7 +53,7 @@ public class Char2CharArrayMap extends AbstractChar2CharMap implements Char2Char
 	/** Amount of Elements stored in the ArrayMap */
 	protected int size = 0;
 	/** KeySet cache */
-	protected CharSet keySet;
+	protected CharOrderedSet keySet;
 	/** Values cache */
 	protected CharCollection valuesC;
 	/** EntrySet cache */
@@ -382,7 +381,7 @@ public class Char2CharArrayMap extends AbstractChar2CharMap implements Char2Char
 	}
 	
 	@Override
-	public CharSet keySet() {
+	public CharOrderedSet keySet() {
 		if(keySet == null) keySet = new KeySet();
 		return keySet;
 	}

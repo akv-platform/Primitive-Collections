@@ -21,7 +21,6 @@ import speiger.src.collections.doubles.maps.interfaces.Double2LongMap;
 import speiger.src.collections.doubles.maps.interfaces.Double2LongOrderedMap;
 import speiger.src.collections.doubles.sets.AbstractDoubleSet;
 import speiger.src.collections.doubles.sets.DoubleOrderedSet;
-import speiger.src.collections.doubles.sets.DoubleSet;
 import speiger.src.collections.doubles.utils.maps.Double2LongMaps;
 import speiger.src.collections.longs.collections.AbstractLongCollection;
 import speiger.src.collections.longs.collections.LongCollection;
@@ -59,7 +58,7 @@ public class Double2LongArrayMap extends AbstractDouble2LongMap implements Doubl
 	/** Amount of Elements stored in the ArrayMap */
 	protected int size = 0;
 	/** KeySet cache */
-	protected DoubleSet keySet;
+	protected DoubleOrderedSet keySet;
 	/** Values cache */
 	protected LongCollection valuesC;
 	/** EntrySet cache */
@@ -387,7 +386,7 @@ public class Double2LongArrayMap extends AbstractDouble2LongMap implements Doubl
 	}
 	
 	@Override
-	public DoubleSet keySet() {
+	public DoubleOrderedSet keySet() {
 		if(keySet == null) keySet = new KeySet();
 		return keySet;
 	}

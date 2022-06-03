@@ -1,6 +1,7 @@
 package speiger.src.collections.bytes.maps.interfaces;
 
 import speiger.src.collections.bytes.utils.maps.Byte2ObjectMaps;
+import speiger.src.collections.bytes.sets.ByteOrderedSet;
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
 /**
@@ -93,6 +94,10 @@ public interface Byte2ObjectOrderedMap<V> extends Byte2ObjectMap<V>
 	
 	@Override
 	public Byte2ObjectOrderedMap<V> copy();
+	@Override
+	public ByteOrderedSet keySet();
+	@Override
+	public ObjectOrderedSet<Byte2ObjectMap.Entry<V>> byte2ObjectEntrySet();
 	
 	/**
 	 * Creates a Wrapped SortedMap that is Synchronized

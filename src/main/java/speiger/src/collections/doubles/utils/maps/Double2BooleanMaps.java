@@ -11,6 +11,7 @@ import speiger.src.collections.objects.collections.ObjectIterable;
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.sets.ObjectSet;
 import speiger.src.collections.objects.utils.ObjectSets;
+import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.doubles.functions.DoubleComparator;
 import speiger.src.collections.doubles.functions.consumer.DoubleBooleanConsumer;
 import speiger.src.collections.doubles.functions.function.Double2BooleanFunction;
@@ -22,6 +23,7 @@ import speiger.src.collections.doubles.maps.interfaces.Double2BooleanSortedMap;
 import speiger.src.collections.doubles.maps.interfaces.Double2BooleanOrderedMap;
 import speiger.src.collections.doubles.sets.DoubleNavigableSet;
 import speiger.src.collections.doubles.sets.DoubleSortedSet;
+import speiger.src.collections.doubles.sets.DoubleOrderedSet;
 import speiger.src.collections.doubles.sets.DoubleSet;
 import speiger.src.collections.doubles.utils.DoubleSets;
 import speiger.src.collections.booleans.collections.BooleanCollection;
@@ -434,6 +436,17 @@ public class Double2BooleanMaps
 		public boolean lastBooleanValue() { return map.lastBooleanValue(); }
 		@Override
 		public Double2BooleanOrderedMap copy() { return map.copy(); }
+		@Override
+		public DoubleOrderedSet keySet() { 
+			if(keys == null) keys = DoubleSets.unmodifiable(map.keySet()); 
+			return (DoubleOrderedSet)keys;
+		}
+				
+		@Override
+		public ObjectOrderedSet<Double2BooleanMap.Entry> double2BooleanEntrySet() {
+			if(entrySet == null) entrySet = new UnmodifyableEntrySet(map.double2BooleanEntrySet());
+			return (ObjectOrderedSet<Double2BooleanMap.Entry>)entrySet;
+		}
 	}
 	
 	/**
@@ -727,6 +740,17 @@ public class Double2BooleanMaps
 		public boolean lastBooleanValue() { synchronized(mutex) { return map.lastBooleanValue(); } }
 		@Override
 		public Double2BooleanOrderedMap copy() { synchronized(mutex) { return map.copy(); } }
+		@Override
+		public DoubleOrderedSet keySet() {
+			if(keys == null) keys = DoubleSets.synchronize(map.keySet(), mutex);
+			return (DoubleOrderedSet)keys;
+		}
+		
+		@Override
+		public ObjectOrderedSet<Double2BooleanMap.Entry> double2BooleanEntrySet() {
+			if(entrySet == null) entrySet = ObjectSets.synchronize(map.double2BooleanEntrySet(), mutex);
+			return (ObjectOrderedSet<Double2BooleanMap.Entry>)entrySet;
+		}
 	}
 	
 	/**

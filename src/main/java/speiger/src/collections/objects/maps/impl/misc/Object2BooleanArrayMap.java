@@ -18,7 +18,6 @@ import speiger.src.collections.objects.maps.interfaces.Object2BooleanMap;
 import speiger.src.collections.objects.maps.interfaces.Object2BooleanOrderedMap;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
 import speiger.src.collections.objects.sets.ObjectOrderedSet;
-import speiger.src.collections.objects.sets.ObjectSet;
 import speiger.src.collections.objects.utils.maps.Object2BooleanMaps;
 import speiger.src.collections.booleans.collections.AbstractBooleanCollection;
 import speiger.src.collections.booleans.collections.BooleanCollection;
@@ -51,7 +50,7 @@ public class Object2BooleanArrayMap<T> extends AbstractObject2BooleanMap<T> impl
 	/** Amount of Elements stored in the ArrayMap */
 	protected int size = 0;
 	/** KeySet cache */
-	protected ObjectSet<T> keySet;
+	protected ObjectOrderedSet<T> keySet;
 	/** Values cache */
 	protected BooleanCollection valuesC;
 	/** EntrySet cache */
@@ -352,7 +351,7 @@ public class Object2BooleanArrayMap<T> extends AbstractObject2BooleanMap<T> impl
 	}
 	
 	@Override
-	public ObjectSet<T> keySet() {
+	public ObjectOrderedSet<T> keySet() {
 		if(keySet == null) keySet = new KeySet();
 		return keySet;
 	}

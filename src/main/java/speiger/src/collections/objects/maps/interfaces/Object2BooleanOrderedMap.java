@@ -93,6 +93,10 @@ public interface Object2BooleanOrderedMap<T> extends Object2BooleanMap<T>
 	
 	@Override
 	public Object2BooleanOrderedMap<T> copy();
+	@Override
+	public ObjectOrderedSet<T> keySet();
+	@Override
+	public ObjectOrderedSet<Object2BooleanMap.Entry<T>> object2BooleanEntrySet();
 	
 	/**
 	 * Creates a Wrapped SortedMap that is Synchronized

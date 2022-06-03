@@ -19,6 +19,7 @@ import speiger.src.collections.objects.maps.interfaces.Object2CharSortedMap;
 import speiger.src.collections.objects.maps.interfaces.Object2CharOrderedMap;
 import speiger.src.collections.objects.sets.ObjectNavigableSet;
 import speiger.src.collections.objects.sets.ObjectSortedSet;
+import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.chars.collections.CharCollection;
 import speiger.src.collections.chars.functions.function.CharCharUnaryOperator;
 import speiger.src.collections.chars.functions.CharSupplier;
@@ -453,6 +454,17 @@ public class Object2CharMaps
 		public char lastCharValue() { return map.lastCharValue(); }
 		@Override
 		public Object2CharOrderedMap<T> copy() { return map.copy(); }
+		@Override
+		public ObjectOrderedSet<T> keySet() { 
+			if(keys == null) keys = ObjectSets.unmodifiable(map.keySet()); 
+			return (ObjectOrderedSet<T>)keys;
+		}
+				
+		@Override
+		public ObjectOrderedSet<Object2CharMap.Entry<T>> object2CharEntrySet() {
+			if(entrySet == null) entrySet = new UnmodifyableEntrySet<>(map.object2CharEntrySet());
+			return (ObjectOrderedSet<Object2CharMap.Entry<T>>)entrySet;
+		}
 	}
 	
 	/**
@@ -705,6 +717,17 @@ public class Object2CharMaps
 		public char lastCharValue() { synchronized(mutex) { return map.lastCharValue(); } }
 		@Override
 		public Object2CharOrderedMap<T> copy() { synchronized(mutex) { return map.copy(); } }
+		@Override
+		public ObjectOrderedSet<T> keySet() {
+			if(keys == null) keys = ObjectSets.synchronize(map.keySet(), mutex);
+			return (ObjectOrderedSet<T>)keys;
+		}
+		
+		@Override
+		public ObjectOrderedSet<Object2CharMap.Entry<T>> object2CharEntrySet() {
+			if(entrySet == null) entrySet = ObjectSets.synchronize(map.object2CharEntrySet(), mutex);
+			return (ObjectOrderedSet<Object2CharMap.Entry<T>>)entrySet;
+		}
 	}
 	
 	/**

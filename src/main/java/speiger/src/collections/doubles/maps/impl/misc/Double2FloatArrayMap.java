@@ -21,7 +21,6 @@ import speiger.src.collections.doubles.maps.interfaces.Double2FloatMap;
 import speiger.src.collections.doubles.maps.interfaces.Double2FloatOrderedMap;
 import speiger.src.collections.doubles.sets.AbstractDoubleSet;
 import speiger.src.collections.doubles.sets.DoubleOrderedSet;
-import speiger.src.collections.doubles.sets.DoubleSet;
 import speiger.src.collections.doubles.utils.maps.Double2FloatMaps;
 import speiger.src.collections.floats.collections.AbstractFloatCollection;
 import speiger.src.collections.floats.collections.FloatCollection;
@@ -59,7 +58,7 @@ public class Double2FloatArrayMap extends AbstractDouble2FloatMap implements Dou
 	/** Amount of Elements stored in the ArrayMap */
 	protected int size = 0;
 	/** KeySet cache */
-	protected DoubleSet keySet;
+	protected DoubleOrderedSet keySet;
 	/** Values cache */
 	protected FloatCollection valuesC;
 	/** EntrySet cache */
@@ -387,7 +386,7 @@ public class Double2FloatArrayMap extends AbstractDouble2FloatMap implements Dou
 	}
 	
 	@Override
-	public DoubleSet keySet() {
+	public DoubleOrderedSet keySet() {
 		if(keySet == null) keySet = new KeySet();
 		return keySet;
 	}

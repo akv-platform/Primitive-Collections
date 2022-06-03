@@ -93,6 +93,10 @@ public interface Object2FloatOrderedMap<T> extends Object2FloatMap<T>
 	
 	@Override
 	public Object2FloatOrderedMap<T> copy();
+	@Override
+	public ObjectOrderedSet<T> keySet();
+	@Override
+	public ObjectOrderedSet<Object2FloatMap.Entry<T>> object2FloatEntrySet();
 	
 	/**
 	 * Creates a Wrapped SortedMap that is Synchronized

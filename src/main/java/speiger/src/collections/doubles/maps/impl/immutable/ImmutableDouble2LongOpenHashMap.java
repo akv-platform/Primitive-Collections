@@ -27,7 +27,6 @@ import speiger.src.collections.objects.functions.function.Object2BooleanFunction
 import speiger.src.collections.objects.functions.consumer.ObjectLongConsumer;
 import speiger.src.collections.longs.functions.function.Long2BooleanFunction;
 import speiger.src.collections.doubles.sets.AbstractDoubleSet;
-import speiger.src.collections.doubles.sets.DoubleSet;
 import speiger.src.collections.longs.collections.AbstractLongCollection;
 import speiger.src.collections.longs.collections.LongCollection;
 import speiger.src.collections.longs.collections.LongIterator;
@@ -40,7 +39,7 @@ import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.functions.function.ObjectObjectUnaryOperator;
 import speiger.src.collections.objects.lists.ObjectListIterator;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
-import speiger.src.collections.objects.sets.ObjectSet;
+import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.utils.HashUtil;
 import speiger.src.collections.utils.SanityChecks;
 
@@ -68,9 +67,9 @@ public class ImmutableDouble2LongOpenHashMap extends AbstractDouble2LongMap impl
 	/** The Last Index in the Map */
 	protected int lastIndex = -1;
 	/** EntrySet cache */
-	protected transient FastEntrySet entrySet;
+	protected transient FastOrderedSet entrySet;
 	/** KeySet cache */
-	protected transient DoubleSet keySet;
+	protected transient DoubleOrderedSet keySet;
 	/** Values cache */
 	protected transient LongCollection valuesC;
 	
@@ -366,13 +365,13 @@ public class ImmutableDouble2LongOpenHashMap extends AbstractDouble2LongMap impl
 	}	
 
 	@Override
-	public ObjectSet<Double2LongMap.Entry> double2LongEntrySet() {
+	public ObjectOrderedSet<Double2LongMap.Entry> double2LongEntrySet() {
 		if(entrySet == null) entrySet = new MapEntrySet();
 		return entrySet;
 	}
 	
 	@Override
-	public DoubleSet keySet() {
+	public DoubleOrderedSet keySet() {
 		if(keySet == null) keySet = new KeySet();
 		return keySet;
 	}

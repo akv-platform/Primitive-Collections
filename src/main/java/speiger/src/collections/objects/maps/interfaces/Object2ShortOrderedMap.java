@@ -93,6 +93,10 @@ public interface Object2ShortOrderedMap<T> extends Object2ShortMap<T>
 	
 	@Override
 	public Object2ShortOrderedMap<T> copy();
+	@Override
+	public ObjectOrderedSet<T> keySet();
+	@Override
+	public ObjectOrderedSet<Object2ShortMap.Entry<T>> object2ShortEntrySet();
 	
 	/**
 	 * Creates a Wrapped SortedMap that is Synchronized

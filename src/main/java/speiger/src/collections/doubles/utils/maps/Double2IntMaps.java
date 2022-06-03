@@ -11,6 +11,7 @@ import speiger.src.collections.objects.collections.ObjectIterable;
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.sets.ObjectSet;
 import speiger.src.collections.objects.utils.ObjectSets;
+import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.doubles.functions.DoubleComparator;
 import speiger.src.collections.doubles.functions.consumer.DoubleIntConsumer;
 import speiger.src.collections.doubles.functions.function.Double2IntFunction;
@@ -22,6 +23,7 @@ import speiger.src.collections.doubles.maps.interfaces.Double2IntSortedMap;
 import speiger.src.collections.doubles.maps.interfaces.Double2IntOrderedMap;
 import speiger.src.collections.doubles.sets.DoubleNavigableSet;
 import speiger.src.collections.doubles.sets.DoubleSortedSet;
+import speiger.src.collections.doubles.sets.DoubleOrderedSet;
 import speiger.src.collections.doubles.sets.DoubleSet;
 import speiger.src.collections.doubles.utils.DoubleSets;
 import speiger.src.collections.ints.collections.IntCollection;
@@ -442,6 +444,17 @@ public class Double2IntMaps
 		public int lastIntValue() { return map.lastIntValue(); }
 		@Override
 		public Double2IntOrderedMap copy() { return map.copy(); }
+		@Override
+		public DoubleOrderedSet keySet() { 
+			if(keys == null) keys = DoubleSets.unmodifiable(map.keySet()); 
+			return (DoubleOrderedSet)keys;
+		}
+				
+		@Override
+		public ObjectOrderedSet<Double2IntMap.Entry> double2IntEntrySet() {
+			if(entrySet == null) entrySet = new UnmodifyableEntrySet(map.double2IntEntrySet());
+			return (ObjectOrderedSet<Double2IntMap.Entry>)entrySet;
+		}
 	}
 	
 	/**
@@ -739,6 +752,17 @@ public class Double2IntMaps
 		public int lastIntValue() { synchronized(mutex) { return map.lastIntValue(); } }
 		@Override
 		public Double2IntOrderedMap copy() { synchronized(mutex) { return map.copy(); } }
+		@Override
+		public DoubleOrderedSet keySet() {
+			if(keys == null) keys = DoubleSets.synchronize(map.keySet(), mutex);
+			return (DoubleOrderedSet)keys;
+		}
+		
+		@Override
+		public ObjectOrderedSet<Double2IntMap.Entry> double2IntEntrySet() {
+			if(entrySet == null) entrySet = ObjectSets.synchronize(map.double2IntEntrySet(), mutex);
+			return (ObjectOrderedSet<Double2IntMap.Entry>)entrySet;
+		}
 	}
 	
 	/**

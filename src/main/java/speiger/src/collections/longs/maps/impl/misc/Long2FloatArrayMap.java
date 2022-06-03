@@ -21,7 +21,6 @@ import speiger.src.collections.longs.maps.interfaces.Long2FloatMap;
 import speiger.src.collections.longs.maps.interfaces.Long2FloatOrderedMap;
 import speiger.src.collections.longs.sets.AbstractLongSet;
 import speiger.src.collections.longs.sets.LongOrderedSet;
-import speiger.src.collections.longs.sets.LongSet;
 import speiger.src.collections.longs.utils.maps.Long2FloatMaps;
 import speiger.src.collections.floats.collections.AbstractFloatCollection;
 import speiger.src.collections.floats.collections.FloatCollection;
@@ -59,7 +58,7 @@ public class Long2FloatArrayMap extends AbstractLong2FloatMap implements Long2Fl
 	/** Amount of Elements stored in the ArrayMap */
 	protected int size = 0;
 	/** KeySet cache */
-	protected LongSet keySet;
+	protected LongOrderedSet keySet;
 	/** Values cache */
 	protected FloatCollection valuesC;
 	/** EntrySet cache */
@@ -387,7 +386,7 @@ public class Long2FloatArrayMap extends AbstractLong2FloatMap implements Long2Fl
 	}
 	
 	@Override
-	public LongSet keySet() {
+	public LongOrderedSet keySet() {
 		if(keySet == null) keySet = new KeySet();
 		return keySet;
 	}

@@ -93,6 +93,10 @@ public interface Object2DoubleOrderedMap<T> extends Object2DoubleMap<T>
 	
 	@Override
 	public Object2DoubleOrderedMap<T> copy();
+	@Override
+	public ObjectOrderedSet<T> keySet();
+	@Override
+	public ObjectOrderedSet<Object2DoubleMap.Entry<T>> object2DoubleEntrySet();
 	
 	/**
 	 * Creates a Wrapped SortedMap that is Synchronized

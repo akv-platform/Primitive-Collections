@@ -26,7 +26,6 @@ import speiger.src.collections.shorts.utils.ShortArrays;
 import speiger.src.collections.objects.functions.consumer.ObjectObjectConsumer;
 import speiger.src.collections.objects.functions.function.Object2BooleanFunction;
 import speiger.src.collections.shorts.sets.AbstractShortSet;
-import speiger.src.collections.shorts.sets.ShortSet;
 import speiger.src.collections.objects.collections.AbstractObjectCollection;
 import speiger.src.collections.objects.collections.ObjectCollection;
 import speiger.src.collections.objects.collections.ObjectIterator;
@@ -35,7 +34,7 @@ import speiger.src.collections.objects.functions.function.ObjectObjectUnaryOpera
 import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.lists.ObjectListIterator;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
-import speiger.src.collections.objects.sets.ObjectSet;
+import speiger.src.collections.objects.sets.ObjectOrderedSet;
 import speiger.src.collections.utils.HashUtil;
 import speiger.src.collections.utils.SanityChecks;
 
@@ -64,9 +63,9 @@ public class ImmutableShort2ObjectOpenHashMap<V> extends AbstractShort2ObjectMap
 	/** The Last Index in the Map */
 	protected int lastIndex = -1;
 	/** EntrySet cache */
-	protected transient FastEntrySet<V> entrySet;
+	protected transient FastOrderedSet<V> entrySet;
 	/** KeySet cache */
-	protected transient ShortSet keySet;
+	protected transient ShortOrderedSet keySet;
 	/** Values cache */
 	protected transient ObjectCollection<V> valuesC;
 	
@@ -347,13 +346,13 @@ public class ImmutableShort2ObjectOpenHashMap<V> extends AbstractShort2ObjectMap
 	}	
 
 	@Override
-	public ObjectSet<Short2ObjectMap.Entry<V>> short2ObjectEntrySet() {
+	public ObjectOrderedSet<Short2ObjectMap.Entry<V>> short2ObjectEntrySet() {
 		if(entrySet == null) entrySet = new MapEntrySet();
 		return entrySet;
 	}
 	
 	@Override
-	public ShortSet keySet() {
+	public ShortOrderedSet keySet() {
 		if(keySet == null) keySet = new KeySet();
 		return keySet;
 	}

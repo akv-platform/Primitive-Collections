@@ -21,7 +21,6 @@ import speiger.src.collections.shorts.maps.interfaces.Short2FloatMap;
 import speiger.src.collections.shorts.maps.interfaces.Short2FloatOrderedMap;
 import speiger.src.collections.shorts.sets.AbstractShortSet;
 import speiger.src.collections.shorts.sets.ShortOrderedSet;
-import speiger.src.collections.shorts.sets.ShortSet;
 import speiger.src.collections.shorts.utils.maps.Short2FloatMaps;
 import speiger.src.collections.floats.collections.AbstractFloatCollection;
 import speiger.src.collections.floats.collections.FloatCollection;
@@ -59,7 +58,7 @@ public class Short2FloatArrayMap extends AbstractShort2FloatMap implements Short
 	/** Amount of Elements stored in the ArrayMap */
 	protected int size = 0;
 	/** KeySet cache */
-	protected ShortSet keySet;
+	protected ShortOrderedSet keySet;
 	/** Values cache */
 	protected FloatCollection valuesC;
 	/** EntrySet cache */
@@ -387,7 +386,7 @@ public class Short2FloatArrayMap extends AbstractShort2FloatMap implements Short
 	}
 	
 	@Override
-	public ShortSet keySet() {
+	public ShortOrderedSet keySet() {
 		if(keySet == null) keySet = new KeySet();
 		return keySet;
 	}
