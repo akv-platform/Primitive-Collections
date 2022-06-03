@@ -234,7 +234,7 @@ public class Byte2LongArrayMap extends AbstractByte2LongMap implements Byte2Long
 	@Override
 	public boolean moveToLast(byte key) {
 		int index = findIndex(key);
-		if(index < size-1) {
+		if(index >= 0 && index < size-1) {
 			moveIndexToLast(index);
 			return true;
 		}

@@ -234,7 +234,7 @@ public class Char2FloatArrayMap extends AbstractChar2FloatMap implements Char2Fl
 	@Override
 	public boolean moveToLast(char key) {
 		int index = findIndex(key);
-		if(index < size-1) {
+		if(index >= 0 && index < size-1) {
 			moveIndexToLast(index);
 			return true;
 		}

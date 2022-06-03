@@ -209,7 +209,7 @@ public class Float2ObjectArrayMap<V> extends AbstractFloat2ObjectMap<V> implemen
 	@Override
 	public boolean moveToLast(float key) {
 		int index = findIndex(key);
-		if(index < size-1) {
+		if(index >= 0 && index < size-1) {
 			moveIndexToLast(index);
 			return true;
 		}

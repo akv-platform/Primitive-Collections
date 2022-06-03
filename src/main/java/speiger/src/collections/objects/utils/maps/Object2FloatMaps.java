@@ -491,15 +491,14 @@ public class Object2FloatMaps
 		public Object2FloatSortedMap<T> tailMap(T fromKey) { return Object2FloatMaps.unmodifiable(map.tailMap(fromKey)); }
 		@Override
 		public ObjectSortedSet<T> keySet() { return ObjectSets.unmodifiable(map.keySet()); }
-
 		@Override
 		public T firstKey() { return map.firstKey(); }
 		@Override
-		public T pollFirstKey() { return map.pollFirstKey(); }
+		public T pollFirstKey() { throw new UnsupportedOperationException(); }
 		@Override
 		public T lastKey() { return map.lastKey(); }
 		@Override
-		public T pollLastKey() { return map.pollLastKey(); }
+		public T pollLastKey() { throw new UnsupportedOperationException(); }
 		@Override
 		public float firstFloatValue() { return map.firstFloatValue(); }
 		@Override

@@ -234,7 +234,7 @@ public class Int2ByteArrayMap extends AbstractInt2ByteMap implements Int2ByteOrd
 	@Override
 	public boolean moveToLast(int key) {
 		int index = findIndex(key);
-		if(index < size-1) {
+		if(index >= 0 && index < size-1) {
 			moveIndexToLast(index);
 			return true;
 		}

@@ -491,15 +491,14 @@ public class Object2LongMaps
 		public Object2LongSortedMap<T> tailMap(T fromKey) { return Object2LongMaps.unmodifiable(map.tailMap(fromKey)); }
 		@Override
 		public ObjectSortedSet<T> keySet() { return ObjectSets.unmodifiable(map.keySet()); }
-
 		@Override
 		public T firstKey() { return map.firstKey(); }
 		@Override
-		public T pollFirstKey() { return map.pollFirstKey(); }
+		public T pollFirstKey() { throw new UnsupportedOperationException(); }
 		@Override
 		public T lastKey() { return map.lastKey(); }
 		@Override
-		public T pollLastKey() { return map.pollLastKey(); }
+		public T pollLastKey() { throw new UnsupportedOperationException(); }
 		@Override
 		public long firstLongValue() { return map.firstLongValue(); }
 		@Override

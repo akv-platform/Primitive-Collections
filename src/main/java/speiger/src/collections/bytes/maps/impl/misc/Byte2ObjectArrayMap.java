@@ -209,7 +209,7 @@ public class Byte2ObjectArrayMap<V> extends AbstractByte2ObjectMap<V> implements
 	@Override
 	public boolean moveToLast(byte key) {
 		int index = findIndex(key);
-		if(index < size-1) {
+		if(index >= 0 && index < size-1) {
 			moveIndexToLast(index);
 			return true;
 		}

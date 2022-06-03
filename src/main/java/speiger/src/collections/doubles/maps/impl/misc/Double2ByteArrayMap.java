@@ -234,7 +234,7 @@ public class Double2ByteArrayMap extends AbstractDouble2ByteMap implements Doubl
 	@Override
 	public boolean moveToLast(double key) {
 		int index = findIndex(key);
-		if(index < size-1) {
+		if(index >= 0 && index < size-1) {
 			moveIndexToLast(index);
 			return true;
 		}

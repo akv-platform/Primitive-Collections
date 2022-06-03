@@ -234,7 +234,7 @@ public class Int2ShortArrayMap extends AbstractInt2ShortMap implements Int2Short
 	@Override
 	public boolean moveToLast(int key) {
 		int index = findIndex(key);
-		if(index < size-1) {
+		if(index >= 0 && index < size-1) {
 			moveIndexToLast(index);
 			return true;
 		}

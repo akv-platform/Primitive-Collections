@@ -234,7 +234,7 @@ public class Char2LongArrayMap extends AbstractChar2LongMap implements Char2Long
 	@Override
 	public boolean moveToLast(char key) {
 		int index = findIndex(key);
-		if(index < size-1) {
+		if(index >= 0 && index < size-1) {
 			moveIndexToLast(index);
 			return true;
 		}

@@ -229,7 +229,7 @@ public class Int2IntArrayMap extends AbstractInt2IntMap implements Int2IntOrdere
 	@Override
 	public boolean moveToLast(int key) {
 		int index = findIndex(key);
-		if(index < size-1) {
+		if(index >= 0 && index < size-1) {
 			moveIndexToLast(index);
 			return true;
 		}

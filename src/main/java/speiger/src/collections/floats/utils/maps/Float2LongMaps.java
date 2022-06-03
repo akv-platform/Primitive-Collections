@@ -480,15 +480,14 @@ public class Float2LongMaps
 		public Float2LongSortedMap tailMap(float fromKey) { return Float2LongMaps.unmodifiable(map.tailMap(fromKey)); }
 		@Override
 		public FloatSortedSet keySet() { return FloatSets.unmodifiable(map.keySet()); }
-
 		@Override
 		public float firstFloatKey() { return map.firstFloatKey(); }
 		@Override
-		public float pollFirstFloatKey() { return map.pollFirstFloatKey(); }
+		public float pollFirstFloatKey() { throw new UnsupportedOperationException(); }
 		@Override
 		public float lastFloatKey() { return map.lastFloatKey(); }
 		@Override
-		public float pollLastFloatKey() { return map.pollLastFloatKey(); }
+		public float pollLastFloatKey() { throw new UnsupportedOperationException(); }
 		@Override
 		public long firstLongValue() { return map.firstLongValue(); }
 		@Override

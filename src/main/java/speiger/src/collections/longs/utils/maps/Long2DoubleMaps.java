@@ -480,15 +480,14 @@ public class Long2DoubleMaps
 		public Long2DoubleSortedMap tailMap(long fromKey) { return Long2DoubleMaps.unmodifiable(map.tailMap(fromKey)); }
 		@Override
 		public LongSortedSet keySet() { return LongSets.unmodifiable(map.keySet()); }
-
 		@Override
 		public long firstLongKey() { return map.firstLongKey(); }
 		@Override
-		public long pollFirstLongKey() { return map.pollFirstLongKey(); }
+		public long pollFirstLongKey() { throw new UnsupportedOperationException(); }
 		@Override
 		public long lastLongKey() { return map.lastLongKey(); }
 		@Override
-		public long pollLastLongKey() { return map.pollLastLongKey(); }
+		public long pollLastLongKey() { throw new UnsupportedOperationException(); }
 		@Override
 		public double firstDoubleValue() { return map.firstDoubleValue(); }
 		@Override

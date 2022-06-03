@@ -496,15 +496,14 @@ public class Byte2ObjectMaps
 		public Byte2ObjectSortedMap<V> tailMap(byte fromKey) { return Byte2ObjectMaps.unmodifiable(map.tailMap(fromKey)); }
 		@Override
 		public ByteSortedSet keySet() { return ByteSets.unmodifiable(map.keySet()); }
-
 		@Override
 		public byte firstByteKey() { return map.firstByteKey(); }
 		@Override
-		public byte pollFirstByteKey() { return map.pollFirstByteKey(); }
+		public byte pollFirstByteKey() { throw new UnsupportedOperationException(); }
 		@Override
 		public byte lastByteKey() { return map.lastByteKey(); }
 		@Override
-		public byte pollLastByteKey() { return map.pollLastByteKey(); }
+		public byte pollLastByteKey() { throw new UnsupportedOperationException(); }
 		@Override
 		public V firstValue() { return map.firstValue(); }
 		@Override

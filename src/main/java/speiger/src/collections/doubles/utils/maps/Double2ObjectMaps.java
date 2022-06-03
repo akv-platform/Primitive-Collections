@@ -496,15 +496,14 @@ public class Double2ObjectMaps
 		public Double2ObjectSortedMap<V> tailMap(double fromKey) { return Double2ObjectMaps.unmodifiable(map.tailMap(fromKey)); }
 		@Override
 		public DoubleSortedSet keySet() { return DoubleSets.unmodifiable(map.keySet()); }
-
 		@Override
 		public double firstDoubleKey() { return map.firstDoubleKey(); }
 		@Override
-		public double pollFirstDoubleKey() { return map.pollFirstDoubleKey(); }
+		public double pollFirstDoubleKey() { throw new UnsupportedOperationException(); }
 		@Override
 		public double lastDoubleKey() { return map.lastDoubleKey(); }
 		@Override
-		public double pollLastDoubleKey() { return map.pollLastDoubleKey(); }
+		public double pollLastDoubleKey() { throw new UnsupportedOperationException(); }
 		@Override
 		public V firstValue() { return map.firstValue(); }
 		@Override

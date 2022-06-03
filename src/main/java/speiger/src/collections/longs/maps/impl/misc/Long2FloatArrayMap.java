@@ -234,7 +234,7 @@ public class Long2FloatArrayMap extends AbstractLong2FloatMap implements Long2Fl
 	@Override
 	public boolean moveToLast(long key) {
 		int index = findIndex(key);
-		if(index < size-1) {
+		if(index >= 0 && index < size-1) {
 			moveIndexToLast(index);
 			return true;
 		}

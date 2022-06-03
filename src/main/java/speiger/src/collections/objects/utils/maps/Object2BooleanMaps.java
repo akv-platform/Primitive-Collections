@@ -483,15 +483,14 @@ public class Object2BooleanMaps
 		public Object2BooleanSortedMap<T> tailMap(T fromKey) { return Object2BooleanMaps.unmodifiable(map.tailMap(fromKey)); }
 		@Override
 		public ObjectSortedSet<T> keySet() { return ObjectSets.unmodifiable(map.keySet()); }
-
 		@Override
 		public T firstKey() { return map.firstKey(); }
 		@Override
-		public T pollFirstKey() { return map.pollFirstKey(); }
+		public T pollFirstKey() { throw new UnsupportedOperationException(); }
 		@Override
 		public T lastKey() { return map.lastKey(); }
 		@Override
-		public T pollLastKey() { return map.pollLastKey(); }
+		public T pollLastKey() { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean firstBooleanValue() { return map.firstBooleanValue(); }
 		@Override

@@ -209,7 +209,7 @@ public class Int2ObjectArrayMap<V> extends AbstractInt2ObjectMap<V> implements I
 	@Override
 	public boolean moveToLast(int key) {
 		int index = findIndex(key);
-		if(index < size-1) {
+		if(index >= 0 && index < size-1) {
 			moveIndexToLast(index);
 			return true;
 		}

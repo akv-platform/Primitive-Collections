@@ -229,7 +229,7 @@ public class Byte2ByteArrayMap extends AbstractByte2ByteMap implements Byte2Byte
 	@Override
 	public boolean moveToLast(byte key) {
 		int index = findIndex(key);
-		if(index < size-1) {
+		if(index >= 0 && index < size-1) {
 			moveIndexToLast(index);
 			return true;
 		}

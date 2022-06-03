@@ -472,15 +472,14 @@ public class Short2BooleanMaps
 		public Short2BooleanSortedMap tailMap(short fromKey) { return Short2BooleanMaps.unmodifiable(map.tailMap(fromKey)); }
 		@Override
 		public ShortSortedSet keySet() { return ShortSets.unmodifiable(map.keySet()); }
-
 		@Override
 		public short firstShortKey() { return map.firstShortKey(); }
 		@Override
-		public short pollFirstShortKey() { return map.pollFirstShortKey(); }
+		public short pollFirstShortKey() { throw new UnsupportedOperationException(); }
 		@Override
 		public short lastShortKey() { return map.lastShortKey(); }
 		@Override
-		public short pollLastShortKey() { return map.pollLastShortKey(); }
+		public short pollLastShortKey() { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean firstBooleanValue() { return map.firstBooleanValue(); }
 		@Override

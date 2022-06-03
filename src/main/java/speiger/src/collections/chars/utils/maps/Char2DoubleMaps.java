@@ -480,15 +480,14 @@ public class Char2DoubleMaps
 		public Char2DoubleSortedMap tailMap(char fromKey) { return Char2DoubleMaps.unmodifiable(map.tailMap(fromKey)); }
 		@Override
 		public CharSortedSet keySet() { return CharSets.unmodifiable(map.keySet()); }
-
 		@Override
 		public char firstCharKey() { return map.firstCharKey(); }
 		@Override
-		public char pollFirstCharKey() { return map.pollFirstCharKey(); }
+		public char pollFirstCharKey() { throw new UnsupportedOperationException(); }
 		@Override
 		public char lastCharKey() { return map.lastCharKey(); }
 		@Override
-		public char pollLastCharKey() { return map.pollLastCharKey(); }
+		public char pollLastCharKey() { throw new UnsupportedOperationException(); }
 		@Override
 		public double firstDoubleValue() { return map.firstDoubleValue(); }
 		@Override

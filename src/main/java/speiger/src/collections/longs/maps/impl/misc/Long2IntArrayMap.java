@@ -234,7 +234,7 @@ public class Long2IntArrayMap extends AbstractLong2IntMap implements Long2IntOrd
 	@Override
 	public boolean moveToLast(long key) {
 		int index = findIndex(key);
-		if(index < size-1) {
+		if(index >= 0 && index < size-1) {
 			moveIndexToLast(index);
 			return true;
 		}

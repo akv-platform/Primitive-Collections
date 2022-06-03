@@ -480,15 +480,14 @@ public class Char2LongMaps
 		public Char2LongSortedMap tailMap(char fromKey) { return Char2LongMaps.unmodifiable(map.tailMap(fromKey)); }
 		@Override
 		public CharSortedSet keySet() { return CharSets.unmodifiable(map.keySet()); }
-
 		@Override
 		public char firstCharKey() { return map.firstCharKey(); }
 		@Override
-		public char pollFirstCharKey() { return map.pollFirstCharKey(); }
+		public char pollFirstCharKey() { throw new UnsupportedOperationException(); }
 		@Override
 		public char lastCharKey() { return map.lastCharKey(); }
 		@Override
-		public char pollLastCharKey() { return map.pollLastCharKey(); }
+		public char pollLastCharKey() { throw new UnsupportedOperationException(); }
 		@Override
 		public long firstLongValue() { return map.firstLongValue(); }
 		@Override

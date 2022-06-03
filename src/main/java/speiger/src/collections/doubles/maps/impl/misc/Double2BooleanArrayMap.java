@@ -211,7 +211,7 @@ public class Double2BooleanArrayMap extends AbstractDouble2BooleanMap implements
 	@Override
 	public boolean moveToLast(double key) {
 		int index = findIndex(key);
-		if(index < size-1) {
+		if(index >= 0 && index < size-1) {
 			moveIndexToLast(index);
 			return true;
 		}

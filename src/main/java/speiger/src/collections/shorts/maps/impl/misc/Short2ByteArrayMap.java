@@ -234,7 +234,7 @@ public class Short2ByteArrayMap extends AbstractShort2ByteMap implements Short2B
 	@Override
 	public boolean moveToLast(short key) {
 		int index = findIndex(key);
-		if(index < size-1) {
+		if(index >= 0 && index < size-1) {
 			moveIndexToLast(index);
 			return true;
 		}

@@ -234,7 +234,7 @@ public class Byte2DoubleArrayMap extends AbstractByte2DoubleMap implements Byte2
 	@Override
 	public boolean moveToLast(byte key) {
 		int index = findIndex(key);
-		if(index < size-1) {
+		if(index >= 0 && index < size-1) {
 			moveIndexToLast(index);
 			return true;
 		}

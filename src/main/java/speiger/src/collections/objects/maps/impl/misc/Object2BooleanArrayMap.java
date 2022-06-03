@@ -204,7 +204,7 @@ public class Object2BooleanArrayMap<T> extends AbstractObject2BooleanMap<T> impl
 	@Override
 	public boolean moveToLast(T key) {
 		int index = findIndex(key);
-		if(index < size-1) {
+		if(index >= 0 && index < size-1) {
 			moveIndexToLast(index);
 			return true;
 		}

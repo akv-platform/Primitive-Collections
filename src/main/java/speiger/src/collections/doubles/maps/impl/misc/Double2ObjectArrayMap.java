@@ -209,7 +209,7 @@ public class Double2ObjectArrayMap<V> extends AbstractDouble2ObjectMap<V> implem
 	@Override
 	public boolean moveToLast(double key) {
 		int index = findIndex(key);
-		if(index < size-1) {
+		if(index >= 0 && index < size-1) {
 			moveIndexToLast(index);
 			return true;
 		}

@@ -480,15 +480,14 @@ public class Byte2IntMaps
 		public Byte2IntSortedMap tailMap(byte fromKey) { return Byte2IntMaps.unmodifiable(map.tailMap(fromKey)); }
 		@Override
 		public ByteSortedSet keySet() { return ByteSets.unmodifiable(map.keySet()); }
-
 		@Override
 		public byte firstByteKey() { return map.firstByteKey(); }
 		@Override
-		public byte pollFirstByteKey() { return map.pollFirstByteKey(); }
+		public byte pollFirstByteKey() { throw new UnsupportedOperationException(); }
 		@Override
 		public byte lastByteKey() { return map.lastByteKey(); }
 		@Override
-		public byte pollLastByteKey() { return map.pollLastByteKey(); }
+		public byte pollLastByteKey() { throw new UnsupportedOperationException(); }
 		@Override
 		public int firstIntValue() { return map.firstIntValue(); }
 		@Override

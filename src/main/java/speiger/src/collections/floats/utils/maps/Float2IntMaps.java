@@ -480,15 +480,14 @@ public class Float2IntMaps
 		public Float2IntSortedMap tailMap(float fromKey) { return Float2IntMaps.unmodifiable(map.tailMap(fromKey)); }
 		@Override
 		public FloatSortedSet keySet() { return FloatSets.unmodifiable(map.keySet()); }
-
 		@Override
 		public float firstFloatKey() { return map.firstFloatKey(); }
 		@Override
-		public float pollFirstFloatKey() { return map.pollFirstFloatKey(); }
+		public float pollFirstFloatKey() { throw new UnsupportedOperationException(); }
 		@Override
 		public float lastFloatKey() { return map.lastFloatKey(); }
 		@Override
-		public float pollLastFloatKey() { return map.pollLastFloatKey(); }
+		public float pollLastFloatKey() { throw new UnsupportedOperationException(); }
 		@Override
 		public int firstIntValue() { return map.firstIntValue(); }
 		@Override

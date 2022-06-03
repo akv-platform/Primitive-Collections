@@ -480,15 +480,14 @@ public class Short2ByteMaps
 		public Short2ByteSortedMap tailMap(short fromKey) { return Short2ByteMaps.unmodifiable(map.tailMap(fromKey)); }
 		@Override
 		public ShortSortedSet keySet() { return ShortSets.unmodifiable(map.keySet()); }
-
 		@Override
 		public short firstShortKey() { return map.firstShortKey(); }
 		@Override
-		public short pollFirstShortKey() { return map.pollFirstShortKey(); }
+		public short pollFirstShortKey() { throw new UnsupportedOperationException(); }
 		@Override
 		public short lastShortKey() { return map.lastShortKey(); }
 		@Override
-		public short pollLastShortKey() { return map.pollLastShortKey(); }
+		public short pollLastShortKey() { throw new UnsupportedOperationException(); }
 		@Override
 		public byte firstByteValue() { return map.firstByteValue(); }
 		@Override

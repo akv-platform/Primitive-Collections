@@ -21,7 +21,9 @@ public class FILE_KEY_TYPE2FILE_VALUE_TYPEOrderedMapMoveTester KEY_VALUE_GENERIC
 	private ORDERED_MAP KEY_VALUE_GENERIC_TYPE orderedMap;
 	private ObjectList<MAP.Entry KEY_VALUE_GENERIC_TYPE> values;
 	private KEY_TYPE a;
+	private VALUE_TYPE aValue;
 	private KEY_TYPE c;
+	private VALUE_TYPE cValue;
 	
 	@Override
 	public void setUp() throws Exception {
@@ -30,8 +32,10 @@ public class FILE_KEY_TYPE2FILE_VALUE_TYPEOrderedMapMoveTester KEY_VALUE_GENERIC
 		values = ObjectHelpers.copyToList(getSampleElements(getSubjectGenerator().getCollectionSize().getNumElements()));
 		if (values.size() >= 1) {
 			a = values.get(0).ENTRY_KEY();
+			aValue = values.get(0).ENTRY_VALUE();
 			if (values.size() >= 3) {
 				c = values.get(2).ENTRY_KEY();
+				cValue = values.get(2).ENTRY_VALUE();
 			}
 		}
 	}
@@ -43,9 +47,9 @@ public class FILE_KEY_TYPE2FILE_VALUE_TYPEOrderedMapMoveTester KEY_VALUE_GENERIC
 	public void testaddMoveToFirstMissing()
 	{
 		assertEquals(a, orderedMap.FIRST_ENTRY_KEY());
-		assertEquals(true, orderedMap.putAndMoveToFirst(k4(), v4()));
+		assertEquals(INVALID_VALUE, orderedMap.putAndMoveToFirst(k4(), v4()));
 		assertNotEquals(a, orderedMap.FIRST_ENTRY_KEY());
-		assertEquals(e4(), orderedMap.FIRST_ENTRY_KEY());
+		assertEquals(k4(), orderedMap.FIRST_ENTRY_KEY());
 	}
 	
 #ignore
@@ -55,7 +59,7 @@ public class FILE_KEY_TYPE2FILE_VALUE_TYPEOrderedMapMoveTester KEY_VALUE_GENERIC
 	public void testaddMoveToFirstPreset()
 	{
 		assertEquals(a, orderedMap.FIRST_ENTRY_KEY());
-		assertEquals(false, orderedMap.putAndMoveToFirst(c, v4()));
+		assertEquals(cValue, orderedMap.putAndMoveToFirst(c, v4()));
 		assertNotEquals(a, orderedMap.FIRST_ENTRY_KEY());
 		assertEquals(c, orderedMap.FIRST_ENTRY_KEY());
 	}
@@ -67,9 +71,9 @@ public class FILE_KEY_TYPE2FILE_VALUE_TYPEOrderedMapMoveTester KEY_VALUE_GENERIC
 	public void testaddMoveToLastMissing()
 	{
 		assertEquals(c, orderedMap.LAST_ENTRY_KEY());
-		assertEquals(true, orderedMap.putAndMoveToFirst(k4(), v4()));
+		assertEquals(INVALID_VALUE, orderedMap.putAndMoveToLast(k4(), v4()));
 		assertNotEquals(c, orderedMap.LAST_ENTRY_KEY());
-		assertEquals(e4(), orderedMap.LAST_ENTRY_KEY());
+		assertEquals(k4(), orderedMap.LAST_ENTRY_KEY());
 	}
 	
 #ignore
@@ -79,7 +83,7 @@ public class FILE_KEY_TYPE2FILE_VALUE_TYPEOrderedMapMoveTester KEY_VALUE_GENERIC
 	public void testaddMoveToLastPreset()
 	{
 		assertEquals(c, orderedMap.LAST_ENTRY_KEY());
-		assertEquals(false, orderedMap.putAndMoveToFirst(a, v4()));
+		assertEquals(aValue, orderedMap.putAndMoveToLast(a, v4()));
 		assertNotEquals(c, orderedMap.LAST_ENTRY_KEY());
 		assertEquals(a, orderedMap.LAST_ENTRY_KEY());
 	}
@@ -137,7 +141,7 @@ public class FILE_KEY_TYPE2FILE_VALUE_TYPEOrderedMapMoveTester KEY_VALUE_GENERIC
 	public void testGetAndMoveToFirstMissing()
 	{
 		assertEquals(a, orderedMap.FIRST_ENTRY_KEY());
-		assertEquals(-1L, orderedMap.getAndMoveToFirst(k4()));
+		assertEquals(INVALID_VALUE, orderedMap.getAndMoveToFirst(k4()));
 		assertEquals(a, orderedMap.FIRST_ENTRY_KEY());
 	}
 	
@@ -148,7 +152,7 @@ public class FILE_KEY_TYPE2FILE_VALUE_TYPEOrderedMapMoveTester KEY_VALUE_GENERIC
 	public void testGetAndMoveToFirstPreset()
 	{
 		assertEquals(a, orderedMap.FIRST_ENTRY_KEY());
-		assertEquals(c, orderedMap.getAndMoveToFirst(c));
+		assertEquals(cValue, orderedMap.getAndMoveToFirst(c));
 		assertNotEquals(a, orderedMap.FIRST_ENTRY_KEY());
 		assertEquals(c, orderedMap.FIRST_ENTRY_KEY());
 	}
@@ -160,7 +164,7 @@ public class FILE_KEY_TYPE2FILE_VALUE_TYPEOrderedMapMoveTester KEY_VALUE_GENERIC
 	public void testGetAndMoveToLastMissing()
 	{
 		assertEquals(c, orderedMap.LAST_ENTRY_KEY());
-		assertEquals(-1L, orderedMap.getAndMoveToLast(k4()));
+		assertEquals(INVALID_VALUE, orderedMap.getAndMoveToLast(k4()));
 		assertEquals(c, orderedMap.LAST_ENTRY_KEY());
 	}
 	
@@ -171,7 +175,7 @@ public class FILE_KEY_TYPE2FILE_VALUE_TYPEOrderedMapMoveTester KEY_VALUE_GENERIC
 	public void testGetAndMoveToLastPreset()
 	{
 		assertEquals(c, orderedMap.LAST_ENTRY_KEY());
-		assertEquals(c, orderedMap.getAndMoveToLast(a));
+		assertEquals(aValue, orderedMap.getAndMoveToLast(a));
 		assertNotEquals(c, orderedMap.LAST_ENTRY_KEY());
 		assertEquals(a, orderedMap.LAST_ENTRY_KEY());
 	}

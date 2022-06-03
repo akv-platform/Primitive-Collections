@@ -12,6 +12,7 @@ import speiger.src.testers.PACKAGE.builder.SET_TEST_BUILDER;
 import speiger.src.testers.PACKAGE.generators.TEST_ORDERED_SET_GENERATOR;
 import speiger.src.testers.PACKAGE.generators.TEST_SET_GENERATOR;
 import speiger.src.testers.PACKAGE.generators.maps.TEST_ORDERED_MAP_GENERATOR;
+import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEOrderedMapMoveTester;
 import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEOrderedMapNavigationTester;
 #if !TYPE_OBJECT
 import speiger.src.testers.objects.builder.ObjectSetTestSuiteBuilder;
@@ -31,6 +32,7 @@ public class ORDERED_MAP_TEST_BUILDER KEY_VALUE_GENERIC_TYPE extends MAP_TEST_BU
 	@SuppressWarnings("rawtypes")
 	protected List<Class<? extends AbstractTester>> getTesters() {
 		List<Class<? extends AbstractTester>> testers = super.getTesters();
+		testers.add(FILE_KEY_TYPE2FILE_VALUE_TYPEOrderedMapMoveTester.class);
 		testers.add(FILE_KEY_TYPE2FILE_VALUE_TYPEOrderedMapNavigationTester.class);
 		return testers;
 	}

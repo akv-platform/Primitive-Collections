@@ -229,7 +229,7 @@ public class Char2CharArrayMap extends AbstractChar2CharMap implements Char2Char
 	@Override
 	public boolean moveToLast(char key) {
 		int index = findIndex(key);
-		if(index < size-1) {
+		if(index >= 0 && index < size-1) {
 			moveIndexToLast(index);
 			return true;
 		}

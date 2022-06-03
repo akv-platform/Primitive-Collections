@@ -211,7 +211,7 @@ public class Byte2BooleanArrayMap extends AbstractByte2BooleanMap implements Byt
 	@Override
 	public boolean moveToLast(byte key) {
 		int index = findIndex(key);
-		if(index < size-1) {
+		if(index >= 0 && index < size-1) {
 			moveIndexToLast(index);
 			return true;
 		}

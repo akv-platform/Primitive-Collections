@@ -480,15 +480,14 @@ public class Short2CharMaps
 		public Short2CharSortedMap tailMap(short fromKey) { return Short2CharMaps.unmodifiable(map.tailMap(fromKey)); }
 		@Override
 		public ShortSortedSet keySet() { return ShortSets.unmodifiable(map.keySet()); }
-
 		@Override
 		public short firstShortKey() { return map.firstShortKey(); }
 		@Override
-		public short pollFirstShortKey() { return map.pollFirstShortKey(); }
+		public short pollFirstShortKey() { throw new UnsupportedOperationException(); }
 		@Override
 		public short lastShortKey() { return map.lastShortKey(); }
 		@Override
-		public short pollLastShortKey() { return map.pollLastShortKey(); }
+		public short pollLastShortKey() { throw new UnsupportedOperationException(); }
 		@Override
 		public char firstCharValue() { return map.firstCharValue(); }
 		@Override

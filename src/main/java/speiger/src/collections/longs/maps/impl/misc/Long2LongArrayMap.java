@@ -229,7 +229,7 @@ public class Long2LongArrayMap extends AbstractLong2LongMap implements Long2Long
 	@Override
 	public boolean moveToLast(long key) {
 		int index = findIndex(key);
-		if(index < size-1) {
+		if(index >= 0 && index < size-1) {
 			moveIndexToLast(index);
 			return true;
 		}

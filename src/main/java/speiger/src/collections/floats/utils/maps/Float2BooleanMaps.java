@@ -472,15 +472,14 @@ public class Float2BooleanMaps
 		public Float2BooleanSortedMap tailMap(float fromKey) { return Float2BooleanMaps.unmodifiable(map.tailMap(fromKey)); }
 		@Override
 		public FloatSortedSet keySet() { return FloatSets.unmodifiable(map.keySet()); }
-
 		@Override
 		public float firstFloatKey() { return map.firstFloatKey(); }
 		@Override
-		public float pollFirstFloatKey() { return map.pollFirstFloatKey(); }
+		public float pollFirstFloatKey() { throw new UnsupportedOperationException(); }
 		@Override
 		public float lastFloatKey() { return map.lastFloatKey(); }
 		@Override
-		public float pollLastFloatKey() { return map.pollLastFloatKey(); }
+		public float pollLastFloatKey() { throw new UnsupportedOperationException(); }
 		@Override
 		public boolean firstBooleanValue() { return map.firstBooleanValue(); }
 		@Override

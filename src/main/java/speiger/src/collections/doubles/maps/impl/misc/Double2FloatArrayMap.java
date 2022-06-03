@@ -234,7 +234,7 @@ public class Double2FloatArrayMap extends AbstractDouble2FloatMap implements Dou
 	@Override
 	public boolean moveToLast(double key) {
 		int index = findIndex(key);
-		if(index < size-1) {
+		if(index >= 0 && index < size-1) {
 			moveIndexToLast(index);
 			return true;
 		}
