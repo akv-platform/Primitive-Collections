@@ -1502,13 +1502,15 @@ public class Int2CharRBTreeMap extends AbstractInt2CharMap implements Int2CharNa
 		@Override
 		public char firstCharValue() {
 			Node entry = subLowest();
-			return entry == null ? map.getDefaultReturnValue() : entry.value;
+			if(entry == null) throw new NoSuchElementException();
+			return entry.value;
 		}
 		
 		@Override
 		public char lastCharValue() {
 			Node entry = subHighest();
-			return entry == null ? map.getDefaultReturnValue() : entry.value;
+			if(entry == null) throw new NoSuchElementException();
+			return entry.value;
 		}
 		
 		@Override

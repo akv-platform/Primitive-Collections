@@ -12,7 +12,6 @@ import speiger.src.collections.PACKAGE.lists.LIST_ITERATOR;
 
 @SuppressWarnings("javadoc")
 public abstract class LIST_ITERATOR_TESTER KEY_GENERIC_TYPE extends ABSTRACT_ITERATOR_TESTER KEY_GENERIC_TYPE {
-
 	public LIST_ITERATOR_TESTER(int steps, ITERABLE KEY_GENERIC_TYPE elementsToInsertIterable, Iterable<? extends IteratorFeature> features, ITERABLE KEY_GENERIC_TYPE expectedElements, int startIndex) {
 		super(steps, elementsToInsertIterable, features, expectedElements, KnownOrder.KNOWN_ORDER, startIndex);
 	}

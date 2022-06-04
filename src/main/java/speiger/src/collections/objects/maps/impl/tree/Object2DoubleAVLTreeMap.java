@@ -1397,13 +1397,15 @@ public class Object2DoubleAVLTreeMap<T> extends AbstractObject2DoubleMap<T> impl
 		@Override
 		public double firstDoubleValue() {
 			Node<T> entry = subLowest();
-			return entry == null ? map.getDefaultReturnValue() : entry.value;
+			if(entry == null) throw new NoSuchElementException();
+			return entry.value;
 		}
 		
 		@Override
 		public double lastDoubleValue() {
 			Node<T> entry = subHighest();
-			return entry == null ? map.getDefaultReturnValue() : entry.value;
+			if(entry == null) throw new NoSuchElementException();
+			return entry.value;
 		}
 		
 		@Override

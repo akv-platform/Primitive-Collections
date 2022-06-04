@@ -236,7 +236,7 @@ public class FILE_KEY_TYPE2FILE_VALUE_TYPEOrderedMapNavigationTester KEY_VALUE_G
 #ignore
 	@CollectionSize.Require(SEVERAL)
 #endignore
-	public void testFirstaValue() {
+	public void testFirstValue() {
 		assertEquals(aValue, orderedMap.FIRST_ENTRY_VALUE());
 	}
 

@@ -1856,7 +1856,7 @@ public class Byte2CharConcurrentOpenHashMap extends AbstractByte2CharMap impleme
 			long stamp = writeLock();
 			try
 			{
-				if(key == null) {
+				if(key == null || ((Byte)key).byteValue() == (byte)0) {
 					if(containsNull && Objects.equals(value, Character.valueOf(values[nullIndex]))) {
 						removeNullIndex();
 						return true;
@@ -2127,6 +2127,7 @@ public class Byte2CharConcurrentOpenHashMap extends AbstractByte2CharMap impleme
 		
 		protected int findIndex(int hash, Object key) {
 			if(key == null) return containsNull ? nullIndex : -(nullIndex + 1);
+			if(((Byte)key).byteValue() == (byte)0) return containsNull ? nullIndex : -(nullIndex + 1);
 			int pos = hash & mask;
 			byte current = keys[pos];
 			if(current != (byte)0) {

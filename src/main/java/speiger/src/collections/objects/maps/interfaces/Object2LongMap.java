@@ -459,7 +459,6 @@ public interface Object2LongMap<T> extends Map<T, Long>, Object2LongFunction<T>
 	 */
 	public interface Entry<T> extends Map.Entry<T, Long>
 	{
-		
 		/**
 		 * Type Specific getValue method that reduces boxing/unboxing
 		 * @return the value of a given Entry

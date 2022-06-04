@@ -1379,13 +1379,15 @@ public class Byte2BooleanAVLTreeMap extends AbstractByte2BooleanMap implements B
 		@Override
 		public boolean firstBooleanValue() {
 			Node entry = subLowest();
-			return entry == null ? map.getDefaultReturnValue() : entry.value;
+			if(entry == null) throw new NoSuchElementException();
+			return entry.value;
 		}
 		
 		@Override
 		public boolean lastBooleanValue() {
 			Node entry = subHighest();
-			return entry == null ? map.getDefaultReturnValue() : entry.value;
+			if(entry == null) throw new NoSuchElementException();
+			return entry.value;
 		}
 		
 		@Override

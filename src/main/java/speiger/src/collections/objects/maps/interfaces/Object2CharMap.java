@@ -459,7 +459,6 @@ public interface Object2CharMap<T> extends Map<T, Character>, Object2CharFunctio
 	 */
 	public interface Entry<T> extends Map.Entry<T, Character>
 	{
-		
 		/**
 		 * Type Specific getValue method that reduces boxing/unboxing
 		 * @return the value of a given Entry

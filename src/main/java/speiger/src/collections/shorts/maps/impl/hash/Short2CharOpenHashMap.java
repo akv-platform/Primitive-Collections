@@ -313,7 +313,7 @@ public class Short2CharOpenHashMap extends AbstractShort2CharMap implements ITri
 	@Override
 	public boolean remove(Object key, Object value) {
 		Objects.requireNonNull(value);
-		if(key == null) {
+		if(key == null || ((Short)key).shortValue() == (short)0) {
 			if(containsNull && Objects.equals(value, Character.valueOf(values[nullIndex]))) {
 				removeNullIndex();
 				return true;
@@ -566,6 +566,7 @@ public class Short2CharOpenHashMap extends AbstractShort2CharMap implements ITri
 	
 	protected int findIndex(Object key) {
 		if(key == null) return containsNull ? nullIndex : -(nullIndex + 1);
+		if(((Short)key).shortValue() == (short)0) return containsNull ? nullIndex : -(nullIndex + 1);
 		int pos = HashUtil.mix(key.hashCode()) & mask;
 		short current = keys[pos];
 		if(current != (short)0) {

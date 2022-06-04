@@ -445,6 +445,7 @@ public class ImmutableFloat2BooleanOpenHashMap extends AbstractFloat2BooleanMap 
 	
 	protected int findIndex(Object key) {
 		if(key == null) return containsNull ? nullIndex : -(nullIndex + 1);
+		if(Float.floatToIntBits(((Float)key).floatValue()) == 0) return containsNull ? nullIndex : -(nullIndex + 1);
 		int pos = HashUtil.mix(key.hashCode()) & mask;
 		float current = keys[pos];
 		if(Float.floatToIntBits(current) != 0) {

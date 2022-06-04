@@ -334,7 +334,7 @@ public class Float2FloatOpenCustomHashMap extends AbstractFloat2FloatMap impleme
 	@Override
 	public boolean remove(Object key, Object value) {
 		Objects.requireNonNull(value);
-		if(key == null) {
+		if(key == null || strategy.equals(((Float)key).floatValue(), 0F)) {
 			if(containsNull && Objects.equals(value, Float.valueOf(values[nullIndex]))) {
 				removeNullIndex();
 				return true;
@@ -591,6 +591,7 @@ public class Float2FloatOpenCustomHashMap extends AbstractFloat2FloatMap impleme
 	protected int findIndex(Float key) {
 		if(key == null) return containsNull ? nullIndex : -(nullIndex + 1);
 		float keyType = ((Float)key).floatValue();
+		if(strategy.equals(keyType, 0F)) return containsNull ? nullIndex : -(nullIndex + 1);
 		int pos = HashUtil.mix(strategy.hashCode(keyType)) & mask;
 		float current = keys[pos];
 		if(!strategy.equals(current, 0F)) {

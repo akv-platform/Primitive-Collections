@@ -450,6 +450,7 @@ public class ImmutableDouble2ByteOpenHashMap extends AbstractDouble2ByteMap impl
 	
 	protected int findIndex(Object key) {
 		if(key == null) return containsNull ? nullIndex : -(nullIndex + 1);
+		if(Double.doubleToLongBits(((Double)key).doubleValue()) == 0) return containsNull ? nullIndex : -(nullIndex + 1);
 		int pos = HashUtil.mix(key.hashCode()) & mask;
 		double current = keys[pos];
 		if(Double.doubleToLongBits(current) != 0) {

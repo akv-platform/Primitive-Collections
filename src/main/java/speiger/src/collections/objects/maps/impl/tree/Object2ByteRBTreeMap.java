@@ -1462,13 +1462,15 @@ public class Object2ByteRBTreeMap<T> extends AbstractObject2ByteMap<T> implement
 		@Override
 		public byte firstByteValue() {
 			Node<T> entry = subLowest();
-			return entry == null ? map.getDefaultReturnValue() : entry.value;
+			if(entry == null) throw new NoSuchElementException();
+			return entry.value;
 		}
 		
 		@Override
 		public byte lastByteValue() {
 			Node<T> entry = subHighest();
-			return entry == null ? map.getDefaultReturnValue() : entry.value;
+			if(entry == null) throw new NoSuchElementException();
+			return entry.value;
 		}
 		
 		@Override

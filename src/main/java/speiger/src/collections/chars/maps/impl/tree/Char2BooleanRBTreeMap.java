@@ -1443,13 +1443,15 @@ public class Char2BooleanRBTreeMap extends AbstractChar2BooleanMap implements Ch
 		@Override
 		public boolean firstBooleanValue() {
 			Node entry = subLowest();
-			return entry == null ? map.getDefaultReturnValue() : entry.value;
+			if(entry == null) throw new NoSuchElementException();
+			return entry.value;
 		}
 		
 		@Override
 		public boolean lastBooleanValue() {
 			Node entry = subHighest();
-			return entry == null ? map.getDefaultReturnValue() : entry.value;
+			if(entry == null) throw new NoSuchElementException();
+			return entry.value;
 		}
 		
 		@Override

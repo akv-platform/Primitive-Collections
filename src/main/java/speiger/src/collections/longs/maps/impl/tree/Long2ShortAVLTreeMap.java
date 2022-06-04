@@ -1438,13 +1438,15 @@ public class Long2ShortAVLTreeMap extends AbstractLong2ShortMap implements Long2
 		@Override
 		public short firstShortValue() {
 			Node entry = subLowest();
-			return entry == null ? map.getDefaultReturnValue() : entry.value;
+			if(entry == null) throw new NoSuchElementException();
+			return entry.value;
 		}
 		
 		@Override
 		public short lastShortValue() {
 			Node entry = subHighest();
-			return entry == null ? map.getDefaultReturnValue() : entry.value;
+			if(entry == null) throw new NoSuchElementException();
+			return entry.value;
 		}
 		
 		@Override

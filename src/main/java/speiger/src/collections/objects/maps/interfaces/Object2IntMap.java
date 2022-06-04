@@ -459,7 +459,6 @@ public interface Object2IntMap<T> extends Map<T, Integer>, Object2IntFunction<T>
 	 */
 	public interface Entry<T> extends Map.Entry<T, Integer>
 	{
-		
 		/**
 		 * Type Specific getValue method that reduces boxing/unboxing
 		 * @return the value of a given Entry

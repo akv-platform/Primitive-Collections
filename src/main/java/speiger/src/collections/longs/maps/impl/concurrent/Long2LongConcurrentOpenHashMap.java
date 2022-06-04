@@ -1851,7 +1851,7 @@ public class Long2LongConcurrentOpenHashMap extends AbstractLong2LongMap impleme
 			long stamp = writeLock();
 			try
 			{
-				if(key == null) {
+				if(key == null || ((Long)key).longValue() == 0) {
 					if(containsNull && Objects.equals(value, Long.valueOf(values[nullIndex]))) {
 						removeNullIndex();
 						return true;
@@ -2122,6 +2122,7 @@ public class Long2LongConcurrentOpenHashMap extends AbstractLong2LongMap impleme
 		
 		protected int findIndex(int hash, Object key) {
 			if(key == null) return containsNull ? nullIndex : -(nullIndex + 1);
+			if(((Long)key).longValue() == 0) return containsNull ? nullIndex : -(nullIndex + 1);
 			int pos = hash & mask;
 			long current = keys[pos];
 			if(current != 0) {

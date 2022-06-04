@@ -1438,13 +1438,15 @@ public class Char2IntAVLTreeMap extends AbstractChar2IntMap implements Char2IntN
 		@Override
 		public int firstIntValue() {
 			Node entry = subLowest();
-			return entry == null ? map.getDefaultReturnValue() : entry.value;
+			if(entry == null) throw new NoSuchElementException();
+			return entry.value;
 		}
 		
 		@Override
 		public int lastIntValue() {
 			Node entry = subHighest();
-			return entry == null ? map.getDefaultReturnValue() : entry.value;
+			if(entry == null) throw new NoSuchElementException();
+			return entry.value;
 		}
 		
 		@Override

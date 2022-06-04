@@ -1462,13 +1462,15 @@ public class Object2ShortRBTreeMap<T> extends AbstractObject2ShortMap<T> impleme
 		@Override
 		public short firstShortValue() {
 			Node<T> entry = subLowest();
-			return entry == null ? map.getDefaultReturnValue() : entry.value;
+			if(entry == null) throw new NoSuchElementException();
+			return entry.value;
 		}
 		
 		@Override
 		public short lastShortValue() {
 			Node<T> entry = subHighest();
-			return entry == null ? map.getDefaultReturnValue() : entry.value;
+			if(entry == null) throw new NoSuchElementException();
+			return entry.value;
 		}
 		
 		@Override

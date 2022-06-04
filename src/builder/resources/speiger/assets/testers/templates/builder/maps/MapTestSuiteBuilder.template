@@ -41,6 +41,7 @@ import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapCo
 import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapComputeIfPresentTester;
 import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapComputeTester;
 import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapCopyTester;
+import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapContainsTester;
 import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapContainsKeyTester;
 import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapContainsValueTester;
 import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapEntrySetTester;
@@ -95,6 +96,7 @@ public class MAP_TEST_BUILDER KEY_VALUE_GENERIC_TYPE extends MapTestSuiteBuilder
 		testers.add(FILE_KEY_TYPE2FILE_VALUE_TYPEMapComputeIfPresentTester.class);
 		testers.add(FILE_KEY_TYPE2FILE_VALUE_TYPEMapSupplyIfAbsentTester.class);
 		testers.add(FILE_KEY_TYPE2FILE_VALUE_TYPEMapCopyTester.class);
+		testers.add(FILE_KEY_TYPE2FILE_VALUE_TYPEMapContainsTester.class);
 		testers.add(FILE_KEY_TYPE2FILE_VALUE_TYPEMapContainsKeyTester.class);
 		testers.add(FILE_KEY_TYPE2FILE_VALUE_TYPEMapContainsValueTester.class);
 		testers.add(FILE_KEY_TYPE2FILE_VALUE_TYPEMapEntrySetTester.class);

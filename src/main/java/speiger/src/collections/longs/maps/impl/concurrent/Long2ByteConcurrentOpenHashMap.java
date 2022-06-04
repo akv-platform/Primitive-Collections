@@ -1856,7 +1856,7 @@ public class Long2ByteConcurrentOpenHashMap extends AbstractLong2ByteMap impleme
 			long stamp = writeLock();
 			try
 			{
-				if(key == null) {
+				if(key == null || ((Long)key).longValue() == 0) {
 					if(containsNull && Objects.equals(value, Byte.valueOf(values[nullIndex]))) {
 						removeNullIndex();
 						return true;
@@ -2127,6 +2127,7 @@ public class Long2ByteConcurrentOpenHashMap extends AbstractLong2ByteMap impleme
 		
 		protected int findIndex(int hash, Object key) {
 			if(key == null) return containsNull ? nullIndex : -(nullIndex + 1);
+			if(((Long)key).longValue() == 0) return containsNull ? nullIndex : -(nullIndex + 1);
 			int pos = hash & mask;
 			long current = keys[pos];
 			if(current != 0) {

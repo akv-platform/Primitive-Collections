@@ -334,7 +334,7 @@ public class Long2LongOpenCustomHashMap extends AbstractLong2LongMap implements 
 	@Override
 	public boolean remove(Object key, Object value) {
 		Objects.requireNonNull(value);
-		if(key == null) {
+		if(key == null || strategy.equals(((Long)key).longValue(), 0L)) {
 			if(containsNull && Objects.equals(value, Long.valueOf(values[nullIndex]))) {
 				removeNullIndex();
 				return true;
@@ -591,6 +591,7 @@ public class Long2LongOpenCustomHashMap extends AbstractLong2LongMap implements 
 	protected int findIndex(Long key) {
 		if(key == null) return containsNull ? nullIndex : -(nullIndex + 1);
 		long keyType = ((Long)key).longValue();
+		if(strategy.equals(keyType, 0L)) return containsNull ? nullIndex : -(nullIndex + 1);
 		int pos = HashUtil.mix(strategy.hashCode(keyType)) & mask;
 		long current = keys[pos];
 		if(!strategy.equals(current, 0L)) {

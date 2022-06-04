@@ -1397,13 +1397,15 @@ public class Object2ShortAVLTreeMap<T> extends AbstractObject2ShortMap<T> implem
 		@Override
 		public short firstShortValue() {
 			Node<T> entry = subLowest();
-			return entry == null ? map.getDefaultReturnValue() : entry.value;
+			if(entry == null) throw new NoSuchElementException();
+			return entry.value;
 		}
 		
 		@Override
 		public short lastShortValue() {
 			Node<T> entry = subHighest();
-			return entry == null ? map.getDefaultReturnValue() : entry.value;
+			if(entry == null) throw new NoSuchElementException();
+			return entry.value;
 		}
 		
 		@Override

@@ -431,6 +431,7 @@ public class ImmutableLong2ObjectOpenHashMap<V> extends AbstractLong2ObjectMap<V
 	
 	protected int findIndex(Object key) {
 		if(key == null) return containsNull ? nullIndex : -(nullIndex + 1);
+		if(((Long)key).longValue() == 0) return containsNull ? nullIndex : -(nullIndex + 1);
 		int pos = HashUtil.mix(key.hashCode()) & mask;
 		long current = keys[pos];
 		if(current != 0) {

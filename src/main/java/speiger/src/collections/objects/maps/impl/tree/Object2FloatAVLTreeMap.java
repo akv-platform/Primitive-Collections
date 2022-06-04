@@ -1397,13 +1397,15 @@ public class Object2FloatAVLTreeMap<T> extends AbstractObject2FloatMap<T> implem
 		@Override
 		public float firstFloatValue() {
 			Node<T> entry = subLowest();
-			return entry == null ? map.getDefaultReturnValue() : entry.value;
+			if(entry == null) throw new NoSuchElementException();
+			return entry.value;
 		}
 		
 		@Override
 		public float lastFloatValue() {
 			Node<T> entry = subHighest();
-			return entry == null ? map.getDefaultReturnValue() : entry.value;
+			if(entry == null) throw new NoSuchElementException();
+			return entry.value;
 		}
 		
 		@Override

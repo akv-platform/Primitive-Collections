@@ -291,7 +291,7 @@ public class Long2BooleanOpenHashMap extends AbstractLong2BooleanMap implements 
 	@Override
 	public boolean remove(Object key, Object value) {
 		Objects.requireNonNull(value);
-		if(key == null) {
+		if(key == null || ((Long)key).longValue() == 0) {
 			if(containsNull && Objects.equals(value, Boolean.valueOf(values[nullIndex]))) {
 				removeNullIndex();
 				return true;
@@ -544,6 +544,7 @@ public class Long2BooleanOpenHashMap extends AbstractLong2BooleanMap implements 
 	
 	protected int findIndex(Object key) {
 		if(key == null) return containsNull ? nullIndex : -(nullIndex + 1);
+		if(((Long)key).longValue() == 0) return containsNull ? nullIndex : -(nullIndex + 1);
 		int pos = HashUtil.mix(key.hashCode()) & mask;
 		long current = keys[pos];
 		if(current != 0) {

@@ -450,6 +450,7 @@ public class ImmutableInt2DoubleOpenHashMap extends AbstractInt2DoubleMap implem
 	
 	protected int findIndex(Object key) {
 		if(key == null) return containsNull ? nullIndex : -(nullIndex + 1);
+		if(((Integer)key).intValue() == 0) return containsNull ? nullIndex : -(nullIndex + 1);
 		int pos = HashUtil.mix(key.hashCode()) & mask;
 		int current = keys[pos];
 		if(current != 0) {

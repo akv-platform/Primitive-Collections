@@ -317,7 +317,7 @@ public class Char2BooleanOpenCustomHashMap extends AbstractChar2BooleanMap imple
 	@Override
 	public boolean remove(Object key, Object value) {
 		Objects.requireNonNull(value);
-		if(key == null) {
+		if(key == null || strategy.equals(((Character)key).charValue(), (char)0)) {
 			if(containsNull && Objects.equals(value, Boolean.valueOf(values[nullIndex]))) {
 				removeNullIndex();
 				return true;
@@ -574,6 +574,7 @@ public class Char2BooleanOpenCustomHashMap extends AbstractChar2BooleanMap imple
 	protected int findIndex(Character key) {
 		if(key == null) return containsNull ? nullIndex : -(nullIndex + 1);
 		char keyType = ((Character)key).charValue();
+		if(strategy.equals(keyType, (char)0)) return containsNull ? nullIndex : -(nullIndex + 1);
 		int pos = HashUtil.mix(strategy.hashCode(keyType)) & mask;
 		char current = keys[pos];
 		if(!strategy.equals(current, (char)0)) {

@@ -450,6 +450,7 @@ public class ImmutableByte2LongOpenHashMap extends AbstractByte2LongMap implemen
 	
 	protected int findIndex(Object key) {
 		if(key == null) return containsNull ? nullIndex : -(nullIndex + 1);
+		if(((Byte)key).byteValue() == (byte)0) return containsNull ? nullIndex : -(nullIndex + 1);
 		int pos = HashUtil.mix(key.hashCode()) & mask;
 		byte current = keys[pos];
 		if(current != (byte)0) {

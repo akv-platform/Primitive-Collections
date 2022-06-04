@@ -459,7 +459,6 @@ public interface Object2DoubleMap<T> extends Map<T, Double>, Object2DoubleFuncti
 	 */
 	public interface Entry<T> extends Map.Entry<T, Double>
 	{
-		
 		/**
 		 * Type Specific getValue method that reduces boxing/unboxing
 		 * @return the value of a given Entry

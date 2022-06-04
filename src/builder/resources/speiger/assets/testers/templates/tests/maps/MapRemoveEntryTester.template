@@ -2,8 +2,11 @@ package speiger.src.testers.PACKAGE.tests.maps;
 
 #ignore
 import static com.google.common.collect.testing.features.CollectionSize.ZERO;
+import static com.google.common.collect.testing.features.CollectionSize.ONE;
 import static com.google.common.collect.testing.features.MapFeature.SUPPORTS_REMOVE;
 #endignore
+
+import java.util.AbstractMap;
 
 import org.junit.Ignore;
 
@@ -48,7 +51,43 @@ public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapRemoveEntryTester KEY_VALUE_GENERIC
 		assertFalse(getMap().remove(k3(), v3()));
 		expectUnchanged();
 	}
+	
+#ignore
+	@CollectionSize.Require(ONE)
+	@MapFeature.Require(SUPPORTS_REMOVE)
+#endignore
+	public void testRemove_supportedEntryPresent() {
+		assertTrue(getMap().ENTRY_SET().remove(e0()));
+		expectMissing(e0());
+	}
+	
+#ignore
+	@CollectionSize.Require(ONE)
+	@MapFeature.Require(SUPPORTS_REMOVE)
+#endignore
+	public void testRemove_supportedObjectEntryPresent() {
+		assertTrue(getMap().ENTRY_SET().remove(new AbstractMap.SimpleEntry<>(e0())));
+		expectMissing(e0());
+	}
 
+#ignore
+	@CollectionSize.Require(ONE)
+	@MapFeature.Require(SUPPORTS_REMOVE)
+#endignore
+	public void testRemove_supportedEntryMissing() {
+		assertFalse(getMap().ENTRY_SET().remove(e3()));
+		expectUnchanged();
+	}
+	
+#ignore
+	@CollectionSize.Require(ONE)
+	@MapFeature.Require(SUPPORTS_REMOVE)
+#endignore
+	public void testRemove_supportedObjectEntryMissing() {
+		assertFalse(getMap().ENTRY_SET().remove(new AbstractMap.SimpleEntry<>(e3())));
+		expectUnchanged();
+	}
+	
 #ignore
 	@MapFeature.Require(absent = SUPPORTS_REMOVE)
 	@CollectionSize.Require(absent = ZERO)
@@ -61,7 +100,7 @@ public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapRemoveEntryTester KEY_VALUE_GENERIC
 		}
 		expectUnchanged();
 	}
-
+	
 #ignore
 	@MapFeature.Require(absent = SUPPORTS_REMOVE)
 #endignore

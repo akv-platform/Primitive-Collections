@@ -331,7 +331,6 @@ public interface Object2ObjectMap<T, V> extends Map<T, V>, Object2ObjectFunction
 	 */
 	public interface Entry<T, V> extends Map.Entry<T, V>
 	{
-		
 	}
 	
 	/**

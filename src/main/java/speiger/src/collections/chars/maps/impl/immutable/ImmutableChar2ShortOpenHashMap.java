@@ -450,6 +450,7 @@ public class ImmutableChar2ShortOpenHashMap extends AbstractChar2ShortMap implem
 	
 	protected int findIndex(Object key) {
 		if(key == null) return containsNull ? nullIndex : -(nullIndex + 1);
+		if(((Character)key).charValue() == (char)0) return containsNull ? nullIndex : -(nullIndex + 1);
 		int pos = HashUtil.mix(key.hashCode()) & mask;
 		char current = keys[pos];
 		if(current != (char)0) {

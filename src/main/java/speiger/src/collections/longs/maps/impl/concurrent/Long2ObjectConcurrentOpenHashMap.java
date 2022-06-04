@@ -1789,7 +1789,7 @@ public class Long2ObjectConcurrentOpenHashMap<V> extends AbstractLong2ObjectMap<
 			long stamp = writeLock();
 			try
 			{
-				if(key == null) {
+				if(key == null || ((Long)key).longValue() == 0) {
 					if(containsNull && Objects.equals(value, values[nullIndex])) {
 						removeNullIndex();
 						return true;
@@ -2060,6 +2060,7 @@ public class Long2ObjectConcurrentOpenHashMap<V> extends AbstractLong2ObjectMap<
 		
 		protected int findIndex(int hash, Object key) {
 			if(key == null) return containsNull ? nullIndex : -(nullIndex + 1);
+			if(((Long)key).longValue() == 0) return containsNull ? nullIndex : -(nullIndex + 1);
 			int pos = hash & mask;
 			long current = keys[pos];
 			if(current != 0) {

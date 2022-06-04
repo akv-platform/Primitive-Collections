@@ -459,7 +459,6 @@ public interface Object2FloatMap<T> extends Map<T, Float>, Object2FloatFunction<
 	 */
 	public interface Entry<T> extends Map.Entry<T, Float>
 	{
-		
 		/**
 		 * Type Specific getValue method that reduces boxing/unboxing
 		 * @return the value of a given Entry

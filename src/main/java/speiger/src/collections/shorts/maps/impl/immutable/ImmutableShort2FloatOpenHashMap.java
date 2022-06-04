@@ -450,6 +450,7 @@ public class ImmutableShort2FloatOpenHashMap extends AbstractShort2FloatMap impl
 	
 	protected int findIndex(Object key) {
 		if(key == null) return containsNull ? nullIndex : -(nullIndex + 1);
+		if(((Short)key).shortValue() == (short)0) return containsNull ? nullIndex : -(nullIndex + 1);
 		int pos = HashUtil.mix(key.hashCode()) & mask;
 		short current = keys[pos];
 		if(current != (short)0) {

@@ -459,7 +459,6 @@ public interface Object2ShortMap<T> extends Map<T, Short>, Object2ShortFunction<
 	 */
 	public interface Entry<T> extends Map.Entry<T, Short>
 	{
-		
 		/**
 		 * Type Specific getValue method that reduces boxing/unboxing
 		 * @return the value of a given Entry

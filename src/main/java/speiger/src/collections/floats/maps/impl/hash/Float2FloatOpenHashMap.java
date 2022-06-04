@@ -308,7 +308,7 @@ public class Float2FloatOpenHashMap extends AbstractFloat2FloatMap implements IT
 	@Override
 	public boolean remove(Object key, Object value) {
 		Objects.requireNonNull(value);
-		if(key == null) {
+		if(key == null || Float.floatToIntBits(((Float)key).floatValue()) == 0) {
 			if(containsNull && Objects.equals(value, Float.valueOf(values[nullIndex]))) {
 				removeNullIndex();
 				return true;
@@ -561,6 +561,7 @@ public class Float2FloatOpenHashMap extends AbstractFloat2FloatMap implements IT
 	
 	protected int findIndex(Object key) {
 		if(key == null) return containsNull ? nullIndex : -(nullIndex + 1);
+		if(Float.floatToIntBits(((Float)key).floatValue()) == 0) return containsNull ? nullIndex : -(nullIndex + 1);
 		int pos = HashUtil.mix(key.hashCode()) & mask;
 		float current = keys[pos];
 		if(Float.floatToIntBits(current) != 0) {

@@ -1856,7 +1856,7 @@ public class Char2IntConcurrentOpenHashMap extends AbstractChar2IntMap implement
 			long stamp = writeLock();
 			try
 			{
-				if(key == null) {
+				if(key == null || ((Character)key).charValue() == (char)0) {
 					if(containsNull && Objects.equals(value, Integer.valueOf(values[nullIndex]))) {
 						removeNullIndex();
 						return true;
@@ -2127,6 +2127,7 @@ public class Char2IntConcurrentOpenHashMap extends AbstractChar2IntMap implement
 		
 		protected int findIndex(int hash, Object key) {
 			if(key == null) return containsNull ? nullIndex : -(nullIndex + 1);
+			if(((Character)key).charValue() == (char)0) return containsNull ? nullIndex : -(nullIndex + 1);
 			int pos = hash & mask;
 			char current = keys[pos];
 			if(current != (char)0) {

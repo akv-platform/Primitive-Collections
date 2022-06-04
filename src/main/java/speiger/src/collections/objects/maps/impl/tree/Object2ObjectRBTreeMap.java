@@ -1374,13 +1374,15 @@ public class Object2ObjectRBTreeMap<T, V> extends AbstractObject2ObjectMap<T, V>
 		@Override
 		public V firstValue() {
 			Node<T, V> entry = subLowest();
-			return entry == null ? map.getDefaultReturnValue() : entry.value;
+			if(entry == null) throw new NoSuchElementException();
+			return entry.value;
 		}
 		
 		@Override
 		public V lastValue() {
 			Node<T, V> entry = subHighest();
-			return entry == null ? map.getDefaultReturnValue() : entry.value;
+			if(entry == null) throw new NoSuchElementException();
+			return entry.value;
 		}
 		
 		@Override

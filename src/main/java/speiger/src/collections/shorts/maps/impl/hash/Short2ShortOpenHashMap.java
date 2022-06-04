@@ -308,7 +308,7 @@ public class Short2ShortOpenHashMap extends AbstractShort2ShortMap implements IT
 	@Override
 	public boolean remove(Object key, Object value) {
 		Objects.requireNonNull(value);
-		if(key == null) {
+		if(key == null || ((Short)key).shortValue() == (short)0) {
 			if(containsNull && Objects.equals(value, Short.valueOf(values[nullIndex]))) {
 				removeNullIndex();
 				return true;
@@ -561,6 +561,7 @@ public class Short2ShortOpenHashMap extends AbstractShort2ShortMap implements IT
 	
 	protected int findIndex(Object key) {
 		if(key == null) return containsNull ? nullIndex : -(nullIndex + 1);
+		if(((Short)key).shortValue() == (short)0) return containsNull ? nullIndex : -(nullIndex + 1);
 		int pos = HashUtil.mix(key.hashCode()) & mask;
 		short current = keys[pos];
 		if(current != (short)0) {

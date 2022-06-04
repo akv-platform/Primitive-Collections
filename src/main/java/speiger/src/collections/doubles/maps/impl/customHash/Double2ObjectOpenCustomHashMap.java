@@ -307,7 +307,7 @@ public class Double2ObjectOpenCustomHashMap<V> extends AbstractDouble2ObjectMap<
 	@Override
 	public boolean remove(Object key, Object value) {
 		Objects.requireNonNull(value);
-		if(key == null) {
+		if(key == null || strategy.equals(((Double)key).doubleValue(), 0D)) {
 			if(containsNull && Objects.equals(value, values[nullIndex])) {
 				removeNullIndex();
 				return true;
@@ -565,6 +565,7 @@ public class Double2ObjectOpenCustomHashMap<V> extends AbstractDouble2ObjectMap<
 	protected int findIndex(Double key) {
 		if(key == null) return containsNull ? nullIndex : -(nullIndex + 1);
 		double keyType = ((Double)key).doubleValue();
+		if(strategy.equals(keyType, 0D)) return containsNull ? nullIndex : -(nullIndex + 1);
 		int pos = HashUtil.mix(strategy.hashCode(keyType)) & mask;
 		double current = keys[pos];
 		if(!strategy.equals(current, 0D)) {

@@ -281,7 +281,7 @@ public class Double2ObjectOpenHashMap<V> extends AbstractDouble2ObjectMap<V> imp
 	@Override
 	public boolean remove(Object key, Object value) {
 		Objects.requireNonNull(value);
-		if(key == null) {
+		if(key == null || Double.doubleToLongBits(((Double)key).doubleValue()) == 0) {
 			if(containsNull && Objects.equals(value, values[nullIndex])) {
 				removeNullIndex();
 				return true;
@@ -535,6 +535,7 @@ public class Double2ObjectOpenHashMap<V> extends AbstractDouble2ObjectMap<V> imp
 	
 	protected int findIndex(Object key) {
 		if(key == null) return containsNull ? nullIndex : -(nullIndex + 1);
+		if(Double.doubleToLongBits(((Double)key).doubleValue()) == 0) return containsNull ? nullIndex : -(nullIndex + 1);
 		int pos = HashUtil.mix(key.hashCode()) & mask;
 		double current = keys[pos];
 		if(Double.doubleToLongBits(current) != 0) {

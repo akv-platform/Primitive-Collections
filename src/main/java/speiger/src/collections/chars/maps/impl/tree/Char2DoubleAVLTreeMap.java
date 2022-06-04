@@ -1438,13 +1438,15 @@ public class Char2DoubleAVLTreeMap extends AbstractChar2DoubleMap implements Cha
 		@Override
 		public double firstDoubleValue() {
 			Node entry = subLowest();
-			return entry == null ? map.getDefaultReturnValue() : entry.value;
+			if(entry == null) throw new NoSuchElementException();
+			return entry.value;
 		}
 		
 		@Override
 		public double lastDoubleValue() {
 			Node entry = subHighest();
-			return entry == null ? map.getDefaultReturnValue() : entry.value;
+			if(entry == null) throw new NoSuchElementException();
+			return entry.value;
 		}
 		
 		@Override

@@ -5,29 +5,31 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.concurrent.locks.StampedLock;
-import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
-import speiger.src.collections.bytes.collections.AbstractByteCollection;
+import java.util.function.BiFunction;
+
 import speiger.src.collections.bytes.collections.ByteBidirectionalIterator;
-import speiger.src.collections.bytes.collections.ByteCollection;
 import speiger.src.collections.bytes.collections.ByteIterator;
 import speiger.src.collections.bytes.functions.ByteConsumer;
-import speiger.src.collections.bytes.functions.ByteSupplier;
+import speiger.src.collections.objects.functions.consumer.ObjectByteConsumer;
 import speiger.src.collections.bytes.functions.consumer.ByteByteConsumer;
-import speiger.src.collections.bytes.functions.function.Byte2BooleanFunction;
 import speiger.src.collections.bytes.functions.function.Byte2ByteFunction;
 import speiger.src.collections.bytes.functions.function.ByteByteUnaryOperator;
+import speiger.src.collections.bytes.functions.function.Byte2BooleanFunction;
 import speiger.src.collections.bytes.maps.abstracts.AbstractByte2ByteMap;
-import speiger.src.collections.bytes.maps.interfaces.Byte2ByteConcurrentMap;
 import speiger.src.collections.bytes.maps.interfaces.Byte2ByteMap;
+import speiger.src.collections.bytes.maps.interfaces.Byte2ByteConcurrentMap;
 import speiger.src.collections.bytes.sets.AbstractByteSet;
 import speiger.src.collections.bytes.sets.ByteSet;
-import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
-import speiger.src.collections.objects.functions.consumer.ObjectByteConsumer;
+import speiger.src.collections.bytes.collections.AbstractByteCollection;
+import speiger.src.collections.bytes.collections.ByteCollection;
+import speiger.src.collections.bytes.functions.ByteSupplier;
+import speiger.src.collections.objects.functions.function.ObjectObjectUnaryOperator;
+
 import speiger.src.collections.objects.functions.consumer.ObjectObjectConsumer;
 import speiger.src.collections.objects.functions.function.Object2BooleanFunction;
-import speiger.src.collections.objects.functions.function.ObjectObjectUnaryOperator;
+import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
 import speiger.src.collections.objects.sets.ObjectSet;
 import speiger.src.collections.utils.HashUtil;
@@ -1849,7 +1851,7 @@ public class Byte2ByteConcurrentOpenHashMap extends AbstractByte2ByteMap impleme
 			long stamp = writeLock();
 			try
 			{
-				if(key == null) {
+				if(key == null || ((Byte)key).byteValue() == (byte)0) {
 					if(containsNull && Objects.equals(value, Byte.valueOf(values[nullIndex]))) {
 						removeNullIndex();
 						return true;
@@ -2120,6 +2122,7 @@ public class Byte2ByteConcurrentOpenHashMap extends AbstractByte2ByteMap impleme
 		
 		protected int findIndex(int hash, Object key) {
 			if(key == null) return containsNull ? nullIndex : -(nullIndex + 1);
+			if(((Byte)key).byteValue() == (byte)0) return containsNull ? nullIndex : -(nullIndex + 1);
 			int pos = hash & mask;
 			byte current = keys[pos];
 			if(current != (byte)0) {

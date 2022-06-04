@@ -317,7 +317,7 @@ public class Byte2BooleanOpenCustomHashMap extends AbstractByte2BooleanMap imple
 	@Override
 	public boolean remove(Object key, Object value) {
 		Objects.requireNonNull(value);
-		if(key == null) {
+		if(key == null || strategy.equals(((Byte)key).byteValue(), (byte)0)) {
 			if(containsNull && Objects.equals(value, Boolean.valueOf(values[nullIndex]))) {
 				removeNullIndex();
 				return true;
@@ -574,6 +574,7 @@ public class Byte2BooleanOpenCustomHashMap extends AbstractByte2BooleanMap imple
 	protected int findIndex(Byte key) {
 		if(key == null) return containsNull ? nullIndex : -(nullIndex + 1);
 		byte keyType = ((Byte)key).byteValue();
+		if(strategy.equals(keyType, (byte)0)) return containsNull ? nullIndex : -(nullIndex + 1);
 		int pos = HashUtil.mix(strategy.hashCode(keyType)) & mask;
 		byte current = keys[pos];
 		if(!strategy.equals(current, (byte)0)) {

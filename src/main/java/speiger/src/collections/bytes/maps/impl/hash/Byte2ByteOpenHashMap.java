@@ -308,7 +308,7 @@ public class Byte2ByteOpenHashMap extends AbstractByte2ByteMap implements ITrimm
 	@Override
 	public boolean remove(Object key, Object value) {
 		Objects.requireNonNull(value);
-		if(key == null) {
+		if(key == null || ((Byte)key).byteValue() == (byte)0) {
 			if(containsNull && Objects.equals(value, Byte.valueOf(values[nullIndex]))) {
 				removeNullIndex();
 				return true;
@@ -561,6 +561,7 @@ public class Byte2ByteOpenHashMap extends AbstractByte2ByteMap implements ITrimm
 	
 	protected int findIndex(Object key) {
 		if(key == null) return containsNull ? nullIndex : -(nullIndex + 1);
+		if(((Byte)key).byteValue() == (byte)0) return containsNull ? nullIndex : -(nullIndex + 1);
 		int pos = HashUtil.mix(key.hashCode()) & mask;
 		byte current = keys[pos];
 		if(current != (byte)0) {

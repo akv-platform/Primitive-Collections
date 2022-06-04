@@ -1856,7 +1856,7 @@ public class Float2DoubleConcurrentOpenHashMap extends AbstractFloat2DoubleMap i
 			long stamp = writeLock();
 			try
 			{
-				if(key == null) {
+				if(key == null || Float.floatToIntBits(((Float)key).floatValue()) == 0) {
 					if(containsNull && Objects.equals(value, Double.valueOf(values[nullIndex]))) {
 						removeNullIndex();
 						return true;
@@ -2127,6 +2127,7 @@ public class Float2DoubleConcurrentOpenHashMap extends AbstractFloat2DoubleMap i
 		
 		protected int findIndex(int hash, Object key) {
 			if(key == null) return containsNull ? nullIndex : -(nullIndex + 1);
+			if(Float.floatToIntBits(((Float)key).floatValue()) == 0) return containsNull ? nullIndex : -(nullIndex + 1);
 			int pos = hash & mask;
 			float current = keys[pos];
 			if(Float.floatToIntBits(current) != 0) {

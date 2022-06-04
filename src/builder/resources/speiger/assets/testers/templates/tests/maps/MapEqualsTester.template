@@ -1,5 +1,7 @@
 package speiger.src.testers.PACKAGE.tests.maps;
 
+import java.util.AbstractMap;
+
 import org.junit.Ignore;
 
 import com.google.common.collect.testing.features.CollectionSize;
@@ -43,7 +45,39 @@ public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapEqualsTester KEY_VALUE_GENERIC_TYPE
 	public void testEquals_list() {
 		assertFalse("A List should never equal a Map.", getMap().equals(ObjectHelpers.copyToList(getMap().ENTRY_SET())));
 	}
+	
+#ignore
+	@CollectionSize.Require(CollectionSize.ONE)
+#endignore
+	public void testEquals_EntryMatches() {
+		MAP.Entry KEY_VALUE_GENERIC_TYPE entry = e0();
+		assertEquals("The Entries should match", entry, getMap().ENTRY_SET().iterator().next());
+	}
 
+#ignore
+	@CollectionSize.Require(CollectionSize.ONE)
+#endignore
+	public void testEquals_EntryMatchesObject() {
+		MAP.Entry KEY_VALUE_GENERIC_TYPE entry = e0();
+		assertEquals("The Entries should match", new AbstractMap.SimpleEntry<>(entry), getMap().ENTRY_SET().iterator().next());
+	}
+	
+#ignore
+	@CollectionSize.Require(CollectionSize.ONE)
+#endignore
+	public void testEquals_EntryNotMatches() {
+		MAP.Entry KEY_VALUE_GENERIC_TYPE entry = e3();
+		assertNotSame("The Entries should match", entry, getMap().ENTRY_SET().iterator().next());
+	}
+	
+#ignore
+	@CollectionSize.Require(CollectionSize.ONE)
+#endignore
+	public void testEquals_EntryNotMatchesObject() {
+		MAP.Entry KEY_VALUE_GENERIC_TYPE entry = e3();
+		assertNotSame("The Entries should match", new AbstractMap.SimpleEntry<>(entry), getMap().ENTRY_SET().iterator().next());
+	}
+	
 	private static GENERIC_KEY_VALUE_BRACES MAP KEY_VALUE_GENERIC_TYPE newHashMap(ObjectCollection<? extends MAP.Entry KEY_VALUE_GENERIC_TYPE> entries) {
 		MAP KEY_VALUE_GENERIC_TYPE map = new HASH_MAPKV_BRACES();
 		for (MAP.Entry KEY_VALUE_GENERIC_TYPE entry : entries) {

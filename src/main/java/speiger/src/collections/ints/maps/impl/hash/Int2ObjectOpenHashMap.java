@@ -281,7 +281,7 @@ public class Int2ObjectOpenHashMap<V> extends AbstractInt2ObjectMap<V> implement
 	@Override
 	public boolean remove(Object key, Object value) {
 		Objects.requireNonNull(value);
-		if(key == null) {
+		if(key == null || ((Integer)key).intValue() == 0) {
 			if(containsNull && Objects.equals(value, values[nullIndex])) {
 				removeNullIndex();
 				return true;
@@ -535,6 +535,7 @@ public class Int2ObjectOpenHashMap<V> extends AbstractInt2ObjectMap<V> implement
 	
 	protected int findIndex(Object key) {
 		if(key == null) return containsNull ? nullIndex : -(nullIndex + 1);
+		if(((Integer)key).intValue() == 0) return containsNull ? nullIndex : -(nullIndex + 1);
 		int pos = HashUtil.mix(key.hashCode()) & mask;
 		int current = keys[pos];
 		if(current != 0) {

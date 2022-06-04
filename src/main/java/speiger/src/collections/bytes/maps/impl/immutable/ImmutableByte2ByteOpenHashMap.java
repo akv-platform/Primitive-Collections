@@ -443,6 +443,7 @@ public class ImmutableByte2ByteOpenHashMap extends AbstractByte2ByteMap implemen
 	
 	protected int findIndex(Object key) {
 		if(key == null) return containsNull ? nullIndex : -(nullIndex + 1);
+		if(((Byte)key).byteValue() == (byte)0) return containsNull ? nullIndex : -(nullIndex + 1);
 		int pos = HashUtil.mix(key.hashCode()) & mask;
 		byte current = keys[pos];
 		if(current != (byte)0) {

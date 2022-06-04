@@ -317,7 +317,7 @@ public class Short2BooleanOpenCustomHashMap extends AbstractShort2BooleanMap imp
 	@Override
 	public boolean remove(Object key, Object value) {
 		Objects.requireNonNull(value);
-		if(key == null) {
+		if(key == null || strategy.equals(((Short)key).shortValue(), (short)0)) {
 			if(containsNull && Objects.equals(value, Boolean.valueOf(values[nullIndex]))) {
 				removeNullIndex();
 				return true;
@@ -574,6 +574,7 @@ public class Short2BooleanOpenCustomHashMap extends AbstractShort2BooleanMap imp
 	protected int findIndex(Short key) {
 		if(key == null) return containsNull ? nullIndex : -(nullIndex + 1);
 		short keyType = ((Short)key).shortValue();
+		if(strategy.equals(keyType, (short)0)) return containsNull ? nullIndex : -(nullIndex + 1);
 		int pos = HashUtil.mix(strategy.hashCode(keyType)) & mask;
 		short current = keys[pos];
 		if(!strategy.equals(current, (short)0)) {

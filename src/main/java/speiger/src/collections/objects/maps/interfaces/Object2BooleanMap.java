@@ -434,7 +434,6 @@ public interface Object2BooleanMap<T> extends Map<T, Boolean>, Object2BooleanFun
 	 */
 	public interface Entry<T> extends Map.Entry<T, Boolean>
 	{
-		
 		/**
 		 * Type Specific getValue method that reduces boxing/unboxing
 		 * @return the value of a given Entry

@@ -1856,7 +1856,7 @@ public class Short2IntConcurrentOpenHashMap extends AbstractShort2IntMap impleme
 			long stamp = writeLock();
 			try
 			{
-				if(key == null) {
+				if(key == null || ((Short)key).shortValue() == (short)0) {
 					if(containsNull && Objects.equals(value, Integer.valueOf(values[nullIndex]))) {
 						removeNullIndex();
 						return true;
@@ -2127,6 +2127,7 @@ public class Short2IntConcurrentOpenHashMap extends AbstractShort2IntMap impleme
 		
 		protected int findIndex(int hash, Object key) {
 			if(key == null) return containsNull ? nullIndex : -(nullIndex + 1);
+			if(((Short)key).shortValue() == (short)0) return containsNull ? nullIndex : -(nullIndex + 1);
 			int pos = hash & mask;
 			short current = keys[pos];
 			if(current != (short)0) {

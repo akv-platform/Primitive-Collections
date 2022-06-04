@@ -187,7 +187,57 @@ public class FILE_KEY_TYPE2FILE_VALUE_TYPESortedMapNavigationTester KEY_VALUE_GE
 		} catch (NoSuchElementException e) {
 		}
 	}
-
+	
+#ignore
+	@CollectionSize.Require(ZERO)
+#endignore
+	public void testEmptyMapFirstValue() {
+		try {
+			sortedMap.FIRST_ENTRY_VALUE();
+			fail();
+		} catch (NoSuchElementException e) {
+		}
+	}
+	
+#ignore
+	@CollectionSize.Require(ZERO)
+#endignore
+	public void testEmptyMapLastValue() {
+		try {
+			sortedMap.LAST_ENTRY_VALUE();
+			fail();
+		} catch (NoSuchElementException e) {
+		}
+	}
+	
+#ignore
+	@CollectionSize.Require(ONE)
+#endignore
+	public void testSingletonMapFirstValue() {
+		assertEquals(a.ENTRY_VALUE(), sortedMap.FIRST_ENTRY_VALUE());
+	}
+	
+#ignore
+	@CollectionSize.Require(ONE)
+#endignore
+	public void testSingletonMapLastValue() {
+		assertEquals(a.ENTRY_VALUE(), sortedMap.FIRST_ENTRY_VALUE());
+	}
+	
+#ignore
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testFirstValue() {
+		assertEquals(a.ENTRY_VALUE(), sortedMap.FIRST_ENTRY_VALUE());
+	}
+	
+#ignore
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testLastValue() {
+		assertEquals(c.ENTRY_VALUE(), sortedMap.LAST_ENTRY_VALUE());
+	}
+	
 #ignore
 	@CollectionSize.Require(ONE)
 #endignore

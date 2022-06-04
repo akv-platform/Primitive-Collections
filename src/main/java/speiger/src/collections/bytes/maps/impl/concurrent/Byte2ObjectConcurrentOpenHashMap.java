@@ -1789,7 +1789,7 @@ public class Byte2ObjectConcurrentOpenHashMap<V> extends AbstractByte2ObjectMap<
 			long stamp = writeLock();
 			try
 			{
-				if(key == null) {
+				if(key == null || ((Byte)key).byteValue() == (byte)0) {
 					if(containsNull && Objects.equals(value, values[nullIndex])) {
 						removeNullIndex();
 						return true;
@@ -2060,6 +2060,7 @@ public class Byte2ObjectConcurrentOpenHashMap<V> extends AbstractByte2ObjectMap<
 		
 		protected int findIndex(int hash, Object key) {
 			if(key == null) return containsNull ? nullIndex : -(nullIndex + 1);
+			if(((Byte)key).byteValue() == (byte)0) return containsNull ? nullIndex : -(nullIndex + 1);
 			int pos = hash & mask;
 			byte current = keys[pos];
 			if(current != (byte)0) {

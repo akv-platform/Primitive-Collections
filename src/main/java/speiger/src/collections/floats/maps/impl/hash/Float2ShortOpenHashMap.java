@@ -313,7 +313,7 @@ public class Float2ShortOpenHashMap extends AbstractFloat2ShortMap implements IT
 	@Override
 	public boolean remove(Object key, Object value) {
 		Objects.requireNonNull(value);
-		if(key == null) {
+		if(key == null || Float.floatToIntBits(((Float)key).floatValue()) == 0) {
 			if(containsNull && Objects.equals(value, Short.valueOf(values[nullIndex]))) {
 				removeNullIndex();
 				return true;
@@ -566,6 +566,7 @@ public class Float2ShortOpenHashMap extends AbstractFloat2ShortMap implements IT
 	
 	protected int findIndex(Object key) {
 		if(key == null) return containsNull ? nullIndex : -(nullIndex + 1);
+		if(Float.floatToIntBits(((Float)key).floatValue()) == 0) return containsNull ? nullIndex : -(nullIndex + 1);
 		int pos = HashUtil.mix(key.hashCode()) & mask;
 		float current = keys[pos];
 		if(Float.floatToIntBits(current) != 0) {

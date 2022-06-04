@@ -1376,13 +1376,15 @@ public class Long2ObjectAVLTreeMap<V> extends AbstractLong2ObjectMap<V> implemen
 		@Override
 		public V firstValue() {
 			Node<V> entry = subLowest();
-			return entry == null ? map.getDefaultReturnValue() : entry.value;
+			if(entry == null) throw new NoSuchElementException();
+			return entry.value;
 		}
 		
 		@Override
 		public V lastValue() {
 			Node<V> entry = subHighest();
-			return entry == null ? map.getDefaultReturnValue() : entry.value;
+			if(entry == null) throw new NoSuchElementException();
+			return entry.value;
 		}
 		
 		@Override

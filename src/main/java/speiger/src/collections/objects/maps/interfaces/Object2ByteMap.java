@@ -459,7 +459,6 @@ public interface Object2ByteMap<T> extends Map<T, Byte>, Object2ByteFunction<T>
 	 */
 	public interface Entry<T> extends Map.Entry<T, Byte>
 	{
-		
 		/**
 		 * Type Specific getValue method that reduces boxing/unboxing
 		 * @return the value of a given Entry

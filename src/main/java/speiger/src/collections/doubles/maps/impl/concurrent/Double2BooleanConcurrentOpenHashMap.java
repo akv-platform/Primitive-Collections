@@ -1812,7 +1812,7 @@ public class Double2BooleanConcurrentOpenHashMap extends AbstractDouble2BooleanM
 			long stamp = writeLock();
 			try
 			{
-				if(key == null) {
+				if(key == null || Double.doubleToLongBits(((Double)key).doubleValue()) == 0) {
 					if(containsNull && Objects.equals(value, Boolean.valueOf(values[nullIndex]))) {
 						removeNullIndex();
 						return true;
@@ -2083,6 +2083,7 @@ public class Double2BooleanConcurrentOpenHashMap extends AbstractDouble2BooleanM
 		
 		protected int findIndex(int hash, Object key) {
 			if(key == null) return containsNull ? nullIndex : -(nullIndex + 1);
+			if(Double.doubleToLongBits(((Double)key).doubleValue()) == 0) return containsNull ? nullIndex : -(nullIndex + 1);
 			int pos = hash & mask;
 			double current = keys[pos];
 			if(Double.doubleToLongBits(current) != 0) {

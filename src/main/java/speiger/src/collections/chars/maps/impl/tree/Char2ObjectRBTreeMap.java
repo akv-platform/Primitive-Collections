@@ -1440,13 +1440,15 @@ public class Char2ObjectRBTreeMap<V> extends AbstractChar2ObjectMap<V> implement
 		@Override
 		public V firstValue() {
 			Node<V> entry = subLowest();
-			return entry == null ? map.getDefaultReturnValue() : entry.value;
+			if(entry == null) throw new NoSuchElementException();
+			return entry.value;
 		}
 		
 		@Override
 		public V lastValue() {
 			Node<V> entry = subHighest();
-			return entry == null ? map.getDefaultReturnValue() : entry.value;
+			if(entry == null) throw new NoSuchElementException();
+			return entry.value;
 		}
 		
 		@Override

@@ -443,6 +443,7 @@ public class ImmutableChar2CharOpenHashMap extends AbstractChar2CharMap implemen
 	
 	protected int findIndex(Object key) {
 		if(key == null) return containsNull ? nullIndex : -(nullIndex + 1);
+		if(((Character)key).charValue() == (char)0) return containsNull ? nullIndex : -(nullIndex + 1);
 		int pos = HashUtil.mix(key.hashCode()) & mask;
 		char current = keys[pos];
 		if(current != (char)0) {
