@@ -32,10 +32,11 @@ public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapContainsValueTester KEY_VALUE_GENER
 		assertTrue("containsValue(present) should return true", getMap().containsValue(VALUE_TO_OBJ(v0())));
 	}
 
+#if !VALUE_BOOLEAN
 	public void testContainsObject_no() {
 		assertFalse("containsValue(notPresent) should return false", getMap().containsValue(VALUE_TO_OBJ(v3())));
 	}
-	
+
 #if !VALUE_OBJECT
 #ignore
 	@CollectionSize.Require(absent = ZERO)
@@ -44,4 +45,5 @@ public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapContainsValueTester KEY_VALUE_GENER
 		assertFalse("containsValue(present) should return false", getMap().containsValue(null));
 	}
 #endif
+#endif	
 }
