@@ -334,7 +334,7 @@ public class Double2DoubleOpenCustomHashMap extends AbstractDouble2DoubleMap imp
 	@Override
 	public boolean remove(Object key, Object value) {
 		Objects.requireNonNull(value);
-		if(key == null || strategy.equals(((Double)key).doubleValue(), 0D)) {
+		if(key == null || (key instanceof Double && strategy.equals(((Double)key).doubleValue(), 0D))) {
 			if(containsNull && Objects.equals(value, Double.valueOf(values[nullIndex]))) {
 				removeNullIndex();
 				return true;

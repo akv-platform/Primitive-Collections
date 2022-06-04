@@ -339,7 +339,7 @@ public class Char2LongOpenCustomHashMap extends AbstractChar2LongMap implements 
 	@Override
 	public boolean remove(Object key, Object value) {
 		Objects.requireNonNull(value);
-		if(key == null || strategy.equals(((Character)key).charValue(), (char)0)) {
+		if(key == null || (key instanceof Character && strategy.equals(((Character)key).charValue(), (char)0))) {
 			if(containsNull && Objects.equals(value, Long.valueOf(values[nullIndex]))) {
 				removeNullIndex();
 				return true;

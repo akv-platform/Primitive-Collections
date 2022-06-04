@@ -307,7 +307,7 @@ public class Long2ObjectOpenCustomHashMap<V> extends AbstractLong2ObjectMap<V> i
 	@Override
 	public boolean remove(Object key, Object value) {
 		Objects.requireNonNull(value);
-		if(key == null || strategy.equals(((Long)key).longValue(), 0L)) {
+		if(key == null || (key instanceof Long && strategy.equals(((Long)key).longValue(), 0L))) {
 			if(containsNull && Objects.equals(value, values[nullIndex])) {
 				removeNullIndex();
 				return true;

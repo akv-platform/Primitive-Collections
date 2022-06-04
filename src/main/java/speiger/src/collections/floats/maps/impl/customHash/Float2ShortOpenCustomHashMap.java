@@ -339,7 +339,7 @@ public class Float2ShortOpenCustomHashMap extends AbstractFloat2ShortMap impleme
 	@Override
 	public boolean remove(Object key, Object value) {
 		Objects.requireNonNull(value);
-		if(key == null || strategy.equals(((Float)key).floatValue(), 0F)) {
+		if(key == null || (key instanceof Float && strategy.equals(((Float)key).floatValue(), 0F))) {
 			if(containsNull && Objects.equals(value, Short.valueOf(values[nullIndex]))) {
 				removeNullIndex();
 				return true;

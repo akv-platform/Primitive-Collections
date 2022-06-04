@@ -339,7 +339,7 @@ public class Long2FloatOpenCustomHashMap extends AbstractLong2FloatMap implement
 	@Override
 	public boolean remove(Object key, Object value) {
 		Objects.requireNonNull(value);
-		if(key == null || strategy.equals(((Long)key).longValue(), 0L)) {
+		if(key == null || (key instanceof Long && strategy.equals(((Long)key).longValue(), 0L))) {
 			if(containsNull && Objects.equals(value, Float.valueOf(values[nullIndex]))) {
 				removeNullIndex();
 				return true;

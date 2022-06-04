@@ -339,7 +339,7 @@ public class Double2ByteOpenCustomHashMap extends AbstractDouble2ByteMap impleme
 	@Override
 	public boolean remove(Object key, Object value) {
 		Objects.requireNonNull(value);
-		if(key == null || strategy.equals(((Double)key).doubleValue(), 0D)) {
+		if(key == null || (key instanceof Double && strategy.equals(((Double)key).doubleValue(), 0D))) {
 			if(containsNull && Objects.equals(value, Byte.valueOf(values[nullIndex]))) {
 				removeNullIndex();
 				return true;

@@ -339,7 +339,7 @@ public class Long2ByteOpenCustomHashMap extends AbstractLong2ByteMap implements 
 	@Override
 	public boolean remove(Object key, Object value) {
 		Objects.requireNonNull(value);
-		if(key == null || strategy.equals(((Long)key).longValue(), 0L)) {
+		if(key == null || (key instanceof Long && strategy.equals(((Long)key).longValue(), 0L))) {
 			if(containsNull && Objects.equals(value, Byte.valueOf(values[nullIndex]))) {
 				removeNullIndex();
 				return true;

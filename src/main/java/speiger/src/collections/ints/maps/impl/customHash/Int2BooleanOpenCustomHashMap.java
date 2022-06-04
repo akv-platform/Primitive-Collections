@@ -317,7 +317,7 @@ public class Int2BooleanOpenCustomHashMap extends AbstractInt2BooleanMap impleme
 	@Override
 	public boolean remove(Object key, Object value) {
 		Objects.requireNonNull(value);
-		if(key == null || strategy.equals(((Integer)key).intValue(), 0)) {
+		if(key == null || (key instanceof Integer && strategy.equals(((Integer)key).intValue(), 0))) {
 			if(containsNull && Objects.equals(value, Boolean.valueOf(values[nullIndex]))) {
 				removeNullIndex();
 				return true;

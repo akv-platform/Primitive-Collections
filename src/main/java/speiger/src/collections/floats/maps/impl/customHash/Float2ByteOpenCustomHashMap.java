@@ -339,7 +339,7 @@ public class Float2ByteOpenCustomHashMap extends AbstractFloat2ByteMap implement
 	@Override
 	public boolean remove(Object key, Object value) {
 		Objects.requireNonNull(value);
-		if(key == null || strategy.equals(((Float)key).floatValue(), 0F)) {
+		if(key == null || (key instanceof Float && strategy.equals(((Float)key).floatValue(), 0F))) {
 			if(containsNull && Objects.equals(value, Byte.valueOf(values[nullIndex]))) {
 				removeNullIndex();
 				return true;

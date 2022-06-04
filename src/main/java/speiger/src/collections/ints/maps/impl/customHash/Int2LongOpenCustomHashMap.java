@@ -339,7 +339,7 @@ public class Int2LongOpenCustomHashMap extends AbstractInt2LongMap implements IT
 	@Override
 	public boolean remove(Object key, Object value) {
 		Objects.requireNonNull(value);
-		if(key == null || strategy.equals(((Integer)key).intValue(), 0)) {
+		if(key == null || (key instanceof Integer && strategy.equals(((Integer)key).intValue(), 0))) {
 			if(containsNull && Objects.equals(value, Long.valueOf(values[nullIndex]))) {
 				removeNullIndex();
 				return true;

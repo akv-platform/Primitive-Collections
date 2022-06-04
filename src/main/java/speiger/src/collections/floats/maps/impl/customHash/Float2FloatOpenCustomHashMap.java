@@ -334,7 +334,7 @@ public class Float2FloatOpenCustomHashMap extends AbstractFloat2FloatMap impleme
 	@Override
 	public boolean remove(Object key, Object value) {
 		Objects.requireNonNull(value);
-		if(key == null || strategy.equals(((Float)key).floatValue(), 0F)) {
+		if(key == null || (key instanceof Float && strategy.equals(((Float)key).floatValue(), 0F))) {
 			if(containsNull && Objects.equals(value, Float.valueOf(values[nullIndex]))) {
 				removeNullIndex();
 				return true;

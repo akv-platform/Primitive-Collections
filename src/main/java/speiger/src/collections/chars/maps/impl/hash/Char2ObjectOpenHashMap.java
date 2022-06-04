@@ -281,7 +281,7 @@ public class Char2ObjectOpenHashMap<V> extends AbstractChar2ObjectMap<V> impleme
 	@Override
 	public boolean remove(Object key, Object value) {
 		Objects.requireNonNull(value);
-		if(key == null || ((Character)key).charValue() == (char)0) {
+		if(key == null || (key instanceof Character && ((Character)key).charValue() == (char)0)) {
 			if(containsNull && Objects.equals(value, values[nullIndex])) {
 				removeNullIndex();
 				return true;
@@ -535,7 +535,7 @@ public class Char2ObjectOpenHashMap<V> extends AbstractChar2ObjectMap<V> impleme
 	
 	protected int findIndex(Object key) {
 		if(key == null) return containsNull ? nullIndex : -(nullIndex + 1);
-		if(((Character)key).charValue() == (char)0) return containsNull ? nullIndex : -(nullIndex + 1);
+		if(key instanceof Character && ((Character)key).charValue() == (char)0) return containsNull ? nullIndex : -(nullIndex + 1);
 		int pos = HashUtil.mix(key.hashCode()) & mask;
 		char current = keys[pos];
 		if(current != (char)0) {

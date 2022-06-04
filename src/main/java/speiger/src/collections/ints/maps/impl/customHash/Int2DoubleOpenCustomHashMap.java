@@ -339,7 +339,7 @@ public class Int2DoubleOpenCustomHashMap extends AbstractInt2DoubleMap implement
 	@Override
 	public boolean remove(Object key, Object value) {
 		Objects.requireNonNull(value);
-		if(key == null || strategy.equals(((Integer)key).intValue(), 0)) {
+		if(key == null || (key instanceof Integer && strategy.equals(((Integer)key).intValue(), 0))) {
 			if(containsNull && Objects.equals(value, Double.valueOf(values[nullIndex]))) {
 				removeNullIndex();
 				return true;

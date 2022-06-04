@@ -339,7 +339,7 @@ public class Double2CharOpenCustomHashMap extends AbstractDouble2CharMap impleme
 	@Override
 	public boolean remove(Object key, Object value) {
 		Objects.requireNonNull(value);
-		if(key == null || strategy.equals(((Double)key).doubleValue(), 0D)) {
+		if(key == null || (key instanceof Double && strategy.equals(((Double)key).doubleValue(), 0D))) {
 			if(containsNull && Objects.equals(value, Character.valueOf(values[nullIndex]))) {
 				removeNullIndex();
 				return true;

@@ -313,7 +313,7 @@ public class Byte2CharOpenHashMap extends AbstractByte2CharMap implements ITrimm
 	@Override
 	public boolean remove(Object key, Object value) {
 		Objects.requireNonNull(value);
-		if(key == null || ((Byte)key).byteValue() == (byte)0) {
+		if(key == null || (key instanceof Byte && ((Byte)key).byteValue() == (byte)0)) {
 			if(containsNull && Objects.equals(value, Character.valueOf(values[nullIndex]))) {
 				removeNullIndex();
 				return true;
@@ -566,7 +566,7 @@ public class Byte2CharOpenHashMap extends AbstractByte2CharMap implements ITrimm
 	
 	protected int findIndex(Object key) {
 		if(key == null) return containsNull ? nullIndex : -(nullIndex + 1);
-		if(((Byte)key).byteValue() == (byte)0) return containsNull ? nullIndex : -(nullIndex + 1);
+		if(key instanceof Byte && ((Byte)key).byteValue() == (byte)0) return containsNull ? nullIndex : -(nullIndex + 1);
 		int pos = HashUtil.mix(key.hashCode()) & mask;
 		byte current = keys[pos];
 		if(current != (byte)0) {

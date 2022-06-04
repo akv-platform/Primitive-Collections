@@ -339,7 +339,7 @@ public class Float2IntOpenCustomHashMap extends AbstractFloat2IntMap implements 
 	@Override
 	public boolean remove(Object key, Object value) {
 		Objects.requireNonNull(value);
-		if(key == null || strategy.equals(((Float)key).floatValue(), 0F)) {
+		if(key == null || (key instanceof Float && strategy.equals(((Float)key).floatValue(), 0F))) {
 			if(containsNull && Objects.equals(value, Integer.valueOf(values[nullIndex]))) {
 				removeNullIndex();
 				return true;

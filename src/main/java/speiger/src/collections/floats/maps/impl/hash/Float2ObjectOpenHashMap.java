@@ -281,7 +281,7 @@ public class Float2ObjectOpenHashMap<V> extends AbstractFloat2ObjectMap<V> imple
 	@Override
 	public boolean remove(Object key, Object value) {
 		Objects.requireNonNull(value);
-		if(key == null || Float.floatToIntBits(((Float)key).floatValue()) == 0) {
+		if(key == null || (key instanceof Float && Float.floatToIntBits(((Float)key).floatValue()) == 0)) {
 			if(containsNull && Objects.equals(value, values[nullIndex])) {
 				removeNullIndex();
 				return true;
@@ -535,7 +535,7 @@ public class Float2ObjectOpenHashMap<V> extends AbstractFloat2ObjectMap<V> imple
 	
 	protected int findIndex(Object key) {
 		if(key == null) return containsNull ? nullIndex : -(nullIndex + 1);
-		if(Float.floatToIntBits(((Float)key).floatValue()) == 0) return containsNull ? nullIndex : -(nullIndex + 1);
+		if(key instanceof Float && Float.floatToIntBits(((Float)key).floatValue()) == 0) return containsNull ? nullIndex : -(nullIndex + 1);
 		int pos = HashUtil.mix(key.hashCode()) & mask;
 		float current = keys[pos];
 		if(Float.floatToIntBits(current) != 0) {

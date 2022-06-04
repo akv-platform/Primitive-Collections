@@ -307,7 +307,7 @@ public class Int2ObjectOpenCustomHashMap<V> extends AbstractInt2ObjectMap<V> imp
 	@Override
 	public boolean remove(Object key, Object value) {
 		Objects.requireNonNull(value);
-		if(key == null || strategy.equals(((Integer)key).intValue(), 0)) {
+		if(key == null || (key instanceof Integer && strategy.equals(((Integer)key).intValue(), 0))) {
 			if(containsNull && Objects.equals(value, values[nullIndex])) {
 				removeNullIndex();
 				return true;

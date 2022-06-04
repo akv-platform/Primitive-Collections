@@ -339,7 +339,7 @@ public class Int2ShortOpenCustomHashMap extends AbstractInt2ShortMap implements 
 	@Override
 	public boolean remove(Object key, Object value) {
 		Objects.requireNonNull(value);
-		if(key == null || strategy.equals(((Integer)key).intValue(), 0)) {
+		if(key == null || (key instanceof Integer && strategy.equals(((Integer)key).intValue(), 0))) {
 			if(containsNull && Objects.equals(value, Short.valueOf(values[nullIndex]))) {
 				removeNullIndex();
 				return true;

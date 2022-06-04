@@ -339,7 +339,7 @@ public class Char2FloatOpenCustomHashMap extends AbstractChar2FloatMap implement
 	@Override
 	public boolean remove(Object key, Object value) {
 		Objects.requireNonNull(value);
-		if(key == null || strategy.equals(((Character)key).charValue(), (char)0)) {
+		if(key == null || (key instanceof Character && strategy.equals(((Character)key).charValue(), (char)0))) {
 			if(containsNull && Objects.equals(value, Float.valueOf(values[nullIndex]))) {
 				removeNullIndex();
 				return true;

@@ -317,7 +317,7 @@ public class Byte2BooleanOpenCustomHashMap extends AbstractByte2BooleanMap imple
 	@Override
 	public boolean remove(Object key, Object value) {
 		Objects.requireNonNull(value);
-		if(key == null || strategy.equals(((Byte)key).byteValue(), (byte)0)) {
+		if(key == null || (key instanceof Byte && strategy.equals(((Byte)key).byteValue(), (byte)0))) {
 			if(containsNull && Objects.equals(value, Boolean.valueOf(values[nullIndex]))) {
 				removeNullIndex();
 				return true;

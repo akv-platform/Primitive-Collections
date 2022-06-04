@@ -334,7 +334,7 @@ public class Short2ShortOpenCustomHashMap extends AbstractShort2ShortMap impleme
 	@Override
 	public boolean remove(Object key, Object value) {
 		Objects.requireNonNull(value);
-		if(key == null || strategy.equals(((Short)key).shortValue(), (short)0)) {
+		if(key == null || (key instanceof Short && strategy.equals(((Short)key).shortValue(), (short)0))) {
 			if(containsNull && Objects.equals(value, Short.valueOf(values[nullIndex]))) {
 				removeNullIndex();
 				return true;

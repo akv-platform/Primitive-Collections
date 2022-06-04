@@ -313,7 +313,7 @@ public class Int2LongOpenHashMap extends AbstractInt2LongMap implements ITrimmab
 	@Override
 	public boolean remove(Object key, Object value) {
 		Objects.requireNonNull(value);
-		if(key == null || ((Integer)key).intValue() == 0) {
+		if(key == null || (key instanceof Integer && ((Integer)key).intValue() == 0)) {
 			if(containsNull && Objects.equals(value, Long.valueOf(values[nullIndex]))) {
 				removeNullIndex();
 				return true;
@@ -566,7 +566,7 @@ public class Int2LongOpenHashMap extends AbstractInt2LongMap implements ITrimmab
 	
 	protected int findIndex(Object key) {
 		if(key == null) return containsNull ? nullIndex : -(nullIndex + 1);
-		if(((Integer)key).intValue() == 0) return containsNull ? nullIndex : -(nullIndex + 1);
+		if(key instanceof Integer && ((Integer)key).intValue() == 0) return containsNull ? nullIndex : -(nullIndex + 1);
 		int pos = HashUtil.mix(key.hashCode()) & mask;
 		int current = keys[pos];
 		if(current != 0) {

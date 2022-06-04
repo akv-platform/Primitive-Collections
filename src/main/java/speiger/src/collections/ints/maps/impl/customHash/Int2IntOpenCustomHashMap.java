@@ -334,7 +334,7 @@ public class Int2IntOpenCustomHashMap extends AbstractInt2IntMap implements ITri
 	@Override
 	public boolean remove(Object key, Object value) {
 		Objects.requireNonNull(value);
-		if(key == null || strategy.equals(((Integer)key).intValue(), 0)) {
+		if(key == null || (key instanceof Integer && strategy.equals(((Integer)key).intValue(), 0))) {
 			if(containsNull && Objects.equals(value, Integer.valueOf(values[nullIndex]))) {
 				removeNullIndex();
 				return true;
