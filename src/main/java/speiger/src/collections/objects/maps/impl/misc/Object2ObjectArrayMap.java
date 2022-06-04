@@ -1049,7 +1049,9 @@ public class Object2ObjectArrayMap<T, V> extends AbstractObject2ObjectMap<T, V> 
 		@Override
 		public void remove() {
 			super.remove();
-			entry.index = -1;
+			if(entry != null && entry.index != -1) {
+				entry.index = -1;				
+			}
 		}
 		
 		@Override
@@ -1063,6 +1065,7 @@ public class Object2ObjectArrayMap<T, V> extends AbstractObject2ObjectMap<T, V> 
 		public KeyIterator(T element) {
 			index = findIndex(element);
 		}
+		
 		@Override
 		public T previous() {
 			return keys[previousEntry()];
@@ -1119,8 +1122,7 @@ public class Object2ObjectArrayMap<T, V> extends AbstractObject2ObjectMap<T, V> 
 		}
 		
 		public void remove() {
-			if(lastReturned == -1)
-				throw new IllegalStateException();
+			if(lastReturned == -1) throw new IllegalStateException();
 			removeIndex(lastReturned);
 			if(lastReturned < index)
 				index--;
@@ -1129,8 +1131,8 @@ public class Object2ObjectArrayMap<T, V> extends AbstractObject2ObjectMap<T, V> 
 		
 		public int previousEntry() {
 			if(!hasPrevious()) throw new NoSuchElementException();
-			lastReturned = index;
-			return index--;
+			index--;
+			return (lastReturned = index);
 		}
 		
 		public int nextEntry() {
@@ -1141,8 +1143,9 @@ public class Object2ObjectArrayMap<T, V> extends AbstractObject2ObjectMap<T, V> 
 		
 		public int skip(int amount) {
 			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
-			int steps = Math.min(amount, (size() - 1) - index);
+			int steps = Math.min(amount, size() - index);
 			index += steps;
+			if(steps > 0) lastReturned = Math.min(index-1, size()-1);
 			return steps;
 		}
 		
@@ -1150,6 +1153,7 @@ public class Object2ObjectArrayMap<T, V> extends AbstractObject2ObjectMap<T, V> 
 			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
 			int steps = Math.min(amount, index);
 			index -= steps;
+			if(steps > 0) lastReturned = Math.min(index, size()-1);
 			return steps;
 		}
 	}

@@ -1862,26 +1862,36 @@ public class Char2DoubleAVLTreeMap extends AbstractChar2DoubleMap implements Cha
 		class DecsendingSubEntryIterator extends SubMapEntryIterator implements ObjectBidirectionalIterator<Char2DoubleMap.Entry>
 		{
 			public DecsendingSubEntryIterator(Node first, Node forwardFence, Node backwardFence) {
-				super(first, forwardFence, backwardFence);
+				super(first, forwardFence, backwardFence, false);
+			}
+			
+			@Override
+			protected Node moveNext(Node node) {
+				return node.previous();
+			}
+			
+			@Override
+			protected Node movePrevious(Node node) {
+				return node.next();
 			}
 			
 			@Override
 			public Char2DoubleMap.Entry previous() {
 				if(!hasPrevious()) throw new NoSuchElementException();
-				return nextEntry();
+				return previousEntry();
 			}
 
 			@Override
 			public Char2DoubleMap.Entry next() {
 				if(!hasNext()) throw new NoSuchElementException();
-				return previousEntry();
+				return nextEntry();
 			}
 		}
 		
 		class AcsendingSubEntryIterator extends SubMapEntryIterator implements ObjectBidirectionalIterator<Char2DoubleMap.Entry>
 		{
 			public AcsendingSubEntryIterator(Node first, Node forwardFence, Node backwardFence) {
-				super(first, forwardFence, backwardFence);
+				super(first, forwardFence, backwardFence, true);
 			}
 
 			@Override
@@ -1900,26 +1910,36 @@ public class Char2DoubleAVLTreeMap extends AbstractChar2DoubleMap implements Cha
 		class DecsendingSubKeyIterator extends SubMapEntryIterator implements CharBidirectionalIterator
 		{
 			public DecsendingSubKeyIterator(Node first, Node forwardFence, Node backwardFence) {
-				super(first, forwardFence, backwardFence);
+				super(first, forwardFence, backwardFence, false);
+			}
+			
+			@Override
+			protected Node moveNext(Node node) {
+				return node.previous();
+			}
+			
+			@Override
+			protected Node movePrevious(Node node) {
+				return node.next();
 			}
 			
 			@Override
 			public char previousChar() {
 				if(!hasPrevious()) throw new NoSuchElementException();
-				return nextEntry().key;
+				return previousEntry().key;
 			}
 
 			@Override
 			public char nextChar() {
 				if(!hasNext()) throw new NoSuchElementException();
-				return previousEntry().key;
+				return nextEntry().key;
 			}
 		}
 		
 		class AcsendingSubKeyIterator extends SubMapEntryIterator implements CharBidirectionalIterator
 		{
 			public AcsendingSubKeyIterator(Node first, Node forwardFence, Node backwardFence) {
-				super(first, forwardFence, backwardFence);
+				super(first, forwardFence, backwardFence, true);
 			}
 
 			@Override
@@ -1938,7 +1958,7 @@ public class Char2DoubleAVLTreeMap extends AbstractChar2DoubleMap implements Cha
 		class AcsendingSubValueIterator extends SubMapEntryIterator implements DoubleBidirectionalIterator
 		{
 			public AcsendingSubValueIterator(Node first, Node forwardFence, Node backwardFence) {
-				super(first, forwardFence, backwardFence);
+				super(first, forwardFence, backwardFence, true);
 			}
 
 			@Override
@@ -1957,39 +1977,60 @@ public class Char2DoubleAVLTreeMap extends AbstractChar2DoubleMap implements Cha
 		class DecsendingSubValueIterator extends SubMapEntryIterator implements DoubleBidirectionalIterator
 		{
 			public DecsendingSubValueIterator(Node first, Node forwardFence, Node backwardFence) {
-				super(first, forwardFence, backwardFence);
+				super(first, forwardFence, backwardFence, false);
+			}
+			
+			@Override
+			protected Node moveNext(Node node) {
+				return node.previous();
+			}
+			
+			@Override
+			protected Node movePrevious(Node node) {
+				return node.next();
 			}
 			
 			@Override
 			public double previousDouble() {
 				if(!hasPrevious()) throw new NoSuchElementException();
-				return nextEntry().value;
+				return previousEntry().value;
 			}
 
 			@Override
 			public double nextDouble() {
 				if(!hasNext()) throw new NoSuchElementException();
-				return previousEntry().value;
+				return nextEntry().value;
 			}
 		}
 		
 		abstract class SubMapEntryIterator
 		{
+			final boolean isForward;
 			boolean wasForward;
 			Node lastReturned;
 			Node next;
+			Node previous;
 			boolean unboundForwardFence;
 			boolean unboundBackwardFence;
 			char forwardFence;
 			char backwardFence;
 			
-			public SubMapEntryIterator(Node first, Node forwardFence, Node backwardFence)
-			{
+			public SubMapEntryIterator(Node first, Node forwardFence, Node backwardFence, boolean isForward) {
 				next = first;
+				previous = first == null ? null : movePrevious(first);
 				this.forwardFence = forwardFence == null ? (char)0 : forwardFence.key;
 				this.backwardFence = backwardFence == null ? (char)0 : backwardFence.key;
 				unboundForwardFence = forwardFence == null;
 				unboundBackwardFence = backwardFence == null;
+				this.isForward = isForward;
+			}
+			
+			protected Node moveNext(Node node) {
+				return node.next();
+			}
+			
+			protected Node movePrevious(Node node) {
+				return node.previous();
 			}
 			
 			public boolean hasNext() {
@@ -1998,26 +2039,30 @@ public class Char2DoubleAVLTreeMap extends AbstractChar2DoubleMap implements Cha
 			
 			protected Node nextEntry() {
 				lastReturned = next;
+				previous = next;
 				Node result = next;
-				next = next.next();
-				wasForward = true;
+				next = moveNext(next);
+				wasForward = isForward;
 				return result;
 			}
 			
 			public boolean hasPrevious() {
-                return next != null && (unboundBackwardFence || next.key != backwardFence);
+                return previous != null && (unboundBackwardFence || previous.key != backwardFence);
 			}
 			
 			protected Node previousEntry() {
-				lastReturned = next;
-				Node result = next;
-				next = next.previous();
-				wasForward = false;
+				lastReturned = previous;
+				next = previous;
+				Node result = previous;
+				previous = movePrevious(previous);
+				wasForward = !isForward;
 				return result;
 			}
 			
 			public void remove() {
 				if(lastReturned == null) throw new IllegalStateException();
+				if(next == lastReturned) next = moveNext(next);
+				if(previous == lastReturned) previous = movePrevious(previous);
 				if(wasForward && lastReturned.needsSuccessor()) next = lastReturned;
 				map.removeNode(lastReturned);
 				lastReturned = null;
@@ -2306,19 +2351,29 @@ public class Char2DoubleAVLTreeMap extends AbstractChar2DoubleMap implements Cha
 	class DescendingKeyIterator extends MapEntryIterator implements CharBidirectionalIterator
 	{
 		public DescendingKeyIterator(Node first) {
-			super(first);
-		}
-
-		@Override
-		public char previousChar() {
-			if(!hasPrevious()) throw new NoSuchElementException();
-			return nextEntry().key;
+			super(first, false);
 		}
 		
 		@Override
+		protected Node moveNext(Node node) {
+			return node.previous();
+		}
+		
+		@Override
+		protected Node movePrevious(Node node) {
+			return node.next();
+		}
+		
+		@Override
+		public char previousChar() {
+			if(!hasPrevious()) throw new NoSuchElementException();
+			return previousEntry().key;
+		}
+
+		@Override
 		public char nextChar() {
 			if(!hasNext()) throw new NoSuchElementException();
-			return previousEntry().key;
+			return nextEntry().key;
 		}
 	}
 	
@@ -2326,7 +2381,7 @@ public class Char2DoubleAVLTreeMap extends AbstractChar2DoubleMap implements Cha
 	{
 		public AscendingMapEntryIterator(Node first)
 		{
-			super(first);
+			super(first, true);
 		}
 
 		@Override
@@ -2345,7 +2400,7 @@ public class Char2DoubleAVLTreeMap extends AbstractChar2DoubleMap implements Cha
 	class AscendingValueIterator extends MapEntryIterator implements DoubleBidirectionalIterator
 	{
 		public AscendingValueIterator(Node first) {
-			super(first);
+			super(first, true);
 		}
 
 		@Override
@@ -2364,7 +2419,7 @@ public class Char2DoubleAVLTreeMap extends AbstractChar2DoubleMap implements Cha
 	class AscendingKeyIterator extends MapEntryIterator implements CharBidirectionalIterator
 	{
 		public AscendingKeyIterator(Node first) {
-			super(first);
+			super(first, true);
 		}
 
 		@Override
@@ -2382,13 +2437,24 @@ public class Char2DoubleAVLTreeMap extends AbstractChar2DoubleMap implements Cha
 	
 	abstract class MapEntryIterator
 	{
+		final boolean isForward;
 		boolean wasMoved = false;
 		Node lastReturned;
 		Node next;
+		Node previous;
 		
-		public MapEntryIterator(Node first)
-		{
+		public MapEntryIterator(Node first, boolean isForward) {
 			next = first;
+			previous = first == null ? null : movePrevious(first);
+			this.isForward = isForward;
+		}
+		
+		protected Node moveNext(Node node) {
+			return node.next();
+		}
+		
+		protected Node movePrevious(Node node) {
+			return node.previous();
 		}
 		
 		public boolean hasNext() {
@@ -2397,26 +2463,30 @@ public class Char2DoubleAVLTreeMap extends AbstractChar2DoubleMap implements Cha
 		
 		protected Node nextEntry() {
 			lastReturned = next;
+			previous = next;
 			Node result = next;
-			next = next.next();
-			wasMoved = true;
+			next = moveNext(next);
+			wasMoved = isForward;
 			return result;
 		}
 		
 		public boolean hasPrevious() {
-            return next != null;
+            return previous != null;
 		}
 		
 		protected Node previousEntry() {
-			lastReturned = next;
-			Node result = next;
-			next = next.previous();
-			wasMoved = false;
+			lastReturned = previous;
+			next = previous;
+			Node result = previous;
+			previous = movePrevious(previous);
+			wasMoved = !isForward;
 			return result;
 		}
 		
 		public void remove() {
 			if(lastReturned == null) throw new IllegalStateException();
+			if(next == lastReturned) next = moveNext(next);
+			if(previous == lastReturned) previous = movePrevious(previous);
 			if(wasMoved && lastReturned.needsSuccessor()) next = lastReturned;
 			removeNode(lastReturned);
 			lastReturned = null;

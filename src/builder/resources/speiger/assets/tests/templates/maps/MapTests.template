@@ -46,6 +46,13 @@ import speiger.src.testers.PACKAGE.builder.maps.MAP_TEST_BUILDER;
 import speiger.src.testers.PACKAGE.builder.maps.ORDERED_MAP_TEST_BUILDER;
 import speiger.src.testers.PACKAGE.builder.maps.NAVIGABLE_MAP_TEST_BUILDER;
 import speiger.src.testers.PACKAGE.impl.maps.SIMPLE_MAP_TEST_GENERATOR;
+import speiger.src.testers.objects.tests.collection.ObjectCollectionIteratorTester;
+#if !SAME_TYPE && !TYPE_OBJECT
+import speiger.src.testers.PACKAGE.tests.collection.FILE_KEY_TYPECollectionIteratorTester;
+#endif
+#if !VALUE_OBJECT
+import speiger.src.testers.VALUE_PACKAGE.tests.collection.FILE_VALUE_TYPECollectionIteratorTester;
+#endif
 #if VALUE_BOOLEAN
 import speiger.src.testers.booleans.tests.collection.BooleanCollectionAddAllArrayTester;
 import speiger.src.testers.booleans.tests.collection.BooleanCollectionAddAllTester;
@@ -56,9 +63,9 @@ import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapCo
 import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapSupplyIfAbsentTester;
 import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapMergeTester;
 import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapPutIfAbsentTester;
-import speiger.src.testers.utils.TestUtils;
 #endif
 import speiger.src.testers.utils.SpecialFeature;
+import speiger.src.testers.utils.TestUtils;
 
 @SuppressWarnings("javadoc")
 public class MAP_TESTS extends TestCase
@@ -77,7 +84,8 @@ public class MAP_TESTS extends TestCase
 		suite.addTest(mapSuite("CUSTOM_HASH_MAP", (K, V) -> new CUSTOM_HASH_MAPKV_BRACES(K, V, HashStrategy.INSTANCE), getFeatures(), -1));
 		suite.addTest(orderedMapSuite("LINKED_CUSTOM_HASH_MAP", (K, V) -> new LINKED_CUSTOM_HASH_MAPKV_BRACES(K, V, HashStrategy.INSTANCE), getFeatures(), -1));
 		suite.addTest(orderedMapSuite("ARRAY_MAP", ARRAY_MAP::new, getFeatures(), -1));
-		suite.addTest(mapSuite("CONCURRENT_HASH_MAP", CONCURRENT_HASH_MAP::new, getFeatures(), -1));
+		suite.addTest(concurrentMapSuite("CONCURRENT_HASH_MAP", CONCURRENT_HASH_MAP::new, getFeatures(), 2));
+		suite.addTest(concurrentMapSuite("CONCURRENT_HASH_MAP", CONCURRENT_HASH_MAP::new, getFeatures(), 3));
 		suite.addTest(navigableMapSuite("RB_TREE_MAP", RB_TREE_MAP::new, getFeatures(), -1));
 		suite.addTest(navigableMapSuite("AVL_TREE_MAP", AVL_TREE_MAP::new, getFeatures(), -1));
 		suite.addTest(navigableMapSuite("SynchronizedRB_TREE_MAP", (K, V) -> new RB_TREE_MAPKV_BRACES(K, V).synchronize(), getLimitedFeatures(), -1));
@@ -107,6 +115,36 @@ public class MAP_TESTS extends TestCase
 #endif
 #endif
 		builder.withFeatures(getSizes(size)).withFeatures(features);
+#if VALUE_BOOLEAN
+		builder.suppressing(getSuppression());
+#endif
+		return builder.named(name).createTestSuite();
+	}
+	
+	private static Test concurrentMapSuite(String name, BiFunction<KEY_STRING_TYPE[], VALUE_STRING_TYPE[], MAP KEY_VALUE_STRING_GENERIC_TYPE> factory, Collection<Feature<?>> features, int size) {
+		SIMPLE_MAP_TEST_GENERATOR.Maps KEY_VALUE_STRING_GENERIC_TYPE generator = new SIMPLE_MAP_TEST_GENERATOR.Maps KEY_VALUE_STRING_GENERIC_TYPE(factory);
+		MAP_TEST_BUILDER KEY_VALUE_STRING_GENERIC_TYPE builder = MAP_TEST_BUILDER.using(generator);
+#if TYPE_OBJECT
+		generator.setKeys(createKeys());
+#ignore
+		builder.withFeatures(MapFeature.ALLOWS_NULL_KEYS);
+#endignore
+#endif
+#if VALUE_OBJECT
+		generator.setValues(createValues());
+#ignore
+		builder.withFeatures(MapFeature.ALLOWS_NULL_VALUES);
+#endignore
+#if SAME_TYPE
+		builder.withFeatures(MapFeature.ALLOWS_NULL_ENTRY_QUERIES);
+#endif
+#endif
+		builder.withFeatures(getSizes(size)).withFeatures(features);
+		if(size == 3) {
+			builder.suppressing(TestUtils.getSurpession(ObjectCollectionIteratorTester.class, "testIterator_unknownOrderRemoveSupported"));
+			builder.suppressing(TestUtils.getSurpession(FILE_KEY_TYPECollectionIteratorTester.class, "testIterator_unknownOrderRemoveSupported"));
+			builder.suppressing(TestUtils.getSurpession(FILE_VALUE_TYPECollectionIteratorTester.class, "testIterator_unknownOrderRemoveSupported"));
+		}
 #if VALUE_BOOLEAN
 		builder.suppressing(getSuppression());
 #endif

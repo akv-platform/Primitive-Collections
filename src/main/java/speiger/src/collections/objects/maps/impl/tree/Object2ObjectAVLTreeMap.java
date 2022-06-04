@@ -1723,26 +1723,36 @@ public class Object2ObjectAVLTreeMap<T, V> extends AbstractObject2ObjectMap<T, V
 		class DecsendingSubEntryIterator extends SubMapEntryIterator implements ObjectBidirectionalIterator<Object2ObjectMap.Entry<T, V>>
 		{
 			public DecsendingSubEntryIterator(Node<T, V> first, Node<T, V> forwardFence, Node<T, V> backwardFence) {
-				super(first, forwardFence, backwardFence);
+				super(first, forwardFence, backwardFence, false);
+			}
+			
+			@Override
+			protected Node<T, V> moveNext(Node<T, V> node) {
+				return node.previous();
+			}
+			
+			@Override
+			protected Node<T, V> movePrevious(Node<T, V> node) {
+				return node.next();
 			}
 			
 			@Override
 			public Object2ObjectMap.Entry<T, V> previous() {
 				if(!hasPrevious()) throw new NoSuchElementException();
-				return nextEntry();
+				return previousEntry();
 			}
 
 			@Override
 			public Object2ObjectMap.Entry<T, V> next() {
 				if(!hasNext()) throw new NoSuchElementException();
-				return previousEntry();
+				return nextEntry();
 			}
 		}
 		
 		class AcsendingSubEntryIterator extends SubMapEntryIterator implements ObjectBidirectionalIterator<Object2ObjectMap.Entry<T, V>>
 		{
 			public AcsendingSubEntryIterator(Node<T, V> first, Node<T, V> forwardFence, Node<T, V> backwardFence) {
-				super(first, forwardFence, backwardFence);
+				super(first, forwardFence, backwardFence, true);
 			}
 
 			@Override
@@ -1761,26 +1771,36 @@ public class Object2ObjectAVLTreeMap<T, V> extends AbstractObject2ObjectMap<T, V
 		class DecsendingSubKeyIterator extends SubMapEntryIterator implements ObjectBidirectionalIterator<T>
 		{
 			public DecsendingSubKeyIterator(Node<T, V> first, Node<T, V> forwardFence, Node<T, V> backwardFence) {
-				super(first, forwardFence, backwardFence);
+				super(first, forwardFence, backwardFence, false);
+			}
+			
+			@Override
+			protected Node<T, V> moveNext(Node<T, V> node) {
+				return node.previous();
+			}
+			
+			@Override
+			protected Node<T, V> movePrevious(Node<T, V> node) {
+				return node.next();
 			}
 			
 			@Override
 			public T previous() {
 				if(!hasPrevious()) throw new NoSuchElementException();
-				return nextEntry().key;
+				return previousEntry().key;
 			}
 
 			@Override
 			public T next() {
 				if(!hasNext()) throw new NoSuchElementException();
-				return previousEntry().key;
+				return nextEntry().key;
 			}
 		}
 		
 		class AcsendingSubKeyIterator extends SubMapEntryIterator implements ObjectBidirectionalIterator<T>
 		{
 			public AcsendingSubKeyIterator(Node<T, V> first, Node<T, V> forwardFence, Node<T, V> backwardFence) {
-				super(first, forwardFence, backwardFence);
+				super(first, forwardFence, backwardFence, true);
 			}
 
 			@Override
@@ -1799,7 +1819,7 @@ public class Object2ObjectAVLTreeMap<T, V> extends AbstractObject2ObjectMap<T, V
 		class AcsendingSubValueIterator extends SubMapEntryIterator implements ObjectBidirectionalIterator<V>
 		{
 			public AcsendingSubValueIterator(Node<T, V> first, Node<T, V> forwardFence, Node<T, V> backwardFence) {
-				super(first, forwardFence, backwardFence);
+				super(first, forwardFence, backwardFence, true);
 			}
 
 			@Override
@@ -1818,39 +1838,60 @@ public class Object2ObjectAVLTreeMap<T, V> extends AbstractObject2ObjectMap<T, V
 		class DecsendingSubValueIterator extends SubMapEntryIterator implements ObjectBidirectionalIterator<V>
 		{
 			public DecsendingSubValueIterator(Node<T, V> first, Node<T, V> forwardFence, Node<T, V> backwardFence) {
-				super(first, forwardFence, backwardFence);
+				super(first, forwardFence, backwardFence, false);
+			}
+			
+			@Override
+			protected Node<T, V> moveNext(Node<T, V> node) {
+				return node.previous();
+			}
+			
+			@Override
+			protected Node<T, V> movePrevious(Node<T, V> node) {
+				return node.next();
 			}
 			
 			@Override
 			public V previous() {
 				if(!hasPrevious()) throw new NoSuchElementException();
-				return nextEntry().value;
+				return previousEntry().value;
 			}
 
 			@Override
 			public V next() {
 				if(!hasNext()) throw new NoSuchElementException();
-				return previousEntry().value;
+				return nextEntry().value;
 			}
 		}
 		
 		abstract class SubMapEntryIterator
 		{
+			final boolean isForward;
 			boolean wasForward;
 			Node<T, V> lastReturned;
 			Node<T, V> next;
+			Node<T, V> previous;
 			boolean unboundForwardFence;
 			boolean unboundBackwardFence;
 			T forwardFence;
 			T backwardFence;
 			
-			public SubMapEntryIterator(Node<T, V> first, Node<T, V> forwardFence, Node<T, V> backwardFence)
-			{
+			public SubMapEntryIterator(Node<T, V> first, Node<T, V> forwardFence, Node<T, V> backwardFence, boolean isForward) {
 				next = first;
+				previous = first == null ? null : movePrevious(first);
 				this.forwardFence = forwardFence == null ? null : forwardFence.key;
 				this.backwardFence = backwardFence == null ? null : backwardFence.key;
 				unboundForwardFence = forwardFence == null;
 				unboundBackwardFence = backwardFence == null;
+				this.isForward = isForward;
+			}
+			
+			protected Node<T, V> moveNext(Node<T, V> node) {
+				return node.next();
+			}
+			
+			protected Node<T, V> movePrevious(Node<T, V> node) {
+				return node.previous();
 			}
 			
 			public boolean hasNext() {
@@ -1859,26 +1900,30 @@ public class Object2ObjectAVLTreeMap<T, V> extends AbstractObject2ObjectMap<T, V
 			
 			protected Node<T, V> nextEntry() {
 				lastReturned = next;
+				previous = next;
 				Node<T, V> result = next;
-				next = next.next();
-				wasForward = true;
+				next = moveNext(next);
+				wasForward = isForward;
 				return result;
 			}
 			
 			public boolean hasPrevious() {
-                return next != null && (unboundBackwardFence || next.key != backwardFence);
+                return previous != null && (unboundBackwardFence || previous.key != backwardFence);
 			}
 			
 			protected Node<T, V> previousEntry() {
-				lastReturned = next;
-				Node<T, V> result = next;
-				next = next.previous();
-				wasForward = false;
+				lastReturned = previous;
+				next = previous;
+				Node<T, V> result = previous;
+				previous = movePrevious(previous);
+				wasForward = !isForward;
 				return result;
 			}
 			
 			public void remove() {
 				if(lastReturned == null) throw new IllegalStateException();
+				if(next == lastReturned) next = moveNext(next);
+				if(previous == lastReturned) previous = movePrevious(previous);
 				if(wasForward && lastReturned.needsSuccessor()) next = lastReturned;
 				map.removeNode(lastReturned);
 				lastReturned = null;
@@ -2167,19 +2212,29 @@ public class Object2ObjectAVLTreeMap<T, V> extends AbstractObject2ObjectMap<T, V
 	class DescendingKeyIterator extends MapEntryIterator implements ObjectBidirectionalIterator<T>
 	{
 		public DescendingKeyIterator(Node<T, V> first) {
-			super(first);
-		}
-
-		@Override
-		public T previous() {
-			if(!hasPrevious()) throw new NoSuchElementException();
-			return nextEntry().key;
+			super(first, false);
 		}
 		
 		@Override
+		protected Node<T, V> moveNext(Node<T, V> node) {
+			return node.previous();
+		}
+		
+		@Override
+		protected Node<T, V> movePrevious(Node<T, V> node) {
+			return node.next();
+		}
+		
+		@Override
+		public T previous() {
+			if(!hasPrevious()) throw new NoSuchElementException();
+			return previousEntry().key;
+		}
+
+		@Override
 		public T next() {
 			if(!hasNext()) throw new NoSuchElementException();
-			return previousEntry().key;
+			return nextEntry().key;
 		}
 	}
 	
@@ -2187,7 +2242,7 @@ public class Object2ObjectAVLTreeMap<T, V> extends AbstractObject2ObjectMap<T, V
 	{
 		public AscendingMapEntryIterator(Node<T, V> first)
 		{
-			super(first);
+			super(first, true);
 		}
 
 		@Override
@@ -2206,7 +2261,7 @@ public class Object2ObjectAVLTreeMap<T, V> extends AbstractObject2ObjectMap<T, V
 	class AscendingValueIterator extends MapEntryIterator implements ObjectBidirectionalIterator<V>
 	{
 		public AscendingValueIterator(Node<T, V> first) {
-			super(first);
+			super(first, true);
 		}
 
 		@Override
@@ -2225,7 +2280,7 @@ public class Object2ObjectAVLTreeMap<T, V> extends AbstractObject2ObjectMap<T, V
 	class AscendingKeyIterator extends MapEntryIterator implements ObjectBidirectionalIterator<T>
 	{
 		public AscendingKeyIterator(Node<T, V> first) {
-			super(first);
+			super(first, true);
 		}
 
 		@Override
@@ -2243,13 +2298,24 @@ public class Object2ObjectAVLTreeMap<T, V> extends AbstractObject2ObjectMap<T, V
 	
 	abstract class MapEntryIterator
 	{
+		final boolean isForward;
 		boolean wasMoved = false;
 		Node<T, V> lastReturned;
 		Node<T, V> next;
+		Node<T, V> previous;
 		
-		public MapEntryIterator(Node<T, V> first)
-		{
+		public MapEntryIterator(Node<T, V> first, boolean isForward) {
 			next = first;
+			previous = first == null ? null : movePrevious(first);
+			this.isForward = isForward;
+		}
+		
+		protected Node<T, V> moveNext(Node<T, V> node) {
+			return node.next();
+		}
+		
+		protected Node<T, V> movePrevious(Node<T, V> node) {
+			return node.previous();
 		}
 		
 		public boolean hasNext() {
@@ -2258,26 +2324,30 @@ public class Object2ObjectAVLTreeMap<T, V> extends AbstractObject2ObjectMap<T, V
 		
 		protected Node<T, V> nextEntry() {
 			lastReturned = next;
+			previous = next;
 			Node<T, V> result = next;
-			next = next.next();
-			wasMoved = true;
+			next = moveNext(next);
+			wasMoved = isForward;
 			return result;
 		}
 		
 		public boolean hasPrevious() {
-            return next != null;
+            return previous != null;
 		}
 		
 		protected Node<T, V> previousEntry() {
-			lastReturned = next;
-			Node<T, V> result = next;
-			next = next.previous();
-			wasMoved = false;
+			lastReturned = previous;
+			next = previous;
+			Node<T, V> result = previous;
+			previous = movePrevious(previous);
+			wasMoved = !isForward;
 			return result;
 		}
 		
 		public void remove() {
 			if(lastReturned == null) throw new IllegalStateException();
+			if(next == lastReturned) next = moveNext(next);
+			if(previous == lastReturned) previous = movePrevious(previous);
 			if(wasMoved && lastReturned.needsSuccessor()) next = lastReturned;
 			removeNode(lastReturned);
 			lastReturned = null;

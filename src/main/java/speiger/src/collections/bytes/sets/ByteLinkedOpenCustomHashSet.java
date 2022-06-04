@@ -687,6 +687,28 @@ public class ByteLinkedOpenCustomHashSet extends ByteOpenCustomHashSet implement
 		}
 		
 		@Override
+		public int skip(int amount) {
+			int result = 0;
+			while(next != -1 && result != amount) {
+				current = previous = next;
+				next = (int)(links[current]);
+				result++;
+			}
+			return result;
+		}
+		
+		@Override
+		public int back(int amount) {
+			int result = 0;
+			while(previous != -1 && result != amount) {
+				current = next = previous;
+				previous = (int)(links[current] >> 32);
+				result++;
+			}
+			return result;
+		}
+		
+		@Override
 		public int nextIndex() {
 			ensureIndexKnown();
 			return index;
@@ -744,9 +766,8 @@ public class ByteLinkedOpenCustomHashSet extends ByteOpenCustomHashSet implement
 		@Override
 		public byte previousByte() {
 			if(!hasPrevious()) throw new NoSuchElementException();
-			current = previous;
+			current = next = previous;
 			previous = (int)(links[current] >> 32);
-			next = current;
 			if(index >= 0) index--;
 			return keys[current];
 		}
@@ -754,9 +775,8 @@ public class ByteLinkedOpenCustomHashSet extends ByteOpenCustomHashSet implement
 		@Override
 		public byte nextByte() {
 			if(!hasNext()) throw new NoSuchElementException();
-			current = next;
+			current = previous = next;
 			next = (int)(links[current]);
-			previous = current;
 			if(index >= 0) index++;
 			return keys[current];
 		}

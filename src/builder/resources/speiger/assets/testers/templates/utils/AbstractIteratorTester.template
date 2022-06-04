@@ -286,8 +286,9 @@ public abstract class ABSTRACT_ITERATOR_TESTER KEY_GENERIC_TYPE
 		MultiExceptionListIterator reference = new MultiExceptionListIterator(expectedElements);
 		ITERATOR KEY_GENERIC_TYPE target = newTargetIterator();
 		for (int i = 0; i < stimuli.length; i++) {
+			String s = Arrays.asList(stimuli)+", Index: "+i;
 			try {
-				stimuli[i].executeAndCompare(reference, target);
+				stimuli[i].executeAndCompare(reference, target, s);
 				verify(reference.getElements());
 			} catch (AssertionFailedError cause) {
 			    AssertionFailedError assertionFailedError = new AssertionFailedError(String.valueOf("failed with stimuli " + subListCopy(stimuli, i + 1)));
@@ -362,7 +363,7 @@ public abstract class ABSTRACT_ITERATOR_TESTER KEY_GENERIC_TYPE
 		}
 
 		if (targetException == null) {
-			Assert.fail("Target failed to throw " + referenceException);
+			Assert.fail("Target failed to throw " + referenceException+", Stimuli: "+Arrays.asList(stimuli));
 		}
 
 		/*
@@ -433,7 +434,7 @@ public abstract class ABSTRACT_ITERATOR_TESTER KEY_GENERIC_TYPE
 			this.toString = toString;
 		}
 
-		abstract void executeAndCompare(LIST_ITERATOR NO_GENERIC_TYPE reference, E target);
+		abstract void executeAndCompare(LIST_ITERATOR NO_GENERIC_TYPE reference, E target, String stimuli);
 
 		@Override
 		public String toString() {
@@ -443,13 +444,13 @@ public abstract class ABSTRACT_ITERATOR_TESTER KEY_GENERIC_TYPE
 
 	Stimulus<ITERATOR NO_GENERIC_TYPE> hasNext = new Stimulus<ITERATOR NO_GENERIC_TYPE>("hasNext") {
 		@Override
-		void executeAndCompare(LIST_ITERATOR NO_GENERIC_TYPE reference, ITERATOR NO_GENERIC_TYPE target) {
-			Assert.assertEquals(reference.hasNext(), target.hasNext());
+		void executeAndCompare(LIST_ITERATOR NO_GENERIC_TYPE reference, ITERATOR NO_GENERIC_TYPE target, String stimuli) {
+			Assert.assertEquals("hasNext wasn't matching. Stimuli: "+stimuli, reference.hasNext(), target.hasNext());
 		}
 	};
 	Stimulus<ITERATOR NO_GENERIC_TYPE> next = new Stimulus<ITERATOR NO_GENERIC_TYPE>("next") {
 		@Override
-		void executeAndCompare(LIST_ITERATOR NO_GENERIC_TYPE reference, ITERATOR NO_GENERIC_TYPE target) {
+		void executeAndCompare(LIST_ITERATOR NO_GENERIC_TYPE reference, ITERATOR NO_GENERIC_TYPE target, String stimuli) {
 #ignore
 			internalExecuteAndCompare(reference, target, NEXT_METHOD);
 #endignore
@@ -457,58 +458,71 @@ public abstract class ABSTRACT_ITERATOR_TESTER KEY_GENERIC_TYPE
 	};
 	Stimulus<ITERATOR NO_GENERIC_TYPE> remove = new Stimulus<ITERATOR NO_GENERIC_TYPE>("remove") {
 		@Override
-		void executeAndCompare(LIST_ITERATOR NO_GENERIC_TYPE reference, ITERATOR NO_GENERIC_TYPE target) {
+		void executeAndCompare(LIST_ITERATOR NO_GENERIC_TYPE reference, ITERATOR NO_GENERIC_TYPE target, String stimuli) {
 #ignore
 			internalExecuteAndCompare(reference, target, REMOVE_METHOD);
 #endignore
 		}
 	};
-
+	Stimulus<ITERATOR NO_GENERIC_TYPE> skip = new Stimulus<ITERATOR NO_GENERIC_TYPE>("skip") {
+		@Override
+		void executeAndCompare(LIST_ITERATOR NO_GENERIC_TYPE reference, ITERATOR NO_GENERIC_TYPE target, String stimuli) {
+			Assert.assertEquals("skip wasn't matching. Stimuli: "+stimuli, reference.skip(1), target.skip(1));
+		}
+	};
+	
 	@SuppressWarnings("unchecked")
 	List<Stimulus<ITERATOR NO_GENERIC_TYPE>> iteratorStimuli() {
-		return Arrays.asList(hasNext, next, remove);
+		return Arrays.asList(hasNext, skip, next, remove);
 	}
 	
 	Stimulus<BI_ITERATOR NO_GENERIC_TYPE> hasPrevious = new Stimulus<BI_ITERATOR NO_GENERIC_TYPE>("hasPrevious") {
 		@Override
-		void executeAndCompare(LIST_ITERATOR NO_GENERIC_TYPE reference, BI_ITERATOR NO_GENERIC_TYPE target) {
-			Assert.assertEquals(reference.hasPrevious(), target.hasPrevious());
+		void executeAndCompare(LIST_ITERATOR NO_GENERIC_TYPE reference, BI_ITERATOR NO_GENERIC_TYPE target, String stimuli) {
+			Assert.assertEquals("hasPrevious wasn't matching. Stimuli: "+stimuli, reference.hasPrevious(), target.hasPrevious());
 		}
 	};
 	Stimulus<BI_ITERATOR NO_GENERIC_TYPE> previous = new Stimulus<BI_ITERATOR NO_GENERIC_TYPE>("previous") {
 		@Override
-		void executeAndCompare(LIST_ITERATOR NO_GENERIC_TYPE reference, BI_ITERATOR NO_GENERIC_TYPE target) {
+		void executeAndCompare(LIST_ITERATOR NO_GENERIC_TYPE reference, BI_ITERATOR NO_GENERIC_TYPE target, String stimuli) {
 #ignore
 			internalExecuteAndCompare(reference, target, PREVIOUS_METHOD);
 #endignore
 		}
 	};
+	Stimulus<BI_ITERATOR NO_GENERIC_TYPE> back = new Stimulus<BI_ITERATOR NO_GENERIC_TYPE>("back") {
+		@Override
+		void executeAndCompare(LIST_ITERATOR NO_GENERIC_TYPE reference, BI_ITERATOR NO_GENERIC_TYPE target, String stimuli) {
+			Assert.assertEquals("back wasn't matching. Stimuli: "+stimuli, reference.back(1), target.back(1));
+		}
+	};
+	
 	
 	List<Stimulus<BI_ITERATOR NO_GENERIC_TYPE>> biIteratorStimuli() {
-		return Arrays.asList(hasPrevious, previous);
+		return Arrays.asList(hasPrevious, back, previous);
 	}
 	
 	Stimulus<LIST_ITERATOR NO_GENERIC_TYPE> nextIndex = new Stimulus<LIST_ITERATOR NO_GENERIC_TYPE>("nextIndex") {
 		@Override
-		void executeAndCompare(LIST_ITERATOR NO_GENERIC_TYPE reference, LIST_ITERATOR NO_GENERIC_TYPE target) {
-			Assert.assertEquals(reference.nextIndex(), target.nextIndex());
+		void executeAndCompare(LIST_ITERATOR NO_GENERIC_TYPE reference, LIST_ITERATOR NO_GENERIC_TYPE target, String stimuli) {
+			Assert.assertEquals("nextIndex wasn't matching. Stimuli: "+stimuli, reference.nextIndex(), target.nextIndex());
 		}
 	};
 	Stimulus<LIST_ITERATOR NO_GENERIC_TYPE> previousIndex = new Stimulus<LIST_ITERATOR NO_GENERIC_TYPE>("previousIndex") {
 		@Override
-		void executeAndCompare(LIST_ITERATOR NO_GENERIC_TYPE reference, LIST_ITERATOR NO_GENERIC_TYPE target) {
-			Assert.assertEquals(reference.previousIndex(), target.previousIndex());
+		void executeAndCompare(LIST_ITERATOR NO_GENERIC_TYPE reference, LIST_ITERATOR NO_GENERIC_TYPE target, String stimuli) {
+			Assert.assertEquals("previous wasn't matching. Stimuli: "+stimuli, reference.previousIndex(), target.previousIndex());
 		}
 	};
 	Stimulus<LIST_ITERATOR NO_GENERIC_TYPE> add = new Stimulus<LIST_ITERATOR NO_GENERIC_TYPE>("add") {
 		@Override
-		void executeAndCompare(LIST_ITERATOR NO_GENERIC_TYPE reference, LIST_ITERATOR NO_GENERIC_TYPE target) {
+		void executeAndCompare(LIST_ITERATOR NO_GENERIC_TYPE reference, LIST_ITERATOR NO_GENERIC_TYPE target, String stimuli) {
 			internalExecuteAndCompare(reference, target, newAddMethod());
 		}
 	};
 	Stimulus<LIST_ITERATOR NO_GENERIC_TYPE> set = new Stimulus<LIST_ITERATOR NO_GENERIC_TYPE>("set") {
 		@Override
-		void executeAndCompare(LIST_ITERATOR NO_GENERIC_TYPE reference, LIST_ITERATOR NO_GENERIC_TYPE target) {
+		void executeAndCompare(LIST_ITERATOR NO_GENERIC_TYPE reference, LIST_ITERATOR NO_GENERIC_TYPE target, String stimuli) {
 			internalExecuteAndCompare(reference, target, newSetMethod());
 		}
 	};

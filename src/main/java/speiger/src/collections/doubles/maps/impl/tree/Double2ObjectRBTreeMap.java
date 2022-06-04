@@ -1852,26 +1852,36 @@ public class Double2ObjectRBTreeMap<V> extends AbstractDouble2ObjectMap<V> imple
 		class DecsendingSubEntryIterator extends SubMapEntryIterator implements ObjectBidirectionalIterator<Double2ObjectMap.Entry<V>>
 		{
 			public DecsendingSubEntryIterator(Node<V> first, Node<V> forwardFence, Node<V> backwardFence) {
-				super(first, forwardFence, backwardFence);
+				super(first, forwardFence, backwardFence, false);
+			}
+			
+			@Override
+			protected Node<V> moveNext(Node<V> node) {
+				return node.previous();
+			}
+			
+			@Override
+			protected Node<V> movePrevious(Node<V> node) {
+				return node.next();
 			}
 			
 			@Override
 			public Double2ObjectMap.Entry<V> previous() {
 				if(!hasPrevious()) throw new NoSuchElementException();
-				return nextEntry();
+				return previousEntry();
 			}
 
 			@Override
 			public Double2ObjectMap.Entry<V> next() {
 				if(!hasNext()) throw new NoSuchElementException();
-				return previousEntry();
+				return nextEntry();
 			}
 		}
 		
 		class AcsendingSubEntryIterator extends SubMapEntryIterator implements ObjectBidirectionalIterator<Double2ObjectMap.Entry<V>>
 		{
 			public AcsendingSubEntryIterator(Node<V> first, Node<V> forwardFence, Node<V> backwardFence) {
-				super(first, forwardFence, backwardFence);
+				super(first, forwardFence, backwardFence, true);
 			}
 
 			@Override
@@ -1890,26 +1900,36 @@ public class Double2ObjectRBTreeMap<V> extends AbstractDouble2ObjectMap<V> imple
 		class DecsendingSubKeyIterator extends SubMapEntryIterator implements DoubleBidirectionalIterator
 		{
 			public DecsendingSubKeyIterator(Node<V> first, Node<V> forwardFence, Node<V> backwardFence) {
-				super(first, forwardFence, backwardFence);
+				super(first, forwardFence, backwardFence, false);
+			}
+			
+			@Override
+			protected Node<V> moveNext(Node<V> node) {
+				return node.previous();
+			}
+			
+			@Override
+			protected Node<V> movePrevious(Node<V> node) {
+				return node.next();
 			}
 			
 			@Override
 			public double previousDouble() {
 				if(!hasPrevious()) throw new NoSuchElementException();
-				return nextEntry().key;
+				return previousEntry().key;
 			}
 
 			@Override
 			public double nextDouble() {
 				if(!hasNext()) throw new NoSuchElementException();
-				return previousEntry().key;
+				return nextEntry().key;
 			}
 		}
 		
 		class AcsendingSubKeyIterator extends SubMapEntryIterator implements DoubleBidirectionalIterator
 		{
 			public AcsendingSubKeyIterator(Node<V> first, Node<V> forwardFence, Node<V> backwardFence) {
-				super(first, forwardFence, backwardFence);
+				super(first, forwardFence, backwardFence, true);
 			}
 
 			@Override
@@ -1928,7 +1948,7 @@ public class Double2ObjectRBTreeMap<V> extends AbstractDouble2ObjectMap<V> imple
 		class AcsendingSubValueIterator extends SubMapEntryIterator implements ObjectBidirectionalIterator<V>
 		{
 			public AcsendingSubValueIterator(Node<V> first, Node<V> forwardFence, Node<V> backwardFence) {
-				super(first, forwardFence, backwardFence);
+				super(first, forwardFence, backwardFence, true);
 			}
 
 			@Override
@@ -1947,39 +1967,60 @@ public class Double2ObjectRBTreeMap<V> extends AbstractDouble2ObjectMap<V> imple
 		class DecsendingSubValueIterator extends SubMapEntryIterator implements ObjectBidirectionalIterator<V>
 		{
 			public DecsendingSubValueIterator(Node<V> first, Node<V> forwardFence, Node<V> backwardFence) {
-				super(first, forwardFence, backwardFence);
+				super(first, forwardFence, backwardFence, false);
+			}
+			
+			@Override
+			protected Node<V> moveNext(Node<V> node) {
+				return node.previous();
+			}
+			
+			@Override
+			protected Node<V> movePrevious(Node<V> node) {
+				return node.next();
 			}
 			
 			@Override
 			public V previous() {
 				if(!hasPrevious()) throw new NoSuchElementException();
-				return nextEntry().value;
+				return previousEntry().value;
 			}
 
 			@Override
 			public V next() {
 				if(!hasNext()) throw new NoSuchElementException();
-				return previousEntry().value;
+				return nextEntry().value;
 			}
 		}
 		
 		abstract class SubMapEntryIterator
 		{
+			final boolean isForward;
 			boolean wasForward;
 			Node<V> lastReturned;
 			Node<V> next;
+			Node<V> previous;
 			boolean unboundForwardFence;
 			boolean unboundBackwardFence;
 			double forwardFence;
 			double backwardFence;
 			
-			public SubMapEntryIterator(Node<V> first, Node<V> forwardFence, Node<V> backwardFence)
-			{
+			public SubMapEntryIterator(Node<V> first, Node<V> forwardFence, Node<V> backwardFence, boolean isForward) {
 				next = first;
+				previous = first == null ? null : movePrevious(first);
 				this.forwardFence = forwardFence == null ? 0D : forwardFence.key;
 				this.backwardFence = backwardFence == null ? 0D : backwardFence.key;
 				unboundForwardFence = forwardFence == null;
 				unboundBackwardFence = backwardFence == null;
+				this.isForward = isForward;
+			}
+			
+			protected Node<V> moveNext(Node<V> node) {
+				return node.next();
+			}
+			
+			protected Node<V> movePrevious(Node<V> node) {
+				return node.previous();
 			}
 			
 			public boolean hasNext() {
@@ -1988,26 +2029,30 @@ public class Double2ObjectRBTreeMap<V> extends AbstractDouble2ObjectMap<V> imple
 			
 			protected Node<V> nextEntry() {
 				lastReturned = next;
+				previous = next;
 				Node<V> result = next;
-				next = next.next();
-				wasForward = true;
+				next = moveNext(next);
+				wasForward = isForward;
 				return result;
 			}
 			
 			public boolean hasPrevious() {
-                return next != null && (unboundBackwardFence || next.key != backwardFence);
+                return previous != null && (unboundBackwardFence || previous.key != backwardFence);
 			}
 			
 			protected Node<V> previousEntry() {
-				lastReturned = next;
-				Node<V> result = next;
-				next = next.previous();
-				wasForward = false;
+				lastReturned = previous;
+				next = previous;
+				Node<V> result = previous;
+				previous = movePrevious(previous);
+				wasForward = !isForward;
 				return result;
 			}
 			
 			public void remove() {
 				if(lastReturned == null) throw new IllegalStateException();
+				if(next == lastReturned) next = moveNext(next);
+				if(previous == lastReturned) previous = movePrevious(previous);
 				if(wasForward && lastReturned.needsSuccessor()) next = lastReturned;
 				map.removeNode(lastReturned);
 				lastReturned = null;
@@ -2296,19 +2341,29 @@ public class Double2ObjectRBTreeMap<V> extends AbstractDouble2ObjectMap<V> imple
 	class DescendingKeyIterator extends MapEntryIterator implements DoubleBidirectionalIterator
 	{
 		public DescendingKeyIterator(Node<V> first) {
-			super(first);
-		}
-
-		@Override
-		public double previousDouble() {
-			if(!hasPrevious()) throw new NoSuchElementException();
-			return nextEntry().key;
+			super(first, false);
 		}
 		
 		@Override
+		protected Node<V> moveNext(Node<V> node) {
+			return node.previous();
+		}
+		
+		@Override
+		protected Node<V> movePrevious(Node<V> node) {
+			return node.next();
+		}
+		
+		@Override
+		public double previousDouble() {
+			if(!hasPrevious()) throw new NoSuchElementException();
+			return previousEntry().key;
+		}
+
+		@Override
 		public double nextDouble() {
 			if(!hasNext()) throw new NoSuchElementException();
-			return previousEntry().key;
+			return nextEntry().key;
 		}
 	}
 	
@@ -2316,7 +2371,7 @@ public class Double2ObjectRBTreeMap<V> extends AbstractDouble2ObjectMap<V> imple
 	{
 		public AscendingMapEntryIterator(Node<V> first)
 		{
-			super(first);
+			super(first, true);
 		}
 
 		@Override
@@ -2335,7 +2390,7 @@ public class Double2ObjectRBTreeMap<V> extends AbstractDouble2ObjectMap<V> imple
 	class AscendingValueIterator extends MapEntryIterator implements ObjectBidirectionalIterator<V>
 	{
 		public AscendingValueIterator(Node<V> first) {
-			super(first);
+			super(first, true);
 		}
 
 		@Override
@@ -2354,7 +2409,7 @@ public class Double2ObjectRBTreeMap<V> extends AbstractDouble2ObjectMap<V> imple
 	class AscendingKeyIterator extends MapEntryIterator implements DoubleBidirectionalIterator
 	{
 		public AscendingKeyIterator(Node<V> first) {
-			super(first);
+			super(first, true);
 		}
 
 		@Override
@@ -2372,13 +2427,24 @@ public class Double2ObjectRBTreeMap<V> extends AbstractDouble2ObjectMap<V> imple
 	
 	abstract class MapEntryIterator
 	{
+		final boolean isForward;
 		boolean wasMoved = false;
 		Node<V> lastReturned;
 		Node<V> next;
+		Node<V> previous;
 		
-		public MapEntryIterator(Node<V> first)
-		{
+		public MapEntryIterator(Node<V> first, boolean isForward) {
 			next = first;
+			previous = first == null ? null : movePrevious(first);
+			this.isForward = isForward;
+		}
+		
+		protected Node<V> moveNext(Node<V> node) {
+			return node.next();
+		}
+		
+		protected Node<V> movePrevious(Node<V> node) {
+			return node.previous();
 		}
 		
 		public boolean hasNext() {
@@ -2387,26 +2453,30 @@ public class Double2ObjectRBTreeMap<V> extends AbstractDouble2ObjectMap<V> imple
 		
 		protected Node<V> nextEntry() {
 			lastReturned = next;
+			previous = next;
 			Node<V> result = next;
-			next = next.next();
-			wasMoved = true;
+			next = moveNext(next);
+			wasMoved = isForward;
 			return result;
 		}
 		
 		public boolean hasPrevious() {
-            return next != null;
+            return previous != null;
 		}
 		
 		protected Node<V> previousEntry() {
-			lastReturned = next;
-			Node<V> result = next;
-			next = next.previous();
-			wasMoved = false;
+			lastReturned = previous;
+			next = previous;
+			Node<V> result = previous;
+			previous = movePrevious(previous);
+			wasMoved = !isForward;
 			return result;
 		}
 		
 		public void remove() {
 			if(lastReturned == null) throw new IllegalStateException();
+			if(next == lastReturned) next = moveNext(next);
+			if(previous == lastReturned) previous = movePrevious(previous);
 			if(wasMoved && lastReturned.needsSuccessor()) next = lastReturned;
 			removeNode(lastReturned);
 			lastReturned = null;

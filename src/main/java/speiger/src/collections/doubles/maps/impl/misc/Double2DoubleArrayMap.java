@@ -1137,7 +1137,9 @@ public class Double2DoubleArrayMap extends AbstractDouble2DoubleMap implements D
 		@Override
 		public void remove() {
 			super.remove();
-			entry.index = -1;
+			if(entry != null && entry.index != -1) {
+				entry.index = -1;				
+			}
 		}
 		
 		@Override
@@ -1151,6 +1153,7 @@ public class Double2DoubleArrayMap extends AbstractDouble2DoubleMap implements D
 		public KeyIterator(double element) {
 			index = findIndex(element);
 		}
+		
 		@Override
 		public double previousDouble() {
 			return keys[previousEntry()];
@@ -1207,8 +1210,7 @@ public class Double2DoubleArrayMap extends AbstractDouble2DoubleMap implements D
 		}
 		
 		public void remove() {
-			if(lastReturned == -1)
-				throw new IllegalStateException();
+			if(lastReturned == -1) throw new IllegalStateException();
 			removeIndex(lastReturned);
 			if(lastReturned < index)
 				index--;
@@ -1217,8 +1219,8 @@ public class Double2DoubleArrayMap extends AbstractDouble2DoubleMap implements D
 		
 		public int previousEntry() {
 			if(!hasPrevious()) throw new NoSuchElementException();
-			lastReturned = index;
-			return index--;
+			index--;
+			return (lastReturned = index);
 		}
 		
 		public int nextEntry() {
@@ -1229,8 +1231,9 @@ public class Double2DoubleArrayMap extends AbstractDouble2DoubleMap implements D
 		
 		public int skip(int amount) {
 			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
-			int steps = Math.min(amount, (size() - 1) - index);
+			int steps = Math.min(amount, size() - index);
 			index += steps;
+			if(steps > 0) lastReturned = Math.min(index-1, size()-1);
 			return steps;
 		}
 		
@@ -1238,6 +1241,7 @@ public class Double2DoubleArrayMap extends AbstractDouble2DoubleMap implements D
 			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
 			int steps = Math.min(amount, index);
 			index -= steps;
+			if(steps > 0) lastReturned = Math.min(index, size()-1);
 			return steps;
 		}
 	}

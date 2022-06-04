@@ -36,8 +36,8 @@ import speiger.src.testers.PACKAGE.builder.SET_TEST_BUILDER;
 #if TYPE_OBJECT
 import speiger.src.testers.PACKAGE.generators.TEST_NAVIGABLE_SET_GENERATOR;
 import speiger.src.testers.PACKAGE.generators.TEST_ORDERED_SET_GENERATOR;
-import speiger.src.testers.PACKAGE.generators.TEST_SET_GENERATOR;
 #endif
+import speiger.src.testers.PACKAGE.generators.TEST_SET_GENERATOR;
 import speiger.src.testers.PACKAGE.impl.SIMPLE_TEST_GENERATOR;
 import speiger.src.testers.utils.SpecialFeature;
 
@@ -53,12 +53,12 @@ public class SET_TESTS extends TestCase
 	}
 	
 	public static void suite(TestSuite suite) {
-		suite.addTest(setSuite("HASH_SET", HASH_SET::new, getFeatures(), -1));
+		suite.addTest(setSuite("HASH_SET", HASH_SET::new, getFeatures(), -1, true));
 		suite.addTest(orderedSetSuite("LINKED_HASH_SET", LINKED_HASH_SET::new, getFeatures(), -1));
-		suite.addTest(setSuite("CUSTOM_HASH_SET", T -> new CUSTOM_HASH_SETBRACES(T, HashStrategy.INSTANCE), getFeatures(), -1));
+		suite.addTest(setSuite("CUSTOM_HASH_SET", T -> new CUSTOM_HASH_SETBRACES(T, HashStrategy.INSTANCE), getFeatures(), -1, true));
 		suite.addTest(orderedSetSuite("LINKED_CUSTOM_HASH_SET", T -> new LINKED_CUSTOM_HASH_SETBRACES(T, HashStrategy.INSTANCE), getFeatures(), -1));
 		suite.addTest(orderedSetSuite("IMMUTABLE_HASH_SET", IMMUTABLE_HASH_SET::new, getImmutableFeatures(), -1));
-		suite.addTest(setSuite("ARRAY_SET", ARRAY_SET::new, getFeatures(), -1));
+		suite.addTest(setSuite("ARRAY_SET", ARRAY_SET::new, getFeatures(), -1, false));
 #if TYPE_OBJECT
 		suite.addTest(navigableSetSuite("RB_TREE_SET", RB_TREE_SET::new, getFeatures(), false, -1));
 		suite.addTest(navigableSetSuite("AVL_TREE_SET", AVL_TREE_SET::new, getFeatures(), false, -1));
@@ -72,15 +72,15 @@ public class SET_TESTS extends TestCase
 		suite.addTest(navigableSetSuite("Synchronized RB_TREE_SET", T -> new RB_TREE_SET(T).synchronize(), getFeatures(), -1));
 		suite.addTest(navigableSetSuite("Unmodifiable RB_TREE_SET", T -> new RB_TREE_SET(T).unmodifiable(), getImmutableFeatures(), -1));
 #endif
-		suite.addTest(setSuite("Empty SET", T -> SETS.empty(), getImmutableFeatures(), 0));
-		suite.addTest(setSuite("Singleton SET", T -> SETS.singleton(T[0]), getImmutableFeatures(), 1));
+		suite.addTest(setSuite("Empty SET", T -> SETS.empty(), getImmutableFeatures(), 0, false));
+		suite.addTest(setSuite("Singleton SET", T -> SETS.singleton(T[0]), getImmutableFeatures(), 1, false));
 		suite.addTest(orderedSetSuite("Synchronized LINKED_HASH_SET", T -> new LINKED_HASH_SETBRACES(T).synchronize(), getFeatures(), -1));
 		suite.addTest(orderedSetSuite("Unmodifiable LINKED_HASH_SET", T -> new LINKED_HASH_SETBRACES(T).unmodifiable(), getImmutableFeatures(), -1));
 	}
 		
 #if TYPE_OBJECT
-	public static Test setSuite(String name, Function<String[], SET<String>> factory, Collection<Feature<?>> features, int size) {
-		return SET_TEST_BUILDER.using((TEST_SET_GENERATOR<String>)new SIMPLE_TEST_GENERATOR.SetsBRACES(factory).setElements(createStrings())).named(name)
+	public static Test setSuite(String name, Function<String[], SET<String>> factory, Collection<Feature<?>> features, int size, boolean sorted) {
+		return SET_TEST_BUILDER.using((TEST_SET_GENERATOR<String>)new SIMPLE_TEST_GENERATOR.SetsBRACES(factory).setElements(sorted ? createSortedStrings() : createStrings())).named(name)
 #ignore
 			.withFeatures(getSizes(size)).withFeatures(CollectionFeature.ALLOWS_NULL_VALUES).withFeatures(features).createTestSuite();
 #endignore
@@ -113,9 +113,13 @@ public class SET_TESTS extends TestCase
 	private static String[] createStrings() {
 		return new String[]{"b", "a", "c", "d", "e", "!! a", "!! b", "~~ a", "~~ b"};
 	}
+	
+	private static String[] createSortedStrings() {
+		return new String[]{"a", "b", "c", "d", "e", "!! a", "!! b", "~~ a", "~~ b"};
+	}
 #else
-	public static Test setSuite(String name, Function<KEY_TYPE[], SET KEY_GENERIC_TYPE> factory, Collection<Feature<?>> features, int size) {
-		return SET_TEST_BUILDER.using(new SIMPLE_TEST_GENERATOR.SetsBRACES(factory)).named(name)
+	public static Test setSuite(String name, Function<KEY_TYPE[], SET KEY_GENERIC_TYPE> factory, Collection<Feature<?>> features, int size, boolean sorted) {
+		return SET_TEST_BUILDER.using((TEST_SET_GENERATOR)new SIMPLE_TEST_GENERATOR.SetsBRACES(factory).setSorted(sorted)).named(name)
 #ignore
 			.withFeatures(getSizes(size)).withFeatures(features).createTestSuite();
 #endignore

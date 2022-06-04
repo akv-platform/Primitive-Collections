@@ -816,8 +816,8 @@ public class ObjectArraySet<T> extends AbstractObjectSet<T> implements ObjectOrd
 		@Override
 		public T previous() {
 			if(!hasPrevious()) throw new NoSuchElementException();
-			lastReturned = index;
-			return data[index--];
+			--index;
+			return data[(lastReturned = index)];
 		}
 		
 		@Override
@@ -847,8 +847,9 @@ public class ObjectArraySet<T> extends AbstractObjectSet<T> implements ObjectOrd
 		@Override
 		public int skip(int amount) {
 			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
-			int steps = Math.min(amount, (size() - 1) - index);
+			int steps = Math.min(amount, size() - index);
 			index += steps;
+			if(steps > 0) lastReturned = Math.min(index-1, size()-1);
 			return steps;
 		}
 		
@@ -857,6 +858,7 @@ public class ObjectArraySet<T> extends AbstractObjectSet<T> implements ObjectOrd
 			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
 			int steps = Math.min(amount, index);
 			index -= steps;
+			if(steps > 0) lastReturned = Math.min(index, size()-1);
 			return steps;
 		}
 	}

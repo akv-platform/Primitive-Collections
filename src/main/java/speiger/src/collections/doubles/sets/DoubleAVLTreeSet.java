@@ -1170,6 +1170,7 @@ public class DoubleAVLTreeSet extends AbstractDoubleSet implements DoubleNavigab
 		{
 			Entry lastReturned;
 			Entry next;
+			Entry previous;
 			boolean forwards = false;
 			boolean unboundForwardFence;
 			boolean unboundBackwardFence;
@@ -1179,6 +1180,7 @@ public class DoubleAVLTreeSet extends AbstractDoubleSet implements DoubleNavigab
 			public AscendingSubSetIterator(Entry first, Entry forwardFence, Entry backwardFence)
 			{
 				next = first;
+				previous = first == null ? null : first.previous();
 				this.forwardFence = forwardFence == null ? 0D : forwardFence.key;
 				this.backwardFence = backwardFence == null ? 0D : backwardFence.key;
 				unboundForwardFence = forwardFence == null;
@@ -1194,6 +1196,7 @@ public class DoubleAVLTreeSet extends AbstractDoubleSet implements DoubleNavigab
 			public double nextDouble() {
 				if(!hasNext()) throw new NoSuchElementException();
 				lastReturned = next;
+				previous = next;
 				double result = next.key;
 				next = next.next();
 				forwards = true;
@@ -1202,15 +1205,16 @@ public class DoubleAVLTreeSet extends AbstractDoubleSet implements DoubleNavigab
 			
 			@Override
 			public boolean hasPrevious() {
-                return next != null && (unboundBackwardFence || next.key != backwardFence);
+                return previous != null && (unboundBackwardFence || previous.key != backwardFence);
 			}
 			
 			@Override
 			public double previousDouble() {
 				if(!hasPrevious()) throw new NoSuchElementException();
-				lastReturned = next;
-				double result = next.key;
-				next = next.previous();
+				lastReturned = previous;
+				next = previous;
+				double result = previous.key;
+				previous = previous.previous();
 				forwards = false;
 				return result;
 			}
@@ -1218,6 +1222,8 @@ public class DoubleAVLTreeSet extends AbstractDoubleSet implements DoubleNavigab
 			@Override
 			public void remove() {
 				if(lastReturned == null) throw new IllegalStateException();
+				if(previous == lastReturned) previous = previous.previous();
+				if(next == lastReturned) next = next.next();
 				if(forwards && lastReturned.needsSuccessor()) next = lastReturned;
 				set.removeNode(lastReturned);
 				lastReturned = null;
@@ -1228,6 +1234,7 @@ public class DoubleAVLTreeSet extends AbstractDoubleSet implements DoubleNavigab
 		{
 			Entry lastReturned;
 			Entry next;
+			Entry previous;
 			boolean forwards = false;
 			boolean unboundForwardFence;
 			boolean unboundBackwardFence;
@@ -1237,6 +1244,7 @@ public class DoubleAVLTreeSet extends AbstractDoubleSet implements DoubleNavigab
 			public DescendingSubSetIterator(Entry first, Entry forwardFence, Entry backwardFence)
 			{
 				next = first;
+				previous = first == null ? null : first.next();
 				this.forwardFence = forwardFence == null ? 0D : forwardFence.key;
 				this.backwardFence = backwardFence == null ? 0D : backwardFence.key;
 				unboundForwardFence = forwardFence == null;
@@ -1252,6 +1260,7 @@ public class DoubleAVLTreeSet extends AbstractDoubleSet implements DoubleNavigab
 			public double nextDouble() {
 				if(!hasNext()) throw new NoSuchElementException();
 				lastReturned = next;
+				previous = next;
 				double result = next.key;
 				next = next.previous();
 				forwards = false;
@@ -1260,15 +1269,16 @@ public class DoubleAVLTreeSet extends AbstractDoubleSet implements DoubleNavigab
 			
 			@Override
 			public boolean hasPrevious() {
-                return next != null && (unboundBackwardFence || next.key != backwardFence);
+                return previous != null && (unboundBackwardFence || previous.key != backwardFence);
 			}
 			
 			@Override
 			public double previousDouble() {
 				if(!hasPrevious()) throw new NoSuchElementException();
-				lastReturned = next;
-				double result = next.key;
-				next = next.next();
+				lastReturned = previous;
+				next = previous;
+				double result = previous.key;
+				previous = previous.next();
 				forwards = true;
 				return result;
 			}
@@ -1276,6 +1286,8 @@ public class DoubleAVLTreeSet extends AbstractDoubleSet implements DoubleNavigab
 			@Override
 			public void remove() {
 				if(lastReturned == null) throw new IllegalStateException();
+				if(previous == lastReturned) previous = previous.next();
+				if(next == lastReturned) next = next.previous();
 				if(forwards && lastReturned.needsSuccessor()) next = lastReturned;
 				set.removeNode(lastReturned);
 				lastReturned = null;
@@ -1287,11 +1299,13 @@ public class DoubleAVLTreeSet extends AbstractDoubleSet implements DoubleNavigab
 	{
 		Entry lastReturned;
 		Entry next;
+		Entry previous;
 		boolean forwards = false;
 		
 		public AscendingSetIterator(Entry first)
 		{
 			next = first;
+			previous = first == null ? null : first.previous();
 		}
 		
 		@Override
@@ -1303,6 +1317,7 @@ public class DoubleAVLTreeSet extends AbstractDoubleSet implements DoubleNavigab
 		public double nextDouble() {
 			if(!hasNext()) throw new NoSuchElementException();
 			lastReturned = next;
+			previous = next;
 			double result = next.key;
 			next = next.next();
 			forwards = true;
@@ -1311,15 +1326,16 @@ public class DoubleAVLTreeSet extends AbstractDoubleSet implements DoubleNavigab
 		
 		@Override
 		public boolean hasPrevious() {
-            return next != null;
+            return previous != null;
 		}
 		
 		@Override
 		public double previousDouble() {
 			if(!hasPrevious()) throw new NoSuchElementException();
-			lastReturned = next;
-			double result = next.key;
-			next = next.previous();
+			lastReturned = previous;
+			next = previous;
+			double result = previous.key;
+			previous = previous.previous();
 			forwards = false;
 			return result;
 		}
@@ -1327,6 +1343,8 @@ public class DoubleAVLTreeSet extends AbstractDoubleSet implements DoubleNavigab
 		@Override
 		public void remove() {
 			if(lastReturned == null) throw new IllegalStateException();
+			if(lastReturned == previous) previous = previous.previous();
+			if(lastReturned == next) next = next.next();
 			if(forwards && lastReturned.needsSuccessor()) next = lastReturned;
 			removeNode(lastReturned);
 			lastReturned = null;
@@ -1337,11 +1355,13 @@ public class DoubleAVLTreeSet extends AbstractDoubleSet implements DoubleNavigab
 	{
 		Entry lastReturned;
 		Entry next;
+		Entry previous;
 		boolean forwards = false;
 
 		public DescendingSetIterator(Entry first)
 		{
 			next = first;
+			previous = first == null ? null : first.next();
 		}
 		
 		@Override
@@ -1353,6 +1373,7 @@ public class DoubleAVLTreeSet extends AbstractDoubleSet implements DoubleNavigab
 		public double nextDouble() {
 			if(!hasNext()) throw new NoSuchElementException();
 			lastReturned = next;
+			previous = next;
 			double result = next.key;
 			next = next.previous();
 			forwards = false;
@@ -1361,15 +1382,16 @@ public class DoubleAVLTreeSet extends AbstractDoubleSet implements DoubleNavigab
 		
 		@Override
 		public boolean hasPrevious() {
-            return next != null;
+            return previous != null;
 		}
 		
 		@Override
 		public double previousDouble() {
 			if(!hasPrevious()) throw new NoSuchElementException();
-			lastReturned = next;
-			double result = next.key;
-			next = next.next();
+			lastReturned = previous;
+			next = previous;
+			double result = previous.key;
+			previous = previous.next();
 			forwards = true;
 			return result;
 		}
@@ -1377,6 +1399,8 @@ public class DoubleAVLTreeSet extends AbstractDoubleSet implements DoubleNavigab
 		@Override
 		public void remove() {
 			if(lastReturned == null) throw new IllegalStateException();
+			if(lastReturned == previous) previous = previous.next();
+			if(lastReturned == next) next = next.previous();
 			if(forwards && lastReturned.needsSuccessor()) next = lastReturned;
 			removeNode(lastReturned);
 			lastReturned = null;

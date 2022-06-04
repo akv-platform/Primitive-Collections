@@ -46,7 +46,7 @@ public interface FloatBidirectionalIterator extends FloatIterator, ObjectBidirec
 	public default int back(int amount) {
 		if(amount < 0) throw new IllegalStateException("Can't go forward");
 		int i = 0;
-		for(;i<amount && hasPrevious();previous(),i++);
+		for(;i<amount && hasPrevious();previousFloat(),i++);
 		return i;
 	}
 }

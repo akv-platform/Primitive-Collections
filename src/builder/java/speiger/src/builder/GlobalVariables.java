@@ -225,6 +225,7 @@ public class GlobalVariables
 		addAbstractMapper("ABSTRACT_ITERATOR_TESTER", "Abstract%sIteratorTester");
 		addAbstractBiMapper("ABSTRACT_MAP_TESTER", "Abstract%sMapTester", "2");
 		addClassMapper("LIST_ITERATOR_TESTER", "ListIteratorTester");
+		addClassMapper("BIDIRECTIONAL_ITERATOR_TESTER", "BidirectionalteratorTester");
 		addClassMapper("ITERATOR_TESTER", "IteratorTester");
 		addClassMapper("COLLECTION_TEST_BUILDER", "CollectionTestSuiteBuilder");
 		addClassMapper("LIST_TEST_BUILDER", "ListTestSuiteBuilder");

@@ -1,14 +1,17 @@
 package speiger.src.testers.PACKAGE.impl.maps;
 
-#if TYPE_OBJECT
 import java.util.Comparator;
-#endif
 import java.util.List;
 import java.util.Map;
+#if TYPE_OBJECT
+import java.util.Objects;
+#endif
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 
 import speiger.src.collections.PACKAGE.maps.abstracts.ABSTRACT_MAP;
 import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
+import speiger.src.collections.PACKAGE.maps.interfaces.CONCURRENT_MAP;
 import speiger.src.collections.PACKAGE.maps.interfaces.ORDERED_MAP;
 import speiger.src.collections.PACKAGE.maps.interfaces.SORTED_MAP;
 import speiger.src.collections.objects.collections.ObjectIterable;
@@ -16,6 +19,7 @@ import speiger.src.collections.objects.collections.ObjectIterable;
 import speiger.src.collections.objects.utils.ObjectArrays;
 #endif
 import speiger.src.collections.objects.lists.ObjectList;
+import speiger.src.collections.objects.lists.ObjectArrayList;
 import speiger.src.testers.PACKAGE.generators.maps.TEST_MAP_GENERATOR;
 import speiger.src.testers.PACKAGE.generators.maps.TEST_ORDERED_MAP_GENERATOR;
 import speiger.src.testers.PACKAGE.generators.maps.TEST_SORTED_MAP_GENERATOR;
@@ -113,6 +117,43 @@ public class SIMPLE_MAP_TEST_GENERATOR KEY_VALUE_SPECIAL_GENERIC_TYPE<E extends 
 	{
 		public OrderedMaps(BiFunction<KEY_TYPE[], VALUE_TYPE[], ORDERED_MAP KEY_VALUE_GENERIC_TYPE> mapper) {
 			super(mapper);
+		}
+	}
+	
+	public static class ConcurrentMaps KEY_VALUE_GENERIC_TYPE extends SIMPLE_MAP_TEST_GENERATOR KEY_VALUE_SPECIAL_GENERIC_TYPE<CONCURRENT_MAP KEY_VALUE_GENERIC_TYPE> implements TEST_MAP_GENERATOR KEY_VALUE_GENERIC_TYPE
+	{
+		Consumer<ObjectList<MAP.Entry KEY_VALUE_GENERIC_TYPE>> sorter; 
+		
+		public ConcurrentMaps(BiFunction<KEY_TYPE[], VALUE_TYPE[], CONCURRENT_MAP KEY_VALUE_GENERIC_TYPE> mapper, Consumer<ObjectList<MAP.Entry KEY_VALUE_GENERIC_TYPE>> sorter) {
+			super(mapper);
+			this.sorter = sorter;
+		}
+		
+		public Iterable<Map.Entry<CLASS_TYPE, CLASS_VALUE_TYPE>> order(List<Map.Entry<CLASS_TYPE, CLASS_VALUE_TYPE>> insertionOrder) {
+			ObjectList<MAP.Entry KEY_VALUE_GENERIC_TYPE> newList = new ObjectArrayList<>();
+			for(Map.Entry<CLASS_TYPE, CLASS_VALUE_TYPE> entry : insertionOrder) {
+				newList.add(new ABSTRACT_MAP.BasicEntryKV_BRACES(entry.getKey(), entry.getValue()));
+			}
+			order(newList);
+			insertionOrder.sort(new Comparator<Map.Entry<CLASS_TYPE, CLASS_VALUE_TYPE>>() {
+				@Override
+				public int compare(Map.Entry<CLASS_TYPE, CLASS_VALUE_TYPE> key, Map.Entry<CLASS_TYPE, CLASS_VALUE_TYPE> value) {
+					return Integer.signum(indexOf(OBJ_TO_KEY(key.getKey())) - indexOf(OBJ_TO_KEY(value.getKey())));
+				}
+				
+				protected int indexOf(KEY_TYPE key) {
+					for(int i = 0,m=newList.size();i<m;i++) {
+						if(KEY_EQUALS(newList.get(i).ENTRY_KEY(), key)) return i;
+					}
+					throw new IllegalArgumentException("MAP.entry sorter was corrupting data");
+				}
+			});
+			return insertionOrder;
+		}
+		
+		public ObjectIterable<MAP.Entry KEY_VALUE_GENERIC_TYPE> order(ObjectList<MAP.Entry KEY_VALUE_GENERIC_TYPE> insertionOrder) {
+			sorter.accept(insertionOrder);
+			return insertionOrder;
 		}
 	}
 	

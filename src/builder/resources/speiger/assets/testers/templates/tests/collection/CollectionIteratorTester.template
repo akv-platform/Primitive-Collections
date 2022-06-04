@@ -19,11 +19,13 @@ import org.junit.Ignore;
 
 import speiger.src.collections.PACKAGE.collections.ITERABLE;
 import speiger.src.collections.PACKAGE.collections.ITERATOR;
+import speiger.src.collections.PACKAGE.collections.BI_ITERATOR;
 import speiger.src.collections.PACKAGE.lists.ARRAY_LIST;
 import speiger.src.collections.PACKAGE.lists.LIST;
 import speiger.src.testers.PACKAGE.tests.base.ABSTRACT_COLLECTION_TESTER;
 import speiger.src.testers.PACKAGE.utils.HELPERS;
 import speiger.src.testers.PACKAGE.utils.ITERATOR_TESTER;
+import speiger.src.testers.PACKAGE.utils.BIDIRECTIONAL_ITERATOR_TESTER;
 
 @Ignore
 @SuppressWarnings("javadoc")
@@ -92,6 +94,21 @@ public class FILE_KEY_TYPECollectionIteratorTester KEY_GENERIC_TYPE extends ABST
 	}
 
 	private void runIteratorTest(Set<IteratorFeature> features, ITERATOR_TESTER.KnownOrder knownOrder, ITERABLE KEY_GENERIC_TYPE elements) {
+		if(collection.iterator() instanceof BI_ITERATOR) {
+			new BIDIRECTIONAL_ITERATOR_TESTER KEY_GENERIC_TYPE(4, features, elements, knownOrder) {
+				@Override
+				protected BI_ITERATOR KEY_GENERIC_TYPE newTargetIterator() {
+					resetCollection();
+					return (BI_ITERATOR KEY_GENERIC_TYPE)collection.iterator();
+				}
+
+				@Override
+				protected void verify(LIST KEY_GENERIC_TYPE elements) {
+					expectContents(elements);
+				}
+			}.test();			
+			return;
+		}
 		new ITERATOR_TESTER KEY_GENERIC_TYPE(5, features, elements, knownOrder) {
 			@Override
 			protected ITERATOR KEY_GENERIC_TYPE newTargetIterator() {

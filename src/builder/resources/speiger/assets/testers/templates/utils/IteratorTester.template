@@ -9,8 +9,7 @@ import speiger.src.collections.PACKAGE.utils.LISTS;
 @SuppressWarnings("javadoc")
 public abstract class ITERATOR_TESTER KEY_GENERIC_TYPE extends ABSTRACT_ITERATOR_TESTER KEY_GENERIC_TYPE
 {
-	public ITERATOR_TESTER(int steps, Iterable<? extends IteratorFeature> features, ITERABLE KEY_GENERIC_TYPE expectedElements,
-			KnownOrder knownOrder) {
+	public ITERATOR_TESTER(int steps, Iterable<? extends IteratorFeature> features, ITERABLE KEY_GENERIC_TYPE expectedElements, KnownOrder knownOrder) {
 		super(steps, LISTS.singleton(INVALID_KEY_VALUE), features, expectedElements, knownOrder, 0);
 	}
 

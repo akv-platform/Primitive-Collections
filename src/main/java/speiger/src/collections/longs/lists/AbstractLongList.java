@@ -505,8 +505,9 @@ public abstract class AbstractLongList extends AbstractLongCollection implements
 		@Override
 		public int skip(int amount) {
 			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
-			int steps = Math.min(amount, (size() - 1) - index);
+			int steps = Math.min(amount, size() - index);
 			index += steps;
+			if(steps > 0) lastReturned = Math.min(index-1, size()-1);
 			return steps;
 		}
 		
@@ -515,6 +516,7 @@ public abstract class AbstractLongList extends AbstractLongCollection implements
 			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
 			int steps = Math.min(amount, index);
 			index -= steps;
+			if(steps > 0) lastReturned = Math.min(index, size()-1);
 			return steps;
 		}
 	}

@@ -481,7 +481,7 @@ public class ImmutableDoubleList extends AbstractDoubleList
 		@Override
 		public int skip(int amount) {
 			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
-			int steps = Math.min(amount, (size() - 1) - index);
+			int steps = Math.min(amount, size() - index);
 			index += steps;
 			return steps;
 		}
