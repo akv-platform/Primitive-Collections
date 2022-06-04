@@ -397,7 +397,7 @@ public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VAL
 #if TYPE_OBJECT
 		if(key == null) {
 #else
-		if(key == null || strategy.equals(CLASS_TO_KEY(key), EMPTY_KEY_VALUE)) {
+		if(key == null || (key instanceof CLASS_TYPE && strategy.equals(CLASS_TO_KEY(key), EMPTY_KEY_VALUE))) {
 #endif
 			if(containsNull && EQUALS_VALUE_TYPE(values[nullIndex], value)) {
 				removeNullIndex();
