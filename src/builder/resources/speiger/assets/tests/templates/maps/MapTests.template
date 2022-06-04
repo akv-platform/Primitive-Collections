@@ -78,10 +78,10 @@ public class MAP_TESTS extends TestCase
 	}
 
 	public static void suite(TestSuite suite) {
-		suite.addTest(mapSuite("HASH_MAP", HASH_MAP::new, getFeatures(), -1));
+		suite.addTest(mapSuite("HASH_MAP", HASH_MAP::new, getFeatures(), -1, true));
 		suite.addTest(orderedMapSuite("LINKED_HASH_MAP", LINKED_HASH_MAP::new, getFeatures(), -1));
 		suite.addTest(orderedMapSuite("IMMUTABLE_HASH_MAP", IMMUTABLE_HASH_MAP::new, getImmutableFeatures(), -1));
-		suite.addTest(mapSuite("CUSTOM_HASH_MAP", (K, V) -> new CUSTOM_HASH_MAPKV_BRACES(K, V, HashStrategy.INSTANCE), getFeatures(), -1));
+		suite.addTest(mapSuite("CUSTOM_HASH_MAP", (K, V) -> new CUSTOM_HASH_MAPKV_BRACES(K, V, HashStrategy.INSTANCE), getFeatures(), -1, true));
 		suite.addTest(orderedMapSuite("LINKED_CUSTOM_HASH_MAP", (K, V) -> new LINKED_CUSTOM_HASH_MAPKV_BRACES(K, V, HashStrategy.INSTANCE), getFeatures(), -1));
 		suite.addTest(orderedMapSuite("ARRAY_MAP", ARRAY_MAP::new, getFeatures(), -1));
 		suite.addTest(concurrentMapSuite("CONCURRENT_HASH_MAP", CONCURRENT_HASH_MAP::new, getFeatures(), 2));
@@ -92,13 +92,14 @@ public class MAP_TESTS extends TestCase
 		suite.addTest(navigableMapSuite("UnmodifiableRB_TREE_MAP", (K, V) -> new RB_TREE_MAPKV_BRACES(K, V).unmodifiable(), getLimitedImmutableFeatures(), -1));
 		suite.addTest(orderedMapSuite("SynchronizedORDERED_MAP", (K, V) -> new LINKED_HASH_MAPKV_BRACES(K, V).synchronize(), getFeatures(), -1));
 		suite.addTest(orderedMapSuite("UnmodifiableORDERED_MAP", (K, V) -> new LINKED_HASH_MAPKV_BRACES(K, V).unmodifiable(), getImmutableFeatures(), -1));
-		suite.addTest(mapSuite("EmptyMAP", (K, V) -> MAPS.empty(), getEmptyFeatures(), 0));
-		suite.addTest(mapSuite("SingletonMAP", (K, V) -> MAPS.singleton(K[0], V[0]), getEmptyFeatures(), 1));
+		suite.addTest(mapSuite("EmptyMAP", (K, V) -> MAPS.empty(), getEmptyFeatures(), 0, false));
+		suite.addTest(mapSuite("SingletonMAP", (K, V) -> MAPS.singleton(K[0], V[0]), getEmptyFeatures(), 1, false));
 	}
 	
-	private static Test mapSuite(String name, BiFunction<KEY_STRING_TYPE[], VALUE_STRING_TYPE[], MAP KEY_VALUE_STRING_GENERIC_TYPE> factory, Collection<Feature<?>> features, int size) {
+	private static Test mapSuite(String name, BiFunction<KEY_STRING_TYPE[], VALUE_STRING_TYPE[], MAP KEY_VALUE_STRING_GENERIC_TYPE> factory, Collection<Feature<?>> features, int size, boolean sorted) {
 		SIMPLE_MAP_TEST_GENERATOR.Maps KEY_VALUE_STRING_GENERIC_TYPE generator = new SIMPLE_MAP_TEST_GENERATOR.Maps KEY_VALUE_STRING_GENERIC_TYPE(factory);
 		MAP_TEST_BUILDER KEY_VALUE_STRING_GENERIC_TYPE builder = MAP_TEST_BUILDER.using(generator);
+		builder.shouldBlockKeys(sorted);
 #if TYPE_OBJECT
 		generator.setKeys(createKeys());
 #ignore

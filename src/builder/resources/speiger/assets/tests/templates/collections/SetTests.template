@@ -39,7 +39,11 @@ import speiger.src.testers.PACKAGE.generators.TEST_ORDERED_SET_GENERATOR;
 #endif
 import speiger.src.testers.PACKAGE.generators.TEST_SET_GENERATOR;
 import speiger.src.testers.PACKAGE.impl.SIMPLE_TEST_GENERATOR;
+#if TYPE_CHAR || TYPE_FLOAT || TYPE_DOUBLE || TYPE_OBJECT
+import speiger.src.testers.PACKAGE.tests.collection.FILE_KEY_TYPECollectionIteratorTester;
+#endif
 import speiger.src.testers.utils.SpecialFeature;
+import speiger.src.testers.utils.TestUtils;
 
 
 @SuppressWarnings("javadoc")
@@ -80,10 +84,12 @@ public class SET_TESTS extends TestCase
 		
 #if TYPE_OBJECT
 	public static Test setSuite(String name, Function<String[], SET<String>> factory, Collection<Feature<?>> features, int size, boolean sorted) {
-		return SET_TEST_BUILDER.using((TEST_SET_GENERATOR<String>)new SIMPLE_TEST_GENERATOR.SetsBRACES(factory).setElements(sorted ? createSortedStrings() : createStrings())).named(name)
+		SET_TEST_BUILDER builder = (SET_TEST_BUILDER)SET_TEST_BUILDER.using((TEST_SET_GENERATOR<String>)new SIMPLE_TEST_GENERATOR.SetsBRACES(factory).setElements(sorted ? createSortedStrings() : createStrings())).named(name)
 #ignore
-			.withFeatures(getSizes(size)).withFeatures(CollectionFeature.ALLOWS_NULL_VALUES).withFeatures(features).createTestSuite();
+			.withFeatures(getSizes(size)).withFeatures(CollectionFeature.ALLOWS_NULL_VALUES).withFeatures(features);
 #endignore
+		if(sorted) builder.suppressing(TestUtils.getSurpession(FILE_KEY_TYPECollectionIteratorTester.class, "testIterator_unknownOrderRemoveSupported"));
+		return builder.createTestSuite();
 	}
 
 	public static Test orderedSetSuite(String name, Function<String[], ORDERED_SET<String>> factory, Collection<Feature<?>> features, int size) {
@@ -119,10 +125,14 @@ public class SET_TESTS extends TestCase
 	}
 #else
 	public static Test setSuite(String name, Function<KEY_TYPE[], SET KEY_GENERIC_TYPE> factory, Collection<Feature<?>> features, int size, boolean sorted) {
-		return SET_TEST_BUILDER.using((TEST_SET_GENERATOR)new SIMPLE_TEST_GENERATOR.SetsBRACES(factory).setSorted(sorted)).named(name)
+		SET_TEST_BUILDER builder = (SET_TEST_BUILDER)SET_TEST_BUILDER.using((TEST_SET_GENERATOR)new SIMPLE_TEST_GENERATOR.SetsBRACES(factory).setSorted(sorted)).named(name)
 #ignore
-			.withFeatures(getSizes(size)).withFeatures(features).createTestSuite();
+			.withFeatures(getSizes(size)).withFeatures(features);
 #endignore
+#if TYPE_CHAR || TYPE_FLOAT || TYPE_DOUBLE
+		if(sorted) builder.suppressing(TestUtils.getSurpession(FILE_KEY_TYPECollectionIteratorTester.class, "testIterator_unknownOrderRemoveSupported"));
+#endif
+		return builder.createTestSuite();
 	}
 	
 	public static Test orderedSetSuite(String name, Function<KEY_TYPE[], ORDERED_SET KEY_GENERIC_TYPE> factory, Collection<Feature<?>> features, int size) {

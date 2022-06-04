@@ -25,6 +25,14 @@ import speiger.src.testers.PACKAGE.generators.TEST_SET_GENERATOR;
 #endif
 import speiger.src.testers.PACKAGE.generators.maps.TEST_MAP_GENERATOR;
 import speiger.src.testers.PACKAGE.impl.maps.DERIVED_MAP_GENERATORS;
+#if TYPE_CHAR || TYPE_FLOAT || TYPE_DOUBLE
+import speiger.src.testers.PACKAGE.tests.collection.FILE_KEY_TYPECollectionIteratorTester;
+#if !SAME_TYPE && !VALUE_OBJECT
+import speiger.src.testers.VALUE_PACKAGE.tests.collection.FILE_VALUE_TYPECollectionIteratorTester;
+#endif
+#else if TYPE_OBJECT && !VALUE_OBJECT
+import speiger.src.testers.VALUE_PACKAGE.tests.collection.FILE_VALUE_TYPECollectionIteratorTester;
+#endif
 #if VALUE_PRIMITIVES
 import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapAddToTester;
 #endif
@@ -66,10 +74,17 @@ import speiger.src.testers.utils.TestUtils;
 
 @SuppressWarnings("javadoc")
 public class MAP_TEST_BUILDER KEY_VALUE_GENERIC_TYPE extends MapTestSuiteBuilder<CLASS_TYPE, CLASS_VALUE_TYPE> {
+	boolean shouldBlockKeys;
+	
 	public static GENERIC_KEY_VALUE_BRACES MAP_TEST_BUILDER KEY_VALUE_GENERIC_TYPE using(TEST_MAP_GENERATOR KEY_VALUE_GENERIC_TYPE generator) {
 		return (MAP_TEST_BUILDER KEY_VALUE_GENERIC_TYPE) new MAP_TEST_BUILDER KEY_VALUE_GENERIC_TYPE().usingGenerator(generator);
 	}
-
+	
+	public MAP_TEST_BUILDER KEY_VALUE_GENERIC_TYPE shouldBlockKeys(boolean value) {
+		shouldBlockKeys = value;
+		return this;
+	}
+	
 	@Override
 	@SuppressWarnings("rawtypes")
 	protected List<Class<? extends AbstractTester>> getTesters() {
@@ -115,14 +130,14 @@ public class MAP_TEST_BUILDER KEY_VALUE_GENERIC_TYPE extends MapTestSuiteBuilder
 				DERIVED_MAP_GENERATORS.entrySetGenerator(parentBuilder.getSubjectGenerator()))
 						.withFeatures(computeEntrySetFeatures(parentBuilder.getFeatures()))
 						.named(parentBuilder.getName() + " entrySet")
-						.suppressing(getEntrySetSuppressing(parentBuilder.getSuppressedTests()))
+						.suppressing(getEntrySetSuppressing(parentBuilder.getSuppressedTests())).suppressing(getSuppressing(1))
 						.withSetUp(parentBuilder.getSetUp()).withTearDown(parentBuilder.getTearDown())
 						.createTestSuite());
 
 		derivedSuites.add(createDerivedKeySetSuite(
 				DERIVED_MAP_GENERATORS.keySetGenerator(parentBuilder.getSubjectGenerator()))
 						.withFeatures(computeKeySetFeatures(parentBuilder.getFeatures()))
-						.named(parentBuilder.getName() + " keys").suppressing(parentBuilder.getSuppressedTests())
+						.named(parentBuilder.getName() + " keys").suppressing(parentBuilder.getSuppressedTests()).suppressing(getSuppressing(0))
 						.withSetUp(parentBuilder.getSetUp()).withTearDown(parentBuilder.getTearDown())
 						.createTestSuite());
 #if !VALUE_BOOLEAN
@@ -130,7 +145,7 @@ public class MAP_TEST_BUILDER KEY_VALUE_GENERIC_TYPE extends MapTestSuiteBuilder
 				new DERIVED_MAP_GENERATORS.MapValueCollectionGeneratorKV_BRACES(parentBuilder.getSubjectGenerator()))
 						.named(parentBuilder.getName() + " values")
 						.withFeatures(computeValuesCollectionFeatures(parentBuilder.getFeatures()))
-						.suppressing(parentBuilder.getSuppressedTests()).withSetUp(parentBuilder.getSetUp())
+						.suppressing(parentBuilder.getSuppressedTests()).suppressing(getSuppressing(2)).withSetUp(parentBuilder.getSetUp())
 						.withTearDown(parentBuilder.getTearDown()).createTestSuite());
 #endif
 		return derivedSuites;
@@ -146,6 +161,21 @@ public class MAP_TEST_BUILDER KEY_VALUE_GENERIC_TYPE extends MapTestSuiteBuilder
 	
 	protected VALUE_COLLECTION_TEST_BUILDER VALUE_GENERIC_TYPE createDerivedValueCollectionSuite(VALUE_TEST_COLLECTION_GENERATOR VALUE_GENERIC_TYPE generator) {
 		return VALUE_COLLECTION_TEST_BUILDER.using(generator);
+	}
+	
+	private Method[] getSuppressing(int type) {
+#if TYPE_CHAR || TYPE_OBJECT || TYPE_FLOAT || TYPE_DOUBLE
+		if(shouldBlockKeys) {
+			switch(type) {
+				case 0: return TestUtils.getSurpession(FILE_KEY_TYPECollectionIteratorTester.class, "testIterator_unknownOrderRemoveSupported");
+				case 1: return TestUtils.getSurpession(ObjectCollectionIteratorTester.class, "testIterator_unknownOrderRemoveSupported");
+				case 2: return TestUtils.getSurpession(FILE_VALUE_TYPECollectionIteratorTester.class, "testIterator_unknownOrderRemoveSupported");
+			}
+		}
+		return new Method[0];
+#else
+		return new Method[0];
+#endif
 	}
 	
 	private static Set<Feature<?>> computeEntrySetFeatures(Set<Feature<?>> mapFeatures) {
