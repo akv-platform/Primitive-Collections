@@ -2,9 +2,13 @@ package speiger.src.testers.PACKAGE.tests.maps;
 
 #ignore
 import static com.google.common.collect.testing.features.CollectionSize.ZERO;
-import static com.google.common.collect.testing.features.CollectionSize.ONE;
 import static com.google.common.collect.testing.features.MapFeature.SUPPORTS_PUT;
 #endignore
+#if !VALUE_BOOLEAN
+#ignore
+import static com.google.common.collect.testing.features.CollectionSize.ONE;
+#endignore
+#endif
 
 import org.junit.Ignore;
 

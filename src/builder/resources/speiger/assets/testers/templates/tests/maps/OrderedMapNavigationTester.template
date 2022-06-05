@@ -5,6 +5,7 @@ import static com.google.common.collect.testing.features.CollectionSize.ONE;
 import static com.google.common.collect.testing.features.CollectionSize.SEVERAL;
 import static com.google.common.collect.testing.features.CollectionSize.ZERO;
 import static com.google.common.collect.testing.features.MapFeature.SUPPORTS_REMOVE;
+import static com.google.common.collect.testing.features.MapFeature.SUPPORTS_PUT;
 #endignore
 
 import java.util.NoSuchElementException;
@@ -44,6 +45,52 @@ public class FILE_KEY_TYPE2FILE_VALUE_TYPEOrderedMapNavigationTester KEY_VALUE_G
 				cValue = values.get(2).ENTRY_VALUE();
 			}
 		}
+	}
+	
+#ignore
+	@MapFeature.Require(SUPPORTS_PUT)
+	@CollectionSize.Require(ZERO)
+#endignore
+	public void testPutEmptyMapToFirst() {
+		orderedMap.putAndMoveToFirst(k0(), v0());
+		expectAdded(e0());
+	}
+
+#ignore
+	@MapFeature.Require(SUPPORTS_PUT)
+	@CollectionSize.Require(ZERO)
+#endignore
+	public void testPutEmptyMapToLast() {
+		orderedMap.putAndMoveToLast(k0(), v0());
+		expectAdded(e0());
+	}
+	
+#ignore
+	@MapFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testyMapPollFirstEmpty() {
+		int polled = 0;
+		int expectedPolls = orderedMap.size();
+		while(polled < expectedPolls) {
+			orderedMap.POLL_FIRST_ENTRY_KEY();
+			polled++;
+		}
+		assertTrue("Map should be empty", orderedMap.isEmpty());
+	}
+
+#ignore
+	@MapFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testyMapPollLastEmpty() {
+		int polled = 0;
+		int expectedPolls = orderedMap.size();
+		while(polled < expectedPolls) {
+			orderedMap.POLL_LAST_ENTRY_KEY();
+			polled++;
+		}
+		assertTrue("Map should be empty", orderedMap.isEmpty());
 	}
 	
 #ignore

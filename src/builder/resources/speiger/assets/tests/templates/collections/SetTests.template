@@ -84,7 +84,7 @@ public class SET_TESTS extends TestCase
 		
 #if TYPE_OBJECT
 	public static Test setSuite(String name, Function<String[], SET<String>> factory, Collection<Feature<?>> features, int size, boolean sorted) {
-		SET_TEST_BUILDER builder = (SET_TEST_BUILDER)SET_TEST_BUILDER.using((TEST_SET_GENERATOR<String>)new SIMPLE_TEST_GENERATOR.SetsBRACES(factory).setElements(sorted ? createSortedStrings() : createStrings())).named(name)
+		SET_TEST_BUILDER<String> builder = (SET_TEST_BUILDER<String>)SET_TEST_BUILDER.using((TEST_SET_GENERATOR<String>)new SIMPLE_TEST_GENERATOR.SetsBRACES(factory).setElements(sorted ? createSortedStrings() : createStrings())).named(name)
 #ignore
 			.withFeatures(getSizes(size)).withFeatures(CollectionFeature.ALLOWS_NULL_VALUES).withFeatures(features);
 #endignore

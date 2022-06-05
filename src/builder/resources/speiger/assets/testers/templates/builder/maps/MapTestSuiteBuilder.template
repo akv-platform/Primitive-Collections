@@ -35,6 +35,7 @@ import speiger.src.testers.VALUE_PACKAGE.tests.collection.FILE_VALUE_TYPECollect
 #endif
 #if VALUE_PRIMITIVES
 import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapAddToTester;
+import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapSubFromTester;
 #endif
 import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapClearTester;
 import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapComputeIfAbsentTester;
@@ -52,6 +53,7 @@ import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapGe
 import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapHashCodeTester;
 import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapIsEmptyTester;
 import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapMergeTester;
+import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapMergeBulkTester;
 import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapPutAllArrayTester;
 import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapPutAllTester;
 import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapPutIfAbsentTester;
@@ -107,9 +109,11 @@ public class MAP_TEST_BUILDER KEY_VALUE_GENERIC_TYPE extends MapTestSuiteBuilder
 		testers.add(FILE_KEY_TYPE2FILE_VALUE_TYPEMapHashCodeTester.class);
 		testers.add(FILE_KEY_TYPE2FILE_VALUE_TYPEMapIsEmptyTester.class);
 		testers.add(FILE_KEY_TYPE2FILE_VALUE_TYPEMapMergeTester.class);
+		testers.add(FILE_KEY_TYPE2FILE_VALUE_TYPEMapMergeBulkTester.class);
 		testers.add(FILE_KEY_TYPE2FILE_VALUE_TYPEMapPutTester.class);
 #if VALUE_PRIMITIVES
 		testers.add(FILE_KEY_TYPE2FILE_VALUE_TYPEMapAddToTester.class);
+		testers.add(FILE_KEY_TYPE2FILE_VALUE_TYPEMapSubFromTester.class);
 #endif
 		testers.add(FILE_KEY_TYPE2FILE_VALUE_TYPEMapPutAllTester.class);
 		testers.add(FILE_KEY_TYPE2FILE_VALUE_TYPEMapPutAllArrayTester.class);

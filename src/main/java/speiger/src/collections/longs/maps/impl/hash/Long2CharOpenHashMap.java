@@ -528,7 +528,7 @@ public class Long2CharOpenHashMap extends AbstractLong2CharMap implements ITrimm
 	@Override
 	public boolean trim(int size) {
 		int request = Math.max(minCapacity, HashUtil.nextPowerOfTwo((int)Math.ceil(size / loadFactor)));
-		if(request >= size || this.size > Math.min((int)Math.ceil(request * loadFactor), request - 1)) return false;
+		if(request >= nullIndex || this.size > Math.min((int)Math.ceil(request * loadFactor), request - 1)) return false;
 		try {
 			rehash(request);
 		}
@@ -539,7 +539,7 @@ public class Long2CharOpenHashMap extends AbstractLong2CharMap implements ITrimm
 	@Override
 	public void clearAndTrim(int size) {
 		int request = Math.max(minCapacity, HashUtil.nextPowerOfTwo((int)Math.ceil(size / loadFactor)));
-		if(request >= size) {
+		if(request >= nullIndex) {
 			clear();
 			return;
 		}
