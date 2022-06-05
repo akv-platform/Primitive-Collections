@@ -237,6 +237,12 @@ public abstract class AbstractDouble2CharMap extends AbstractMap<Double, Charact
 		return value != getDefaultReturnValue() || containsKey(key) ? value : defaultValue;
 	}
 	
+	
+	@Override
+	public Character remove(Object key) {
+		return key instanceof Double ? Character.valueOf(remove(((Double)key).doubleValue())) : Character.valueOf(getDefaultReturnValue());
+	}
+	
 	@Override
 	public void forEach(DoubleCharConsumer action) {
 		Objects.requireNonNull(action);

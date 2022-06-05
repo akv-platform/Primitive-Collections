@@ -237,6 +237,12 @@ public abstract class AbstractBoolean2ShortMap extends AbstractMap<Boolean, Shor
 		return value != getDefaultReturnValue() || containsKey(key) ? value : defaultValue;
 	}
 	
+	
+	@Override
+	public Short remove(Object key) {
+		return key instanceof Boolean ? Short.valueOf(remove(((Boolean)key).booleanValue())) : Short.valueOf(getDefaultReturnValue());
+	}
+	
 	@Override
 	public void forEach(BooleanShortConsumer action) {
 		Objects.requireNonNull(action);

@@ -235,6 +235,12 @@ public abstract class AbstractShort2ShortMap extends AbstractMap<Short, Short> i
 		return value != getDefaultReturnValue() || containsKey(key) ? value : defaultValue;
 	}
 	
+	
+	@Override
+	public Short remove(Object key) {
+		return key instanceof Short ? Short.valueOf(remove(((Short)key).shortValue())) : Short.valueOf(getDefaultReturnValue());
+	}
+	
 	@Override
 	public void forEach(ShortShortConsumer action) {
 		Objects.requireNonNull(action);

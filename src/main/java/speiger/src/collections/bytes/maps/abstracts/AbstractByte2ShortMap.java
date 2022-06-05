@@ -237,6 +237,12 @@ public abstract class AbstractByte2ShortMap extends AbstractMap<Byte, Short> imp
 		return value != getDefaultReturnValue() || containsKey(key) ? value : defaultValue;
 	}
 	
+	
+	@Override
+	public Short remove(Object key) {
+		return key instanceof Byte ? Short.valueOf(remove(((Byte)key).byteValue())) : Short.valueOf(getDefaultReturnValue());
+	}
+	
 	@Override
 	public void forEach(ByteShortConsumer action) {
 		Objects.requireNonNull(action);

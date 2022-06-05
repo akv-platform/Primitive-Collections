@@ -229,6 +229,12 @@ public abstract class AbstractBoolean2BooleanMap extends AbstractMap<Boolean, Bo
 		return value != getDefaultReturnValue() || containsKey(key) ? value : defaultValue;
 	}
 	
+	
+	@Override
+	public Boolean remove(Object key) {
+		return key instanceof Boolean ? Boolean.valueOf(remove(((Boolean)key).booleanValue())) : Boolean.valueOf(getDefaultReturnValue());
+	}
+	
 	@Override
 	public void forEach(BooleanBooleanConsumer action) {
 		Objects.requireNonNull(action);

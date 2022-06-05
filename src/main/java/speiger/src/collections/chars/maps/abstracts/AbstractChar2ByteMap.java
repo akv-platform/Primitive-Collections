@@ -237,6 +237,12 @@ public abstract class AbstractChar2ByteMap extends AbstractMap<Character, Byte> 
 		return value != getDefaultReturnValue() || containsKey(key) ? value : defaultValue;
 	}
 	
+	
+	@Override
+	public Byte remove(Object key) {
+		return key instanceof Character ? Byte.valueOf(remove(((Character)key).charValue())) : Byte.valueOf(getDefaultReturnValue());
+	}
+	
 	@Override
 	public void forEach(CharByteConsumer action) {
 		Objects.requireNonNull(action);

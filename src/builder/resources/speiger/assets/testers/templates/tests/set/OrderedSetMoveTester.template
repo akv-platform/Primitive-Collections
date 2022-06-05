@@ -134,6 +134,90 @@ public class FILE_KEY_TYPEOrderedSetMoveTester KEY_GENERIC_TYPE extends ABSTRACT
 	}
 	
 #ignore
+	@CollectionFeature.Require(SUPPORTS_ADD)
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testMoveCenterToLast()
+	{
+		assertEquals(c, orderedSet.LAST_KEY());
+		assertTrue(orderedSet.moveToLast(e1()));
+		assertNotEquals(c, orderedSet.LAST_KEY());
+		assertEquals(e1(), orderedSet.LAST_KEY());
+	}
+	
+#ignore
+	@CollectionFeature.Require(SUPPORTS_ADD)
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testMoveCenterToFirst()
+	{
+		assertEquals(a, orderedSet.FIRST_KEY());
+		assertTrue(orderedSet.moveToFirst(e1()));
+		assertNotEquals(c, orderedSet.FIRST_KEY());
+		assertEquals(e1(), orderedSet.FIRST_KEY());
+	}
+	
+#ignore
+	@CollectionFeature.Require(SUPPORTS_ADD)
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testMoveForthAndBack()
+	{
+		assertEquals(c, orderedSet.LAST_KEY());
+		assertTrue(orderedSet.moveToLast(e0()));
+		assertNotEquals(c, orderedSet.LAST_KEY());
+		assertEquals(a, orderedSet.LAST_KEY());
+		assertNotEquals(a, orderedSet.FIRST_KEY());
+		assertTrue(orderedSet.moveToFirst(e0()));
+		assertEquals(a, orderedSet.FIRST_KEY());
+	}
+	
+#ignore
+	@CollectionFeature.Require(SUPPORTS_ADD)
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testMoveBackAndForth()
+	{
+		assertEquals(a, orderedSet.FIRST_KEY());
+		assertTrue(orderedSet.moveToFirst(e2()));
+		assertNotEquals(a, orderedSet.FIRST_KEY());
+		assertEquals(c, orderedSet.FIRST_KEY());
+		assertNotEquals(c, orderedSet.LAST_KEY());
+		assertTrue(orderedSet.moveToLast(e2()));
+		assertEquals(c, orderedSet.LAST_KEY());
+	}
+	
+#ignore
+	@CollectionFeature.Require(SUPPORTS_ADD)
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testAddForthAndBack()
+	{
+		assertEquals(c, orderedSet.LAST_KEY());
+		assertFalse(orderedSet.addAndMoveToLast(e0()));
+		assertNotEquals(c, orderedSet.LAST_KEY());
+		assertEquals(a, orderedSet.LAST_KEY());
+		assertNotEquals(a, orderedSet.FIRST_KEY());
+		assertFalse(orderedSet.addAndMoveToFirst(e0()));
+		assertEquals(a, orderedSet.FIRST_KEY());
+	}
+	
+#ignore
+	@CollectionFeature.Require(SUPPORTS_ADD)
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testAddBackAndForth()
+	{
+		assertEquals(a, orderedSet.FIRST_KEY());
+		assertFalse(orderedSet.addAndMoveToFirst(e2()));
+		assertNotEquals(a, orderedSet.FIRST_KEY());
+		assertEquals(c, orderedSet.FIRST_KEY());
+		assertNotEquals(c, orderedSet.LAST_KEY());
+		assertFalse(orderedSet.addAndMoveToLast(e2()));
+		assertEquals(c, orderedSet.LAST_KEY());
+	}
+	
+#ignore
 	@CollectionFeature.Require(absent = SUPPORTS_ADD)
 #endignore
 	public void testaddMoveToFirstUnsupported()

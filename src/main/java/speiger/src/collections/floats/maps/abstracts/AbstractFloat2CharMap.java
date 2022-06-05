@@ -237,6 +237,12 @@ public abstract class AbstractFloat2CharMap extends AbstractMap<Float, Character
 		return value != getDefaultReturnValue() || containsKey(key) ? value : defaultValue;
 	}
 	
+	
+	@Override
+	public Character remove(Object key) {
+		return key instanceof Float ? Character.valueOf(remove(((Float)key).floatValue())) : Character.valueOf(getDefaultReturnValue());
+	}
+	
 	@Override
 	public void forEach(FloatCharConsumer action) {
 		Objects.requireNonNull(action);

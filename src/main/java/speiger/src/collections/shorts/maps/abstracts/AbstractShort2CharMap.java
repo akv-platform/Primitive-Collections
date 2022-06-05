@@ -237,6 +237,12 @@ public abstract class AbstractShort2CharMap extends AbstractMap<Short, Character
 		return value != getDefaultReturnValue() || containsKey(key) ? value : defaultValue;
 	}
 	
+	
+	@Override
+	public Character remove(Object key) {
+		return key instanceof Short ? Character.valueOf(remove(((Short)key).shortValue())) : Character.valueOf(getDefaultReturnValue());
+	}
+	
 	@Override
 	public void forEach(ShortCharConsumer action) {
 		Objects.requireNonNull(action);

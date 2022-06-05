@@ -237,6 +237,12 @@ public abstract class AbstractBoolean2DoubleMap extends AbstractMap<Boolean, Dou
 		return Double.doubleToLongBits(value) != Double.doubleToLongBits(getDefaultReturnValue()) || containsKey(key) ? value : defaultValue;
 	}
 	
+	
+	@Override
+	public Double remove(Object key) {
+		return key instanceof Boolean ? Double.valueOf(remove(((Boolean)key).booleanValue())) : Double.valueOf(getDefaultReturnValue());
+	}
+	
 	@Override
 	public void forEach(BooleanDoubleConsumer action) {
 		Objects.requireNonNull(action);

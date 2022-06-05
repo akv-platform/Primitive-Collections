@@ -237,6 +237,12 @@ public abstract class AbstractChar2DoubleMap extends AbstractMap<Character, Doub
 		return Double.doubleToLongBits(value) != Double.doubleToLongBits(getDefaultReturnValue()) || containsKey(key) ? value : defaultValue;
 	}
 	
+	
+	@Override
+	public Double remove(Object key) {
+		return key instanceof Character ? Double.valueOf(remove(((Character)key).charValue())) : Double.valueOf(getDefaultReturnValue());
+	}
+	
 	@Override
 	public void forEach(CharDoubleConsumer action) {
 		Objects.requireNonNull(action);

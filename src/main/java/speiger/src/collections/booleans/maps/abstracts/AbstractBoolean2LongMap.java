@@ -237,6 +237,12 @@ public abstract class AbstractBoolean2LongMap extends AbstractMap<Boolean, Long>
 		return value != getDefaultReturnValue() || containsKey(key) ? value : defaultValue;
 	}
 	
+	
+	@Override
+	public Long remove(Object key) {
+		return key instanceof Boolean ? Long.valueOf(remove(((Boolean)key).booleanValue())) : Long.valueOf(getDefaultReturnValue());
+	}
+	
 	@Override
 	public void forEach(BooleanLongConsumer action) {
 		Objects.requireNonNull(action);

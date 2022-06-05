@@ -237,6 +237,12 @@ public abstract class AbstractLong2DoubleMap extends AbstractMap<Long, Double> i
 		return Double.doubleToLongBits(value) != Double.doubleToLongBits(getDefaultReturnValue()) || containsKey(key) ? value : defaultValue;
 	}
 	
+	
+	@Override
+	public Double remove(Object key) {
+		return key instanceof Long ? Double.valueOf(remove(((Long)key).longValue())) : Double.valueOf(getDefaultReturnValue());
+	}
+	
 	@Override
 	public void forEach(LongDoubleConsumer action) {
 		Objects.requireNonNull(action);

@@ -237,6 +237,12 @@ public abstract class AbstractByte2IntMap extends AbstractMap<Byte, Integer> imp
 		return value != getDefaultReturnValue() || containsKey(key) ? value : defaultValue;
 	}
 	
+	
+	@Override
+	public Integer remove(Object key) {
+		return key instanceof Byte ? Integer.valueOf(remove(((Byte)key).byteValue())) : Integer.valueOf(getDefaultReturnValue());
+	}
+	
 	@Override
 	public void forEach(ByteIntConsumer action) {
 		Objects.requireNonNull(action);

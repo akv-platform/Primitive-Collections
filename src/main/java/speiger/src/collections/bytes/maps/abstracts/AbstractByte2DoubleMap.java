@@ -237,6 +237,12 @@ public abstract class AbstractByte2DoubleMap extends AbstractMap<Byte, Double> i
 		return Double.doubleToLongBits(value) != Double.doubleToLongBits(getDefaultReturnValue()) || containsKey(key) ? value : defaultValue;
 	}
 	
+	
+	@Override
+	public Double remove(Object key) {
+		return key instanceof Byte ? Double.valueOf(remove(((Byte)key).byteValue())) : Double.valueOf(getDefaultReturnValue());
+	}
+	
 	@Override
 	public void forEach(ByteDoubleConsumer action) {
 		Objects.requireNonNull(action);

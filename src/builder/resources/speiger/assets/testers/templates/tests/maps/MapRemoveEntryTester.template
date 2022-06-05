@@ -3,6 +3,7 @@ package speiger.src.testers.PACKAGE.tests.maps;
 #ignore
 import static com.google.common.collect.testing.features.CollectionSize.ZERO;
 import static com.google.common.collect.testing.features.CollectionSize.ONE;
+import static com.google.common.collect.testing.features.CollectionSize.SEVERAL;
 import static com.google.common.collect.testing.features.MapFeature.SUPPORTS_REMOVE;
 #endignore
 
@@ -27,7 +28,25 @@ public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapRemoveEntryTester KEY_VALUE_GENERIC
 		assertTrue(getMap().remove(k0(), v0()));
 		expectMissing(e0());
 	}
+	
+#ignore
+	@MapFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testRemove_supportedPresentLast() {
+		assertTrue(getMap().remove(k2(), v2()));
+		expectMissing(e2());
+	}
 
+#ignore
+	@MapFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testRemove_supportedPresentLastWrongValue() {
+		assertFalse(getMap().remove(k1(), v2()));
+		expectUnchanged();
+	}
+	
 #ignore
 	@MapFeature.Require(SUPPORTS_REMOVE)
 #endignore
@@ -52,6 +71,59 @@ public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapRemoveEntryTester KEY_VALUE_GENERIC
 		expectUnchanged();
 	}
 	
+#if !TYPE_OBJECT
+#ignore
+	@MapFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(absent = ZERO)
+#endignore
+	public void testRemoveObject_supportedPresent() {
+		assertTrue(getMap().remove(KEY_TO_OBJ(k0()), VALUE_TO_OBJ(v0())));
+		expectMissing(e0());
+	}
+	
+#ignore
+	@MapFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testRemoveObject_supportedPresentLast() {
+		assertTrue(getMap().remove(KEY_TO_OBJ(k2()), VALUE_TO_OBJ(v2())));
+		expectMissing(e2());
+	}
+	
+#ignore
+	@MapFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(SEVERAL)
+#endignore
+	public void testRemoveObject_supportedPresentLastWrongValue() {
+		assertFalse(getMap().remove(KEY_TO_OBJ(k1()), VALUE_TO_OBJ(v2())));
+		expectUnchanged();
+	}
+	
+#ignore
+	@MapFeature.Require(SUPPORTS_REMOVE)
+#endignore
+	public void testRemoveObject_supportedPresentKeyWrongValue() {
+		assertFalse(getMap().remove(KEY_TO_OBJ(k0()), VALUE_TO_OBJ(v3())));
+		expectUnchanged();
+	}
+	
+#ignore
+	@MapFeature.Require(SUPPORTS_REMOVE)
+#endignore
+	public void testRemoveObject_supportedWrongKeyPresentValue() {
+		assertFalse(getMap().remove(KEY_TO_OBJ(k3()), VALUE_TO_OBJ(v0())));
+		expectUnchanged();
+	}
+	
+#ignore
+	@MapFeature.Require(SUPPORTS_REMOVE)
+#endignore
+	public void testRemoveObject_supportedAbsentKeyAbsentValue() {
+		assertFalse(getMap().remove(KEY_TO_OBJ(k3()), VALUE_TO_OBJ(v3())));
+		expectUnchanged();
+	}
+	
+#endif
 #ignore
 	@CollectionSize.Require(ONE)
 	@MapFeature.Require(SUPPORTS_REMOVE)

@@ -237,6 +237,12 @@ public abstract class AbstractInt2ShortMap extends AbstractMap<Integer, Short> i
 		return value != getDefaultReturnValue() || containsKey(key) ? value : defaultValue;
 	}
 	
+	
+	@Override
+	public Short remove(Object key) {
+		return key instanceof Integer ? Short.valueOf(remove(((Integer)key).intValue())) : Short.valueOf(getDefaultReturnValue());
+	}
+	
 	@Override
 	public void forEach(IntShortConsumer action) {
 		Objects.requireNonNull(action);

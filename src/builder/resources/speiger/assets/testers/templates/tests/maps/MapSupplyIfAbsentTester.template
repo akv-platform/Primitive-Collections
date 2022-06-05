@@ -2,6 +2,7 @@ package speiger.src.testers.PACKAGE.tests.maps;
 
 #ignore
 import static com.google.common.collect.testing.features.CollectionSize.ZERO;
+import static com.google.common.collect.testing.features.CollectionSize.ONE;
 import static com.google.common.collect.testing.features.MapFeature.SUPPORTS_PUT;
 #endignore
 
@@ -25,7 +26,29 @@ public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapSupplyIfAbsentTester KEY_VALUE_GENE
 				getMap().SUPPLY_IF_ABSENT(k3(), this::v3));
 		expectAdded(e3());
 	}
-
+	
+#ignore
+	@MapFeature.Require(SUPPORTS_PUT)
+	@CollectionSize.Require(ONE)
+#endignore
+	public void testSupplyIfAbsent_supportedAbsentFirst() {
+		getMap().setDefaultReturnValue(EMPTY_VALUE);
+		assertEquals("SUPPLY_IF_ABSENT(notPresent, function) should return new value", v3(),
+			getMap().SUPPLY_IF_ABSENT(k0(), this::v3));
+		expectContents(entry(k0(), v3()));
+	}
+	
+#ignore
+	@MapFeature.Require(SUPPORTS_PUT)
+	@CollectionSize.Require(ONE)
+#endignore
+	public void testSupplyIfAbsent_supportedAbsentSameResult() {
+		getMap().setDefaultReturnValue(EMPTY_VALUE);
+		assertEquals("SUPPLY_IF_ABSENT(notPresent, function) should return new value", v0(),
+			getMap().SUPPLY_IF_ABSENT(k0(), this::v0));
+		expectUnchanged();
+	}
+	
 #ignore
 	@MapFeature.Require(SUPPORTS_PUT)
 	@CollectionSize.Require(absent = ZERO)

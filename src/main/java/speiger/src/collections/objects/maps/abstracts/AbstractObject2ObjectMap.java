@@ -211,6 +211,12 @@ public abstract class AbstractObject2ObjectMap<T, V> extends AbstractMap<T, V> i
 		return !Objects.equals(value, getDefaultReturnValue()) || containsKey(key) ? value : defaultValue;
 	}
 	
+	
+	@Override
+	public V remove(Object key) {
+		return rem((T)key);
+	}
+	
 	@Override
 	public void forEach(ObjectObjectConsumer<T, V> action) {
 		Objects.requireNonNull(action);

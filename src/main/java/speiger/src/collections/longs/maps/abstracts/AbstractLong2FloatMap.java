@@ -237,6 +237,12 @@ public abstract class AbstractLong2FloatMap extends AbstractMap<Long, Float> imp
 		return Float.floatToIntBits(value) != Float.floatToIntBits(getDefaultReturnValue()) || containsKey(key) ? value : defaultValue;
 	}
 	
+	
+	@Override
+	public Float remove(Object key) {
+		return key instanceof Long ? Float.valueOf(remove(((Long)key).longValue())) : Float.valueOf(getDefaultReturnValue());
+	}
+	
 	@Override
 	public void forEach(LongFloatConsumer action) {
 		Objects.requireNonNull(action);

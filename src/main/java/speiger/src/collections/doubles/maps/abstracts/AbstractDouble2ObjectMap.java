@@ -231,6 +231,12 @@ public abstract class AbstractDouble2ObjectMap<V> extends AbstractMap<Double, V>
 		return !Objects.equals(value, getDefaultReturnValue()) || containsKey(key) ? value : defaultValue;
 	}
 	
+	
+	@Override
+	public V remove(Object key) {
+		return key instanceof Double ? remove(((Double)key).doubleValue()) : getDefaultReturnValue();
+	}
+	
 	@Override
 	public void forEach(DoubleObjectConsumer<V> action) {
 		Objects.requireNonNull(action);

@@ -237,6 +237,12 @@ public abstract class AbstractDouble2FloatMap extends AbstractMap<Double, Float>
 		return Float.floatToIntBits(value) != Float.floatToIntBits(getDefaultReturnValue()) || containsKey(key) ? value : defaultValue;
 	}
 	
+	
+	@Override
+	public Float remove(Object key) {
+		return key instanceof Double ? Float.valueOf(remove(((Double)key).doubleValue())) : Float.valueOf(getDefaultReturnValue());
+	}
+	
 	@Override
 	public void forEach(DoubleFloatConsumer action) {
 		Objects.requireNonNull(action);

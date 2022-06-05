@@ -231,6 +231,12 @@ public abstract class AbstractFloat2BooleanMap extends AbstractMap<Float, Boolea
 		return value != getDefaultReturnValue() || containsKey(key) ? value : defaultValue;
 	}
 	
+	
+	@Override
+	public Boolean remove(Object key) {
+		return key instanceof Float ? Boolean.valueOf(remove(((Float)key).floatValue())) : Boolean.valueOf(getDefaultReturnValue());
+	}
+	
 	@Override
 	public void forEach(FloatBooleanConsumer action) {
 		Objects.requireNonNull(action);

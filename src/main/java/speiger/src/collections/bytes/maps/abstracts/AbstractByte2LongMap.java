@@ -237,6 +237,12 @@ public abstract class AbstractByte2LongMap extends AbstractMap<Byte, Long> imple
 		return value != getDefaultReturnValue() || containsKey(key) ? value : defaultValue;
 	}
 	
+	
+	@Override
+	public Long remove(Object key) {
+		return key instanceof Byte ? Long.valueOf(remove(((Byte)key).byteValue())) : Long.valueOf(getDefaultReturnValue());
+	}
+	
 	@Override
 	public void forEach(ByteLongConsumer action) {
 		Objects.requireNonNull(action);

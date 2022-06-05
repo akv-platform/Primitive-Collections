@@ -235,6 +235,12 @@ public abstract class AbstractFloat2FloatMap extends AbstractMap<Float, Float> i
 		return Float.floatToIntBits(value) != Float.floatToIntBits(getDefaultReturnValue()) || containsKey(key) ? value : defaultValue;
 	}
 	
+	
+	@Override
+	public Float remove(Object key) {
+		return key instanceof Float ? Float.valueOf(remove(((Float)key).floatValue())) : Float.valueOf(getDefaultReturnValue());
+	}
+	
 	@Override
 	public void forEach(FloatFloatConsumer action) {
 		Objects.requireNonNull(action);

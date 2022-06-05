@@ -193,7 +193,14 @@ public class ABSTRACT_MAP_TESTER KEY_VALUE_GENERIC_TYPE extends AbstractObjectCo
 	protected VALUE_TYPE get(KEY_TYPE key) {
 		return getMap().GET_VALUE(key);
 	}
-
+	
+#if !TYPE_OBJECT
+	@SuppressWarnings("deprecation")
+	protected CLASS_VALUE_TYPE get(CLASS_TYPE key) {
+		return getMap().get(key);
+	}
+	
+#endif
 	protected final KEY_TYPE k0() {
 		return e0().ENTRY_KEY();
 	}

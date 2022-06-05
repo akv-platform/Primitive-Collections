@@ -237,6 +237,12 @@ public abstract class AbstractBoolean2CharMap extends AbstractMap<Boolean, Chara
 		return value != getDefaultReturnValue() || containsKey(key) ? value : defaultValue;
 	}
 	
+	
+	@Override
+	public Character remove(Object key) {
+		return key instanceof Boolean ? Character.valueOf(remove(((Boolean)key).booleanValue())) : Character.valueOf(getDefaultReturnValue());
+	}
+	
 	@Override
 	public void forEach(BooleanCharConsumer action) {
 		Objects.requireNonNull(action);

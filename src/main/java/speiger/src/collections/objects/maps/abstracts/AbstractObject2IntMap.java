@@ -231,6 +231,12 @@ public abstract class AbstractObject2IntMap<T> extends AbstractMap<T, Integer> i
 		return value != getDefaultReturnValue() || containsKey(key) ? value : defaultValue;
 	}
 	
+	
+	@Override
+	public Integer remove(Object key) {
+		return Integer.valueOf(rem((T)key));
+	}
+	
 	@Override
 	public void forEach(ObjectIntConsumer<T> action) {
 		Objects.requireNonNull(action);

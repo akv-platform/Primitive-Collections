@@ -231,6 +231,12 @@ public abstract class AbstractFloat2ObjectMap<V> extends AbstractMap<Float, V> i
 		return !Objects.equals(value, getDefaultReturnValue()) || containsKey(key) ? value : defaultValue;
 	}
 	
+	
+	@Override
+	public V remove(Object key) {
+		return key instanceof Float ? remove(((Float)key).floatValue()) : getDefaultReturnValue();
+	}
+	
 	@Override
 	public void forEach(FloatObjectConsumer<V> action) {
 		Objects.requireNonNull(action);

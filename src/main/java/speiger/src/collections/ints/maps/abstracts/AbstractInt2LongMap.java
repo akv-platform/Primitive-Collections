@@ -237,6 +237,12 @@ public abstract class AbstractInt2LongMap extends AbstractMap<Integer, Long> imp
 		return value != getDefaultReturnValue() || containsKey(key) ? value : defaultValue;
 	}
 	
+	
+	@Override
+	public Long remove(Object key) {
+		return key instanceof Integer ? Long.valueOf(remove(((Integer)key).intValue())) : Long.valueOf(getDefaultReturnValue());
+	}
+	
 	@Override
 	public void forEach(IntLongConsumer action) {
 		Objects.requireNonNull(action);

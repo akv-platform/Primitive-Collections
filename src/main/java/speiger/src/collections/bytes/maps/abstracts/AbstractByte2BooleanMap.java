@@ -231,6 +231,12 @@ public abstract class AbstractByte2BooleanMap extends AbstractMap<Byte, Boolean>
 		return value != getDefaultReturnValue() || containsKey(key) ? value : defaultValue;
 	}
 	
+	
+	@Override
+	public Boolean remove(Object key) {
+		return key instanceof Byte ? Boolean.valueOf(remove(((Byte)key).byteValue())) : Boolean.valueOf(getDefaultReturnValue());
+	}
+	
 	@Override
 	public void forEach(ByteBooleanConsumer action) {
 		Objects.requireNonNull(action);

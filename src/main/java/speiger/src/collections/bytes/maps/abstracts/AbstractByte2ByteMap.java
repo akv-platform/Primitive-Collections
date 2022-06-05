@@ -235,6 +235,12 @@ public abstract class AbstractByte2ByteMap extends AbstractMap<Byte, Byte> imple
 		return value != getDefaultReturnValue() || containsKey(key) ? value : defaultValue;
 	}
 	
+	
+	@Override
+	public Byte remove(Object key) {
+		return key instanceof Byte ? Byte.valueOf(remove(((Byte)key).byteValue())) : Byte.valueOf(getDefaultReturnValue());
+	}
+	
 	@Override
 	public void forEach(ByteByteConsumer action) {
 		Objects.requireNonNull(action);

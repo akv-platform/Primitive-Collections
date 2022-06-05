@@ -237,6 +237,12 @@ public abstract class AbstractShort2FloatMap extends AbstractMap<Short, Float> i
 		return Float.floatToIntBits(value) != Float.floatToIntBits(getDefaultReturnValue()) || containsKey(key) ? value : defaultValue;
 	}
 	
+	
+	@Override
+	public Float remove(Object key) {
+		return key instanceof Short ? Float.valueOf(remove(((Short)key).shortValue())) : Float.valueOf(getDefaultReturnValue());
+	}
+	
 	@Override
 	public void forEach(ShortFloatConsumer action) {
 		Objects.requireNonNull(action);

@@ -237,6 +237,12 @@ public abstract class AbstractLong2CharMap extends AbstractMap<Long, Character> 
 		return value != getDefaultReturnValue() || containsKey(key) ? value : defaultValue;
 	}
 	
+	
+	@Override
+	public Character remove(Object key) {
+		return key instanceof Long ? Character.valueOf(remove(((Long)key).longValue())) : Character.valueOf(getDefaultReturnValue());
+	}
+	
 	@Override
 	public void forEach(LongCharConsumer action) {
 		Objects.requireNonNull(action);

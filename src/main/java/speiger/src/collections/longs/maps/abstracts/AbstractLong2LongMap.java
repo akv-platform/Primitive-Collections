@@ -235,6 +235,12 @@ public abstract class AbstractLong2LongMap extends AbstractMap<Long, Long> imple
 		return value != getDefaultReturnValue() || containsKey(key) ? value : defaultValue;
 	}
 	
+	
+	@Override
+	public Long remove(Object key) {
+		return key instanceof Long ? Long.valueOf(remove(((Long)key).longValue())) : Long.valueOf(getDefaultReturnValue());
+	}
+	
 	@Override
 	public void forEach(LongLongConsumer action) {
 		Objects.requireNonNull(action);

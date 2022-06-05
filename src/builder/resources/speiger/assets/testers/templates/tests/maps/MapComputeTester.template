@@ -110,4 +110,36 @@ public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapComputeTester KEY_VALUE_GENERIC_TYP
 		}
 		expectUnchanged();
 	}
+	
+#ignore
+	@MapFeature.Require(absent = SUPPORTS_REMOVE)
+#endignore
+	public void testCompute_removeAbsent() {
+		try {
+			getMap().COMPUTE(k3(), (k, v) -> {
+				assertEquals(k3(), k);
+				assertEquals(INVALID_VALUE, v);
+				return INVALID_VALUE;
+			});
+			fail("Expected UnsupportedOperationException");
+		} catch (UnsupportedOperationException expected) {
+		}
+		expectUnchanged();
+	}
+
+#ignore
+	@MapFeature.Require(absent = SUPPORTS_PUT)
+#endignore
+	public void testCompute_putAbsent() {
+		try {
+			getMap().COMPUTE(k3(), (k, v) -> {
+				assertEquals(k3(), k);
+				assertEquals(INVALID_VALUE, v);
+				return INVALID_VALUE;
+			});
+			fail("Expected UnsupportedOperationException");
+		} catch (UnsupportedOperationException expected) {
+		}
+		expectUnchanged();
+	}
 }

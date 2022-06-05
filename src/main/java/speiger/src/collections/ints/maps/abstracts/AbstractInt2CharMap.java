@@ -237,6 +237,12 @@ public abstract class AbstractInt2CharMap extends AbstractMap<Integer, Character
 		return value != getDefaultReturnValue() || containsKey(key) ? value : defaultValue;
 	}
 	
+	
+	@Override
+	public Character remove(Object key) {
+		return key instanceof Integer ? Character.valueOf(remove(((Integer)key).intValue())) : Character.valueOf(getDefaultReturnValue());
+	}
+	
 	@Override
 	public void forEach(IntCharConsumer action) {
 		Objects.requireNonNull(action);

@@ -237,6 +237,12 @@ public abstract class AbstractFloat2ByteMap extends AbstractMap<Float, Byte> imp
 		return value != getDefaultReturnValue() || containsKey(key) ? value : defaultValue;
 	}
 	
+	
+	@Override
+	public Byte remove(Object key) {
+		return key instanceof Float ? Byte.valueOf(remove(((Float)key).floatValue())) : Byte.valueOf(getDefaultReturnValue());
+	}
+	
 	@Override
 	public void forEach(FloatByteConsumer action) {
 		Objects.requireNonNull(action);

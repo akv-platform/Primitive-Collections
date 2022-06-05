@@ -237,6 +237,12 @@ public abstract class AbstractDouble2ShortMap extends AbstractMap<Double, Short>
 		return value != getDefaultReturnValue() || containsKey(key) ? value : defaultValue;
 	}
 	
+	
+	@Override
+	public Short remove(Object key) {
+		return key instanceof Double ? Short.valueOf(remove(((Double)key).doubleValue())) : Short.valueOf(getDefaultReturnValue());
+	}
+	
 	@Override
 	public void forEach(DoubleShortConsumer action) {
 		Objects.requireNonNull(action);

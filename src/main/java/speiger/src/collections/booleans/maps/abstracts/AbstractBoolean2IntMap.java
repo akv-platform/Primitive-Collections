@@ -237,6 +237,12 @@ public abstract class AbstractBoolean2IntMap extends AbstractMap<Boolean, Intege
 		return value != getDefaultReturnValue() || containsKey(key) ? value : defaultValue;
 	}
 	
+	
+	@Override
+	public Integer remove(Object key) {
+		return key instanceof Boolean ? Integer.valueOf(remove(((Boolean)key).booleanValue())) : Integer.valueOf(getDefaultReturnValue());
+	}
+	
 	@Override
 	public void forEach(BooleanIntConsumer action) {
 		Objects.requireNonNull(action);

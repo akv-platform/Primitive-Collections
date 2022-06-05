@@ -235,6 +235,12 @@ public abstract class AbstractDouble2DoubleMap extends AbstractMap<Double, Doubl
 		return Double.doubleToLongBits(value) != Double.doubleToLongBits(getDefaultReturnValue()) || containsKey(key) ? value : defaultValue;
 	}
 	
+	
+	@Override
+	public Double remove(Object key) {
+		return key instanceof Double ? Double.valueOf(remove(((Double)key).doubleValue())) : Double.valueOf(getDefaultReturnValue());
+	}
+	
 	@Override
 	public void forEach(DoubleDoubleConsumer action) {
 		Objects.requireNonNull(action);
