@@ -27,12 +27,13 @@ public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapSupplyIfAbsentTester KEY_VALUE_GENE
 		expectAdded(e3());
 	}
 	
+#if !VALUE_BOOLEAN
 #ignore
 	@MapFeature.Require(SUPPORTS_PUT)
 	@CollectionSize.Require(ONE)
 #endignore
 	public void testSupplyIfAbsent_supportedAbsentFirst() {
-		getMap().setDefaultReturnValue(EMPTY_VALUE);
+		getMap().setDefaultReturnValue(v0());
 		assertEquals("SUPPLY_IF_ABSENT(notPresent, function) should return new value", v3(),
 			getMap().SUPPLY_IF_ABSENT(k0(), this::v3));
 		expectContents(entry(k0(), v3()));
@@ -43,12 +44,13 @@ public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapSupplyIfAbsentTester KEY_VALUE_GENE
 	@CollectionSize.Require(ONE)
 #endignore
 	public void testSupplyIfAbsent_supportedAbsentSameResult() {
-		getMap().setDefaultReturnValue(EMPTY_VALUE);
+		getMap().setDefaultReturnValue(v0());
 		assertEquals("SUPPLY_IF_ABSENT(notPresent, function) should return new value", v0(),
 			getMap().SUPPLY_IF_ABSENT(k0(), this::v0));
 		expectUnchanged();
 	}
 	
+#endif
 #ignore
 	@MapFeature.Require(SUPPORTS_PUT)
 	@CollectionSize.Require(absent = ZERO)

@@ -30,12 +30,13 @@ public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapComputeIfAbsentTester KEY_VALUE_GEN
 		expectAdded(e3());
 	}
 
+#if !VALUE_BOOLEAN
 #ignore
 	@MapFeature.Require(SUPPORTS_PUT)
 	@CollectionSize.Require(ONE)
 #endignore
 	public void testComputeIfAbsent_supportedAbsentFirst() {
-		getMap().setDefaultReturnValue(EMPTY_VALUE);
+		getMap().setDefaultReturnValue(v0());
 		assertEquals("COMPUTE_IF_ABSENT(notPresent, function) should return new value", v3(),
 			getMap().COMPUTE_IF_ABSENT(k0(), k -> {
 				assertEquals(k0(), k);
@@ -49,7 +50,7 @@ public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapComputeIfAbsentTester KEY_VALUE_GEN
 	@CollectionSize.Require(ONE)
 #endignore
 	public void testComputeIfAbsent_supportedAbsentSameResult() {
-		getMap().setDefaultReturnValue(EMPTY_VALUE);
+		getMap().setDefaultReturnValue(v0());
 		assertEquals("COMPUTE_IF_ABSENT(notPresent, function) should return new value", v0(),
 			getMap().COMPUTE_IF_ABSENT(k0(), k -> {
 			assertEquals(k0(), k);
@@ -58,6 +59,7 @@ public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapComputeIfAbsentTester KEY_VALUE_GEN
 		expectUnchanged();
 	}
 	
+#endif
 #ignore
 	@MapFeature.Require(SUPPORTS_PUT)
 	@CollectionSize.Require(absent = ZERO)
