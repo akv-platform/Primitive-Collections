@@ -21,6 +21,7 @@ import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
 #if !SAME_TYPE && !TYPE_OBJECT
 import speiger.src.collections.PACKAGE.utils.ARRAYS;
 #endif
+import speiger.src.collections.utils.ITrimmable;
 #if TYPE_OBJECT || VALUE_OBJECT
 import speiger.src.collections.objects.utils.StringSortTest;
 #endif
@@ -148,6 +149,29 @@ public abstract class FILE_KEY_TYPE2FILE_VALUE_TYPEMapConstructorTester extends 
 	public void testSizeConstructor_largeSize() {
 		if(sizeConstructor == null) return;
 		Assert.assertTrue(sizeConstructor.apply(25212) != null);
+	}
+	
+	@Test
+	public void testRehash() {
+		if(sizeConstructor == null) return;
+		try
+		{
+			MAP KEY_VALUE_STRING_GENERIC_TYPE map = sizeConstructor.apply(0);
+			if(map instanceof ITrimmable) {
+				ITrimmable trim = (ITrimmable)map;
+				map.putAll(keys, values);
+				map.clear();
+				Assert.assertTrue(trim.trim());
+				Assert.assertFalse(trim.trim());
+				map.putAll(keys, values);
+				trim.clearAndTrim();
+				map.putAll(keys, values);
+				trim.clearAndTrim(Short.MAX_VALUE);
+			}
+		}
+		catch(UnsupportedOperationException e) {
+			//Ignore thats fine
+		}
 	}
 	
 	@Test

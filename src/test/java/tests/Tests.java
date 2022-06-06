@@ -2,6 +2,7 @@ package tests;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
+import speiger.src.tests.bytes.maps.Byte2CharMapTests;
 
 @SuppressWarnings("javadoc")
 public class Tests {
@@ -56,7 +57,7 @@ public class Tests {
 		TestSuite maps = new TestSuite("ByteMaps");
 //		maps.addTest(Byte2BooleanMapTests.suite());
 //		maps.addTest(Byte2ByteMapTests.suite());
-//		maps.addTest(Byte2CharMapTests.suite());
+		maps.addTest(Byte2CharMapTests.suite());
 //		maps.addTest(Byte2ShortMapTests.suite());
 //		maps.addTest(Byte2IntMapTests.suite());
 //		maps.addTest(Byte2LongMapTests.suite());

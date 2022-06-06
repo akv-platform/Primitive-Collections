@@ -38,6 +38,7 @@ import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
 import speiger.src.collections.objects.sets.ObjectSet;
 import speiger.src.collections.utils.HashUtil;
+import speiger.src.collections.utils.ITrimmable;
 
 /**
  * A TypeSpecific ConcurrentHashMap implementation that is based on <a href="https://github.com/google/guava">Guavas</a> approach and backing array implementations.
@@ -47,7 +48,7 @@ import speiger.src.collections.utils.HashUtil;
  * 
  * 
  */
-public class Float2CharConcurrentOpenHashMap extends AbstractFloat2CharMap implements Float2CharConcurrentMap
+public class Float2CharConcurrentOpenHashMap extends AbstractFloat2CharMap implements Float2CharConcurrentMap, ITrimmable
 {
 	/** Segment Limit */
 	private static final int MAX_SEGMENTS = 1 << 16;
@@ -479,6 +480,30 @@ public class Float2CharConcurrentOpenHashMap extends AbstractFloat2CharMap imple
 	public void clear() {
 		for(int i = 0,m=segments.length;i<m;i++) {
 			segments[i].clear();
+		}
+	}
+	
+	@Override
+	public boolean trim(int size) {
+		int segmentCapacity = size / segments.length;
+		if(segmentCapacity * segments.length < size) {
+			segmentCapacity++;
+		}
+		boolean result = false;
+		for(int i = 0, m=segments.length;i<m;i++) {
+			result |= segments[i].trim(segmentCapacity);
+		}
+		return result;
+	}
+	
+	@Override
+	public void clearAndTrim(int size) {
+		int segmentCapacity = size / segments.length;
+		if(segmentCapacity * segments.length < size) {
+			segmentCapacity++;
+		}
+		for(int i = 0, m=segments.length;i<m;i++) {
+			segments[i].clearAndTrim(segmentCapacity);
 		}
 	}
 	
@@ -2033,7 +2058,7 @@ public class Float2CharConcurrentOpenHashMap extends AbstractFloat2CharMap imple
 		
 		protected boolean trim(int size) {
 			int request = Math.max(minCapacity, HashUtil.nextPowerOfTwo((int)Math.ceil(size / loadFactor)));
-			if(request >= size || this.size > Math.min((int)Math.ceil(request * loadFactor), request - 1)) return false;
+			if(request >= mask+1 || this.size > Math.min((int)Math.ceil(request * loadFactor), request - 1)) return false;
 			long stamp = writeLock();
 			try {
 				try {
@@ -2049,7 +2074,7 @@ public class Float2CharConcurrentOpenHashMap extends AbstractFloat2CharMap imple
 		
 		protected void clearAndTrim(int size) {
 			int request = Math.max(minCapacity, HashUtil.nextPowerOfTwo((int)Math.ceil(size / loadFactor)));
-			if(request >= size) {
+			if(request >= mask+1) {
 				clear();
 				return;
 			}

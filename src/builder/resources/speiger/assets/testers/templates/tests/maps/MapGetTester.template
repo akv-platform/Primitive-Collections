@@ -24,4 +24,17 @@ public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapGetTester KEY_VALUE_GENERIC_TYPE ex
 	public void testGet_no() {
 		assertEquals("get(notPresent) should return INVALID_VALUE", INVALID_VALUE, get(k3()));
 	}
+	
+#if !TYPE_OBJECT
+#ignore
+	@CollectionSize.Require(absent = ZERO)
+#endignore
+	public void testGetObject_yes() {
+		assertEquals("get(present) should return the associated value", VALUE_TO_OBJ(v0()), get(KEY_TO_OBJ(k0())));
+	}
+
+	public void testGetObject_no() {
+		assertEquals("get(notPresent) should return INVALID_VALUE", VALUE_TO_OBJ(INVALID_VALUE), get(KEY_TO_OBJ(k3())));
+	}
+#endif
 }
