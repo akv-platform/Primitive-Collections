@@ -43,8 +43,9 @@ import speiger.src.testers.PACKAGE.impl.SIMPLE_TEST_GENERATOR;
 import speiger.src.testers.PACKAGE.tests.collection.FILE_KEY_TYPECollectionIteratorTester;
 #endif
 import speiger.src.testers.utils.SpecialFeature;
+#if TYPE_CHAR || TYPE_FLOAT || TYPE_DOUBLE || TYPE_OBJECT
 import speiger.src.testers.utils.TestUtils;
-
+#endif
 
 @SuppressWarnings("javadoc")
 public class SET_TESTS extends TestCase

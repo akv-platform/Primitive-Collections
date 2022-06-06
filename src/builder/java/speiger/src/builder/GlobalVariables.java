@@ -40,6 +40,8 @@ public class GlobalVariables
 		addSimpleMapper("KEY_SPECIAL_TYPE", type.isObject() ? "E" : type.getKeyType());
 		addSimpleMapper("CLASS_OBJECT_TYPE", type.getClassType());
 		addSimpleMapper("CLASS_OBJECT_VALUE_TYPE", valueType.getClassValueType());
+		addSimpleMapper("CLASS_STRING_TYPE", type.isObject() ? "String" : type.getClassType());
+		addSimpleMapper("CLASS_STRING_VALUE_TYPE", valueType.isObject() ? "String" : valueType.getClassValueType());
 		addSimpleMapper("VALUE_TYPE", valueType.getValueType());
 		addSimpleMapper("VALUE_OBJECT_TYPE", valueType.isObject() ? "Object" : valueType.getValueType());
 		addSimpleMapper("VALUE_STRING_TYPE", valueType.isObject() ? "String" : valueType.getValueType());
@@ -237,6 +239,7 @@ public class GlobalVariables
 		addAbstractBiMapper("SORTED_MAP_TEST_BUILDER", "%sSortedMapTestSuiteBuilder", "2");
 		addAbstractBiMapper("ORDERED_MAP_TEST_BUILDER", "%sOrderedMapTestSuiteBuilder", "2");
 		addAbstractBiMapper("MAP_TEST_BUILDER", "%sMapTestSuiteBuilder", "2");
+		addAbstractBiMapper("MAP_CONSTRUCTOR_TESTS", "%sMapConstructorTests", "2");
 		addClassMapper("SUB_SORTED_SET_CLASS_GENERATOR", "SortedSetSubsetTestSetGenerator");
 		addClassMapper("SUB_NAVIGABLE_SET_CLASS_GENERATOR", "NavigableSetSubsetTestSetGenerator");
 		addClassMapper("LIST_TESTS", "ListTests");

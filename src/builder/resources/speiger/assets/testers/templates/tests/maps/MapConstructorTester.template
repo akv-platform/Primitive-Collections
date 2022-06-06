@@ -1,0 +1,197 @@
+package speiger.src.testers.PACKAGE.tests.maps;
+
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.function.BiFunction;
+import java.util.function.Function;
+import java.util.function.IntFunction;
+import java.util.function.Supplier;
+
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.Ignore;
+import junit.framework.TestCase;
+
+#if !VALUE_OBJECT
+import speiger.src.collections.VALUE_PACKAGE.utils.VALUE_ARRAYS;
+#endif
+import speiger.src.collections.PACKAGE.maps.impl.hash.LINKED_HASH_MAP;
+import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
+#if !SAME_TYPE && !TYPE_OBJECT
+import speiger.src.collections.PACKAGE.utils.ARRAYS;
+#endif
+#if TYPE_OBJECT || VALUE_OBJECT
+import speiger.src.collections.objects.utils.StringSortTest;
+#endif
+
+@Ignore
+@SuppressWarnings("javadoc")
+public abstract class FILE_KEY_TYPE2FILE_VALUE_TYPEMapConstructorTester extends TestCase
+{
+	Supplier<MAP KEY_VALUE_STRING_GENERIC_TYPE> simpleConstructor;
+	IntFunction<MAP KEY_VALUE_STRING_GENERIC_TYPE> sizeConstructor;
+	BiFunction<KEY_STRING_TYPE[], VALUE_STRING_TYPE[], MAP KEY_VALUE_STRING_GENERIC_TYPE> pArrayConstructor;
+#if !TYPE_OBJECT || !VALUE_OBJECT
+	BiFunction<CLASS_STRING_TYPE[], CLASS_STRING_VALUE_TYPE[], MAP KEY_VALUE_STRING_GENERIC_TYPE> arrayConstructor;
+#endif
+	Function<Map<? extends CLASS_STRING_TYPE, ? extends CLASS_STRING_VALUE_TYPE>, MAP KEY_VALUE_STRING_GENERIC_TYPE> mapConstructor;
+	Function<MAP KEY_VALUE_STRING_GENERIC_TYPE, MAP KEY_VALUE_STRING_GENERIC_TYPE> pMapConstructor;
+	KEY_STRING_TYPE[] keys = createKeyElements();
+	VALUE_STRING_TYPE[] values = createValueElements();
+	
+	protected void setSimpleConstructor(Supplier<MAP KEY_VALUE_STRING_GENERIC_TYPE> simpleConstructor) {
+		this.simpleConstructor = simpleConstructor;
+	}
+	
+	protected void setSizeConstructor(IntFunction<MAP KEY_VALUE_STRING_GENERIC_TYPE> sizeConstructor) {
+		this.sizeConstructor = sizeConstructor;
+	}
+	
+	protected void setPArrayConstructor(BiFunction<KEY_STRING_TYPE[], VALUE_STRING_TYPE[], MAP KEY_VALUE_STRING_GENERIC_TYPE> pArrayConstructor) {
+		this.pArrayConstructor = pArrayConstructor;
+	}
+	
+#if !TYPE_OBJECT || !VALUE_OBJECT
+	protected void setArrayConstructor(BiFunction<CLASS_STRING_TYPE[], CLASS_STRING_VALUE_TYPE[], MAP KEY_VALUE_STRING_GENERIC_TYPE> arrayConstructor) {
+		this.arrayConstructor = arrayConstructor;
+	}
+
+#endif
+	protected void setMapConstructor(Function<Map<? extends CLASS_STRING_TYPE, ? extends CLASS_STRING_VALUE_TYPE>, MAP KEY_VALUE_STRING_GENERIC_TYPE> mapConstructor) {
+		this.mapConstructor = mapConstructor;
+	}
+	
+	protected void setPMapConstructor(Function<MAP KEY_VALUE_STRING_GENERIC_TYPE, MAP KEY_VALUE_STRING_GENERIC_TYPE> pMapConstructor) {
+		this.pMapConstructor = pMapConstructor;
+	}
+	
+	@Test
+	public void testPrimitiveArrayConstructor() {
+		if(pArrayConstructor == null) return;
+		Assert.assertTrue(pArrayConstructor.apply(keys, values) != null);
+	}
+	
+	@Test
+	public void testPrimitiveArrayConstructorBadlySized() {
+		if(pArrayConstructor == null) return;
+		try {
+			pArrayConstructor.apply(Arrays.copyOf(keys, 50), values);
+			Assert.fail("This should throw IllegalStateException");
+		}
+		catch(IllegalStateException e) {
+		}
+	}
+	
+#if !TYPE_OBJECT || !VALUE_OBJECT
+	@Test
+	public void testArrayConstructor() {
+		if(arrayConstructor == null) return;
+#if TYPE_OBJECT
+		Assert.assertTrue(arrayConstructor.apply(keys, VALUE_ARRAYS.wrap(values)) != null);
+#else if VALUE_OBJECT
+		Assert.assertTrue(arrayConstructor.apply(ARRAYS.wrap(keys), values) != null);
+#else
+		Assert.assertTrue(arrayConstructor.apply(ARRAYS.wrap(keys), VALUE_ARRAYS.wrap(values)) != null);
+#endif
+	}
+	
+	@Test
+	public void testArrayConstructorBadlySized() {
+		if(arrayConstructor == null) return;
+		try {
+#if TYPE_OBJECT
+			arrayConstructor.apply(Arrays.copyOf(keys, 50), VALUE_ARRAYS.wrap(values));
+#else if VALUE_OBJECT
+			arrayConstructor.apply(ARRAYS.wrap(Arrays.copyOf(keys, 50)), values);
+#else
+			arrayConstructor.apply(ARRAYS.wrap(Arrays.copyOf(keys, 50)), VALUE_ARRAYS.wrap(values));
+#endif
+			Assert.fail("This should throw IllegalStateException");
+		}
+		catch(IllegalStateException e) {
+		}
+	}
+	
+#endif	
+	@Test
+	public void testPrimitiveMapsConstructor() {
+		if(pMapConstructor == null) return;
+		Assert.assertTrue(pMapConstructor.apply(new LINKED_HASH_MAPKV_BRACES(keys, values)) != null);
+	}
+	
+	@Test
+	public void testMapsConstructor() {
+		if(mapConstructor == null) return;
+		Assert.assertTrue(mapConstructor.apply(new LinkedHashMap<>(new LINKED_HASH_MAPKV_BRACES(keys, values))) != null);
+	}
+	
+	@Test
+	public void testSimpleConstructor() {
+		if(simpleConstructor == null) return;
+		Assert.assertTrue(simpleConstructor.get() != null);
+	}
+	
+	@Test
+	public void testSizeConstructor_empty() {
+		if(sizeConstructor == null) return;
+		Assert.assertTrue(sizeConstructor.apply(0) != null);
+	}
+	
+	@Test
+	public void testSizeConstructor_smallSize() {
+		if(sizeConstructor == null) return;
+		Assert.assertTrue(sizeConstructor.apply(32) != null);
+	}
+	
+	@Test
+	public void testSizeConstructor_largeSize() {
+		if(sizeConstructor == null) return;
+		Assert.assertTrue(sizeConstructor.apply(25212) != null);
+	}
+	
+	@Test
+	public void testSizeConstructor_InvalidSize() {
+		if(sizeConstructor == null) return;
+		try {
+			sizeConstructor.apply(-1);
+			Assert.fail("When Inputted Size is negative this should crash");
+		}
+		catch(IllegalStateException e) {
+		}
+	}
+	
+#if TYPE_OBJECT
+	protected String[] createKeyElements() {
+		return Arrays.copyOfRange(StringSortTest.NAMES, 0, 100);
+	}
+	
+#else
+	protected KEY_TYPE[] createKeyElements() {
+		KEY_TYPE[] keys = NEW_KEY_ARRAY(100);
+		for(int i = 0;i<100;i++) {
+			keys[i] = (KEY_TYPE)i;
+		}
+		return keys;
+	}
+#endif
+
+#if VALUE_OBJECT
+	protected String[] createValueElements() {
+		return Arrays.copyOfRange(StringSortTest.NAMES, 100, 200);
+	}
+	
+#else
+	protected VALUE_TYPE[] createValueElements() {
+		VALUE_TYPE[] values = NEW_VALUE_ARRAY(100);
+		for(int i = 0;i<100;i++) {
+#if VALUE_BOOLEAN
+			values[i] = i % 2 != 0;
+#else
+			values[i] = (VALUE_TYPE)i;
+#endif
+		}
+		return values;
+	}
+#endif
+}

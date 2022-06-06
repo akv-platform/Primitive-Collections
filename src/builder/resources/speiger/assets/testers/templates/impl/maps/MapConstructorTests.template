@@ -1,0 +1,304 @@
+package speiger.src.testers.PACKAGE.impl.maps;
+
+#if TYPE_OBJECT
+import java.util.Objects;
+import java.util.Comparator;
+#endif
+
+import org.junit.Ignore;
+import org.junit.Test;
+
+import speiger.src.collections.PACKAGE.maps.impl.hash.HASH_MAP;
+import speiger.src.collections.PACKAGE.maps.impl.hash.LINKED_HASH_MAP;
+import speiger.src.collections.PACKAGE.maps.impl.customHash.CUSTOM_HASH_MAP;
+import speiger.src.collections.PACKAGE.maps.impl.customHash.LINKED_CUSTOM_HASH_MAP;
+import speiger.src.collections.PACKAGE.maps.impl.immutable.IMMUTABLE_HASH_MAP;
+import speiger.src.collections.PACKAGE.maps.impl.concurrent.CONCURRENT_HASH_MAP;
+import speiger.src.collections.PACKAGE.maps.impl.misc.ARRAY_MAP;
+import speiger.src.collections.PACKAGE.maps.impl.tree.RB_TREE_MAP;
+import speiger.src.collections.PACKAGE.maps.impl.tree.AVL_TREE_MAP;
+import speiger.src.collections.PACKAGE.utils.STRATEGY;
+import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapConstructorTester;
+
+@Ignore
+@SuppressWarnings("javadoc")
+public class MAP_CONSTRUCTOR_TESTS
+{
+	public static class HashMap extends FILE_KEY_TYPE2FILE_VALUE_TYPEMapConstructorTester
+	{
+		public HashMap() {
+			setSimpleConstructor(HASH_MAP::new);
+			setSizeConstructor(HASH_MAP::new);
+			setPArrayConstructor(HASH_MAP::new);
+#if !TYPE_OBJECT || !VALUE_OBJECT
+			setArrayConstructor(HASH_MAP::new);
+#endif
+			setPMapConstructor(HASH_MAP::new);
+			setMapConstructor(HASH_MAP::new);
+		}
+		
+		@Test
+		public void testWrongLoadFactorSize() {
+			setSizeConstructor(T -> new HASH_MAP KEY_VALUE_STRING_GENERIC_TYPE(T, 0F));
+			try {
+				testSizeConstructor_smallSize();
+				fail("A Constructor using a 0 LoadFactor should error");
+			} catch(IllegalStateException e) {
+			}
+			
+			setSizeConstructor(T -> new HASH_MAP KEY_VALUE_STRING_GENERIC_TYPE(T, 1F));
+			try {
+				testSizeConstructor_smallSize();
+				fail("A Constructor using a 1 LoadFactor should error");
+			} catch(IllegalStateException e) {
+			}
+		}
+	}
+	
+	public static class LinkedHashMap extends FILE_KEY_TYPE2FILE_VALUE_TYPEMapConstructorTester
+	{
+		public LinkedHashMap() {
+			setSimpleConstructor(LINKED_HASH_MAP::new);
+			setSizeConstructor(LINKED_HASH_MAP::new);
+			setPArrayConstructor(LINKED_HASH_MAP::new);
+#if !TYPE_OBJECT || !VALUE_OBJECT
+			setArrayConstructor(LINKED_HASH_MAP::new);
+#endif
+			setPMapConstructor(LINKED_HASH_MAP::new);
+			setMapConstructor(LINKED_HASH_MAP::new);
+		}
+		
+		@Test
+		public void testWrongLoadFactorSize() {
+			setSizeConstructor(T -> new LINKED_HASH_MAP KEY_VALUE_STRING_GENERIC_TYPE(T, 0F));
+			try {
+				testSizeConstructor_smallSize();
+				fail("A Constructor using a 0 LoadFactor should error");
+			} catch(IllegalStateException e) {
+			}
+			
+			setSizeConstructor(T -> new LINKED_HASH_MAP KEY_VALUE_STRING_GENERIC_TYPE(T, 1F));
+			try {
+				testSizeConstructor_smallSize();
+				fail("A Constructor using a 1 LoadFactor should error");
+			} catch(IllegalStateException e) {
+			}
+		}
+	}
+	
+	public static class CustomHashMap extends FILE_KEY_TYPE2FILE_VALUE_TYPEMapConstructorTester
+	{
+		public CustomHashMap() {
+			setSimpleConstructor(() -> new CUSTOM_HASH_MAP KEY_VALUE_STRING_GENERIC_TYPE(HashStrategy.INSTANCE));
+			setSizeConstructor(T -> new CUSTOM_HASH_MAP KEY_VALUE_STRING_GENERIC_TYPE(T, HashStrategy.INSTANCE));
+			setPArrayConstructor((K, V) -> new CUSTOM_HASH_MAP KEY_VALUE_STRING_GENERIC_TYPE(K, V, HashStrategy.INSTANCE));
+#if !TYPE_OBJECT || !VALUE_OBJECT
+			setArrayConstructor((K, V) -> new CUSTOM_HASH_MAP KEY_VALUE_STRING_GENERIC_TYPE(K, V, HashStrategy.INSTANCE));
+#endif
+			setPMapConstructor(T -> new CUSTOM_HASH_MAP KEY_VALUE_STRING_GENERIC_TYPE(T, HashStrategy.INSTANCE));
+			setMapConstructor(T -> new CUSTOM_HASH_MAP KEY_VALUE_STRING_GENERIC_TYPE(T, HashStrategy.INSTANCE));
+		}
+		
+		@Test
+		public void testWrongLoadFactorSize() {
+			setSizeConstructor(T -> new CUSTOM_HASH_MAP KEY_VALUE_STRING_GENERIC_TYPE(T, 0F, HashStrategy.INSTANCE));
+			try {
+				testSizeConstructor_smallSize();
+				fail("A Constructor using a 0 LoadFactor should error");
+			} catch(IllegalStateException e) {
+			}
+			
+			setSizeConstructor(T -> new CUSTOM_HASH_MAP KEY_VALUE_STRING_GENERIC_TYPE(T, 1F, HashStrategy.INSTANCE));
+			try {
+				testSizeConstructor_smallSize();
+				fail("A Constructor using a 1 LoadFactor should error");
+			} catch(IllegalStateException e) {
+			}
+		}
+	}
+	
+	public static class LinkedCustomHashMap extends FILE_KEY_TYPE2FILE_VALUE_TYPEMapConstructorTester
+	{
+		public LinkedCustomHashMap() {
+			setSimpleConstructor(() -> new LINKED_CUSTOM_HASH_MAP KEY_VALUE_STRING_GENERIC_TYPE(HashStrategy.INSTANCE));
+			setSizeConstructor(T -> new LINKED_CUSTOM_HASH_MAP KEY_VALUE_STRING_GENERIC_TYPE(T, HashStrategy.INSTANCE));
+			setPArrayConstructor((K, V) -> new LINKED_CUSTOM_HASH_MAP KEY_VALUE_STRING_GENERIC_TYPE(K, V, HashStrategy.INSTANCE));
+#if !TYPE_OBJECT || !VALUE_OBJECT
+			setArrayConstructor((K, V) -> new LINKED_CUSTOM_HASH_MAP KEY_VALUE_STRING_GENERIC_TYPE(K, V, HashStrategy.INSTANCE));
+#endif
+			setPMapConstructor(T -> new LINKED_CUSTOM_HASH_MAP KEY_VALUE_STRING_GENERIC_TYPE(T, HashStrategy.INSTANCE));
+			setMapConstructor(T -> new LINKED_CUSTOM_HASH_MAP KEY_VALUE_STRING_GENERIC_TYPE(T, HashStrategy.INSTANCE));
+		}
+		
+		@Test
+		public void testWrongLoadFactorSize() {
+			setSizeConstructor(T -> new LINKED_CUSTOM_HASH_MAP KEY_VALUE_STRING_GENERIC_TYPE(T, 0F, HashStrategy.INSTANCE));
+			try {
+				testSizeConstructor_smallSize();
+				fail("A Constructor using a 0 LoadFactor should error");
+			} catch(IllegalStateException e) {
+			}
+			
+			setSizeConstructor(T -> new LINKED_CUSTOM_HASH_MAP KEY_VALUE_STRING_GENERIC_TYPE(T, 1F, HashStrategy.INSTANCE));
+			try {
+				testSizeConstructor_smallSize();
+				fail("A Constructor using a 1 LoadFactor should error");
+			} catch(IllegalStateException e) {
+			}
+		}
+	}
+	
+	public static class ImmutableHashMap extends FILE_KEY_TYPE2FILE_VALUE_TYPEMapConstructorTester
+	{
+		public ImmutableHashMap() {
+			setPArrayConstructor(IMMUTABLE_HASH_MAP::new);
+#if !TYPE_OBJECT || !VALUE_OBJECT
+			setArrayConstructor(IMMUTABLE_HASH_MAP::new);
+#endif
+			setPMapConstructor(IMMUTABLE_HASH_MAP::new);
+			setMapConstructor(IMMUTABLE_HASH_MAP::new);
+		}
+	}
+	
+	public static class ConcurrentHashMap extends FILE_KEY_TYPE2FILE_VALUE_TYPEMapConstructorTester
+	{
+		public ConcurrentHashMap() {
+			setSimpleConstructor(CONCURRENT_HASH_MAP::new);
+			setSizeConstructor(CONCURRENT_HASH_MAP::new);
+			setPArrayConstructor(CONCURRENT_HASH_MAP::new);
+#if !TYPE_OBJECT || !VALUE_OBJECT
+			setArrayConstructor(CONCURRENT_HASH_MAP::new);
+#endif
+			setPMapConstructor(CONCURRENT_HASH_MAP::new);
+			setMapConstructor(CONCURRENT_HASH_MAP::new);
+		}
+		
+		@Test
+		public void testWrongLoadFactorSize() {
+			setSizeConstructor(T -> new CONCURRENT_HASH_MAP KEY_VALUE_STRING_GENERIC_TYPE(T, 0F));
+			try {
+				testSizeConstructor_smallSize();
+				fail("A Constructor using a 0 LoadFactor should error");
+			} catch(IllegalStateException e) {
+			}
+			
+			setSizeConstructor(T -> new CONCURRENT_HASH_MAP KEY_VALUE_STRING_GENERIC_TYPE(T, 1F));
+			try {
+				testSizeConstructor_smallSize();
+				fail("A Constructor using a 1 LoadFactor should error");
+			} catch(IllegalStateException e) {
+			}
+		}
+		
+		@Test
+		public void testWrongConcurrency() {
+			setSizeConstructor(T -> new CONCURRENT_HASH_MAP KEY_VALUE_STRING_GENERIC_TYPE(T, 0));
+			try {
+				testSizeConstructor_smallSize();
+				fail("A Constructor using a 0 Concurrency should error");
+			} catch(IllegalStateException e) {
+			}
+			
+			setSizeConstructor(T -> new CONCURRENT_HASH_MAP KEY_VALUE_STRING_GENERIC_TYPE(T, Integer.MAX_VALUE));
+			try {
+				testSizeConstructor_smallSize();
+				fail("A Constructor using a 65536 or larger Concurrency should error");
+			} catch(IllegalStateException e) {
+			}
+		}
+	}
+	
+	public static class ArrayMap extends FILE_KEY_TYPE2FILE_VALUE_TYPEMapConstructorTester
+	{
+		public ArrayMap() {
+			setSimpleConstructor(ARRAY_MAP::new);
+			setSizeConstructor(ARRAY_MAP::new);
+			setPArrayConstructor(ARRAY_MAP::new);
+#if !TYPE_OBJECT || !VALUE_OBJECT
+			setArrayConstructor(ARRAY_MAP::new);
+#endif
+			setPMapConstructor(ARRAY_MAP::new);
+			setMapConstructor(ARRAY_MAP::new);
+		}
+	}
+	
+	public static class RBTreeMap extends FILE_KEY_TYPE2FILE_VALUE_TYPEMapConstructorTester
+	{
+		public RBTreeMap() {
+			setSimpleConstructor(RB_TREE_MAP::new);
+			setPArrayConstructor(RB_TREE_MAP::new);
+#if !TYPE_OBJECT || !VALUE_OBJECT
+			setArrayConstructor(RB_TREE_MAP::new);
+#endif
+			setPMapConstructor(RB_TREE_MAP::new);
+			setMapConstructor(RB_TREE_MAP::new);
+		}
+	}
+	
+	public static class RBTreeMapComparator extends FILE_KEY_TYPE2FILE_VALUE_TYPEMapConstructorTester
+	{
+		public RBTreeMapComparator() {
+#if TYPE_OBJECT
+			setSimpleConstructor(() -> new RB_TREE_MAP KEY_VALUE_STRING_GENERIC_TYPE(Comparator.naturalOrder()));
+			setPArrayConstructor((K, V) -> new RB_TREE_MAP KEY_VALUE_STRING_GENERIC_TYPE(K, V, Comparator.naturalOrder()));
+#if !TYPE_OBJECT || !VALUE_OBJECT
+			setArrayConstructor((K, V) -> new RB_TREE_MAP KEY_VALUE_STRING_GENERIC_TYPE(K, V, Comparator.naturalOrder()));
+#endif
+			setPMapConstructor(T -> new RB_TREE_MAP KEY_VALUE_STRING_GENERIC_TYPE(T, Comparator.naturalOrder()));
+			setMapConstructor(T -> new RB_TREE_MAP KEY_VALUE_STRING_GENERIC_TYPE(T, Comparator.naturalOrder()));
+#else
+			setSimpleConstructor(() -> new RB_TREE_MAP KEY_VALUE_STRING_GENERIC_TYPE(CLASS_TYPE::compare));
+			setPArrayConstructor((K, V) -> new RB_TREE_MAP KEY_VALUE_STRING_GENERIC_TYPE(K, V, CLASS_TYPE::compare));
+#if !TYPE_OBJECT || !VALUE_OBJECT
+			setArrayConstructor((K, V) -> new RB_TREE_MAP KEY_VALUE_STRING_GENERIC_TYPE(K, V, CLASS_TYPE::compare));
+#endif
+			setPMapConstructor(T -> new RB_TREE_MAP KEY_VALUE_STRING_GENERIC_TYPE(T, CLASS_TYPE::compare));
+			setMapConstructor(T -> new RB_TREE_MAP KEY_VALUE_STRING_GENERIC_TYPE(T, CLASS_TYPE::compare));
+#endif
+		}
+	}
+	
+	public static class AVLTreeMap extends FILE_KEY_TYPE2FILE_VALUE_TYPEMapConstructorTester
+	{
+		public AVLTreeMap() {
+			setSimpleConstructor(AVL_TREE_MAP::new);
+			setPArrayConstructor(AVL_TREE_MAP::new);
+#if !TYPE_OBJECT || !VALUE_OBJECT
+			setArrayConstructor(AVL_TREE_MAP::new);
+#endif
+			setPMapConstructor(AVL_TREE_MAP::new);
+			setMapConstructor(AVL_TREE_MAP::new);
+		}
+	}
+	
+	public static class AVLTreeMapComparator extends FILE_KEY_TYPE2FILE_VALUE_TYPEMapConstructorTester
+	{
+		public AVLTreeMapComparator() {
+#if TYPE_OBJECT
+			setSimpleConstructor(() -> new AVL_TREE_MAP KEY_VALUE_STRING_GENERIC_TYPE(Comparator.naturalOrder()));
+			setPArrayConstructor((K, V) -> new AVL_TREE_MAP KEY_VALUE_STRING_GENERIC_TYPE(K, V, Comparator.naturalOrder()));
+#if !TYPE_OBJECT || !VALUE_OBJECT
+			setArrayConstructor((K, V) -> new AVL_TREE_MAP KEY_VALUE_STRING_GENERIC_TYPE(K, V, Comparator.naturalOrder()));
+#endif
+			setPMapConstructor(T -> new AVL_TREE_MAP KEY_VALUE_STRING_GENERIC_TYPE(T, Comparator.naturalOrder()));
+			setMapConstructor(T -> new AVL_TREE_MAP KEY_VALUE_STRING_GENERIC_TYPE(T, Comparator.naturalOrder()));
+#else
+			setSimpleConstructor(() -> new AVL_TREE_MAP KEY_VALUE_STRING_GENERIC_TYPE(CLASS_TYPE::compare));
+			setPArrayConstructor((K, V) -> new AVL_TREE_MAP KEY_VALUE_STRING_GENERIC_TYPE(K, V, CLASS_TYPE::compare));
+#if !TYPE_OBJECT || !VALUE_OBJECT
+			setArrayConstructor((K, V) -> new AVL_TREE_MAP KEY_VALUE_STRING_GENERIC_TYPE(K, V, CLASS_TYPE::compare));
+#endif
+			setPMapConstructor(T -> new AVL_TREE_MAP KEY_VALUE_STRING_GENERIC_TYPE(T, CLASS_TYPE::compare));
+			setMapConstructor(T -> new AVL_TREE_MAP KEY_VALUE_STRING_GENERIC_TYPE(T, CLASS_TYPE::compare));
+#endif
+		}
+	}
+	
+	private static class HashStrategy implements STRATEGY KEY_STRING_GENERIC_TYPE {
+		static final HashStrategy INSTANCE = new HashStrategy();
+		@Override
+		public int hashCode(KEY_STRING_TYPE o) { return KEY_TO_HASH(o); }
+		@Override
+		public boolean equals(KEY_STRING_TYPE key, KEY_STRING_TYPE value) { return KEY_EQUALS(key, value); }
+	}
+}
