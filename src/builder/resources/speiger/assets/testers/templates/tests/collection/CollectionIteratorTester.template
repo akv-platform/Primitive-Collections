@@ -99,24 +99,24 @@ public class FILE_KEY_TYPECollectionIteratorTester KEY_GENERIC_TYPE extends ABST
 	}
 
 	private void runIteratorTest(Set<IteratorFeature> features, ITERATOR_TESTER.KnownOrder knownOrder, ITERABLE KEY_GENERIC_TYPE elements) {
-		if(knownOrder == ITERATOR_TESTER.KnownOrder.KNOWN_ORDER && !(collection instanceof LIST) && collection.iterator() instanceof LIST_ITERATOR) {
-			Set<IteratorFeature> listFeature = features.isEmpty() ? features : EnumSet.copyOf(features);
-#ignore
-			listFeature.retainAll(EnumSet.of(IteratorFeature.SUPPORTS_REMOVE));
-#endignore
-			new LIST_ITERATOR_TESTER KEY_GENERIC_TYPE(3, LISTS.singleton(INVALID_VALUE), Collections.unmodifiableSet(listFeature), elements, 0) {
-				@Override
-				protected LIST_ITERATOR KEY_GENERIC_TYPE newTargetIterator() {
-					resetCollection();
-					return (LIST_ITERATOR KEY_GENERIC_TYPE)collection.iterator();
-				}
-
-				@Override
-				protected void verify(LIST KEY_GENERIC_TYPE elements) {
-					expectContents(elements);
-				}
-			}.test();			
-		}
+//		if(knownOrder == ITERATOR_TESTER.KnownOrder.KNOWN_ORDER && !(collection instanceof LIST) && collection.iterator() instanceof LIST_ITERATOR) {
+//			Set<IteratorFeature> listFeature = features.isEmpty() ? features : EnumSet.copyOf(features);
+//#ignore
+//			listFeature.retainAll(EnumSet.of(IteratorFeature.SUPPORTS_REMOVE));
+//#endignore
+//			new LIST_ITERATOR_TESTER KEY_GENERIC_TYPE(3, LISTS.singleton(INVALID_VALUE), Collections.unmodifiableSet(listFeature), elements, 0) {
+//				@Override
+//				protected LIST_ITERATOR KEY_GENERIC_TYPE newTargetIterator() {
+//					resetCollection();
+//					return (LIST_ITERATOR KEY_GENERIC_TYPE)collection.iterator();
+//				}
+//
+//				@Override
+//				protected void verify(LIST KEY_GENERIC_TYPE elements) {
+//					expectContents(elements);
+//				}
+//			}.test();			
+//		}
 		if(collection.iterator() instanceof BI_ITERATOR) {
 			new BIDIRECTIONAL_ITERATOR_TESTER KEY_GENERIC_TYPE(4, features, elements, knownOrder) {
 				@Override
