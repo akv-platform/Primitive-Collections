@@ -1104,6 +1104,7 @@ public class Short2BooleanArrayMap extends AbstractShort2BooleanMap implements S
 		public EntryIterator() {}
 		public EntryIterator(short from) {
 			index = findIndex(from);
+			if(index == -1) throw new NoSuchElementException();
 		}
 		
 		@Override
@@ -1134,6 +1135,7 @@ public class Short2BooleanArrayMap extends AbstractShort2BooleanMap implements S
 		public KeyIterator() {}
 		public KeyIterator(short element) {
 			index = findIndex(element);
+			if(index == -1) throw new NoSuchElementException();
 		}
 		
 		@Override

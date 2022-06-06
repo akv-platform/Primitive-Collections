@@ -1109,6 +1109,7 @@ public class Object2ByteArrayMap<T> extends AbstractObject2ByteMap<T> implements
 		public EntryIterator() {}
 		public EntryIterator(T from) {
 			index = findIndex(from);
+			if(index == -1) throw new NoSuchElementException();
 		}
 		
 		@Override
@@ -1139,6 +1140,7 @@ public class Object2ByteArrayMap<T> extends AbstractObject2ByteMap<T> implements
 		public KeyIterator() {}
 		public KeyIterator(T element) {
 			index = findIndex(element);
+			if(index == -1) throw new NoSuchElementException();
 		}
 		
 		@Override

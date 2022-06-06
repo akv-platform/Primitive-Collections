@@ -9,6 +9,7 @@ import com.google.common.collect.testing.features.CollectionFeature;
 import junit.framework.TestSuite;
 import speiger.src.testers.PACKAGE.generators.TEST_ORDERED_SET_GENERATOR;
 import speiger.src.testers.PACKAGE.tests.set.FILE_KEY_TYPEOrderedSetMoveTester;
+import speiger.src.testers.PACKAGE.tests.set.FILE_KEY_TYPEOrderedSetIterationTester;
 import speiger.src.testers.PACKAGE.tests.set.FILE_KEY_TYPEOrderedSetNavigationTester;
 
 @SuppressWarnings("javadoc")
@@ -23,6 +24,7 @@ public class ORDERED_SET_TEST_BUILDER KEY_GENERIC_TYPE extends SET_TEST_BUILDER 
 		List<Class<? extends AbstractTester>> testers = Helpers.copyToList(super.getTesters());
 		testers.add(FILE_KEY_TYPEOrderedSetNavigationTester.class);
 		testers.add(FILE_KEY_TYPEOrderedSetMoveTester.class);
+		testers.add(FILE_KEY_TYPEOrderedSetIterationTester.class);
 		return testers;
 	}
 	

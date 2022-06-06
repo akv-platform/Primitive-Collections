@@ -1104,6 +1104,7 @@ public class Double2BooleanArrayMap extends AbstractDouble2BooleanMap implements
 		public EntryIterator() {}
 		public EntryIterator(double from) {
 			index = findIndex(from);
+			if(index == -1) throw new NoSuchElementException();
 		}
 		
 		@Override
@@ -1134,6 +1135,7 @@ public class Double2BooleanArrayMap extends AbstractDouble2BooleanMap implements
 		public KeyIterator() {}
 		public KeyIterator(double element) {
 			index = findIndex(element);
+			if(index == -1) throw new NoSuchElementException();
 		}
 		
 		@Override

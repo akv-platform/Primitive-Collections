@@ -16,6 +16,7 @@ import com.google.common.collect.testing.testers.SortedSetNavigationTester;
 import junit.framework.TestSuite;
 import speiger.src.testers.PACKAGE.generators.TEST_SORTED_SET_GENERATOR;
 import speiger.src.testers.PACKAGE.impl.SUB_SORTED_SET_CLASS_GENERATOR;
+import speiger.src.testers.PACKAGE.tests.set.FILE_KEY_TYPESortedSetIterationTester;
 import speiger.src.testers.PACKAGE.tests.set.FILE_KEY_TYPESortedSetNaviationTester;
 
 @SuppressWarnings("javadoc")
@@ -29,6 +30,7 @@ public class SORTED_SET_TEST_BUILDER KEY_GENERIC_TYPE extends SET_TEST_BUILDER K
 	protected List<Class<? extends AbstractTester>> getTesters() {
 		List<Class<? extends AbstractTester>> testers = Helpers.copyToList(super.getTesters());
 		testers.add(SortedSetNavigationTester.class);
+		testers.add(FILE_KEY_TYPESortedSetIterationTester.class);
 		testers.add(FILE_KEY_TYPESortedSetNaviationTester.class);
 		return testers;
 	}

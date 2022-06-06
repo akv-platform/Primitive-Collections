@@ -1092,6 +1092,7 @@ public class Long2ObjectArrayMap<V> extends AbstractLong2ObjectMap<V> implements
 		public EntryIterator() {}
 		public EntryIterator(long from) {
 			index = findIndex(from);
+			if(index == -1) throw new NoSuchElementException();
 		}
 		
 		@Override
@@ -1122,6 +1123,7 @@ public class Long2ObjectArrayMap<V> extends AbstractLong2ObjectMap<V> implements
 		public KeyIterator() {}
 		public KeyIterator(long element) {
 			index = findIndex(element);
+			if(index == -1) throw new NoSuchElementException();
 		}
 		
 		@Override

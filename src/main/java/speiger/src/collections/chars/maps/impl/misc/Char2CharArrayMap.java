@@ -1122,6 +1122,7 @@ public class Char2CharArrayMap extends AbstractChar2CharMap implements Char2Char
 		public EntryIterator() {}
 		public EntryIterator(char from) {
 			index = findIndex(from);
+			if(index == -1) throw new NoSuchElementException();
 		}
 		
 		@Override
@@ -1152,6 +1153,7 @@ public class Char2CharArrayMap extends AbstractChar2CharMap implements Char2Char
 		public KeyIterator() {}
 		public KeyIterator(char element) {
 			index = findIndex(element);
+			if(index == -1) throw new NoSuchElementException();
 		}
 		
 		@Override

@@ -67,7 +67,7 @@ public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapEqualsTester KEY_VALUE_GENERIC_TYPE
 #endignore
 	public void testEquals_EntryNotMatches() {
 		MAP.Entry KEY_VALUE_GENERIC_TYPE entry = e3();
-		assertNotSame("The Entries should match", entry, getMap().ENTRY_SET().iterator().next());
+		assertFalse("The Entries should match", getMap().ENTRY_SET().iterator().next().equals(entry));
 	}
 	
 #ignore
@@ -75,7 +75,14 @@ public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapEqualsTester KEY_VALUE_GENERIC_TYPE
 #endignore
 	public void testEquals_EntryNotMatchesObject() {
 		MAP.Entry KEY_VALUE_GENERIC_TYPE entry = e3();
-		assertNotSame("The Entries should match", new AbstractMap.SimpleEntry<>(entry), getMap().ENTRY_SET().iterator().next());
+		assertFalse("The Entries should match", getMap().ENTRY_SET().iterator().next().equals(new AbstractMap.SimpleEntry<>(entry)));
+	}
+	
+#ignore
+	@CollectionSize.Require(CollectionSize.ONE)
+#endignore
+	public void testEquals_EntryNotMatchingNull() {
+		assertFalse("The Entries should match", getMap().ENTRY_SET().iterator().next().equals(null));
 	}
 	
 	private static GENERIC_KEY_VALUE_BRACES MAP KEY_VALUE_GENERIC_TYPE newHashMap(ObjectCollection<? extends MAP.Entry KEY_VALUE_GENERIC_TYPE> entries) {

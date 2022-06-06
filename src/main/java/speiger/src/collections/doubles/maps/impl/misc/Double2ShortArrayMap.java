@@ -1127,6 +1127,7 @@ public class Double2ShortArrayMap extends AbstractDouble2ShortMap implements Dou
 		public EntryIterator() {}
 		public EntryIterator(double from) {
 			index = findIndex(from);
+			if(index == -1) throw new NoSuchElementException();
 		}
 		
 		@Override
@@ -1157,6 +1158,7 @@ public class Double2ShortArrayMap extends AbstractDouble2ShortMap implements Dou
 		public KeyIterator() {}
 		public KeyIterator(double element) {
 			index = findIndex(element);
+			if(index == -1) throw new NoSuchElementException();
 		}
 		
 		@Override

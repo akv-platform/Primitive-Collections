@@ -1092,6 +1092,7 @@ public class Double2ObjectArrayMap<V> extends AbstractDouble2ObjectMap<V> implem
 		public EntryIterator() {}
 		public EntryIterator(double from) {
 			index = findIndex(from);
+			if(index == -1) throw new NoSuchElementException();
 		}
 		
 		@Override
@@ -1122,6 +1123,7 @@ public class Double2ObjectArrayMap<V> extends AbstractDouble2ObjectMap<V> implem
 		public KeyIterator() {}
 		public KeyIterator(double element) {
 			index = findIndex(element);
+			if(index == -1) throw new NoSuchElementException();
 		}
 		
 		@Override

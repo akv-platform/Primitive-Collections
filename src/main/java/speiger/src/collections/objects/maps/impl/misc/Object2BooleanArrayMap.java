@@ -1086,6 +1086,7 @@ public class Object2BooleanArrayMap<T> extends AbstractObject2BooleanMap<T> impl
 		public EntryIterator() {}
 		public EntryIterator(T from) {
 			index = findIndex(from);
+			if(index == -1) throw new NoSuchElementException();
 		}
 		
 		@Override
@@ -1116,6 +1117,7 @@ public class Object2BooleanArrayMap<T> extends AbstractObject2BooleanMap<T> impl
 		public KeyIterator() {}
 		public KeyIterator(T element) {
 			index = findIndex(element);
+			if(index == -1) throw new NoSuchElementException();
 		}
 		
 		@Override

@@ -1127,6 +1127,7 @@ public class Float2LongArrayMap extends AbstractFloat2LongMap implements Float2L
 		public EntryIterator() {}
 		public EntryIterator(float from) {
 			index = findIndex(from);
+			if(index == -1) throw new NoSuchElementException();
 		}
 		
 		@Override
@@ -1157,6 +1158,7 @@ public class Float2LongArrayMap extends AbstractFloat2LongMap implements Float2L
 		public KeyIterator() {}
 		public KeyIterator(float element) {
 			index = findIndex(element);
+			if(index == -1) throw new NoSuchElementException();
 		}
 		
 		@Override

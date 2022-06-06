@@ -1092,6 +1092,7 @@ public class Char2ObjectArrayMap<V> extends AbstractChar2ObjectMap<V> implements
 		public EntryIterator() {}
 		public EntryIterator(char from) {
 			index = findIndex(from);
+			if(index == -1) throw new NoSuchElementException();
 		}
 		
 		@Override
@@ -1122,6 +1123,7 @@ public class Char2ObjectArrayMap<V> extends AbstractChar2ObjectMap<V> implements
 		public KeyIterator() {}
 		public KeyIterator(char element) {
 			index = findIndex(element);
+			if(index == -1) throw new NoSuchElementException();
 		}
 		
 		@Override

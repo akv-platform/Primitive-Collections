@@ -1092,6 +1092,7 @@ public class Short2ObjectArrayMap<V> extends AbstractShort2ObjectMap<V> implemen
 		public EntryIterator() {}
 		public EntryIterator(short from) {
 			index = findIndex(from);
+			if(index == -1) throw new NoSuchElementException();
 		}
 		
 		@Override
@@ -1122,6 +1123,7 @@ public class Short2ObjectArrayMap<V> extends AbstractShort2ObjectMap<V> implemen
 		public KeyIterator() {}
 		public KeyIterator(short element) {
 			index = findIndex(element);
+			if(index == -1) throw new NoSuchElementException();
 		}
 		
 		@Override

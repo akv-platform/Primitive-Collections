@@ -1109,6 +1109,7 @@ public class Object2IntArrayMap<T> extends AbstractObject2IntMap<T> implements O
 		public EntryIterator() {}
 		public EntryIterator(T from) {
 			index = findIndex(from);
+			if(index == -1) throw new NoSuchElementException();
 		}
 		
 		@Override
@@ -1139,6 +1140,7 @@ public class Object2IntArrayMap<T> extends AbstractObject2IntMap<T> implements O
 		public KeyIterator() {}
 		public KeyIterator(T element) {
 			index = findIndex(element);
+			if(index == -1) throw new NoSuchElementException();
 		}
 		
 		@Override

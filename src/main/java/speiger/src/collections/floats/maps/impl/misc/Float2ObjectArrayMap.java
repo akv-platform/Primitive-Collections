@@ -1092,6 +1092,7 @@ public class Float2ObjectArrayMap<V> extends AbstractFloat2ObjectMap<V> implemen
 		public EntryIterator() {}
 		public EntryIterator(float from) {
 			index = findIndex(from);
+			if(index == -1) throw new NoSuchElementException();
 		}
 		
 		@Override
@@ -1122,6 +1123,7 @@ public class Float2ObjectArrayMap<V> extends AbstractFloat2ObjectMap<V> implemen
 		public KeyIterator() {}
 		public KeyIterator(float element) {
 			index = findIndex(element);
+			if(index == -1) throw new NoSuchElementException();
 		}
 		
 		@Override

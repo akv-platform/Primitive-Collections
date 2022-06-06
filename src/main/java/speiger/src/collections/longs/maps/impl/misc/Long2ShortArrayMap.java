@@ -1127,6 +1127,7 @@ public class Long2ShortArrayMap extends AbstractLong2ShortMap implements Long2Sh
 		public EntryIterator() {}
 		public EntryIterator(long from) {
 			index = findIndex(from);
+			if(index == -1) throw new NoSuchElementException();
 		}
 		
 		@Override
@@ -1157,6 +1158,7 @@ public class Long2ShortArrayMap extends AbstractLong2ShortMap implements Long2Sh
 		public KeyIterator() {}
 		public KeyIterator(long element) {
 			index = findIndex(element);
+			if(index == -1) throw new NoSuchElementException();
 		}
 		
 		@Override

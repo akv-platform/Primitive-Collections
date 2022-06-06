@@ -1127,6 +1127,7 @@ public class Int2LongArrayMap extends AbstractInt2LongMap implements Int2LongOrd
 		public EntryIterator() {}
 		public EntryIterator(int from) {
 			index = findIndex(from);
+			if(index == -1) throw new NoSuchElementException();
 		}
 		
 		@Override
@@ -1157,6 +1158,7 @@ public class Int2LongArrayMap extends AbstractInt2LongMap implements Int2LongOrd
 		public KeyIterator() {}
 		public KeyIterator(int element) {
 			index = findIndex(element);
+			if(index == -1) throw new NoSuchElementException();
 		}
 		
 		@Override

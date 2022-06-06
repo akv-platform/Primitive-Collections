@@ -1127,6 +1127,7 @@ public class Float2CharArrayMap extends AbstractFloat2CharMap implements Float2C
 		public EntryIterator() {}
 		public EntryIterator(float from) {
 			index = findIndex(from);
+			if(index == -1) throw new NoSuchElementException();
 		}
 		
 		@Override
@@ -1157,6 +1158,7 @@ public class Float2CharArrayMap extends AbstractFloat2CharMap implements Float2C
 		public KeyIterator() {}
 		public KeyIterator(float element) {
 			index = findIndex(element);
+			if(index == -1) throw new NoSuchElementException();
 		}
 		
 		@Override

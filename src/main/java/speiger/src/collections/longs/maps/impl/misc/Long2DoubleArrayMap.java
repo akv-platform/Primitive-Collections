@@ -1127,6 +1127,7 @@ public class Long2DoubleArrayMap extends AbstractLong2DoubleMap implements Long2
 		public EntryIterator() {}
 		public EntryIterator(long from) {
 			index = findIndex(from);
+			if(index == -1) throw new NoSuchElementException();
 		}
 		
 		@Override
@@ -1157,6 +1158,7 @@ public class Long2DoubleArrayMap extends AbstractLong2DoubleMap implements Long2
 		public KeyIterator() {}
 		public KeyIterator(long element) {
 			index = findIndex(element);
+			if(index == -1) throw new NoSuchElementException();
 		}
 		
 		@Override

@@ -1104,6 +1104,7 @@ public class Char2BooleanArrayMap extends AbstractChar2BooleanMap implements Cha
 		public EntryIterator() {}
 		public EntryIterator(char from) {
 			index = findIndex(from);
+			if(index == -1) throw new NoSuchElementException();
 		}
 		
 		@Override
@@ -1134,6 +1135,7 @@ public class Char2BooleanArrayMap extends AbstractChar2BooleanMap implements Cha
 		public KeyIterator() {}
 		public KeyIterator(char element) {
 			index = findIndex(element);
+			if(index == -1) throw new NoSuchElementException();
 		}
 		
 		@Override

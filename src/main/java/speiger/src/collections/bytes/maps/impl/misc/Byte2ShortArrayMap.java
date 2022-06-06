@@ -1127,6 +1127,7 @@ public class Byte2ShortArrayMap extends AbstractByte2ShortMap implements Byte2Sh
 		public EntryIterator() {}
 		public EntryIterator(byte from) {
 			index = findIndex(from);
+			if(index == -1) throw new NoSuchElementException();
 		}
 		
 		@Override
@@ -1157,6 +1158,7 @@ public class Byte2ShortArrayMap extends AbstractByte2ShortMap implements Byte2Sh
 		public KeyIterator() {}
 		public KeyIterator(byte element) {
 			index = findIndex(element);
+			if(index == -1) throw new NoSuchElementException();
 		}
 		
 		@Override

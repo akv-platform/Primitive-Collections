@@ -1127,6 +1127,7 @@ public class Int2ByteArrayMap extends AbstractInt2ByteMap implements Int2ByteOrd
 		public EntryIterator() {}
 		public EntryIterator(int from) {
 			index = findIndex(from);
+			if(index == -1) throw new NoSuchElementException();
 		}
 		
 		@Override
@@ -1157,6 +1158,7 @@ public class Int2ByteArrayMap extends AbstractInt2ByteMap implements Int2ByteOrd
 		public KeyIterator() {}
 		public KeyIterator(int element) {
 			index = findIndex(element);
+			if(index == -1) throw new NoSuchElementException();
 		}
 		
 		@Override

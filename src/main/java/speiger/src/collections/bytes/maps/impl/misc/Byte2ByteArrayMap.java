@@ -1122,6 +1122,7 @@ public class Byte2ByteArrayMap extends AbstractByte2ByteMap implements Byte2Byte
 		public EntryIterator() {}
 		public EntryIterator(byte from) {
 			index = findIndex(from);
+			if(index == -1) throw new NoSuchElementException();
 		}
 		
 		@Override
@@ -1152,6 +1153,7 @@ public class Byte2ByteArrayMap extends AbstractByte2ByteMap implements Byte2Byte
 		public KeyIterator() {}
 		public KeyIterator(byte element) {
 			index = findIndex(element);
+			if(index == -1) throw new NoSuchElementException();
 		}
 		
 		@Override

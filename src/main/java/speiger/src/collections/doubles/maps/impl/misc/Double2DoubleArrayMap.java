@@ -1122,6 +1122,7 @@ public class Double2DoubleArrayMap extends AbstractDouble2DoubleMap implements D
 		public EntryIterator() {}
 		public EntryIterator(double from) {
 			index = findIndex(from);
+			if(index == -1) throw new NoSuchElementException();
 		}
 		
 		@Override
@@ -1152,6 +1153,7 @@ public class Double2DoubleArrayMap extends AbstractDouble2DoubleMap implements D
 		public KeyIterator() {}
 		public KeyIterator(double element) {
 			index = findIndex(element);
+			if(index == -1) throw new NoSuchElementException();
 		}
 		
 		@Override

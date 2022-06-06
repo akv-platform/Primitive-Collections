@@ -1104,6 +1104,7 @@ public class Int2BooleanArrayMap extends AbstractInt2BooleanMap implements Int2B
 		public EntryIterator() {}
 		public EntryIterator(int from) {
 			index = findIndex(from);
+			if(index == -1) throw new NoSuchElementException();
 		}
 		
 		@Override
@@ -1134,6 +1135,7 @@ public class Int2BooleanArrayMap extends AbstractInt2BooleanMap implements Int2B
 		public KeyIterator() {}
 		public KeyIterator(int element) {
 			index = findIndex(element);
+			if(index == -1) throw new NoSuchElementException();
 		}
 		
 		@Override

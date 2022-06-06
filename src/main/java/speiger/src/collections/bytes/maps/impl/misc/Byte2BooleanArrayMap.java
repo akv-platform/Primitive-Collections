@@ -1104,6 +1104,7 @@ public class Byte2BooleanArrayMap extends AbstractByte2BooleanMap implements Byt
 		public EntryIterator() {}
 		public EntryIterator(byte from) {
 			index = findIndex(from);
+			if(index == -1) throw new NoSuchElementException();
 		}
 		
 		@Override
@@ -1134,6 +1135,7 @@ public class Byte2BooleanArrayMap extends AbstractByte2BooleanMap implements Byt
 		public KeyIterator() {}
 		public KeyIterator(byte element) {
 			index = findIndex(element);
+			if(index == -1) throw new NoSuchElementException();
 		}
 		
 		@Override

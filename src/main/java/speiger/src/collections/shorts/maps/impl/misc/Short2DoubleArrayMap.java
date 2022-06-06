@@ -1127,6 +1127,7 @@ public class Short2DoubleArrayMap extends AbstractShort2DoubleMap implements Sho
 		public EntryIterator() {}
 		public EntryIterator(short from) {
 			index = findIndex(from);
+			if(index == -1) throw new NoSuchElementException();
 		}
 		
 		@Override
@@ -1157,6 +1158,7 @@ public class Short2DoubleArrayMap extends AbstractShort2DoubleMap implements Sho
 		public KeyIterator() {}
 		public KeyIterator(short element) {
 			index = findIndex(element);
+			if(index == -1) throw new NoSuchElementException();
 		}
 		
 		@Override

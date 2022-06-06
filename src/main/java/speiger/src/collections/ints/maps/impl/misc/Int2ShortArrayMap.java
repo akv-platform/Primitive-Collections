@@ -1127,6 +1127,7 @@ public class Int2ShortArrayMap extends AbstractInt2ShortMap implements Int2Short
 		public EntryIterator() {}
 		public EntryIterator(int from) {
 			index = findIndex(from);
+			if(index == -1) throw new NoSuchElementException();
 		}
 		
 		@Override
@@ -1157,6 +1158,7 @@ public class Int2ShortArrayMap extends AbstractInt2ShortMap implements Int2Short
 		public KeyIterator() {}
 		public KeyIterator(int element) {
 			index = findIndex(element);
+			if(index == -1) throw new NoSuchElementException();
 		}
 		
 		@Override

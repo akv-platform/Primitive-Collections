@@ -1034,6 +1034,7 @@ public class Object2ObjectArrayMap<T, V> extends AbstractObject2ObjectMap<T, V> 
 		public EntryIterator() {}
 		public EntryIterator(T from) {
 			index = findIndex(from);
+			if(index == -1) throw new NoSuchElementException();
 		}
 		
 		@Override
@@ -1064,6 +1065,7 @@ public class Object2ObjectArrayMap<T, V> extends AbstractObject2ObjectMap<T, V> 
 		public KeyIterator() {}
 		public KeyIterator(T element) {
 			index = findIndex(element);
+			if(index == -1) throw new NoSuchElementException();
 		}
 		
 		@Override

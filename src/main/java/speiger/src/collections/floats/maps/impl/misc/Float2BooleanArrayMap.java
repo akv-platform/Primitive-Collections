@@ -1104,6 +1104,7 @@ public class Float2BooleanArrayMap extends AbstractFloat2BooleanMap implements F
 		public EntryIterator() {}
 		public EntryIterator(float from) {
 			index = findIndex(from);
+			if(index == -1) throw new NoSuchElementException();
 		}
 		
 		@Override
@@ -1134,6 +1135,7 @@ public class Float2BooleanArrayMap extends AbstractFloat2BooleanMap implements F
 		public KeyIterator() {}
 		public KeyIterator(float element) {
 			index = findIndex(element);
+			if(index == -1) throw new NoSuchElementException();
 		}
 		
 		@Override
