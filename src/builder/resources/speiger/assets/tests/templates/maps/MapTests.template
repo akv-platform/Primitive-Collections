@@ -90,6 +90,10 @@ public class MAP_TESTS extends TestCase
 		TestSuite constructors = new TestSuite("Constructors");
 		constructors.addTest(new TestSuite(MAP_CONSTRUCTOR_TESTS.HashMap.class));
 		constructors.addTest(new TestSuite(MAP_CONSTRUCTOR_TESTS.LinkedHashMap.class));
+#if TYPE_OBJECT
+		constructors.addTest(new TestSuite(MAP_CONSTRUCTOR_TESTS.EnumMap.class));
+		constructors.addTest(new TestSuite(MAP_CONSTRUCTOR_TESTS.LinkedEnumMap.class));
+#endif
 		constructors.addTest(new TestSuite(MAP_CONSTRUCTOR_TESTS.CustomHashMap.class));
 		constructors.addTest(new TestSuite(MAP_CONSTRUCTOR_TESTS.LinkedCustomHashMap.class));
 		constructors.addTest(new TestSuite(MAP_CONSTRUCTOR_TESTS.ImmutableHashMap.class));

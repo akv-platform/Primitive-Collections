@@ -22,48 +22,45 @@ import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
 import speiger.src.collections.PACKAGE.utils.ARRAYS;
 #endif
 import speiger.src.collections.utils.ITrimmable;
-#if TYPE_OBJECT || VALUE_OBJECT
-import speiger.src.collections.objects.utils.StringSortTest;
-#endif
 
 @Ignore
 @SuppressWarnings("javadoc")
-public abstract class FILE_KEY_TYPE2FILE_VALUE_TYPEMapConstructorTester extends TestCase
+public abstract class FILE_KEY_TYPE2FILE_VALUE_TYPEMapConstructorTester KEY_VALUE_GENERIC_TYPE extends TestCase
 {
-	Supplier<MAP KEY_VALUE_STRING_GENERIC_TYPE> simpleConstructor;
-	IntFunction<MAP KEY_VALUE_STRING_GENERIC_TYPE> sizeConstructor;
-	BiFunction<KEY_STRING_TYPE[], VALUE_STRING_TYPE[], MAP KEY_VALUE_STRING_GENERIC_TYPE> pArrayConstructor;
+	protected Supplier<MAP KEY_VALUE_GENERIC_TYPE> simpleConstructor;
+	protected IntFunction<MAP KEY_VALUE_GENERIC_TYPE> sizeConstructor;
+	protected BiFunction<KEY_TYPE[], VALUE_TYPE[], MAP KEY_VALUE_GENERIC_TYPE> pArrayConstructor;
 #if !TYPE_OBJECT || !VALUE_OBJECT
-	BiFunction<CLASS_STRING_TYPE[], CLASS_STRING_VALUE_TYPE[], MAP KEY_VALUE_STRING_GENERIC_TYPE> arrayConstructor;
+	protected BiFunction<CLASS_TYPE[], CLASS_VALUE_TYPE[], MAP KEY_VALUE_GENERIC_TYPE> arrayConstructor;
 #endif
-	Function<Map<? extends CLASS_STRING_TYPE, ? extends CLASS_STRING_VALUE_TYPE>, MAP KEY_VALUE_STRING_GENERIC_TYPE> mapConstructor;
-	Function<MAP KEY_VALUE_STRING_GENERIC_TYPE, MAP KEY_VALUE_STRING_GENERIC_TYPE> pMapConstructor;
-	KEY_STRING_TYPE[] keys = createKeyElements();
-	VALUE_STRING_TYPE[] values = createValueElements();
+	protected Function<Map<? extends CLASS_TYPE, ? extends CLASS_VALUE_TYPE>, MAP KEY_VALUE_GENERIC_TYPE> mapConstructor;
+	protected Function<MAP KEY_VALUE_GENERIC_TYPE, MAP KEY_VALUE_GENERIC_TYPE> pMapConstructor;
+	protected KEY_TYPE[] keys = createKeyElements();
+	protected VALUE_TYPE[] values = createValueElements();
 	
-	protected void setSimpleConstructor(Supplier<MAP KEY_VALUE_STRING_GENERIC_TYPE> simpleConstructor) {
+	protected void setSimpleConstructor(Supplier<MAP KEY_VALUE_GENERIC_TYPE> simpleConstructor) {
 		this.simpleConstructor = simpleConstructor;
 	}
 	
-	protected void setSizeConstructor(IntFunction<MAP KEY_VALUE_STRING_GENERIC_TYPE> sizeConstructor) {
+	protected void setSizeConstructor(IntFunction<MAP KEY_VALUE_GENERIC_TYPE> sizeConstructor) {
 		this.sizeConstructor = sizeConstructor;
 	}
 	
-	protected void setPArrayConstructor(BiFunction<KEY_STRING_TYPE[], VALUE_STRING_TYPE[], MAP KEY_VALUE_STRING_GENERIC_TYPE> pArrayConstructor) {
+	protected void setPArrayConstructor(BiFunction<KEY_TYPE[], VALUE_TYPE[], MAP KEY_VALUE_GENERIC_TYPE> pArrayConstructor) {
 		this.pArrayConstructor = pArrayConstructor;
 	}
 	
 #if !TYPE_OBJECT || !VALUE_OBJECT
-	protected void setArrayConstructor(BiFunction<CLASS_STRING_TYPE[], CLASS_STRING_VALUE_TYPE[], MAP KEY_VALUE_STRING_GENERIC_TYPE> arrayConstructor) {
+	protected void setArrayConstructor(BiFunction<CLASS_TYPE[], CLASS_VALUE_TYPE[], MAP KEY_VALUE_GENERIC_TYPE> arrayConstructor) {
 		this.arrayConstructor = arrayConstructor;
 	}
 
 #endif
-	protected void setMapConstructor(Function<Map<? extends CLASS_STRING_TYPE, ? extends CLASS_STRING_VALUE_TYPE>, MAP KEY_VALUE_STRING_GENERIC_TYPE> mapConstructor) {
+	protected void setMapConstructor(Function<Map<? extends CLASS_TYPE, ? extends CLASS_VALUE_TYPE>, MAP KEY_VALUE_GENERIC_TYPE> mapConstructor) {
 		this.mapConstructor = mapConstructor;
 	}
 	
-	protected void setPMapConstructor(Function<MAP KEY_VALUE_STRING_GENERIC_TYPE, MAP KEY_VALUE_STRING_GENERIC_TYPE> pMapConstructor) {
+	protected void setPMapConstructor(Function<MAP KEY_VALUE_GENERIC_TYPE, MAP KEY_VALUE_GENERIC_TYPE> pMapConstructor) {
 		this.pMapConstructor = pMapConstructor;
 	}
 	
@@ -80,7 +77,7 @@ public abstract class FILE_KEY_TYPE2FILE_VALUE_TYPEMapConstructorTester extends 
 			pArrayConstructor.apply(Arrays.copyOf(keys, 50), values);
 			Assert.fail("This should throw IllegalStateException");
 		}
-		catch(IllegalStateException e) {
+		catch(IllegalStateException | IllegalArgumentException e) {
 		}
 	}
 	
@@ -110,7 +107,7 @@ public abstract class FILE_KEY_TYPE2FILE_VALUE_TYPEMapConstructorTester extends 
 #endif
 			Assert.fail("This should throw IllegalStateException");
 		}
-		catch(IllegalStateException e) {
+		catch(IllegalStateException | IllegalArgumentException e) {
 		}
 	}
 	
@@ -156,7 +153,7 @@ public abstract class FILE_KEY_TYPE2FILE_VALUE_TYPEMapConstructorTester extends 
 		if(sizeConstructor == null) return;
 		try
 		{
-			MAP KEY_VALUE_STRING_GENERIC_TYPE map = sizeConstructor.apply(0);
+			MAP KEY_VALUE_GENERIC_TYPE map = sizeConstructor.apply(0);
 			if(map instanceof ITrimmable) {
 				ITrimmable trim = (ITrimmable)map;
 				map.putAll(keys, values);
@@ -186,9 +183,7 @@ public abstract class FILE_KEY_TYPE2FILE_VALUE_TYPEMapConstructorTester extends 
 	}
 	
 #if TYPE_OBJECT
-	protected String[] createKeyElements() {
-		return Arrays.copyOfRange(StringSortTest.NAMES, 0, 100);
-	}
+	protected abstract KEY_TYPE[] createKeyElements();
 	
 #else
 	protected KEY_TYPE[] createKeyElements() {
@@ -201,14 +196,12 @@ public abstract class FILE_KEY_TYPE2FILE_VALUE_TYPEMapConstructorTester extends 
 #endif
 
 #if VALUE_OBJECT
-	protected String[] createValueElements() {
-		return Arrays.copyOfRange(StringSortTest.NAMES, 100, 200);
-	}
+	protected abstract VALUE_TYPE[] createValueElements();
 	
 #else
 	protected VALUE_TYPE[] createValueElements() {
-		VALUE_TYPE[] values = NEW_VALUE_ARRAY(100);
-		for(int i = 0;i<100;i++) {
+		VALUE_TYPE[] values = NEW_VALUE_ARRAY(getSize());
+		for(int i = 0,m=getSize();i<m;i++) {
 #if VALUE_BOOLEAN
 			values[i] = i % 2 != 0;
 #else
@@ -216,6 +209,10 @@ public abstract class FILE_KEY_TYPE2FILE_VALUE_TYPEMapConstructorTester extends 
 #endif
 		}
 		return values;
+	}
+	
+	protected int getSize() {
+		return 100;
 	}
 #endif
 }
