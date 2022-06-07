@@ -224,7 +224,7 @@ public class LinkedEnum2ByteMap<T extends Enum<T>> extends Enum2ByteMap<T> imple
 	@Override
 	public byte getAndMoveToFirst(T key) {
 		int index = key.ordinal();
-		if(index < 0) return getDefaultReturnValue();
+		if(!isSet(index)) return getDefaultReturnValue();
 		moveToFirstIndex(index);
 		return values[index];
 	}
@@ -232,7 +232,7 @@ public class LinkedEnum2ByteMap<T extends Enum<T>> extends Enum2ByteMap<T> imple
 	@Override
 	public byte getAndMoveToLast(T key) {
 		int index = key.ordinal();
-		if(index < 0) return getDefaultReturnValue();
+		if(!isSet(index)) return getDefaultReturnValue();
 		moveToLastIndex(index);
 		return values[index];
 	}
@@ -766,6 +766,7 @@ public class LinkedEnum2ByteMap<T extends Enum<T>> extends Enum2ByteMap<T> imple
 			previous = from.ordinal() - 1;
 			index = from.ordinal();
 			next = from.ordinal();
+			if(!isSet(index)) throw new NoSuchElementException();
 		}
 		
 		public boolean hasNext() {

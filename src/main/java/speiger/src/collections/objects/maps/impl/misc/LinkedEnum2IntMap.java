@@ -224,7 +224,7 @@ public class LinkedEnum2IntMap<T extends Enum<T>> extends Enum2IntMap<T> impleme
 	@Override
 	public int getAndMoveToFirst(T key) {
 		int index = key.ordinal();
-		if(index < 0) return getDefaultReturnValue();
+		if(!isSet(index)) return getDefaultReturnValue();
 		moveToFirstIndex(index);
 		return values[index];
 	}
@@ -232,7 +232,7 @@ public class LinkedEnum2IntMap<T extends Enum<T>> extends Enum2IntMap<T> impleme
 	@Override
 	public int getAndMoveToLast(T key) {
 		int index = key.ordinal();
-		if(index < 0) return getDefaultReturnValue();
+		if(!isSet(index)) return getDefaultReturnValue();
 		moveToLastIndex(index);
 		return values[index];
 	}
@@ -766,6 +766,7 @@ public class LinkedEnum2IntMap<T extends Enum<T>> extends Enum2IntMap<T> impleme
 			previous = from.ordinal() - 1;
 			index = from.ordinal();
 			next = from.ordinal();
+			if(!isSet(index)) throw new NoSuchElementException();
 		}
 		
 		public boolean hasNext() {

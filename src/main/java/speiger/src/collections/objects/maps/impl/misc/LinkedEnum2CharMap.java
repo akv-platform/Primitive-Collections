@@ -224,7 +224,7 @@ public class LinkedEnum2CharMap<T extends Enum<T>> extends Enum2CharMap<T> imple
 	@Override
 	public char getAndMoveToFirst(T key) {
 		int index = key.ordinal();
-		if(index < 0) return getDefaultReturnValue();
+		if(!isSet(index)) return getDefaultReturnValue();
 		moveToFirstIndex(index);
 		return values[index];
 	}
@@ -232,7 +232,7 @@ public class LinkedEnum2CharMap<T extends Enum<T>> extends Enum2CharMap<T> imple
 	@Override
 	public char getAndMoveToLast(T key) {
 		int index = key.ordinal();
-		if(index < 0) return getDefaultReturnValue();
+		if(!isSet(index)) return getDefaultReturnValue();
 		moveToLastIndex(index);
 		return values[index];
 	}
@@ -766,6 +766,7 @@ public class LinkedEnum2CharMap<T extends Enum<T>> extends Enum2CharMap<T> imple
 			previous = from.ordinal() - 1;
 			index = from.ordinal();
 			next = from.ordinal();
+			if(!isSet(index)) throw new NoSuchElementException();
 		}
 		
 		public boolean hasNext() {
