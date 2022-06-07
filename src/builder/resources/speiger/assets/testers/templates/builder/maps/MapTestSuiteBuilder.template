@@ -158,7 +158,7 @@ public class MAP_TEST_BUILDER KEY_VALUE_GENERIC_TYPE extends MapTestSuiteBuilder
 						.named(parentBuilder.getName() + " keys").suppressing(parentBuilder.getSuppressedTests()).suppressing(getSuppressing(0))
 						.withSetUp(parentBuilder.getSetUp()).withTearDown(parentBuilder.getTearDown())
 						.createTestSuite());
-#if !TYPE_CHAR && !TYPE_OBJECT && !TYPE_FLOAT && !TYPE_DOUBLE
+#if !TYPE_CHAR && !TYPE_OBJECT && !TYPE_FLOAT && !TYPE_DOUBLE || !VALUE_BOOLEAN
 		derivedSuites.add(createDerivedValueCollectionSuite(
 				new DERIVED_MAP_GENERATORS.MapValueCollectionGeneratorKV_BRACES(parentBuilder.getSubjectGenerator()))
 						.named(parentBuilder.getName() + " values")
@@ -257,7 +257,7 @@ public class MAP_TEST_BUILDER KEY_VALUE_GENERIC_TYPE extends MapTestSuiteBuilder
 		return keySetFeatures;
 	}
 
-#if !TYPE_CHAR && !TYPE_OBJECT && !TYPE_FLOAT && !TYPE_DOUBLE
+#if !TYPE_CHAR && !TYPE_OBJECT && !TYPE_FLOAT && !TYPE_DOUBLE || !VALUE_BOOLEAN
 	private static Set<Feature<?>> computeValuesCollectionFeatures(Set<Feature<?>> mapFeatures) {
 		Set<Feature<?>> valuesCollectionFeatures = MapTestSuiteBuilder.computeCommonDerivedCollectionFeatures(mapFeatures);
 #ignore
