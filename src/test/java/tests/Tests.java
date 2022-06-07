@@ -2,7 +2,9 @@ package tests;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import speiger.src.tests.bytes.maps.Byte2CharMapTests;
+import speiger.src.tests.ints.maps.Int2BooleanMapTests;
+import speiger.src.tests.longs.maps.Long2BooleanMapTests;
+import speiger.src.tests.shorts.maps.Short2BooleanMapTests;
 
 @SuppressWarnings("javadoc")
 public class Tests {
@@ -57,7 +59,7 @@ public class Tests {
 		TestSuite maps = new TestSuite("ByteMaps");
 //		maps.addTest(Byte2BooleanMapTests.suite());
 //		maps.addTest(Byte2ByteMapTests.suite());
-		maps.addTest(Byte2CharMapTests.suite());
+//		maps.addTest(Byte2CharMapTests.suite());
 //		maps.addTest(Byte2ShortMapTests.suite());
 //		maps.addTest(Byte2IntMapTests.suite());
 //		maps.addTest(Byte2LongMapTests.suite());
@@ -69,7 +71,7 @@ public class Tests {
 	
 	private static void shortSuite(TestSuite suite) {
 		TestSuite maps = new TestSuite("ShortMaps");
-//		maps.addTest(Short2BooleanMapTests.suite());
+		maps.addTest(Short2BooleanMapTests.suite());
 //		maps.addTest(Short2ByteMapTests.suite());
 //		maps.addTest(Short2CharMapTests.suite());
 //		maps.addTest(Short2ShortMapTests.suite());
@@ -82,7 +84,7 @@ public class Tests {
 	}
 	
 	private static void charSuite(TestSuite suite) {
-		TestSuite maps = new TestSuite("ShortMaps");
+		TestSuite maps = new TestSuite("CharMaps");
 //		maps.addTest(Char2BooleanMapTests.suite());
 //		maps.addTest(Char2ByteMapTests.suite());
 //		maps.addTest(Char2CharMapTests.suite());
@@ -97,7 +99,7 @@ public class Tests {
 	
 	private static void intSuite(TestSuite suite) {
 		TestSuite maps = new TestSuite("IntMaps");
-//		maps.addTest(Int2BooleanMapTests.suite());
+		maps.addTest(Int2BooleanMapTests.suite());
 //		maps.addTest(Int2ByteMapTests.suite());
 //		maps.addTest(Int2CharMapTests.suite());
 //		maps.addTest(Int2ShortMapTests.suite());
@@ -111,7 +113,7 @@ public class Tests {
 	
 	private static void longSuite(TestSuite suite) {
 		TestSuite maps = new TestSuite("LongMaps");
-//		maps.addTest(Long2BooleanMapTests.suite());
+		maps.addTest(Long2BooleanMapTests.suite());
 //		maps.addTest(Long2ByteMapTests.suite());
 //		maps.addTest(Long2CharMapTests.suite());
 //		maps.addTest(Long2ShortMapTests.suite());

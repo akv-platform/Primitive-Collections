@@ -71,6 +71,7 @@ import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapCo
 import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapSupplyIfAbsentTester;
 import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapMergeTester;
 import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapPutIfAbsentTester;
+import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapRemoveEntryTester;
 #endif
 import speiger.src.testers.utils.SpecialFeature;
 import speiger.src.testers.utils.TestUtils;
@@ -350,7 +351,8 @@ public class MAP_TESTS extends TestCase
 		TestUtils.getSurpession(list, FILE_KEY_TYPE2FILE_VALUE_TYPEMapSupplyIfAbsentTester.class, "testSupplyIfAbsent_supportedAbsent");
 		TestUtils.getSurpession(list, FILE_KEY_TYPE2FILE_VALUE_TYPEMapMergeTester.class, "testAbsent");
 		TestUtils.getSurpession(list, FILE_KEY_TYPE2FILE_VALUE_TYPEMapPutIfAbsentTester.class, "testPutIfAbsent_supportedAbsent");
-		
+		TestUtils.getSurpession(list, FILE_KEY_TYPE2FILE_VALUE_TYPEMapRemoveEntryTester.class, "testRemove_supportedPresentLastWrongValue", "testRemoveObject_supportedPresentLastWrongValue");
+
 		TestUtils.getSurpession(list, CollectionAddTester.class, "testAdd_unsupportedNotPresent");
 		TestUtils.getSurpession(list, CollectionAddAllTester.class, "testAddAll_unsupportedNonePresent");
 		TestUtils.getSurpession(list, FILE_KEY_TYPE2FILE_VALUE_TYPEMapContainsValueTester.class, "testContains_no");

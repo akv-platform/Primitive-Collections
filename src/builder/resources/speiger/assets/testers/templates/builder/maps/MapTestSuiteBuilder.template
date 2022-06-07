@@ -14,6 +14,10 @@ import com.google.common.collect.testing.features.CollectionFeature;
 import com.google.common.collect.testing.features.Feature;
 import com.google.common.collect.testing.features.MapFeature;
 import com.google.common.collect.testing.testers.CollectionIteratorTester;
+#if VALUE_BOOLEAN
+import com.google.common.collect.testing.testers.CollectionRemoveTester;
+import com.google.common.collect.testing.testers.CollectionRetainAllTester;
+#endif
 
 import junit.framework.TestSuite;
 import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
@@ -37,6 +41,14 @@ import speiger.src.testers.VALUE_PACKAGE.tests.collection.FILE_VALUE_TYPECollect
 import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapAddToTester;
 import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapSubFromTester;
 #endif
+#if VALUE_BOOLEAN
+#if !TYPE_CHAR && !TYPE_FLOAT && !TYPE_DOUBLE && !TYPE_OBJECT
+import speiger.src.testers.VALUE_PACKAGE.tests.collection.FILE_VALUE_TYPECollectionIteratorTester;
+#endif
+import speiger.src.testers.VALUE_PACKAGE.tests.collection.FILE_VALUE_TYPECollectionRemoveAllTester;
+import speiger.src.testers.VALUE_PACKAGE.tests.collection.FILE_VALUE_TYPECollectionRetainAllTester;
+#endif
+
 import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapClearTester;
 import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapComputeIfAbsentTester;
 import speiger.src.testers.PACKAGE.tests.maps.FILE_KEY_TYPE2FILE_VALUE_TYPEMapComputeIfPresentTester;
@@ -146,7 +158,7 @@ public class MAP_TEST_BUILDER KEY_VALUE_GENERIC_TYPE extends MapTestSuiteBuilder
 						.named(parentBuilder.getName() + " keys").suppressing(parentBuilder.getSuppressedTests()).suppressing(getSuppressing(0))
 						.withSetUp(parentBuilder.getSetUp()).withTearDown(parentBuilder.getTearDown())
 						.createTestSuite());
-#if !VALUE_BOOLEAN
+#if !TYPE_CHAR && !TYPE_OBJECT && !TYPE_FLOAT && !TYPE_DOUBLE
 		derivedSuites.add(createDerivedValueCollectionSuite(
 				new DERIVED_MAP_GENERATORS.MapValueCollectionGeneratorKV_BRACES(parentBuilder.getSubjectGenerator()))
 						.named(parentBuilder.getName() + " values")
@@ -175,8 +187,33 @@ public class MAP_TEST_BUILDER KEY_VALUE_GENERIC_TYPE extends MapTestSuiteBuilder
 			switch(type) {
 				case 0: return TestUtils.getSurpession(FILE_KEY_TYPECollectionIteratorTester.class, "testIterator_unknownOrderRemoveSupported");
 				case 1: return TestUtils.getSurpession(ObjectCollectionIteratorTester.class, "testIterator_unknownOrderRemoveSupported");
-				case 2: return TestUtils.getSurpession(FILE_VALUE_TYPECollectionIteratorTester.class, "testIterator_unknownOrderRemoveSupported");
+				case 2: {
+					List<Method> result = new ArrayList<>();
+					TestUtils.getSurpession(result, FILE_VALUE_TYPECollectionIteratorTester.class, "testIterator_unknownOrderRemoveSupported");
+#if VALUE_BOOLEAN
+					TestUtils.getSurpession(result, CollectionRemoveTester.class, "testRemove_present");
+					TestUtils.getSurpession(result, CollectionRetainAllTester.class);
+					TestUtils.getSurpession(result, FILE_VALUE_TYPECollectionIteratorTester.class, "testIterator_removeAffectsBackingCollection");
+					TestUtils.getSurpession(result, FILE_VALUE_TYPECollectionRemoveAllTester.class, "testRemoveAll_someFetchRemovedElements");
+					TestUtils.getSurpession(result, FILE_VALUE_TYPECollectionRetainAllTester.class);
+#endif
+					return result.toArray(new Method[result.size()]);
+				}
 			}
+		}
+		return new Method[0];
+#else if VALUE_BOOLEAN
+		if(type == 2) {
+			List<Method> result = new ArrayList<>();
+			TestUtils.getSurpession(result, FILE_VALUE_TYPECollectionIteratorTester.class, "testIterator_unknownOrderRemoveSupported");
+#if VALUE_BOOLEAN
+			TestUtils.getSurpession(result, CollectionRemoveTester.class, "testRemove_present");
+			TestUtils.getSurpession(result, CollectionRetainAllTester.class);
+			TestUtils.getSurpession(result, FILE_VALUE_TYPECollectionIteratorTester.class, "testIterator_removeAffectsBackingCollection");
+			TestUtils.getSurpession(result, FILE_VALUE_TYPECollectionRemoveAllTester.class, "testRemoveAll_someFetchRemovedElements");
+			TestUtils.getSurpession(result, FILE_VALUE_TYPECollectionRetainAllTester.class);
+#endif
+			return result.toArray(new Method[result.size()]);
 		}
 		return new Method[0];
 #else
@@ -220,7 +257,7 @@ public class MAP_TEST_BUILDER KEY_VALUE_GENERIC_TYPE extends MapTestSuiteBuilder
 		return keySetFeatures;
 	}
 
-#if !VALUE_BOOLEAN
+#if !TYPE_CHAR && !TYPE_OBJECT && !TYPE_FLOAT && !TYPE_DOUBLE
 	private static Set<Feature<?>> computeValuesCollectionFeatures(Set<Feature<?>> mapFeatures) {
 		Set<Feature<?>> valuesCollectionFeatures = MapTestSuiteBuilder.computeCommonDerivedCollectionFeatures(mapFeatures);
 #ignore
