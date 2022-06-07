@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.function.Consumer;
 
 import speiger.src.collections.shorts.collections.AbstractShortCollection;
 import speiger.src.collections.shorts.collections.ShortCollection;
@@ -70,8 +71,8 @@ public class Enum2ShortMap<T extends Enum<T>> extends AbstractObject2ShortMap<T>
 		if(keys.length != values.length) throw new IllegalArgumentException("Keys and Values have to be the same size");
 		keyType = keys[0].getDeclaringClass();
 		this.keys = getKeyUniverse(keyType);
-		this.values = new short[keys.length];
-		present = new long[((keys.length - 1) >> 6) + 1];
+		this.values = new short[this.keys.length];
+		present = new long[((this.keys.length - 1) >> 6) + 1];
 		putAll(keys, values);
 	}
 	
@@ -86,8 +87,8 @@ public class Enum2ShortMap<T extends Enum<T>> extends AbstractObject2ShortMap<T>
 		if(keys.length != values.length) throw new IllegalArgumentException("Keys and Values have to be the same size");
 		keyType = keys[0].getDeclaringClass();
 		this.keys = getKeyUniverse(keyType);
-		this.values = new short[keys.length];
-		present = new long[((keys.length - 1) >> 6) + 1];
+		this.values = new short[this.keys.length];
+		present = new long[((this.keys.length - 1) >> 6) + 1];
 		putAll(keys, values);		
 	}
 	
@@ -484,6 +485,14 @@ public class Enum2ShortMap<T extends Enum<T>> extends AbstractObject2ShortMap<T>
 				return Enum2ShortMap.this.remove(entry.getKey(), entry.getValue());
 			}
 			return false;
+		}
+		
+		@Override
+		public void forEach(Consumer<? super Object2ShortMap.Entry<T>> action) {
+			if(size() <= 0) return;
+			for(int i = 0,m=keys.length;i<m;i++) {
+				if(isSet(i)) action.accept(new BasicEntry<>(keys[i], values[i]));
+			}
 		}
 		
 		@Override

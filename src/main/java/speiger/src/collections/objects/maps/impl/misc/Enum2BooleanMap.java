@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.function.Consumer;
 
 import speiger.src.collections.booleans.collections.AbstractBooleanCollection;
 import speiger.src.collections.booleans.collections.BooleanCollection;
@@ -70,8 +71,8 @@ public class Enum2BooleanMap<T extends Enum<T>> extends AbstractObject2BooleanMa
 		if(keys.length != values.length) throw new IllegalArgumentException("Keys and Values have to be the same size");
 		keyType = keys[0].getDeclaringClass();
 		this.keys = getKeyUniverse(keyType);
-		this.values = new boolean[keys.length];
-		present = new long[((keys.length - 1) >> 6) + 1];
+		this.values = new boolean[this.keys.length];
+		present = new long[((this.keys.length - 1) >> 6) + 1];
 		putAll(keys, values);
 	}
 	
@@ -86,8 +87,8 @@ public class Enum2BooleanMap<T extends Enum<T>> extends AbstractObject2BooleanMa
 		if(keys.length != values.length) throw new IllegalArgumentException("Keys and Values have to be the same size");
 		keyType = keys[0].getDeclaringClass();
 		this.keys = getKeyUniverse(keyType);
-		this.values = new boolean[keys.length];
-		present = new long[((keys.length - 1) >> 6) + 1];
+		this.values = new boolean[this.keys.length];
+		present = new long[((this.keys.length - 1) >> 6) + 1];
 		putAll(keys, values);		
 	}
 	
@@ -459,6 +460,14 @@ public class Enum2BooleanMap<T extends Enum<T>> extends AbstractObject2BooleanMa
 				return Enum2BooleanMap.this.remove(entry.getKey(), entry.getValue());
 			}
 			return false;
+		}
+		
+		@Override
+		public void forEach(Consumer<? super Object2BooleanMap.Entry<T>> action) {
+			if(size() <= 0) return;
+			for(int i = 0,m=keys.length;i<m;i++) {
+				if(isSet(i)) action.accept(new BasicEntry<>(keys[i], values[i]));
+			}
 		}
 		
 		@Override

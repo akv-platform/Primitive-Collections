@@ -52,9 +52,9 @@ public class LinkedEnum2ByteMap<T extends Enum<T>> extends Enum2ByteMap<T> imple
 		if(keys.length != values.length) throw new IllegalArgumentException("Keys and Values have to be the same size");
 		keyType = keys[0].getDeclaringClass();
 		this.keys = getKeyUniverse(keyType);
-		this.values = new byte[keys.length];
-		present = new long[((keys.length - 1) >> 6) + 1];
-		links = new long[keys.length];
+		this.values = new byte[this.keys.length];
+		present = new long[((this.keys.length - 1) >> 6) + 1];
+		links = new long[this.keys.length];
 		putAll(keys, values);
 	}
 	
@@ -69,9 +69,9 @@ public class LinkedEnum2ByteMap<T extends Enum<T>> extends Enum2ByteMap<T> imple
 		if(keys.length != values.length) throw new IllegalArgumentException("Keys and Values have to be the same size");
 		keyType = keys[0].getDeclaringClass();
 		this.keys = getKeyUniverse(keyType);
-		this.values = new byte[keys.length];
-		present = new long[((keys.length - 1) >> 6) + 1];
-		links = new long[keys.length];
+		this.values = new byte[this.keys.length];
+		present = new long[((this.keys.length - 1) >> 6) + 1];
+		links = new long[this.keys.length];
 		putAll(keys, values);		
 	}
 	

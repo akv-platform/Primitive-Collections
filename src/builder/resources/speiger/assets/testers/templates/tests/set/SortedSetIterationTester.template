@@ -1,7 +1,5 @@
 package speiger.src.testers.PACKAGE.tests.set;
 
-import java.util.NoSuchElementException;
-
 import org.junit.Assert;
 import org.junit.Ignore;
 

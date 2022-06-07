@@ -52,9 +52,9 @@ public class LinkedEnum2ShortMap<T extends Enum<T>> extends Enum2ShortMap<T> imp
 		if(keys.length != values.length) throw new IllegalArgumentException("Keys and Values have to be the same size");
 		keyType = keys[0].getDeclaringClass();
 		this.keys = getKeyUniverse(keyType);
-		this.values = new short[keys.length];
-		present = new long[((keys.length - 1) >> 6) + 1];
-		links = new long[keys.length];
+		this.values = new short[this.keys.length];
+		present = new long[((this.keys.length - 1) >> 6) + 1];
+		links = new long[this.keys.length];
 		putAll(keys, values);
 	}
 	
@@ -69,9 +69,9 @@ public class LinkedEnum2ShortMap<T extends Enum<T>> extends Enum2ShortMap<T> imp
 		if(keys.length != values.length) throw new IllegalArgumentException("Keys and Values have to be the same size");
 		keyType = keys[0].getDeclaringClass();
 		this.keys = getKeyUniverse(keyType);
-		this.values = new short[keys.length];
-		present = new long[((keys.length - 1) >> 6) + 1];
-		links = new long[keys.length];
+		this.values = new short[this.keys.length];
+		present = new long[((this.keys.length - 1) >> 6) + 1];
+		links = new long[this.keys.length];
 		putAll(keys, values);		
 	}
 	

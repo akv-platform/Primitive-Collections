@@ -51,9 +51,9 @@ public class LinkedEnum2ObjectMap<T extends Enum<T>, V> extends Enum2ObjectMap<T
 		if(keys.length != values.length) throw new IllegalArgumentException("Keys and Values have to be the same size");
 		keyType = keys[0].getDeclaringClass();
 		this.keys = getKeyUniverse(keyType);
-		this.values = (V[])new Object[keys.length];
-		present = new long[((keys.length - 1) >> 6) + 1];
-		links = new long[keys.length];
+		this.values = (V[])new Object[this.keys.length];
+		present = new long[((this.keys.length - 1) >> 6) + 1];
+		links = new long[this.keys.length];
 		putAll(keys, values);		
 	}
 	
