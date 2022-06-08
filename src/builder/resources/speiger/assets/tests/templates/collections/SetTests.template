@@ -84,8 +84,8 @@ public class SET_TESTS extends TestCase
 	}
 		
 #if TYPE_OBJECT
-	public static Test setSuite(String name, Function<String[], SET<String>> factory, Collection<Feature<?>> features, int size, boolean sorted) {
-		SET_TEST_BUILDER<String> builder = (SET_TEST_BUILDER<String>)SET_TEST_BUILDER.using((TEST_SET_GENERATOR<String>)new SIMPLE_TEST_GENERATOR.SetsBRACES(factory).setElements(sorted ? createSortedStrings() : createStrings())).named(name)
+	public static Test setSuite(String name, Function<String[], SET<String>> factory, Collection<Feature<?>> features, int size) {
+		SET_TEST_BUILDER<String> builder = (SET_TEST_BUILDER<String>)SET_TEST_BUILDER.using((TEST_SET_GENERATOR<String>)new SIMPLE_TEST_GENERATOR.SetsBRACES(factory).setElements(createSortedStrings())).named(name)
 #ignore
 			.withFeatures(getSizes(size)).withFeatures(CollectionFeature.ALLOWS_NULL_VALUES).withFeatures(features);
 #endignore
@@ -94,14 +94,14 @@ public class SET_TESTS extends TestCase
 	}
 
 	public static Test orderedSetSuite(String name, Function<String[], ORDERED_SET<String>> factory, Collection<Feature<?>> features, int size) {
-		return ORDERED_SET_TEST_BUILDER.using((TEST_ORDERED_SET_GENERATOR<String>)new SIMPLE_TEST_GENERATOR.OrderedSetsBRACES(factory).setElements(createStrings())).named(name)
+		return ORDERED_SET_TEST_BUILDER.using((TEST_ORDERED_SET_GENERATOR<String>)new SIMPLE_TEST_GENERATOR.OrderedSetsBRACES(factory).setElements(createSortedStrings())).named(name)
 #ignore
 			.withFeatures(getSizes(size)).withFeatures(CollectionFeature.ALLOWS_NULL_VALUES).withFeatures(features).createTestSuite();
 #endignore
 	}
 
 	public static Test navigableSetSuite(String name, Function<String[], NAVIGABLE_SET<String>> factory, Collection<Feature<?>> features, boolean nullValues, int size) {
-		NAVIGABLE_SET_TEST_BUILDER<String> builder = (NAVIGABLE_SET_TEST_BUILDER<String>)NAVIGABLE_SET_TEST_BUILDER.using((TEST_NAVIGABLE_SET_GENERATOR<String>)new SIMPLE_TEST_GENERATOR.NavigableSetsBRACES(factory).setElements(createStrings())).named(name)
+		NAVIGABLE_SET_TEST_BUILDER<String> builder = (NAVIGABLE_SET_TEST_BUILDER<String>)NAVIGABLE_SET_TEST_BUILDER.using((TEST_NAVIGABLE_SET_GENERATOR<String>)new SIMPLE_TEST_GENERATOR.NavigableSetsBRACES(factory).setElements(createSortedStrings())).named(name)
 #ignore
 			.withFeatures(getSizes(size)).withFeatures(features);
 		if(nullValues) builder.withFeatures(CollectionFeature.ALLOWS_NULL_VALUES);
@@ -117,16 +117,12 @@ public class SET_TESTS extends TestCase
 		public boolean equals(String key, String value) { return KEY_EQUALS(key, value); }
 	}
 	
-	private static String[] createStrings() {
-		return new String[]{"b", "a", "c", "d", "e", "!! a", "!! b", "~~ a", "~~ b"};
-	}
-	
 	private static String[] createSortedStrings() {
 		return new String[]{"a", "b", "c", "d", "e", "!! a", "!! b", "~~ a", "~~ b"};
 	}
 #else
-	public static Test setSuite(String name, Function<KEY_TYPE[], SET KEY_GENERIC_TYPE> factory, Collection<Feature<?>> features, int size, boolean sorted) {
-		SET_TEST_BUILDER builder = (SET_TEST_BUILDER)SET_TEST_BUILDER.using((TEST_SET_GENERATOR)new SIMPLE_TEST_GENERATOR.SetsBRACES(factory).setSorted(sorted)).named(name)
+	public static Test setSuite(String name, Function<KEY_TYPE[], SET KEY_GENERIC_TYPE> factory, Collection<Feature<?>> features, int size) {
+		SET_TEST_BUILDER builder = (SET_TEST_BUILDER)SET_TEST_BUILDER.using(new SIMPLE_TEST_GENERATOR.SetsBRACES(factory)).named(name)
 #ignore
 			.withFeatures(getSizes(size)).withFeatures(features);
 #endignore
