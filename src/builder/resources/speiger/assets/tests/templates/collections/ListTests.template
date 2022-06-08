@@ -13,6 +13,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import com.google.common.collect.testing.features.CollectionFeature;
 import com.google.common.collect.testing.features.ListFeature;
 import com.google.common.collect.testing.features.Feature;
+
 #if TYPE_BOOLEAN
 import com.google.common.collect.testing.testers.CollectionAddAllTester;
 import com.google.common.collect.testing.testers.CollectionAddTester;
@@ -31,6 +32,7 @@ import com.google.common.collect.testing.testers.ListRetainAllTester;
 import com.google.common.collect.testing.testers.ListSubListTester;
 #else
 import com.google.common.collect.testing.testers.ListSubListTester;
+import com.google.common.collect.testing.testers.ListListIteratorTester;
 #endif
 
 import junit.framework.Test;
@@ -41,6 +43,7 @@ import speiger.src.collections.PACKAGE.lists.ARRAY_LIST;
 import speiger.src.collections.PACKAGE.lists.LINKED_LIST;
 import speiger.src.collections.PACKAGE.lists.COPY_ON_WRITE_LIST;
 import speiger.src.collections.PACKAGE.lists.LIST;
+
 #if !TYPE_BOOLEAN
 import speiger.src.collections.PACKAGE.utils.LISTS;
 #endif
@@ -72,6 +75,7 @@ import speiger.src.testers.booleans.tests.list.BooleanListRetainAllTester;
 import speiger.src.testers.booleans.tests.list.BooleanListSubListTester;
 #else
 import speiger.src.testers.PACKAGE.tests.list.FILE_KEY_TYPEListSubListTester;
+import speiger.src.testers.PACKAGE.tests.list.FILE_KEY_TYPEListListIteratorTester;
 #endif
 
 @SuppressWarnings("javadoc")
@@ -88,7 +92,7 @@ public class LIST_TESTS extends TestCase
 	public static void suite(TestSuite suite) {
 		suite.addTest(listSuite("ARRAY_LIST", T -> new ARRAY_LISTBRACES(T), getFeatures(), -1));
 		suite.addTest(listSuite("LINKED_LIST", T -> new LINKED_LISTBRACES(T), getFeatures(), -1));
-		suite.addTest(listSuite("COPY_ON_WRITE_LIST", T -> new COPY_ON_WRITE_LISTBRACES(T), getCopyOnWriteFeatures(), -1));
+		suite.addTest(copyOnWritelistSuite("COPY_ON_WRITE_LIST", T -> new COPY_ON_WRITE_LISTBRACES(T), getCopyOnWriteFeatures(), -1));
 		suite.addTest(listSuite("IMMUTABLE_LIST", T -> new IMMUTABLE_LISTBRACES(T), getImmutableFeatures(), -1));
 		suite.addTest(listSuite("Synchronized ARRAY_LIST", T -> new ARRAY_LISTBRACES(T).synchronize(), getFeatures(), -1));
 		suite.addTest(listSuite("Unmodifiable ARRAY_LIST", T -> new ARRAY_LISTBRACES(T).unmodifiable(), getImmutableFeatures(), -1));
@@ -98,6 +102,10 @@ public class LIST_TESTS extends TestCase
 	
 	private static Test listSuite(String name, Function<KEY_STRING_TYPE[], LIST KEY_STRING_GENERIC_TYPE> factory, Collection<Feature<?>> features, int size) {
 		return LIST_TEST_BUILDER.using((TEST_LIST_GENERATOR KEY_STRING_GENERIC_TYPE)new SIMPLE_TEST_GENERATOR.Lists KEY_STRING_GENERIC_TYPE(factory).setElements(createStrings())).named(name).withFeatures(getSizes(size)).withFeatures(features).createTestSuite();
+	}
+	
+	private static Test copyOnWritelistSuite(String name, Function<KEY_STRING_TYPE[], LIST KEY_STRING_GENERIC_TYPE> factory, Collection<Feature<?>> features, int size) {
+		return LIST_TEST_BUILDER.using((TEST_LIST_GENERATOR KEY_STRING_GENERIC_TYPE)new SIMPLE_TEST_GENERATOR.Lists KEY_STRING_GENERIC_TYPE(factory).setElements(createStrings())).named(name).withFeatures(getSizes(size)).withFeatures(features).suppressing(TestUtils.getSurpession(ListListIteratorTester.class)).suppressing(TestUtils.getSurpession(FILE_KEY_TYPEListListIteratorTester.class)).createTestSuite();
 	}
 	
 	private static Test emptylistSuite(String name, Function<KEY_STRING_TYPE[], LIST KEY_STRING_GENERIC_TYPE> factory, Collection<Feature<?>> features, int size) {
@@ -111,7 +119,7 @@ public class LIST_TESTS extends TestCase
 	public static void suite(TestSuite suite) {
 		suite.addTest(listSuite("ARRAY_LIST", ARRAY_LIST::new, getFeatures(), -1));
 		suite.addTest(listSuite("LINKED_LIST", LINKED_LIST::new, getFeatures(), -1));
-		suite.addTest(listSuite("COPY_ON_WRITE_LIST", COPY_ON_WRITE_LIST::new, getCopyOnWriteFeatures(), -1));
+		suite.addTest(copyOnWritelistSuite("COPY_ON_WRITE_LIST", COPY_ON_WRITE_LIST::new, getCopyOnWriteFeatures(), -1));
 		suite.addTest(listSuite("IMMUTABLE_LIST", IMMUTABLE_LIST::new, getImmutableFeatures(), -1));
 		suite.addTest(listSuite("Synchronized ARRAY_LIST", T -> new ARRAY_LISTBRACES(T).synchronize(), getFeatures(), -1));
 		suite.addTest(listSuite("Unmodifiable ARRAY_LIST", T -> new ARRAY_LISTBRACES(T).unmodifiable(), getImmutableFeatures(), -1));
@@ -123,6 +131,10 @@ public class LIST_TESTS extends TestCase
 		return LIST_TEST_BUILDER.using(new SIMPLE_TEST_GENERATOR.ListsBRACES(factory)).named(name).withFeatures(getSizes(size)).withFeatures(features).createTestSuite();
 	}
 	
+	private static Test copyOnWritelistSuite(String name, Function<KEY_STRING_TYPE[], LIST KEY_STRING_GENERIC_TYPE> factory, Collection<Feature<?>> features, int size) {
+		return LIST_TEST_BUILDER.using(new SIMPLE_TEST_GENERATOR.Lists KEY_STRING_GENERIC_TYPE(factory)).named(name).withFeatures(getSizes(size)).withFeatures(features).suppressing(TestUtils.getSurpession(ListListIteratorTester.class)).suppressing(TestUtils.getSurpession(FILE_KEY_TYPEListListIteratorTester.class)).createTestSuite();
+	}
+	
 	private static Test emptylistSuite(String name, Function<KEY_STRING_TYPE[], LIST KEY_STRING_GENERIC_TYPE> factory, Collection<Feature<?>> features, int size) {
 		return LIST_TEST_BUILDER.using(new SIMPLE_TEST_GENERATOR.ListsBRACES(factory)).named(name).withFeatures(getSizes(size)).suppressing(TestUtils.getSurpession(ListSubListTester.class)).suppressing(TestUtils.getSurpession(FILE_KEY_TYPEListSubListTester.class)).withFeatures(features).createTestSuite();
 	}
@@ -131,10 +143,40 @@ public class LIST_TESTS extends TestCase
 	public static void suite(TestSuite suite) {
 		listSuite(suite, "ARRAY_LIST", ARRAY_LIST::new, getFeatures(), false, -1);
 		listSuite(suite, "LINKED_LIST", LINKED_LIST::new, getFeatures(), false, -1);
-		listSuite(suite, "COPY_ON_WRITE_LIST", COPY_ON_WRITE_LIST::new, getCopyOnWriteFeatures(), false, -1);
+		copyOnWritelistSuite(suite, "COPY_ON_WRITE_LIST", COPY_ON_WRITE_LIST::new, getCopyOnWriteFeatures(), false, -1);
 		listSuite(suite, "IMMUTABLE_LIST", IMMUTABLE_LIST::new, getImmutableFeatures(), true, -1);
 		listSuite(suite, "Synchronized ARRAY_LIST", T -> new ARRAY_LISTBRACES(T).synchronize(), getFeatures(), false, -1);
 		listSuite(suite, "Unmodifiable ARRAY_LIST", T -> new ARRAY_LISTBRACES(T).unmodifiable(), getImmutableFeatures(), true, -1);
+	}
+	
+	private static void copyOnWritelistSuite(TestSuite suite, String name, Function<KEY_TYPE[], LIST KEY_GENERIC_TYPE> factory, Collection<Feature<?>> features, boolean immutable, int size) {
+		TestSuite data = new TestSuite(name);
+		Collection<CollectionSize> sizes = getSizes(size);
+#ignore
+		if(sizes.contains(CollectionSize.ZERO) || sizes.contains(CollectionSize.ANY)) {
+#endignore
+			data.addTest(LIST_TEST_BUILDER.using(new SIMPLE_TEST_GENERATOR.ListsBRACES(factory))
+#ignore
+			.named(name+" [collection size: zero]").withFeatures(CollectionSize.ZERO).withFeatures(features).suppressing(getSurpression(CollectionSize.ZERO, immutable)).createTestSuite());
+#endignore
+		}
+#ignore
+		if(sizes.contains(CollectionSize.ONE) || sizes.contains(CollectionSize.ANY)) {
+#endignore
+			data.addTest(LIST_TEST_BUILDER.using(new SIMPLE_TEST_GENERATOR.ListsBRACES(factory))
+#ignore
+				.named(name+" [collection size: one]").withFeatures(CollectionSize.ONE).withFeatures(features).suppressing(getSurpression(CollectionSize.ONE, immutable)).createTestSuite());
+#endignore
+		}
+#ignore
+		if(sizes.contains(CollectionSize.SEVERAL) || sizes.contains(CollectionSize.ANY)) {
+#endignore
+			data.addTest(LIST_TEST_BUILDER.using(new SIMPLE_TEST_GENERATOR.ListsBRACES(factory)).named(name)
+#ignore
+				.named(name+" [collection size: several]").withFeatures(CollectionSize.SEVERAL).withFeatures(features).suppressing(getSurpression(CollectionSize.SEVERAL, immutable)).createTestSuite());
+#endignore
+		}
+		suite.addTest(data);
 	}
 	
 	private static void listSuite(TestSuite suite, String name, Function<KEY_TYPE[], LIST KEY_GENERIC_TYPE> factory, Collection<Feature<?>> features, boolean immutable, int size) {
