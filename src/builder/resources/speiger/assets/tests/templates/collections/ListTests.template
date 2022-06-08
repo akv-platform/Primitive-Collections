@@ -10,6 +10,7 @@ import java.util.List;
 #endif
 
 import com.google.common.collect.testing.features.CollectionSize;
+import com.google.common.collect.testing.features.CollectionFeature;
 import com.google.common.collect.testing.features.ListFeature;
 import com.google.common.collect.testing.features.Feature;
 #if TYPE_OBJECT
@@ -41,6 +42,7 @@ import junit.framework.TestSuite;
 import speiger.src.collections.PACKAGE.lists.IMMUTABLE_LIST;
 import speiger.src.collections.PACKAGE.lists.ARRAY_LIST;
 import speiger.src.collections.PACKAGE.lists.LINKED_LIST;
+import speiger.src.collections.PACKAGE.lists.COPY_ON_WRITE_LIST;
 import speiger.src.collections.PACKAGE.lists.LIST;
 #if !TYPE_BOOLEAN
 import speiger.src.collections.PACKAGE.utils.LISTS;
@@ -89,6 +91,7 @@ public class LIST_TESTS extends TestCase
 	public static void suite(TestSuite suite) {
 		suite.addTest(listSuite("ARRAY_LIST", T -> new ARRAY_LISTBRACES(T), getFeatures(), -1));
 		suite.addTest(listSuite("LINKED_LIST", T -> new LINKED_LISTBRACES(T), getFeatures(), -1));
+		suite.addTest(listSuite("COPY_ON_WRITE_LIST", COPY_ON_WRITE_LIST::new, getCopyOnWriteFeatures(), -1));
 		suite.addTest(listSuite("IMMUTABLE_LIST", T -> new IMMUTABLE_LISTBRACES(T), getImmutableFeatures(), -1));
 		suite.addTest(listSuite("Synchronized ARRAY_LIST", T -> new ARRAY_LISTBRACES(T).synchronize(), getFeatures(), -1));
 		suite.addTest(listSuite("Unmodifiable ARRAY_LIST", T -> new ARRAY_LISTBRACES(T).unmodifiable(), getImmutableFeatures(), -1));
@@ -111,6 +114,7 @@ public class LIST_TESTS extends TestCase
 	public static void suite(TestSuite suite) {
 		suite.addTest(listSuite("ARRAY_LIST", ARRAY_LIST::new, getFeatures(), -1));
 		suite.addTest(listSuite("LINKED_LIST", LINKED_LIST::new, getFeatures(), -1));
+		suite.addTest(listSuite("COPY_ON_WRITE_LIST", COPY_ON_WRITE_LIST::new, getCopyOnWriteFeatures(), -1));
 		suite.addTest(listSuite("IMMUTABLE_LIST", IMMUTABLE_LIST::new, getImmutableFeatures(), -1));
 		suite.addTest(listSuite("Synchronized ARRAY_LIST", T -> new ARRAY_LISTBRACES(T).synchronize(), getFeatures(), -1));
 		suite.addTest(listSuite("Unmodifiable ARRAY_LIST", T -> new ARRAY_LISTBRACES(T).unmodifiable(), getImmutableFeatures(), -1));
@@ -130,6 +134,7 @@ public class LIST_TESTS extends TestCase
 	public static void suite(TestSuite suite) {
 		listSuite(suite, "ARRAY_LIST", ARRAY_LIST::new, getFeatures(), false, -1);
 		listSuite(suite, "LINKED_LIST", LINKED_LIST::new, getFeatures(), false, -1);
+		listSuite(suite, "COPY_ON_WRITE_LIST", COPY_ON_WRITE_LIST::new, getCopyOnWriteFeatures(), false, -1);
 		listSuite(suite, "IMMUTABLE_LIST", IMMUTABLE_LIST::new, getImmutableFeatures(), true, -1);
 		listSuite(suite, "Synchronized ARRAY_LIST", T -> new ARRAY_LISTBRACES(T).synchronize(), getFeatures(), false, -1);
 		listSuite(suite, "Unmodifiable ARRAY_LIST", T -> new ARRAY_LISTBRACES(T).unmodifiable(), getImmutableFeatures(), true, -1);
@@ -236,6 +241,19 @@ public class LIST_TESTS extends TestCase
 	}
 	
 #endignore
+	private static Collection<Feature<?>> getCopyOnWriteFeatures() {
+
+#if TYPE_OBJECT
+#ignore
+		return Arrays.asList(CollectionFeature.SUPPORTS_ADD, CollectionFeature.SUPPORTS_REMOVE, SpecialFeature.COPYING, ListFeature.SUPPORTS_SET, CollectionFeature.ALLOWS_NULL_VALUES);
+#endignore
+#else
+#ignore
+		return Arrays.asList(CollectionFeature.SUPPORTS_ADD, CollectionFeature.SUPPORTS_REMOVE, SpecialFeature.COPYING, ListFeature.SUPPORTS_SET);
+#endignore
+#endif
+	}
+	
 	private static Collection<Feature<?>> getImmutableFeatures() {
 
 #if TYPE_OBJECT

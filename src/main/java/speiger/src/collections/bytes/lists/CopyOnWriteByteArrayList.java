@@ -363,6 +363,8 @@ public class CopyOnWriteByteArrayList extends AbstractByteList implements ITrimm
 	 */
 	@Override
 	public void removeElements(int from, int to) {
+		checkRange(from);
+		checkAddRange(to);
 		int length = to - from;
 		if(length <= 0) return;
 		ReentrantLock lock = this.lock;
@@ -391,6 +393,8 @@ public class CopyOnWriteByteArrayList extends AbstractByteList implements ITrimm
 	 */
 	@Override
 	public byte[] extractElements(int from, int to) {
+		checkRange(from);
+		checkAddRange(to);
 		int length = to - from;
 		if(length <= 0) return ByteArrays.EMPTY_ARRAY;
 		ReentrantLock lock = this.lock;
@@ -401,9 +405,9 @@ public class CopyOnWriteByteArrayList extends AbstractByteList implements ITrimm
 			System.arraycopy(data, from, a, 0, length);
 			if(to == data.length) this.data = Arrays.copyOf(data, data.length - length);
 			else {
-				int size = data.length-1;
-				byte[] newElements = new byte[size];
-				System.arraycopy(data, 0, newElements, 0, from);
+				int size = data.length;
+				byte[] newElements = new byte[size-length];
+				if(from != 0) System.arraycopy(data, 0, newElements, 0, from);
 				System.arraycopy(data, to, newElements, from, size - to);
 				this.data = newElements;
 			}
@@ -1188,6 +1192,11 @@ public class CopyOnWriteByteArrayList extends AbstractByteList implements ITrimm
 			throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + data.length);
 	}
 	
+	protected void checkAddRange(int index) {
+		if (index < 0 || index > data.length)
+			throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + data.length);
+	}
+	
 	/**
 	 * Returns a Java-Type-Specific Stream to reduce boxing/unboxing.
 	 * @return a Stream of the closest java type
@@ -1233,7 +1242,7 @@ public class CopyOnWriteByteArrayList extends AbstractByteList implements ITrimm
 		@Override
 		public byte previousByte() {
 			if(!hasPrevious()) throw new NoSuchElementException();
-			return data[index--];
+			return data[--index];
 		}
 		
 		@Override
@@ -1256,7 +1265,7 @@ public class CopyOnWriteByteArrayList extends AbstractByteList implements ITrimm
 		@Override
 		public int skip(int amount) {
 			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
-			int steps = Math.min(amount, (data.length - 1) - index);
+			int steps = Math.min(amount, data.length - index);
 			index += steps;
 			return steps;
 		}
@@ -1551,7 +1560,7 @@ public class CopyOnWriteByteArrayList extends AbstractByteList implements ITrimm
 		@Override
 		public int skip(int amount) {
 			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
-			int steps = Math.min(amount, (list.size() - 1) - index);
+			int steps = Math.min(amount, list.size() - index);
 			index += steps;
 			return steps;
 		}
