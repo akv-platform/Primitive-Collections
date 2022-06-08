@@ -36,8 +36,8 @@ import speiger.src.testers.PACKAGE.builder.SET_TEST_BUILDER;
 #if TYPE_OBJECT
 import speiger.src.testers.PACKAGE.generators.TEST_NAVIGABLE_SET_GENERATOR;
 import speiger.src.testers.PACKAGE.generators.TEST_ORDERED_SET_GENERATOR;
-#endif
 import speiger.src.testers.PACKAGE.generators.TEST_SET_GENERATOR;
+#endif
 import speiger.src.testers.PACKAGE.impl.SIMPLE_TEST_GENERATOR;
 #if TYPE_CHAR || TYPE_FLOAT || TYPE_DOUBLE || TYPE_OBJECT
 import speiger.src.testers.PACKAGE.tests.collection.FILE_KEY_TYPECollectionIteratorTester;
@@ -84,7 +84,7 @@ public class SET_TESTS extends TestCase
 	}
 		
 #if TYPE_OBJECT
-	public static Test setSuite(String name, Function<String[], SET<String>> factory, Collection<Feature<?>> features, int size) {
+	public static Test setSuite(String name, Function<String[], SET<String>> factory, Collection<Feature<?>> features, int size, boolean sorted) {
 		SET_TEST_BUILDER<String> builder = (SET_TEST_BUILDER<String>)SET_TEST_BUILDER.using((TEST_SET_GENERATOR<String>)new SIMPLE_TEST_GENERATOR.SetsBRACES(factory).setElements(createSortedStrings())).named(name)
 #ignore
 			.withFeatures(getSizes(size)).withFeatures(CollectionFeature.ALLOWS_NULL_VALUES).withFeatures(features);
@@ -121,7 +121,7 @@ public class SET_TESTS extends TestCase
 		return new String[]{"a", "b", "c", "d", "e", "!! a", "!! b", "~~ a", "~~ b"};
 	}
 #else
-	public static Test setSuite(String name, Function<KEY_TYPE[], SET KEY_GENERIC_TYPE> factory, Collection<Feature<?>> features, int size) {
+	public static Test setSuite(String name, Function<KEY_TYPE[], SET KEY_GENERIC_TYPE> factory, Collection<Feature<?>> features, int size, boolean sorted) {
 		SET_TEST_BUILDER builder = (SET_TEST_BUILDER)SET_TEST_BUILDER.using(new SIMPLE_TEST_GENERATOR.SetsBRACES(factory)).named(name)
 #ignore
 			.withFeatures(getSizes(size)).withFeatures(features);

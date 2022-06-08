@@ -13,9 +13,6 @@ import com.google.common.collect.testing.features.CollectionSize;
 import com.google.common.collect.testing.features.CollectionFeature;
 import com.google.common.collect.testing.features.ListFeature;
 import com.google.common.collect.testing.features.Feature;
-#if TYPE_OBJECT
-import com.google.common.collect.testing.features.CollectionFeature;
-#endif
 #if TYPE_BOOLEAN
 import com.google.common.collect.testing.testers.CollectionAddAllTester;
 import com.google.common.collect.testing.testers.CollectionAddTester;
@@ -91,7 +88,7 @@ public class LIST_TESTS extends TestCase
 	public static void suite(TestSuite suite) {
 		suite.addTest(listSuite("ARRAY_LIST", T -> new ARRAY_LISTBRACES(T), getFeatures(), -1));
 		suite.addTest(listSuite("LINKED_LIST", T -> new LINKED_LISTBRACES(T), getFeatures(), -1));
-		suite.addTest(listSuite("COPY_ON_WRITE_LIST", COPY_ON_WRITE_LIST::new, getCopyOnWriteFeatures(), -1));
+		suite.addTest(listSuite("COPY_ON_WRITE_LIST", T -> new COPY_ON_WRITE_LISTBRACES(T), getCopyOnWriteFeatures(), -1));
 		suite.addTest(listSuite("IMMUTABLE_LIST", T -> new IMMUTABLE_LISTBRACES(T), getImmutableFeatures(), -1));
 		suite.addTest(listSuite("Synchronized ARRAY_LIST", T -> new ARRAY_LISTBRACES(T).synchronize(), getFeatures(), -1));
 		suite.addTest(listSuite("Unmodifiable ARRAY_LIST", T -> new ARRAY_LISTBRACES(T).unmodifiable(), getImmutableFeatures(), -1));
