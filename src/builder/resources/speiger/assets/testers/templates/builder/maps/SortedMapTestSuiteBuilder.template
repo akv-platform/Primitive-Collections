@@ -76,6 +76,7 @@ public class SORTED_MAP_TEST_BUILDER KEY_VALUE_GENERIC_TYPE extends MAP_TEST_BUI
 		features.add(SpecialFeature.SUBMAP);
 		features.addAll(parentBuilder.getFeatures());
 		features.remove(SpecialFeature.COPYING);
+		features.remove(SpecialFeature.CHILDREN_COPY);
 #endignore
 
 		return newBuilderUsing(delegate, to, from).named(parentBuilder.getName() + " subMap " + from + "-" + to)

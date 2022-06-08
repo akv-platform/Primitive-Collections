@@ -15,7 +15,7 @@ import speiger.src.testers.utils.SpecialFeature;
 public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapCopyTester KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP_TESTER KEY_VALUE_GENERIC_TYPE
 {
 #ignore
-	@CollectionFeature.Require(absent = {CollectionFeature.SUBSET_VIEW, CollectionFeature.DESCENDING_VIEW})
+//	@CollectionFeature.Require(absent = {CollectionFeature.SUBSET_VIEW, CollectionFeature.DESCENDING_VIEW})
 	@SpecialFeature.Require(SpecialFeature.COPYING)
 #endignore
 	public void testEquals() {
@@ -27,7 +27,7 @@ public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapCopyTester KEY_VALUE_GENERIC_TYPE e
 	}
 
 #ignore
-	@CollectionFeature.Require(absent = {CollectionFeature.SUBSET_VIEW, CollectionFeature.DESCENDING_VIEW})
+//	@CollectionFeature.Require(absent = {CollectionFeature.SUBSET_VIEW, CollectionFeature.DESCENDING_VIEW})
 	@SpecialFeature.Require(absent = SpecialFeature.COPYING)
 #endignore
 	public void testEqualsFail() {

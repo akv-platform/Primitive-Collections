@@ -18,6 +18,7 @@ import speiger.src.testers.PACKAGE.generators.TEST_SORTED_SET_GENERATOR;
 import speiger.src.testers.PACKAGE.impl.SUB_SORTED_SET_CLASS_GENERATOR;
 import speiger.src.testers.PACKAGE.tests.set.FILE_KEY_TYPESortedSetIterationTester;
 import speiger.src.testers.PACKAGE.tests.set.FILE_KEY_TYPESortedSetNaviationTester;
+import speiger.src.testers.utils.SpecialFeature;
 
 @SuppressWarnings("javadoc")
 public class SORTED_SET_TEST_BUILDER KEY_GENERIC_TYPE extends SET_TEST_BUILDER KEY_GENERIC_TYPE {
@@ -72,6 +73,8 @@ public class SORTED_SET_TEST_BUILDER KEY_GENERIC_TYPE extends SET_TEST_BUILDER K
 #ignore
 		features.remove(CollectionFeature.ALLOWS_NULL_VALUES);
 		features.add(CollectionFeature.SUBSET_VIEW);
+		features.remove(SpecialFeature.COPYING);
+		features.remove(SpecialFeature.CHILDREN_COPY);
 #endignore
 
 		return newBuilderUsing(delegate, to, from).named(parentBuilder.getName() + " subSet " + from + "-" + to)

@@ -15,7 +15,7 @@ import speiger.src.testers.PACKAGE.tests.base.ABSTRACT_COLLECTION_TESTER;
 public class FILE_KEY_TYPECollectionCopyTester KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION_TESTER KEY_GENERIC_TYPE
 {
 #ignore
-	@CollectionFeature.Require(absent = {CollectionFeature.SUBSET_VIEW, CollectionFeature.DESCENDING_VIEW})
+//	@CollectionFeature.Require(absent = {CollectionFeature.SUBSET_VIEW, CollectionFeature.DESCENDING_VIEW})
 	@SpecialFeature.Require(SpecialFeature.COPYING)
 #endignore
 	public void testEquals() {
@@ -27,7 +27,7 @@ public class FILE_KEY_TYPECollectionCopyTester KEY_GENERIC_TYPE extends ABSTRACT
 	}
 
 #ignore
-	@CollectionFeature.Require(absent = {CollectionFeature.SUBSET_VIEW, CollectionFeature.DESCENDING_VIEW})
+//	@CollectionFeature.Require(absent = {CollectionFeature.SUBSET_VIEW, CollectionFeature.DESCENDING_VIEW})
 	@SpecialFeature.Require(absent = SpecialFeature.COPYING)
 #endignore
 	public void testEqualsFail() {

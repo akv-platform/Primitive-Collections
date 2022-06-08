@@ -30,6 +30,7 @@ import speiger.src.testers.PACKAGE.generators.TEST_SORTED_SET_GENERATOR;
 import speiger.src.testers.PACKAGE.impl.SUB_SORTED_SET_CLASS_GENERATOR.SUB_NAVIGABLE_SET_CLASS_GENERATOR;
 import speiger.src.testers.PACKAGE.tests.set.FILE_KEY_TYPENavigableSetNavigationTester;
 import speiger.src.testers.PACKAGE.utils.SAMPLE_ELEMENTS;
+import speiger.src.testers.utils.SpecialFeature;
 
 @SuppressWarnings("javadoc")
 public class NAVIGABLE_SET_TEST_BUILDER KEY_GENERIC_TYPE extends SORTED_SET_TEST_BUILDER KEY_GENERIC_TYPE {
@@ -77,8 +78,12 @@ public class NAVIGABLE_SET_TEST_BUILDER KEY_GENERIC_TYPE extends SORTED_SET_TEST
 		TEST_NAVIGABLE_SET_GENERATOR KEY_GENERIC_TYPE delegate = (TEST_NAVIGABLE_SET_GENERATOR KEY_GENERIC_TYPE) parentBuilder.getSubjectGenerator().getInnerGenerator();
 
 		List<Feature<?>> features = new ArrayList<>();
+#ignore
 		features.add(DESCENDING_VIEW);
 		features.addAll(parentBuilder.getFeatures());
+		features.remove(SpecialFeature.COPYING);
+		features.remove(SpecialFeature.CHILDREN_COPY);
+#endignore
 
 		return NAVIGABLE_SET_TEST_BUILDER.using(new TEST_SET_GENERATOR KEY_GENERIC_TYPE() {
 
