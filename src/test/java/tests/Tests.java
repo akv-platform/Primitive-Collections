@@ -2,9 +2,6 @@ package tests;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import speiger.src.tests.ints.maps.Int2BooleanMapTests;
-import speiger.src.tests.longs.maps.Long2BooleanMapTests;
-import speiger.src.tests.shorts.maps.Short2BooleanMapTests;
 
 @SuppressWarnings("javadoc")
 public class Tests {
@@ -71,7 +68,7 @@ public class Tests {
 	
 	private static void shortSuite(TestSuite suite) {
 		TestSuite maps = new TestSuite("ShortMaps");
-		maps.addTest(Short2BooleanMapTests.suite());
+//		maps.addTest(Short2BooleanMapTests.suite());
 //		maps.addTest(Short2ByteMapTests.suite());
 //		maps.addTest(Short2CharMapTests.suite());
 //		maps.addTest(Short2ShortMapTests.suite());
@@ -99,7 +96,7 @@ public class Tests {
 	
 	private static void intSuite(TestSuite suite) {
 		TestSuite maps = new TestSuite("IntMaps");
-		maps.addTest(Int2BooleanMapTests.suite());
+//		maps.addTest(Int2BooleanMapTests.suite());
 //		maps.addTest(Int2ByteMapTests.suite());
 //		maps.addTest(Int2CharMapTests.suite());
 //		maps.addTest(Int2ShortMapTests.suite());
@@ -113,7 +110,7 @@ public class Tests {
 	
 	private static void longSuite(TestSuite suite) {
 		TestSuite maps = new TestSuite("LongMaps");
-		maps.addTest(Long2BooleanMapTests.suite());
+//		maps.addTest(Long2BooleanMapTests.suite());
 //		maps.addTest(Long2ByteMapTests.suite());
 //		maps.addTest(Long2CharMapTests.suite());
 //		maps.addTest(Long2ShortMapTests.suite());
