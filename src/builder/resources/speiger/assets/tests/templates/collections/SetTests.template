@@ -173,7 +173,7 @@ public class SET_TESTS extends TestCase
 	}
 	
 	private static Collection<Feature<?>> getFeatures() {
-		return Arrays.asList(SetFeature.GENERAL_PURPOSE, SpecialFeature.COPYING);
+		return Arrays.asList(SetFeature.GENERAL_PURPOSE, SpecialFeature.COPYING, SpecialFeature.MODIFIABLE);
 	}
 #endignore
 }

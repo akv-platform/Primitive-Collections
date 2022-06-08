@@ -311,7 +311,7 @@ public class MAP_TESTS extends TestCase
 	}
 	
 	private static Collection<Feature<?>> getFeatures() {
-		return Arrays.asList(MapFeature.GENERAL_PURPOSE, CollectionFeature.SUPPORTS_ITERATOR_REMOVE, SpecialFeature.COPYING);
+		return Arrays.asList(MapFeature.GENERAL_PURPOSE, CollectionFeature.SUPPORTS_ITERATOR_REMOVE, SpecialFeature.COPYING, SpecialFeature.MODIFIABLE);
 	}
 	
 	private static Collection<Feature<?>> getEmptyFeatures() {
@@ -323,7 +323,7 @@ public class MAP_TESTS extends TestCase
 	}
 	
 	private static Collection<Feature<?>> getLimitedFeatures() {
-		return Arrays.asList(MapFeature.GENERAL_PURPOSE, CollectionFeature.SUPPORTS_ITERATOR_REMOVE, SpecialFeature.SUBMAP, SpecialFeature.DESCENDING, SpecialFeature.COPYING);
+		return Arrays.asList(MapFeature.GENERAL_PURPOSE, CollectionFeature.SUPPORTS_ITERATOR_REMOVE, SpecialFeature.SUBMAP, SpecialFeature.DESCENDING, SpecialFeature.COPYING, SpecialFeature.MODIFIABLE);
 	}
 	
 	private static Collection<Feature<?>> getLimitedImmutableFeatures() {

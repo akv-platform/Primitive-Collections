@@ -4,7 +4,6 @@ import org.junit.Ignore;
 
 #ignore
 import static com.google.common.collect.testing.features.CollectionFeature.SUPPORTS_ADD;
-import static com.google.common.collect.testing.features.CollectionFeature.SUPPORTS_REMOVE;
 import static com.google.common.collect.testing.features.CollectionSize.SEVERAL;
 import static org.junit.Assert.assertNotEquals;
 #endignore
@@ -16,6 +15,7 @@ import speiger.src.collections.PACKAGE.lists.LIST;
 import speiger.src.collections.PACKAGE.sets.ORDERED_SET;
 import speiger.src.testers.PACKAGE.tests.base.ABSTRACT_SET_TESTER;
 import speiger.src.testers.PACKAGE.utils.HELPERS;
+import speiger.src.testers.utils.SpecialFeature;
 
 @Ignore
 @SuppressWarnings("javadoc")
@@ -88,7 +88,7 @@ public class FILE_KEY_TYPEOrderedSetMoveTester KEY_GENERIC_TYPE extends ABSTRACT
 	}
 	
 #ignore
-	@CollectionFeature.Require(SUPPORTS_ADD)
+	@SpecialFeature.Require(SpecialFeature.MODIFIABLE)
 	@CollectionSize.Require(SEVERAL)
 #endignore
 	public void testMoveToFirstMissing()
@@ -99,7 +99,7 @@ public class FILE_KEY_TYPEOrderedSetMoveTester KEY_GENERIC_TYPE extends ABSTRACT
 	}
 	
 #ignore
-	@CollectionFeature.Require(SUPPORTS_ADD)
+	@SpecialFeature.Require(SpecialFeature.MODIFIABLE)
 	@CollectionSize.Require(SEVERAL)
 #endignore
 	public void testMoveToFirstPreset()
@@ -111,7 +111,7 @@ public class FILE_KEY_TYPEOrderedSetMoveTester KEY_GENERIC_TYPE extends ABSTRACT
 	}
 	
 #ignore
-	@CollectionFeature.Require(SUPPORTS_ADD)
+	@SpecialFeature.Require(SpecialFeature.MODIFIABLE)
 	@CollectionSize.Require(SEVERAL)
 #endignore
 	public void testMoveToLastMissing()
@@ -122,7 +122,7 @@ public class FILE_KEY_TYPEOrderedSetMoveTester KEY_GENERIC_TYPE extends ABSTRACT
 	}
 	
 #ignore
-	@CollectionFeature.Require(SUPPORTS_ADD)
+	@SpecialFeature.Require(SpecialFeature.MODIFIABLE)
 	@CollectionSize.Require(SEVERAL)
 #endignore
 	public void testMoveToLastPreset()
@@ -134,7 +134,7 @@ public class FILE_KEY_TYPEOrderedSetMoveTester KEY_GENERIC_TYPE extends ABSTRACT
 	}
 	
 #ignore
-	@CollectionFeature.Require(SUPPORTS_ADD)
+	@SpecialFeature.Require(SpecialFeature.MODIFIABLE)
 	@CollectionSize.Require(SEVERAL)
 #endignore
 	public void testMoveCenterToLast()
@@ -146,7 +146,7 @@ public class FILE_KEY_TYPEOrderedSetMoveTester KEY_GENERIC_TYPE extends ABSTRACT
 	}
 	
 #ignore
-	@CollectionFeature.Require(SUPPORTS_ADD)
+	@SpecialFeature.Require(SpecialFeature.MODIFIABLE)
 	@CollectionSize.Require(SEVERAL)
 #endignore
 	public void testMoveCenterToFirst()
@@ -158,7 +158,7 @@ public class FILE_KEY_TYPEOrderedSetMoveTester KEY_GENERIC_TYPE extends ABSTRACT
 	}
 	
 #ignore
-	@CollectionFeature.Require(SUPPORTS_ADD)
+	@SpecialFeature.Require(SpecialFeature.MODIFIABLE)
 	@CollectionSize.Require(SEVERAL)
 #endignore
 	public void testMoveForthAndBack()
@@ -173,7 +173,7 @@ public class FILE_KEY_TYPEOrderedSetMoveTester KEY_GENERIC_TYPE extends ABSTRACT
 	}
 	
 #ignore
-	@CollectionFeature.Require(SUPPORTS_ADD)
+	@SpecialFeature.Require(SpecialFeature.MODIFIABLE)
 	@CollectionSize.Require(SEVERAL)
 #endignore
 	public void testMoveBackAndForth()
@@ -244,7 +244,7 @@ public class FILE_KEY_TYPEOrderedSetMoveTester KEY_GENERIC_TYPE extends ABSTRACT
 	}
 	
 #ignore
-	@CollectionFeature.Require(absent = {SUPPORTS_ADD, SUPPORTS_REMOVE})
+	@SpecialFeature.Require(absent = SpecialFeature.MODIFIABLE)
 #endignore
 	public void testmoveToFirstUnsupported()
 	{
@@ -257,7 +257,7 @@ public class FILE_KEY_TYPEOrderedSetMoveTester KEY_GENERIC_TYPE extends ABSTRACT
 	}
 	
 #ignore
-	@CollectionFeature.Require(absent = {SUPPORTS_ADD, SUPPORTS_REMOVE})
+	@SpecialFeature.Require(absent = SpecialFeature.MODIFIABLE)
 #endignore
 	public void testmoveToLastUnsupported()
 	{

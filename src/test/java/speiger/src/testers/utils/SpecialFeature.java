@@ -14,6 +14,7 @@ import com.google.common.collect.testing.features.TesterAnnotation;
 public enum SpecialFeature implements Feature<Collection> {
 	COPYING,
 	CHILDREN_COPY(COPYING),
+	MODIFIABLE,
 	MAP_ENTRY,
 	DESCENDING,
 	SUBMAP;

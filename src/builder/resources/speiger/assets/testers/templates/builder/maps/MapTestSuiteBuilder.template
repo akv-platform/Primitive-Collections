@@ -233,6 +233,12 @@ public class MAP_TEST_BUILDER KEY_VALUE_GENERIC_TYPE extends MapTestSuiteBuilder
 		else {
 			entrySetFeatures.remove(SpecialFeature.COPYING);
 		}
+		if(mapFeatures.contains(SpecialFeature.MODIFIABLE)) {
+			entrySetFeatures.add(SpecialFeature.MODIFIABLE);
+		}
+		else {
+			entrySetFeatures.remove(SpecialFeature.MODIFIABLE);
+		}
 		entrySetFeatures.add(SpecialFeature.MAP_ENTRY);
 #endignore
 		return entrySetFeatures;
@@ -252,6 +258,12 @@ public class MAP_TEST_BUILDER KEY_VALUE_GENERIC_TYPE extends MapTestSuiteBuilder
 		}
 		else {
 			keySetFeatures.remove(SpecialFeature.COPYING);
+		}
+		if(mapFeatures.contains(SpecialFeature.MODIFIABLE)) {
+			keySetFeatures.add(SpecialFeature.MODIFIABLE);
+		}
+		else {
+			keySetFeatures.remove(SpecialFeature.MODIFIABLE);
 		}
 #endignore
 		return keySetFeatures;
