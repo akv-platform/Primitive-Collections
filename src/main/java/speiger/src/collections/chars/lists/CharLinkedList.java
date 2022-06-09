@@ -153,36 +153,7 @@ public class CharLinkedList extends AbstractCharList implements CharPriorityDequ
 	
 	@Override
 	public boolean addAll(int index, CharList c) {
-		int length = c.size();
-		if(length == 0) return false;
-		checkAddRange(index);
-		Entry next;
-		Entry prev;
-		if(index == size) {
-			prev = last;
-			next = null;
-		}
-		else if(index == 0) {
-			next = first;
-			prev = null;
-		}
-		else {
-			next = getNode(index);
-			prev = next.prev;
-		}
-		for(CharIterator iter = c.iterator();iter.hasNext();) {
-			Entry entry = new Entry(iter.nextChar(), prev, null);
-			if(prev == null) first = entry;
-			else prev.next = entry;
-			prev = entry;
-		}
-		if(next == null) last = prev;
-		else {
-			prev.next = next;
-			next.prev = prev;
-		}
-		size += length;
-		return true;
+		return addAll(index, (CharCollection)c); //
 	}
 	
 	@Override
@@ -572,6 +543,7 @@ public class CharLinkedList extends AbstractCharList implements CharPriorityDequ
 			temp.next = before.next;
 			temp.prev = before;
 			before.next = temp;
+			temp.next.prev = temp;
 		}
 		return result;
 	}
@@ -604,6 +576,7 @@ public class CharLinkedList extends AbstractCharList implements CharPriorityDequ
 					temp.next = before.next;
 					temp.prev = before;
 					before.next = temp;
+					temp.next.prev = temp;
 				}
 				return true;
 			}
@@ -1023,6 +996,11 @@ public class CharLinkedList extends AbstractCharList implements CharPriorityDequ
 			this.value = value;
 			this.prev = prev;
 			this.next = next;
+		}
+		
+		@Override
+		public String toString() {
+			return Character.toString(value);
 		}
 	}
 	

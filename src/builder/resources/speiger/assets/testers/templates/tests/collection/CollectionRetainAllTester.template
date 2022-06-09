@@ -70,6 +70,13 @@ public class FILE_KEY_TYPECollectionRetainAllTester KEY_GENERIC_TYPE extends ABS
 		expectUnchanged();
 	}
 
+	@CollectionFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(ZERO)
+	public void testRetainAllExtra_emptyPreviouslyEmpty() {
+		expectReturnsFalseExtra(empty);
+		expectUnchanged();
+	}
+
 	@CollectionFeature.Require(absent = SUPPORTS_REMOVE)
 	@CollectionSize.Require(ZERO)
 	public void testRetainAll_emptyPreviouslyEmptyUnsupported() {
@@ -106,6 +113,13 @@ public class FILE_KEY_TYPECollectionRetainAllTester KEY_GENERIC_TYPE extends ABS
 	@CollectionSize.Require(ZERO)
 	public void testRetainAll_disjointPreviouslyEmpty() {
 		expectReturnsFalse(disjoint);
+		expectUnchanged();
+	}
+	
+	@CollectionFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(ZERO)
+	public void testRetainAllExtra_disjointPreviouslyEmpty() {
+		expectReturnsFalseExtra(disjoint);
 		expectUnchanged();
 	}
 
@@ -153,6 +167,12 @@ public class FILE_KEY_TYPECollectionRetainAllTester KEY_GENERIC_TYPE extends ABS
 		expectReturnsFalse(superset);
 		expectUnchanged();
 	}
+	
+	@CollectionFeature.Require(SUPPORTS_REMOVE)
+	public void testRetainAllExtra_superset() {
+		expectReturnsFalseExtra(superset);
+		expectUnchanged();
+	}
 
 	@CollectionFeature.Require(absent = SUPPORTS_REMOVE)
 	public void testRetainAll_supersetUnsupported() {
@@ -188,6 +208,12 @@ public class FILE_KEY_TYPECollectionRetainAllTester KEY_GENERIC_TYPE extends ABS
 	@CollectionFeature.Require(SUPPORTS_REMOVE)
 	public void testRetainAll_sameElements() {
 		expectReturnsFalse(sameElements);
+		expectUnchanged();
+	}
+	
+	@CollectionFeature.Require(SUPPORTS_REMOVE)
+	public void testRetainAllExtra_sameElements() {
+		expectReturnsFalseExtra(sameElements);
 		expectUnchanged();
 	}
 
@@ -226,6 +252,13 @@ public class FILE_KEY_TYPECollectionRetainAllTester KEY_GENERIC_TYPE extends ABS
 	@CollectionSize.Require(ONE)
 	public void testRetainAll_containsDuplicatesSizeOne() {
 		expectReturnsFalse(containsDuplicates);
+		expectContents(e0());
+	}
+	
+	@CollectionFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(ONE)
+	public void testRetainAllExtra_containsDuplicatesSizeOne() {
+		expectReturnsFalseExtra(containsDuplicates);
 		expectContents(e0());
 	}
 
@@ -279,6 +312,11 @@ public class FILE_KEY_TYPECollectionRetainAllTester KEY_GENERIC_TYPE extends ABS
 	private void expectReturnsFalse(Target target) {
 		String message = String.format("retainAll(%s) should return false", target);
 		assertFalse(message, collection.retainAll(target.toRetain));
+	}
+	
+	private void expectReturnsFalseExtra(Target target) {
+		String message = String.format("retainAll(%s, Removed) should return false", target);
+		assertFalse(message, collection.retainAll(target.toRetain, T -> {}));
 	}
 
 	private void expectThrows(Target target) {

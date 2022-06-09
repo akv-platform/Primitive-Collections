@@ -3,14 +3,14 @@ package speiger.src.tests.PACKAGE.collections;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.function.Function;
-#if TYPE_BOOLEAN
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
-#endif
 
 import com.google.common.collect.testing.features.CollectionSize;
+#if TYPE_OBJECT
 import com.google.common.collect.testing.features.CollectionFeature;
+#endif
 import com.google.common.collect.testing.features.ListFeature;
 import com.google.common.collect.testing.features.Feature;
 
@@ -32,8 +32,9 @@ import com.google.common.collect.testing.testers.ListRetainAllTester;
 import com.google.common.collect.testing.testers.ListSubListTester;
 #else
 import com.google.common.collect.testing.testers.ListSubListTester;
-import com.google.common.collect.testing.testers.ListListIteratorTester;
+import com.google.common.collect.testing.testers.CollectionIteratorTester;
 #endif
+import com.google.common.collect.testing.testers.ListListIteratorTester;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -75,8 +76,10 @@ import speiger.src.testers.booleans.tests.list.BooleanListRetainAllTester;
 import speiger.src.testers.booleans.tests.list.BooleanListSubListTester;
 #else
 import speiger.src.testers.PACKAGE.tests.list.FILE_KEY_TYPEListSubListTester;
-import speiger.src.testers.PACKAGE.tests.list.FILE_KEY_TYPEListListIteratorTester;
+import speiger.src.testers.PACKAGE.tests.collection.FILE_KEY_TYPECollectionIteratorTester;
 #endif
+
+import speiger.src.testers.PACKAGE.tests.list.FILE_KEY_TYPEListListIteratorTester;
 
 @SuppressWarnings("javadoc")
 public class LIST_TESTS extends TestCase
@@ -105,7 +108,7 @@ public class LIST_TESTS extends TestCase
 	}
 	
 	private static Test copyOnWritelistSuite(String name, Function<KEY_STRING_TYPE[], LIST KEY_STRING_GENERIC_TYPE> factory, Collection<Feature<?>> features, int size) {
-		return LIST_TEST_BUILDER.using((TEST_LIST_GENERATOR KEY_STRING_GENERIC_TYPE)new SIMPLE_TEST_GENERATOR.Lists KEY_STRING_GENERIC_TYPE(factory).setElements(createStrings())).named(name).withFeatures(getSizes(size)).withFeatures(features).suppressing(TestUtils.getSurpession(ListListIteratorTester.class)).suppressing(TestUtils.getSurpession(FILE_KEY_TYPEListListIteratorTester.class)).createTestSuite();
+		return LIST_TEST_BUILDER.using((TEST_LIST_GENERATOR KEY_STRING_GENERIC_TYPE)new SIMPLE_TEST_GENERATOR.Lists KEY_STRING_GENERIC_TYPE(factory).setElements(createStrings())).named(name).withFeatures(getSizes(size)).withFeatures(features).suppressing(getCopyOnWriteMethods()).createTestSuite();
 	}
 	
 	private static Test emptylistSuite(String name, Function<KEY_STRING_TYPE[], LIST KEY_STRING_GENERIC_TYPE> factory, Collection<Feature<?>> features, int size) {
@@ -113,7 +116,7 @@ public class LIST_TESTS extends TestCase
 	}
 	
 	private static String[] createStrings() {
-		return new String[]{"b", "a", "c", "d", "e"};
+		return new String[]{"a", "b", "c", "d", "e"};
 	}
 #else if !TYPE_BOOLEAN
 	public static void suite(TestSuite suite) {
@@ -132,7 +135,7 @@ public class LIST_TESTS extends TestCase
 	}
 	
 	private static Test copyOnWritelistSuite(String name, Function<KEY_STRING_TYPE[], LIST KEY_STRING_GENERIC_TYPE> factory, Collection<Feature<?>> features, int size) {
-		return LIST_TEST_BUILDER.using(new SIMPLE_TEST_GENERATOR.Lists KEY_STRING_GENERIC_TYPE(factory)).named(name).withFeatures(getSizes(size)).withFeatures(features).suppressing(TestUtils.getSurpession(ListListIteratorTester.class)).suppressing(TestUtils.getSurpession(FILE_KEY_TYPEListListIteratorTester.class)).createTestSuite();
+		return LIST_TEST_BUILDER.using(new SIMPLE_TEST_GENERATOR.Lists KEY_STRING_GENERIC_TYPE(factory)).named(name).withFeatures(getSizes(size)).withFeatures(features).suppressing(getCopyOnWriteMethods()).createTestSuite();
 	}
 	
 	private static Test emptylistSuite(String name, Function<KEY_STRING_TYPE[], LIST KEY_STRING_GENERIC_TYPE> factory, Collection<Feature<?>> features, int size) {
@@ -157,7 +160,7 @@ public class LIST_TESTS extends TestCase
 #endignore
 			data.addTest(LIST_TEST_BUILDER.using(new SIMPLE_TEST_GENERATOR.ListsBRACES(factory))
 #ignore
-			.named(name+" [collection size: zero]").withFeatures(CollectionSize.ZERO).withFeatures(features).suppressing(getSurpression(CollectionSize.ZERO, immutable)).createTestSuite());
+			.named(name+" [collection size: zero]").withFeatures(CollectionSize.ZERO).withFeatures(features).suppressing(getSurpression(CollectionSize.ZERO, immutable)).suppressing(getCopyOnWriteMethods()).createTestSuite());
 #endignore
 		}
 #ignore
@@ -165,15 +168,15 @@ public class LIST_TESTS extends TestCase
 #endignore
 			data.addTest(LIST_TEST_BUILDER.using(new SIMPLE_TEST_GENERATOR.ListsBRACES(factory))
 #ignore
-				.named(name+" [collection size: one]").withFeatures(CollectionSize.ONE).withFeatures(features).suppressing(getSurpression(CollectionSize.ONE, immutable)).createTestSuite());
+				.named(name+" [collection size: one]").withFeatures(CollectionSize.ONE).withFeatures(features).suppressing(getSurpression(CollectionSize.ONE, immutable)).suppressing(getCopyOnWriteMethods()).createTestSuite());
 #endignore
 		}
 #ignore
 		if(sizes.contains(CollectionSize.SEVERAL) || sizes.contains(CollectionSize.ANY)) {
 #endignore
-			data.addTest(LIST_TEST_BUILDER.using(new SIMPLE_TEST_GENERATOR.ListsBRACES(factory)).named(name)
+			data.addTest(LIST_TEST_BUILDER.using(new SIMPLE_TEST_GENERATOR.ListsBRACES(factory))
 #ignore
-				.named(name+" [collection size: several]").withFeatures(CollectionSize.SEVERAL).withFeatures(features).suppressing(getSurpression(CollectionSize.SEVERAL, immutable)).createTestSuite());
+				.named(name+" [collection size: several]").withFeatures(CollectionSize.SEVERAL).withFeatures(features).suppressing(getSurpression(CollectionSize.SEVERAL, immutable)).suppressing(getCopyOnWriteMethods()).createTestSuite());
 #endignore
 		}
 		suite.addTest(data);
@@ -280,15 +283,26 @@ public class LIST_TESTS extends TestCase
 	}
 	
 #endignore
+	public static Collection<Method> getCopyOnWriteMethods() {
+		List<Method> list = new ArrayList<>();
+		TestUtils.getSurpession(list, CollectionIteratorTester.class);
+		TestUtils.getSurpession(list, FILE_KEY_TYPECollectionIteratorTester.class);
+		TestUtils.getSurpession(list, ListListIteratorTester.class);
+		TestUtils.getSurpession(list, FILE_KEY_TYPEListListIteratorTester.class);
+		TestUtils.getSurpession(list, ListSubListTester.class, "testSubList_subListRemoveAffectsOriginalLargeList");
+		TestUtils.getSurpession(list, FILE_KEY_TYPEListSubListTester.class, "testSubList_subListRemoveAffectsOriginalLargeList");
+		return list;
+	}
+	
 	private static Collection<Feature<?>> getCopyOnWriteFeatures() {
 
 #if TYPE_OBJECT
 #ignore
-		return Arrays.asList(CollectionFeature.SUPPORTS_ADD, CollectionFeature.SUPPORTS_REMOVE, SpecialFeature.COPYING, ListFeature.SUPPORTS_SET, CollectionFeature.ALLOWS_NULL_VALUES);
+		return Arrays.asList(ListFeature.GENERAL_PURPOSE, SpecialFeature.COPYING, CollectionFeature.ALLOWS_NULL_VALUES);
 #endignore
 #else
 #ignore
-		return Arrays.asList(CollectionFeature.SUPPORTS_ADD, CollectionFeature.SUPPORTS_REMOVE, SpecialFeature.COPYING, ListFeature.SUPPORTS_SET);
+		return Arrays.asList(ListFeature.GENERAL_PURPOSE, SpecialFeature.COPYING);
 #endignore
 #endif
 	}

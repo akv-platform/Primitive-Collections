@@ -147,36 +147,7 @@ public class BooleanLinkedList extends AbstractBooleanList implements BooleanPri
 	
 	@Override
 	public boolean addAll(int index, BooleanList c) {
-		int length = c.size();
-		if(length == 0) return false;
-		checkAddRange(index);
-		Entry next;
-		Entry prev;
-		if(index == size) {
-			prev = last;
-			next = null;
-		}
-		else if(index == 0) {
-			next = first;
-			prev = null;
-		}
-		else {
-			next = getNode(index);
-			prev = next.prev;
-		}
-		for(BooleanIterator iter = c.iterator();iter.hasNext();) {
-			Entry entry = new Entry(iter.nextBoolean(), prev, null);
-			if(prev == null) first = entry;
-			else prev.next = entry;
-			prev = entry;
-		}
-		if(next == null) last = prev;
-		else {
-			prev.next = next;
-			next.prev = prev;
-		}
-		size += length;
-		return true;
+		return addAll(index, (BooleanCollection)c); //
 	}
 	
 	@Override
@@ -547,6 +518,7 @@ public class BooleanLinkedList extends AbstractBooleanList implements BooleanPri
 			temp.next = before.next;
 			temp.prev = before;
 			before.next = temp;
+			temp.next.prev = temp;
 		}
 		return result;
 	}
@@ -579,6 +551,7 @@ public class BooleanLinkedList extends AbstractBooleanList implements BooleanPri
 					temp.next = before.next;
 					temp.prev = before;
 					before.next = temp;
+					temp.next.prev = temp;
 				}
 				return true;
 			}
@@ -973,6 +946,11 @@ public class BooleanLinkedList extends AbstractBooleanList implements BooleanPri
 			this.value = value;
 			this.prev = prev;
 			this.next = next;
+		}
+		
+		@Override
+		public String toString() {
+			return Boolean.toString(value);
 		}
 	}
 	

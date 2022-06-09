@@ -47,6 +47,7 @@ import speiger.src.testers.PACKAGE.generators.TEST_LIST_GENERATOR;
 import speiger.src.testers.PACKAGE.tests.list.FILE_KEY_TYPEListAbsentTester;
 import speiger.src.testers.PACKAGE.tests.list.FILE_KEY_TYPEListAddAllArrayAtIndexTester;
 import speiger.src.testers.PACKAGE.tests.list.FILE_KEY_TYPEListAddAllAtIndexTester;
+import speiger.src.testers.PACKAGE.tests.list.FILE_KEY_TYPEListAddAllListAtIndexTester;
 import speiger.src.testers.PACKAGE.tests.list.FILE_KEY_TYPEListAddAllTester;
 import speiger.src.testers.PACKAGE.tests.list.FILE_KEY_TYPEListAddAtIndexTester;
 import speiger.src.testers.PACKAGE.tests.list.FILE_KEY_TYPEListAddTester;
@@ -59,6 +60,7 @@ import speiger.src.testers.PACKAGE.tests.list.FILE_KEY_TYPEListIndexOfTester;
 import speiger.src.testers.PACKAGE.tests.list.FILE_KEY_TYPEListLastIndexOfTester;
 import speiger.src.testers.PACKAGE.tests.list.FILE_KEY_TYPEListListIteratorTester;
 import speiger.src.testers.PACKAGE.tests.list.FILE_KEY_TYPEListPresentTester;
+import speiger.src.testers.PACKAGE.tests.list.FILE_KEY_TYPEListSortTester;
 import speiger.src.testers.PACKAGE.tests.list.FILE_KEY_TYPEListRemoveAllTester;
 import speiger.src.testers.PACKAGE.tests.list.FILE_KEY_TYPEListRemoveAtIndexTester;
 import speiger.src.testers.PACKAGE.tests.list.FILE_KEY_TYPEListRemoveElementsTester;
@@ -109,6 +111,7 @@ public class LIST_TEST_BUILDER KEY_GENERIC_TYPE extends COLLECTION_TEST_BUILDER 
 		testers.add(ListToArrayTester.class);
 		
 		testers.add(FILE_KEY_TYPEListAddAllAtIndexTester.class);
+		testers.add(FILE_KEY_TYPEListAddAllListAtIndexTester.class);
 		testers.add(FILE_KEY_TYPEListAddAllArrayAtIndexTester.class);
 		testers.add(FILE_KEY_TYPEListAddAllTester.class);
 		testers.add(FILE_KEY_TYPEListAddAtIndexTester.class);
@@ -130,6 +133,7 @@ public class LIST_TEST_BUILDER KEY_GENERIC_TYPE extends COLLECTION_TEST_BUILDER 
 		testers.add(FILE_KEY_TYPEListSwapRemoveAtIndexTester.class);
 		testers.add(FILE_KEY_TYPEListSwapRemoveTester.class);
 #if !TYPE_BOOLEAN
+		testers.add(FILE_KEY_TYPEListSortTester.class);
 #if !TYPE_OBJECT
 		testers.add(FILE_KEY_TYPEListFillBufferTester.class);
 #endif

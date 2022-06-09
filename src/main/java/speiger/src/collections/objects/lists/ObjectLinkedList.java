@@ -148,36 +148,7 @@ public class ObjectLinkedList<T> extends AbstractObjectList<T> implements Object
 	
 	@Override
 	public boolean addAll(int index, ObjectList<T> c) {
-		int length = c.size();
-		if(length == 0) return false;
-		checkAddRange(index);
-		Entry<T> next;
-		Entry<T> prev;
-		if(index == size) {
-			prev = last;
-			next = null;
-		}
-		else if(index == 0) {
-			next = first;
-			prev = null;
-		}
-		else {
-			next = getNode(index);
-			prev = next.prev;
-		}
-		for(ObjectIterator<T> iter = c.iterator();iter.hasNext();) {
-			Entry<T> entry = new Entry<>(iter.next(), prev, null);
-			if(prev == null) first = entry;
-			else prev.next = entry;
-			prev = entry;
-		}
-		if(next == null) last = prev;
-		else {
-			prev.next = next;
-			next.prev = prev;
-		}
-		size += length;
-		return true;
+		return addAll(index, (ObjectCollection<T>)c); //
 	}
 	
 	@Override
@@ -520,6 +491,7 @@ public class ObjectLinkedList<T> extends AbstractObjectList<T> implements Object
 			temp.next = before.next;
 			temp.prev = before;
 			before.next = temp;
+			temp.next.prev = temp;
 		}
 		return result;
 	}
@@ -552,6 +524,7 @@ public class ObjectLinkedList<T> extends AbstractObjectList<T> implements Object
 					temp.next = before.next;
 					temp.prev = before;
 					before.next = temp;
+					temp.next.prev = temp;
 				}
 				return true;
 			}
@@ -947,6 +920,11 @@ public class ObjectLinkedList<T> extends AbstractObjectList<T> implements Object
 			this.value = value;
 			this.prev = prev;
 			this.next = next;
+		}
+		
+		@Override
+		public String toString() {
+			return Objects.toString(value);
 		}
 	}
 	

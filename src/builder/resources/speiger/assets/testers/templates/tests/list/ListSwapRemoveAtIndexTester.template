@@ -16,6 +16,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import com.google.common.collect.testing.features.ListFeature;
 
 import speiger.src.collections.PACKAGE.collections.ITERATOR;
+import speiger.src.collections.PACKAGE.collections.COLLECTION;
 import speiger.src.collections.PACKAGE.lists.LIST;
 import speiger.src.testers.PACKAGE.tests.base.ABSTRACT_LIST_TESTER;
 import speiger.src.testers.PACKAGE.utils.HELPERS;
@@ -61,7 +62,20 @@ public class FILE_KEY_TYPEListSwapRemoveAtIndexTester KEY_GENERIC_TYPE extends A
 	public void testRemoveAtIndex_first() {
 		runRemoveTest(0);
 	}
-
+	
+	@ListFeature.Require(SUPPORTS_REMOVE_WITH_INDEX)
+	@CollectionSize.Require(absent = { ZERO, ONE })
+#endignore
+	public void testRemoveAtSecondOfFour() {
+		COLLECTION KEY_GENERIC_TYPE samples = getSampleElements(4);
+		KEY_TYPE[] data = samples.TO_ARRAY(NEW_KEY_ARRAY(4));
+		collection = primitiveGenerator.create(data);
+		assertEquals(data[1], getList().GET_KEY(1));
+		assertEquals(data[1], getList().swapRemove(1));
+		assertEquals(data[3], getList().GET_KEY(1));
+	}
+	
+#ignore
 	@ListFeature.Require(SUPPORTS_REMOVE_WITH_INDEX)
 	@CollectionSize.Require(absent = { ZERO, ONE })
 	public void testRemoveAtIndex_middle() {
