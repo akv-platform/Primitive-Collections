@@ -183,36 +183,7 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 	
 	@Override
 	public boolean addAll(int index, LIST KEY_GENERIC_TYPE c) {
-		int length = c.size();
-		if(length == 0) return false;
-		checkAddRange(index);
-		Entry KEY_GENERIC_TYPE next;
-		Entry KEY_GENERIC_TYPE prev;
-		if(index == size) {
-			prev = last;
-			next = null;
-		}
-		else if(index == 0) {
-			next = first;
-			prev = null;
-		}
-		else {
-			next = getNode(index);
-			prev = next.prev;
-		}
-		for(ITERATOR KEY_GENERIC_TYPE iter = c.iterator();iter.hasNext();) {
-			Entry KEY_GENERIC_TYPE entry = new EntryBRACES(iter.NEXT(), prev, null);
-			if(prev == null) first = entry;
-			else prev.next = entry;
-			prev = entry;
-		}
-		if(next == null) last = prev;
-		else {
-			prev.next = next;
-			next.prev = prev;
-		}
-		size += length;
-		return true;
+		return addAll(index, (COLLECTION KEY_GENERIC_TYPE)c); //
 	}
 	
 	@Override
@@ -625,6 +596,7 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 			temp.next = before.next;
 			temp.prev = before;
 			before.next = temp;
+			temp.next.prev = temp;
 		}
 		return result;
 	}
@@ -657,6 +629,7 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 					temp.next = before.next;
 					temp.prev = before;
 					before.next = temp;
+					temp.next.prev = temp;
 				}
 				return true;
 			}
@@ -1140,6 +1113,11 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 			this.value = value;
 			this.prev = prev;
 			this.next = next;
+		}
+		
+		@Override
+		public String toString() {
+			return KEY_TO_STRING(value);
 		}
 	}
 	
