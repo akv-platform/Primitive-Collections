@@ -726,7 +726,7 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 	@Override
 	public LIST KEY_GENERIC_TYPE subList(int fromIndex, int toIndex) {
 		SanityChecks.checkArrayCapacity(data.length, fromIndex, toIndex-fromIndex);
-		return new COWSubListBRACES(this, 0, fromIndex, toIndex);
+		return new COWSubListBRACES(this, lock, 0, fromIndex, toIndex);
 	}
 	
 	/**
@@ -1486,13 +1486,15 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 	
 	private static class COWSubList KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 	{
-		final COPY_ON_WRITE_LIST KEY_GENERIC_TYPE list;
+		final ABSTRACT_LIST KEY_GENERIC_TYPE list;
+		final ReentrantLock lock;
 		final int parentOffset;
 		final int offset;
 		int size;
 		
-		public COWSubList(COPY_ON_WRITE_LIST KEY_GENERIC_TYPE list, int offset, int from, int to) {
+		public COWSubList(ABSTRACT_LIST KEY_GENERIC_TYPE list, ReentrantLock lock, int offset, int from, int to) {
 			this.list = list;
+			this.lock = lock;
 			this.parentOffset = from;
 			this.offset = offset + from;
 			this.size = to - from;
@@ -1500,7 +1502,6 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 		
 		@Override
 		public void add(int index, KEY_TYPE element) {
-			ReentrantLock lock = list.lock;
 			lock.lock();
 			try {
 				checkAddSubRange(index);
@@ -1516,7 +1517,6 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 		public boolean addAll(int index, Collection<? extends CLASS_TYPE> c) {
 			int add = c.size();
 			if(add <= 0) return false;
-			ReentrantLock lock = list.lock;
 			lock.lock();
 			try {
 				checkAddSubRange(index);
@@ -1533,7 +1533,6 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 		public boolean addAll(int index, COLLECTION KEY_GENERIC_TYPE c) {
 			int add = c.size();
 			if(add <= 0) return false;
-			ReentrantLock lock = list.lock;
 			lock.lock();
 			try {
 				checkAddSubRange(index);
@@ -1550,7 +1549,6 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 		public boolean addAll(int index, LIST KEY_GENERIC_TYPE c) {
 			int add = c.size();
 			if(add <= 0) return false;
-			ReentrantLock lock = list.lock;
 			lock.lock();
 			try {
 				checkAddSubRange(index);
@@ -1566,7 +1564,6 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 		@Override
 		public void addElements(int from, KEY_TYPE[] a, int offset, int length) {
 			if(length <= 0) return;
-			ReentrantLock lock = list.lock;
 			lock.lock();
 			try {
 				checkAddSubRange(from);
@@ -1582,13 +1579,12 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 		public KEY_TYPE[] getElements(int from, KEY_TYPE[] a, int offset, int length) {
 			SanityChecks.checkArrayCapacity(size, from, length);
 			SanityChecks.checkArrayCapacity(a.length, offset, length);
-			return list.getElements(from+this.offset, a, offset, length);
+			return list.getElements(from+parentOffset, a, offset, length);
 		}
 		
 		@Override
 		public void removeElements(int from, int to) {
 			if(to-from <= 0) return;
-			ReentrantLock lock = list.lock;
 			lock.lock();
 			try {
 				checkSubRange(from);
@@ -1604,7 +1600,6 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 #if TYPE_OBJECT
 		@Override
 		public <K> K[] extractElements(int from, int to, Class<K> type) {
-			ReentrantLock lock = list.lock;
 			lock.lock();
 			try {
 				checkSubRange(from);
@@ -1621,7 +1616,6 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 #else
 		@Override
 		public KEY_TYPE[] extractElements(int from, int to) {
-			ReentrantLock lock = list.lock;
 			lock.lock();
 			try {
 				checkSubRange(from);
@@ -1639,16 +1633,15 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 		@Override
 		public KEY_TYPE GET_KEY(int index) {
 			checkSubRange(index);
-			return list.GET_KEY(offset+index);
+			return list.GET_KEY(parentOffset+index);
 		}
 
 		@Override
 		public KEY_TYPE set(int index, KEY_TYPE element) {
-			ReentrantLock lock = list.lock;
 			lock.lock();
 			try {
 				checkSubRange(index);
-				return list.set(offset+index, element);
+				return list.set(parentOffset+index, element);
 			}
 			finally {
 				lock.unlock();
@@ -1657,7 +1650,6 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 		
 		@Override
 		public KEY_TYPE swapRemove(int index) {
-			ReentrantLock lock = list.lock;
 			lock.lock();
 			try {
 				checkSubRange(index);
@@ -1672,7 +1664,6 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 		
 		@Override
 		public KEY_TYPE REMOVE(int index) {
-			ReentrantLock lock = list.lock;
 			lock.lock();
 			try {
 				checkSubRange(index);
@@ -1693,10 +1684,9 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 		@Override
 		public void clear() {
 			if(size == 0) return;
-			ReentrantLock lock = list.lock;
 			lock.lock();
 			try {
-				list.removeElements(offset, offset+size);
+				list.removeElements(parentOffset, parentOffset+size);
 				size = 0;
 			}
 			finally {
@@ -1716,7 +1706,7 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 		@Override
 		public LIST KEY_GENERIC_TYPE subList(int fromIndex, int toIndex) {
 			SanityChecks.checkArrayCapacity(size, fromIndex, toIndex-fromIndex);
-			return new COWSubListBRACES(list, offset, fromIndex, toIndex);
+			return new COWSubListBRACES(this, lock, offset, fromIndex, toIndex);
 		}
 		
 		protected void checkSubRange(int index) {
@@ -1734,6 +1724,7 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 	{
 		ABSTRACT_LIST KEY_GENERIC_TYPE list;
 		int index;
+		int lastReturned = -1;
 		
 		COWSubListIterator(ABSTRACT_LIST KEY_GENERIC_TYPE list, int index) {
 			this.list = list;
@@ -1748,7 +1739,8 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 		@Override
 		public KEY_TYPE NEXT() {
 			if(!hasNext()) throw new NoSuchElementException();
-			return list.GET_KEY(index++);
+			int i = index++;
+			return list.GET_KEY((lastReturned = i));
 		}
 		
 		@Override
@@ -1759,7 +1751,8 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 		@Override
 		public KEY_TYPE PREVIOUS() {
 			if(!hasPrevious()) throw new NoSuchElementException();
-			return list.GET_KEY(--index);
+			--index;
+			return list.GET_KEY((lastReturned = index));
 		}
 		
 		@Override
@@ -1773,19 +1766,31 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 		}
 		
 		@Override
-		public void remove() { throw new UnsupportedOperationException(); }
+		public void remove() {
+			if(lastReturned == -1) throw new IllegalStateException();
+			list.REMOVE(lastReturned);
+			index = lastReturned;
+			lastReturned = -1;
+		}
 		
 		@Override
-		public void set(KEY_TYPE e) { throw new UnsupportedOperationException(); }
+		public void set(KEY_TYPE e) {
+			if(lastReturned == -1) throw new IllegalStateException();
+			list.set(lastReturned, e);
+		}
 		
 		@Override
-		public void add(KEY_TYPE e) { throw new UnsupportedOperationException(); }
+		public void add(KEY_TYPE e) {
+			list.add(index++, e);
+			lastReturned = -1;
+		}
 		
 		@Override
 		public int skip(int amount) {
 			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
 			int steps = Math.min(amount, list.size() - index);
 			index += steps;
+			if(steps > 0) lastReturned = Math.min(index-1, list.size()-1);
 			return steps;
 		}
 		
@@ -1794,6 +1799,7 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
 			int steps = Math.min(amount, index);
 			index -= steps;
+			if(steps > 0) lastReturned = Math.min(index, list.size()-1);
 			return steps;
 		}
 	}
