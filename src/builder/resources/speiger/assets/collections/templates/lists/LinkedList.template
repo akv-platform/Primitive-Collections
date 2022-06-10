@@ -680,7 +680,7 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 			}
 			return;
 		}
-		Entry KEY_GENERIC_TYPE entry = getNode(to);
+		Entry KEY_GENERIC_TYPE entry = getNode(to-1);
 		while(length > 0) {
 			Entry KEY_GENERIC_TYPE prev = entry.prev;
 			unlink(entry);
@@ -706,7 +706,7 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 			}
 			return a;
 		}
-		Entry KEY_GENERIC_TYPE entry = getNode(to);
+		Entry KEY_GENERIC_TYPE entry = getNode(to-1);
 		for(int i = length-1;length > 0;i--, length--) {
 			Entry KEY_GENERIC_TYPE prev = entry.prev;
 			a[i] = (K)unlink(entry);
@@ -732,7 +732,7 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 			}
 			return d;
 		}
-		Entry KEY_GENERIC_TYPE entry = getNode(to);
+		Entry KEY_GENERIC_TYPE entry = getNode(to-1);
 		for(int i = length-1;length > 0;i--, length--) {
 			Entry KEY_GENERIC_TYPE prev = entry.prev;
 			d[i] = unlink(entry);

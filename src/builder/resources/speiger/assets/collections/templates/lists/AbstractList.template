@@ -356,7 +356,13 @@ public abstract class ABSTRACT_LIST KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION
 		@Override
 		public KEY_TYPE swapRemove(int index) {
 			checkSubRange(index);
-			KEY_TYPE result = list.swapRemove(index+parentOffset);
+			if(index == size-1) {
+				KEY_TYPE result = list.REMOVE(parentOffset+size-1);
+				size--;
+				return result;
+			}
+			KEY_TYPE result = list.set(index+parentOffset, list.GET_KEY(parentOffset+size-1));
+			list.REMOVE(parentOffset+size-1);
 			size--;
 			return result;
 		}

@@ -9,8 +9,9 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.concurrent.locks.ReentrantLock;
-#if TYPE_OBJECT
 import java.util.function.Consumer;
+import java.util.function.Supplier;
+#if TYPE_OBJECT
 import java.util.function.BiFunction;
 #endif
 import java.util.function.Predicate;
@@ -154,6 +155,14 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 	}
 	
 #endif
+	
+	private void setArray(KEY_TYPE[] data) {
+		this.data = data;
+	}
+	
+	private KEY_TYPE[] getArray() {
+		return data;
+	}
 	
 	/**
 	 * Appends the specified element to the end of this list.
@@ -726,7 +735,7 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 	@Override
 	public LIST KEY_GENERIC_TYPE subList(int fromIndex, int toIndex) {
 		SanityChecks.checkArrayCapacity(data.length, fromIndex, toIndex-fromIndex);
-		return new COWSubListBRACES(this, lock, 0, fromIndex, toIndex);
+		return new COWSubListBRACES(this, lock, this::setArray, this::getArray, 0, fromIndex, toIndex);
 	}
 	
 	/**
@@ -1488,13 +1497,17 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 	{
 		final ABSTRACT_LIST KEY_GENERIC_TYPE list;
 		final ReentrantLock lock;
+		final Consumer<KEY_TYPE[]> setter;
+		final Supplier<KEY_TYPE[]> getter;
 		final int parentOffset;
 		final int offset;
 		int size;
 		
-		public COWSubList(ABSTRACT_LIST KEY_GENERIC_TYPE list, ReentrantLock lock, int offset, int from, int to) {
+		public COWSubList(ABSTRACT_LIST KEY_GENERIC_TYPE list, ReentrantLock lock, Consumer<KEY_TYPE[]> setter, Supplier<KEY_TYPE[]> getter, int offset, int from, int to) {
 			this.list = list;
 			this.lock = lock;
+			this.setter = setter;
+			this.getter = getter;
 			this.parentOffset = from;
 			this.offset = offset + from;
 			this.size = to - from;
@@ -1650,10 +1663,18 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 		
 		@Override
 		public KEY_TYPE swapRemove(int index) {
+			if(index < 0 || index >= size) throw new IndexOutOfBoundsException();
+			ReentrantLock lock = this.lock;
 			lock.lock();
 			try {
-				checkSubRange(index);
-				KEY_TYPE result = list.swapRemove(index+parentOffset);
+				KEY_TYPE[] data = getter.get();
+				KEY_TYPE result = data[offset+index];
+				KEY_TYPE[] newElements = NEW_KEY_ARRAY(data.length-1);
+				int end = offset+size-1;
+				System.arraycopy(data, 0, newElements, 0, end);
+				if(end != newElements.length) System.arraycopy(data, end+1, newElements, end, data.length-end-1);
+				if(index+offset != end) newElements[index+offset] = data[end];
+				setter.accept(newElements);
 				size--;
 				return result;
 			}
@@ -1676,6 +1697,371 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 			}
 		}
 		
+#if !TYPE_OBJECT
+		@Override
+		public boolean REMOVE_KEY(KEY_TYPE type) {
+			int index = indexOf(type);
+			if(index == -1) return false;
+			REMOVE(index);
+			return true;
+		}
+		
+#else
+		@Override
+		public boolean remove(Object type) {
+			int index = indexOf(type);
+			if(index == -1) return false;
+			REMOVE(index);
+			return true;
+		}
+		
+#endif
+		
+#if TYPE_OBJECT
+		@Override
+		public void sort(Comparator<? super CLASS_TYPE> c) {
+			ReentrantLock lock = this.lock;
+			lock.lock();
+			try {
+				KEY_TYPE[] data = getter.get();
+				KEY_TYPE[] newData = Arrays.copyOf(data, data.length);
+				if(c != null) ARRAYS.stableSort(newData, offset, offset+size, c);
+				else ARRAYS.stableSort(newData, offset, offset+size);
+				setter.accept(newData);
+			}
+			finally {
+				lock.unlock();
+			}
+		}
+		
+		@Override
+		public void unstableSort(Comparator<? super CLASS_TYPE> c) {
+			ReentrantLock lock = this.lock;
+			lock.lock();
+			try {
+				KEY_TYPE[] data = getter.get();
+				KEY_TYPE[] newData = Arrays.copyOf(data, data.length);
+				if(c != null) ARRAYS.unstableSort(newData, offset, offset+size, c);
+				else ARRAYS.unstableSort(newData, offset, offset+size);
+				setter.accept(newData);
+			}
+			finally {
+				lock.unlock();
+			}
+		}
+		
+#else
+		@Override
+		public void sort(COMPARATOR c) {
+			ReentrantLock lock = this.lock;
+			lock.lock();
+			try {
+				KEY_TYPE[] data = getter.get();
+				KEY_TYPE[] newData = Arrays.copyOf(data, data.length);
+				if(c != null) ARRAYS.stableSort(newData, offset, offset+size, c);
+				else ARRAYS.stableSort(newData, offset, offset+size);
+				setter.accept(newData);
+			}
+			finally {
+				lock.unlock();
+			}
+		}
+		
+		@Override
+		public void unstableSort(COMPARATOR c) {
+			ReentrantLock lock = this.lock;
+			lock.lock();
+			try {
+				KEY_TYPE[] data = getter.get();
+				KEY_TYPE[] newData = Arrays.copyOf(data, data.length);
+				if(c != null) ARRAYS.unstableSort(newData, offset, offset+size, c);
+				else ARRAYS.unstableSort(newData, offset, offset+size);
+				setter.accept(newData);
+			}
+			finally {
+				lock.unlock();
+			}	
+		}
+		
+#endif
+		
+		@Override
+		@Deprecated
+		public boolean removeAll(Collection<?> c) {
+			if(c.isEmpty()) return false;
+			ReentrantLock lock = this.lock;
+			lock.lock();
+			try {
+				KEY_TYPE[] data = getter.get();
+				KEY_TYPE[] newElements = NEW_KEY_ARRAY(data.length);
+				int j = 0;
+				for(int i= 0,m=data.length;i<m;i++) {
+					if(i < offset || i >= offset+size) newElements[j++] = data[i];
+					else if(!c.contains(KEY_TO_OBJ(data[i]))) newElements[j++] = data[i];
+				}
+				if(data.length != j) {
+					setter.accept(Arrays.copyOf(newElements, j));
+					size -= data.length - j;
+					return true;
+				}
+				return false;
+			}
+			finally {
+				lock.unlock();
+			}
+		}
+		
+		@Override
+		@Deprecated
+		public boolean retainAll(Collection<?> c) {
+			ReentrantLock lock = this.lock;
+			lock.lock();
+			try {
+				KEY_TYPE[] data = getter.get();
+				if(c.isEmpty()) {
+					if(size > 0) {
+						clear();
+						return true;
+					}
+					return false;
+				}
+				KEY_TYPE[] newElements = NEW_KEY_ARRAY(data.length);
+				int j = 0;
+				for(int i= 0,m=data.length;i<m;i++) {
+					if(i < offset || i >= offset+size) newElements[j++] = data[i];
+					else if(c.contains(KEY_TO_OBJ(data[i]))) newElements[j++] = data[i];
+				}
+				if(data.length != j) {
+					setter.accept(Arrays.copyOf(newElements, j));
+					size -= data.length - j;
+					return true;
+				}
+				return false;
+			}
+			finally {
+				lock.unlock();
+			}
+		}
+		
+		@Override
+		@Deprecated
+		public boolean removeIf(Predicate<? super CLASS_TYPE> filter) {
+			Objects.requireNonNull(filter);
+			ReentrantLock lock = this.lock;
+			lock.lock();
+			try {
+				KEY_TYPE[] data = getter.get();
+				KEY_TYPE[] newElements = NEW_KEY_ARRAY(data.length);
+				int j = 0;
+				for(int i= 0,m=data.length;i<m;i++) {
+					if(i < offset || i >= offset+size) newElements[j++] = data[i];
+					else if(!filter.test(KEY_TO_OBJ(data[i]))) newElements[j++] = data[i];
+				}
+				if(data.length != j) {
+					setter.accept(Arrays.copyOf(newElements, j));
+					size -= data.length - j;
+					return true;
+				}
+				return false;
+			}
+			finally {
+				lock.unlock();
+			}
+		}
+		
+		@Override
+		public boolean removeAll(COLLECTION KEY_GENERIC_TYPE c) {
+			if(c.isEmpty()) return false;
+			ReentrantLock lock = this.lock;
+			lock.lock();
+			try {
+				KEY_TYPE[] data = getter.get();
+				KEY_TYPE[] newElements = NEW_KEY_ARRAY(data.length);
+				int j = 0;
+				for(int i= 0,m=data.length;i<m;i++) {
+					if(i < offset || i >= offset+size) newElements[j++] = data[i];
+					else if(!c.contains(data[i])) newElements[j++] = data[i];
+				}
+				if(data.length != j) {
+					setter.accept(Arrays.copyOf(newElements, j));
+					size -= data.length - j;
+					return true;
+				}
+				return false;
+			}
+			finally {
+				lock.unlock();
+			}
+		}
+		
+		@Override
+		public boolean removeAll(COLLECTION KEY_GENERIC_TYPE c, CONSUMER KEY_GENERIC_TYPE r) {
+			if(c.isEmpty()) return false;
+			ReentrantLock lock = this.lock;
+			lock.lock();
+			try {
+				KEY_TYPE[] data = getter.get();
+				KEY_TYPE[] newElements = NEW_KEY_ARRAY(data.length);
+				int j = 0;
+				for(int i= 0,m=data.length;i<m;i++) {
+					if(i < offset || i >= offset+size) newElements[j++] = data[i];
+					else if(!c.contains(data[i])) newElements[j++] = data[i];
+					else r.accept(data[i]);
+				}
+				if(data.length != j) {
+					setter.accept(Arrays.copyOf(newElements, j));
+					size -= data.length - j;
+					return true;
+				}
+				return false;
+			}
+			finally {
+				lock.unlock();
+			}
+		}
+		
+		@Override
+		public boolean retainAll(COLLECTION KEY_GENERIC_TYPE c) {
+			ReentrantLock lock = this.lock;
+			lock.lock();
+			try {
+				KEY_TYPE[] data = getter.get();
+				if(c.isEmpty()) {
+					if(size > 0) {
+						clear();
+						return true;
+					}
+					return false;
+				}
+				KEY_TYPE[] newElements = NEW_KEY_ARRAY(data.length);
+				int j = 0;
+				for(int i= 0,m=data.length;i<m;i++) {
+					if(i < offset || i >= offset+size) newElements[j++] = data[i];
+					else if(c.contains(data[i])) newElements[j++] = data[i];
+				}
+				if(data.length != j) {
+					setter.accept(Arrays.copyOf(newElements, j));;
+					size -= data.length - j;
+					return true;
+				}
+				return false;
+			}
+			finally {
+				lock.unlock();
+			}
+		}
+		
+		@Override
+		public boolean retainAll(COLLECTION KEY_GENERIC_TYPE c, CONSUMER KEY_GENERIC_TYPE r) {
+			ReentrantLock lock = this.lock;
+			lock.lock();
+			try {
+				KEY_TYPE[] data = getter.get();
+				if(c.isEmpty()) {
+					if(size > 0) {
+						forEach(r);
+						clear();
+						return true;
+					}
+					return false;
+				}
+				KEY_TYPE[] newElements = NEW_KEY_ARRAY(data.length);
+				int j = 0;
+				for(int i= 0,m=data.length;i<m;i++) {
+					if(i < offset || i >= offset+size) newElements[j++] = data[i];
+					else if(c.contains(data[i])) newElements[j++] = data[i];
+					else r.accept(data[i]);
+				}
+				if(data.length != j) {
+					setter.accept(Arrays.copyOf(newElements, j));
+					size -= data.length - j;
+					return true;
+				}
+				return false;
+			}
+			finally {
+				lock.unlock();
+			}
+		}
+		
+#if PRIMITIVES
+		@Override
+		public boolean remIf(JAVA_PREDICATE filter) {
+			Objects.requireNonNull(filter);
+			ReentrantLock lock = this.lock;
+			lock.lock();
+			try {
+				KEY_TYPE[] data = getter.get();
+				KEY_TYPE[] newElements = NEW_KEY_ARRAY(data.length);
+				int j = 0;
+				for(int i=0,m=data.length;i<m;i++) {
+					if(i < offset || i >= offset+size) newElements[j++] = data[i];
+					else if(!filter.test(data[i])) newElements[j++] = data[i];
+				}
+				if(data.length != j) {
+					setter.accept(Arrays.copyOf(newElements, j));
+					size -= data.length - j;
+					return true;
+				}
+				return false;
+			}
+			finally {
+				lock.unlock();
+			}
+		}
+		
+#endif
+		
+		@Override
+		@Primitive
+		public void replaceAll(UnaryOperator<CLASS_TYPE> o) {
+#if PRIMITIVES
+			Objects.requireNonNull(o);
+#if TYPE_BYTE || TYPE_SHORT || TYPE_CHAR || TYPE_FLOAT
+			REPLACE(T -> OBJ_TO_KEY(o.apply(KEY_TO_OBJ(SanityChecks.SANITY_CAST(T)))));
+#else
+			REPLACE(T -> OBJ_TO_KEY(o.apply(KEY_TO_OBJ(T))));
+#endif
+#else
+			Objects.requireNonNull(o);
+			ReentrantLock lock = this.lock;
+			lock.lock();
+			try {
+				KEY_TYPE[] data = getter.get();
+				KEY_TYPE[] newData = Arrays.copyOf(data, data.length);
+				for(int i = 0,m=size;i<m;i++)
+					newData[i+offset] = OBJ_TO_KEY(o.apply(KEY_TO_OBJ(newData[i+offset])));
+				setter.accept(newData);
+			}
+			finally {
+				lock.unlock();
+			}
+#endif
+		}
+		
+#if PRIMITIVES
+		@Override
+		public void REPLACE(JAVA_UNARY_OPERATOR o) {
+			Objects.requireNonNull(o);
+			ReentrantLock lock = this.lock;
+			lock.lock();
+			try {
+				KEY_TYPE[] data = getter.get();
+				KEY_TYPE[] newData = Arrays.copyOf(data, data.length);
+				for(int i = 0,m=size;i<m;i++)
+#if TYPE_BYTE || TYPE_SHORT || TYPE_CHAR || TYPE_FLOAT
+					newData[i+offset] = SanityChecks.SANITY_CAST(o.APPLY_CAST(newData[i+offset]));
+#else
+					newData[i+offset] = o.APPLY(newData[i+offset]);
+#endif
+				setter.accept(newData);
+			}
+			finally {
+				lock.unlock();
+			}
+		}
+		
+#endif		
 		@Override
 		public int size() {
 			return size;
@@ -1706,7 +2092,7 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 		@Override
 		public LIST KEY_GENERIC_TYPE subList(int fromIndex, int toIndex) {
 			SanityChecks.checkArrayCapacity(size, fromIndex, toIndex-fromIndex);
-			return new COWSubListBRACES(this, lock, offset, fromIndex, toIndex);
+			return new COWSubListBRACES(this, lock, setter, getter, offset, fromIndex, toIndex);
 		}
 		
 		protected void checkSubRange(int index) {
@@ -1724,7 +2110,6 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 	{
 		ABSTRACT_LIST KEY_GENERIC_TYPE list;
 		int index;
-		int lastReturned = -1;
 		
 		COWSubListIterator(ABSTRACT_LIST KEY_GENERIC_TYPE list, int index) {
 			this.list = list;
@@ -1739,8 +2124,7 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 		@Override
 		public KEY_TYPE NEXT() {
 			if(!hasNext()) throw new NoSuchElementException();
-			int i = index++;
-			return list.GET_KEY((lastReturned = i));
+			return list.GET_KEY(index++);
 		}
 		
 		@Override
@@ -1751,8 +2135,7 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 		@Override
 		public KEY_TYPE PREVIOUS() {
 			if(!hasPrevious()) throw new NoSuchElementException();
-			--index;
-			return list.GET_KEY((lastReturned = index));
+			return list.GET_KEY(--index);
 		}
 		
 		@Override
@@ -1766,31 +2149,19 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 		}
 		
 		@Override
-		public void remove() {
-			if(lastReturned == -1) throw new IllegalStateException();
-			list.REMOVE(lastReturned);
-			index = lastReturned;
-			lastReturned = -1;
-		}
+		public void remove() { throw new UnsupportedOperationException(); }
 		
 		@Override
-		public void set(KEY_TYPE e) {
-			if(lastReturned == -1) throw new IllegalStateException();
-			list.set(lastReturned, e);
-		}
+		public void set(KEY_TYPE e) { throw new UnsupportedOperationException(); }
 		
 		@Override
-		public void add(KEY_TYPE e) {
-			list.add(index++, e);
-			lastReturned = -1;
-		}
+		public void add(KEY_TYPE e) { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public int skip(int amount) {
 			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
 			int steps = Math.min(amount, list.size() - index);
 			index += steps;
-			if(steps > 0) lastReturned = Math.min(index-1, list.size()-1);
 			return steps;
 		}
 		
@@ -1799,7 +2170,6 @@ public class COPY_ON_WRITE_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENER
 			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
 			int steps = Math.min(amount, index);
 			index -= steps;
-			if(steps > 0) lastReturned = Math.min(index, list.size()-1);
 			return steps;
 		}
 	}
