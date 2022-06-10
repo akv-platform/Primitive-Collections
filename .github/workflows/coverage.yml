@@ -5,11 +5,20 @@ on:
     branches: [ debug ]
 jobs:
   build:
-      strategy:
-      fail-fast: false
-      matrix:
-        tests: [testBooleans, testBytes, testShorts, testChars, testInts, testLongs, testFloats, testDoubles, testObjects, testGeneral]
-        
+    strategy:
+    fail-fast: false
+    matrix:
+      tests:
+        - testBooleans
+        - testBytes
+        - testShorts
+        - testChars
+        - testInts
+        - testLongs
+        - testFloats
+        - testDoubles
+        - testObjects
+        - testGeneral
     name: Code Quality Check
     runs-on: ubuntu-latest
     steps:
