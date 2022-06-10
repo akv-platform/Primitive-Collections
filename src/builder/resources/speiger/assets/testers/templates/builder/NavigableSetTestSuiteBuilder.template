@@ -71,7 +71,7 @@ public class NAVIGABLE_SET_TEST_BUILDER KEY_GENERIC_TYPE extends SORTED_SET_TEST
 
 	@Override
 	SORTED_SET_TEST_BUILDER KEY_GENERIC_TYPE newBuilderUsing(TEST_SORTED_SET_GENERATOR KEY_GENERIC_TYPE delegate, Bound to, Bound from) {
-	    return using(new SUB_NAVIGABLE_SET_CLASS_GENERATOR BRACES(delegate, to, from));
+	    return NAVIGABLE_SET_TEST_BUILDER.using(new SUB_NAVIGABLE_SET_CLASS_GENERATORBRACES(delegate, to, from));
 	}
 	
 	private TestSuite createDescendingSuite(FeatureSpecificTestSuiteBuilder<?, ? extends OneSizeTestContainerGenerator<Collection<CLASS_TYPE>, CLASS_TYPE>> parentBuilder) {
