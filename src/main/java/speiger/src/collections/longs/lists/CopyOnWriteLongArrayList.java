@@ -581,7 +581,7 @@ public class CopyOnWriteLongArrayList extends AbstractLongList implements ITrimm
 	@Override
 	public LongList subList(int fromIndex, int toIndex) {
 		SanityChecks.checkArrayCapacity(data.length, fromIndex, toIndex-fromIndex);
-		return new COWSubList(this, 0, fromIndex, toIndex);
+		return new COWSubList(this, lock, 0, fromIndex, toIndex);
 	}
 	
 	/**
@@ -1281,13 +1281,15 @@ public class CopyOnWriteLongArrayList extends AbstractLongList implements ITrimm
 	
 	private static class COWSubList extends AbstractLongList
 	{
-		final CopyOnWriteLongArrayList list;
+		final AbstractLongList list;
+		final ReentrantLock lock;
 		final int parentOffset;
 		final int offset;
 		int size;
 		
-		public COWSubList(CopyOnWriteLongArrayList list, int offset, int from, int to) {
+		public COWSubList(AbstractLongList list, ReentrantLock lock, int offset, int from, int to) {
 			this.list = list;
+			this.lock = lock;
 			this.parentOffset = from;
 			this.offset = offset + from;
 			this.size = to - from;
@@ -1295,7 +1297,6 @@ public class CopyOnWriteLongArrayList extends AbstractLongList implements ITrimm
 		
 		@Override
 		public void add(int index, long element) {
-			ReentrantLock lock = list.lock;
 			lock.lock();
 			try {
 				checkAddSubRange(index);
@@ -1311,7 +1312,6 @@ public class CopyOnWriteLongArrayList extends AbstractLongList implements ITrimm
 		public boolean addAll(int index, Collection<? extends Long> c) {
 			int add = c.size();
 			if(add <= 0) return false;
-			ReentrantLock lock = list.lock;
 			lock.lock();
 			try {
 				checkAddSubRange(index);
@@ -1328,7 +1328,6 @@ public class CopyOnWriteLongArrayList extends AbstractLongList implements ITrimm
 		public boolean addAll(int index, LongCollection c) {
 			int add = c.size();
 			if(add <= 0) return false;
-			ReentrantLock lock = list.lock;
 			lock.lock();
 			try {
 				checkAddSubRange(index);
@@ -1345,7 +1344,6 @@ public class CopyOnWriteLongArrayList extends AbstractLongList implements ITrimm
 		public boolean addAll(int index, LongList c) {
 			int add = c.size();
 			if(add <= 0) return false;
-			ReentrantLock lock = list.lock;
 			lock.lock();
 			try {
 				checkAddSubRange(index);
@@ -1361,7 +1359,6 @@ public class CopyOnWriteLongArrayList extends AbstractLongList implements ITrimm
 		@Override
 		public void addElements(int from, long[] a, int offset, int length) {
 			if(length <= 0) return;
-			ReentrantLock lock = list.lock;
 			lock.lock();
 			try {
 				checkAddSubRange(from);
@@ -1377,13 +1374,12 @@ public class CopyOnWriteLongArrayList extends AbstractLongList implements ITrimm
 		public long[] getElements(int from, long[] a, int offset, int length) {
 			SanityChecks.checkArrayCapacity(size, from, length);
 			SanityChecks.checkArrayCapacity(a.length, offset, length);
-			return list.getElements(from+this.offset, a, offset, length);
+			return list.getElements(from+parentOffset, a, offset, length);
 		}
 		
 		@Override
 		public void removeElements(int from, int to) {
 			if(to-from <= 0) return;
-			ReentrantLock lock = list.lock;
 			lock.lock();
 			try {
 				checkSubRange(from);
@@ -1398,7 +1394,6 @@ public class CopyOnWriteLongArrayList extends AbstractLongList implements ITrimm
 		
 		@Override
 		public long[] extractElements(int from, int to) {
-			ReentrantLock lock = list.lock;
 			lock.lock();
 			try {
 				checkSubRange(from);
@@ -1415,16 +1410,15 @@ public class CopyOnWriteLongArrayList extends AbstractLongList implements ITrimm
 		@Override
 		public long getLong(int index) {
 			checkSubRange(index);
-			return list.getLong(offset+index);
+			return list.getLong(parentOffset+index);
 		}
 
 		@Override
 		public long set(int index, long element) {
-			ReentrantLock lock = list.lock;
 			lock.lock();
 			try {
 				checkSubRange(index);
-				return list.set(offset+index, element);
+				return list.set(parentOffset+index, element);
 			}
 			finally {
 				lock.unlock();
@@ -1433,7 +1427,6 @@ public class CopyOnWriteLongArrayList extends AbstractLongList implements ITrimm
 		
 		@Override
 		public long swapRemove(int index) {
-			ReentrantLock lock = list.lock;
 			lock.lock();
 			try {
 				checkSubRange(index);
@@ -1448,7 +1441,6 @@ public class CopyOnWriteLongArrayList extends AbstractLongList implements ITrimm
 		
 		@Override
 		public long removeLong(int index) {
-			ReentrantLock lock = list.lock;
 			lock.lock();
 			try {
 				checkSubRange(index);
@@ -1469,10 +1461,9 @@ public class CopyOnWriteLongArrayList extends AbstractLongList implements ITrimm
 		@Override
 		public void clear() {
 			if(size == 0) return;
-			ReentrantLock lock = list.lock;
 			lock.lock();
 			try {
-				list.removeElements(offset, offset+size);
+				list.removeElements(parentOffset, parentOffset+size);
 				size = 0;
 			}
 			finally {
@@ -1492,7 +1483,7 @@ public class CopyOnWriteLongArrayList extends AbstractLongList implements ITrimm
 		@Override
 		public LongList subList(int fromIndex, int toIndex) {
 			SanityChecks.checkArrayCapacity(size, fromIndex, toIndex-fromIndex);
-			return new COWSubList(list, offset, fromIndex, toIndex);
+			return new COWSubList(this, lock, offset, fromIndex, toIndex);
 		}
 		
 		protected void checkSubRange(int index) {
@@ -1510,6 +1501,7 @@ public class CopyOnWriteLongArrayList extends AbstractLongList implements ITrimm
 	{
 		AbstractLongList list;
 		int index;
+		int lastReturned = -1;
 		
 		COWSubListIterator(AbstractLongList list, int index) {
 			this.list = list;
@@ -1524,7 +1516,8 @@ public class CopyOnWriteLongArrayList extends AbstractLongList implements ITrimm
 		@Override
 		public long nextLong() {
 			if(!hasNext()) throw new NoSuchElementException();
-			return list.getLong(index++);
+			int i = index++;
+			return list.getLong((lastReturned = i));
 		}
 		
 		@Override
@@ -1535,7 +1528,8 @@ public class CopyOnWriteLongArrayList extends AbstractLongList implements ITrimm
 		@Override
 		public long previousLong() {
 			if(!hasPrevious()) throw new NoSuchElementException();
-			return list.getLong(--index);
+			--index;
+			return list.getLong((lastReturned = index));
 		}
 		
 		@Override
@@ -1549,19 +1543,31 @@ public class CopyOnWriteLongArrayList extends AbstractLongList implements ITrimm
 		}
 		
 		@Override
-		public void remove() { throw new UnsupportedOperationException(); }
+		public void remove() {
+			if(lastReturned == -1) throw new IllegalStateException();
+			list.removeLong(lastReturned);
+			index = lastReturned;
+			lastReturned = -1;
+		}
 		
 		@Override
-		public void set(long e) { throw new UnsupportedOperationException(); }
+		public void set(long e) {
+			if(lastReturned == -1) throw new IllegalStateException();
+			list.set(lastReturned, e);
+		}
 		
 		@Override
-		public void add(long e) { throw new UnsupportedOperationException(); }
+		public void add(long e) {
+			list.add(index++, e);
+			lastReturned = -1;
+		}
 		
 		@Override
 		public int skip(int amount) {
 			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
 			int steps = Math.min(amount, list.size() - index);
 			index += steps;
+			if(steps > 0) lastReturned = Math.min(index-1, list.size()-1);
 			return steps;
 		}
 		
@@ -1570,6 +1576,7 @@ public class CopyOnWriteLongArrayList extends AbstractLongList implements ITrimm
 			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
 			int steps = Math.min(amount, index);
 			index -= steps;
+			if(steps > 0) lastReturned = Math.min(index, list.size()-1);
 			return steps;
 		}
 	}

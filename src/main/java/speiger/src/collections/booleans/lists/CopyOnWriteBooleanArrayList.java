@@ -571,7 +571,7 @@ public class CopyOnWriteBooleanArrayList extends AbstractBooleanList implements 
 	@Override
 	public BooleanList subList(int fromIndex, int toIndex) {
 		SanityChecks.checkArrayCapacity(data.length, fromIndex, toIndex-fromIndex);
-		return new COWSubList(this, 0, fromIndex, toIndex);
+		return new COWSubList(this, lock, 0, fromIndex, toIndex);
 	}
 	
 	/**
@@ -1224,13 +1224,15 @@ public class CopyOnWriteBooleanArrayList extends AbstractBooleanList implements 
 	
 	private static class COWSubList extends AbstractBooleanList
 	{
-		final CopyOnWriteBooleanArrayList list;
+		final AbstractBooleanList list;
+		final ReentrantLock lock;
 		final int parentOffset;
 		final int offset;
 		int size;
 		
-		public COWSubList(CopyOnWriteBooleanArrayList list, int offset, int from, int to) {
+		public COWSubList(AbstractBooleanList list, ReentrantLock lock, int offset, int from, int to) {
 			this.list = list;
+			this.lock = lock;
 			this.parentOffset = from;
 			this.offset = offset + from;
 			this.size = to - from;
@@ -1238,7 +1240,6 @@ public class CopyOnWriteBooleanArrayList extends AbstractBooleanList implements 
 		
 		@Override
 		public void add(int index, boolean element) {
-			ReentrantLock lock = list.lock;
 			lock.lock();
 			try {
 				checkAddSubRange(index);
@@ -1254,7 +1255,6 @@ public class CopyOnWriteBooleanArrayList extends AbstractBooleanList implements 
 		public boolean addAll(int index, Collection<? extends Boolean> c) {
 			int add = c.size();
 			if(add <= 0) return false;
-			ReentrantLock lock = list.lock;
 			lock.lock();
 			try {
 				checkAddSubRange(index);
@@ -1271,7 +1271,6 @@ public class CopyOnWriteBooleanArrayList extends AbstractBooleanList implements 
 		public boolean addAll(int index, BooleanCollection c) {
 			int add = c.size();
 			if(add <= 0) return false;
-			ReentrantLock lock = list.lock;
 			lock.lock();
 			try {
 				checkAddSubRange(index);
@@ -1288,7 +1287,6 @@ public class CopyOnWriteBooleanArrayList extends AbstractBooleanList implements 
 		public boolean addAll(int index, BooleanList c) {
 			int add = c.size();
 			if(add <= 0) return false;
-			ReentrantLock lock = list.lock;
 			lock.lock();
 			try {
 				checkAddSubRange(index);
@@ -1304,7 +1302,6 @@ public class CopyOnWriteBooleanArrayList extends AbstractBooleanList implements 
 		@Override
 		public void addElements(int from, boolean[] a, int offset, int length) {
 			if(length <= 0) return;
-			ReentrantLock lock = list.lock;
 			lock.lock();
 			try {
 				checkAddSubRange(from);
@@ -1320,13 +1317,12 @@ public class CopyOnWriteBooleanArrayList extends AbstractBooleanList implements 
 		public boolean[] getElements(int from, boolean[] a, int offset, int length) {
 			SanityChecks.checkArrayCapacity(size, from, length);
 			SanityChecks.checkArrayCapacity(a.length, offset, length);
-			return list.getElements(from+this.offset, a, offset, length);
+			return list.getElements(from+parentOffset, a, offset, length);
 		}
 		
 		@Override
 		public void removeElements(int from, int to) {
 			if(to-from <= 0) return;
-			ReentrantLock lock = list.lock;
 			lock.lock();
 			try {
 				checkSubRange(from);
@@ -1341,7 +1337,6 @@ public class CopyOnWriteBooleanArrayList extends AbstractBooleanList implements 
 		
 		@Override
 		public boolean[] extractElements(int from, int to) {
-			ReentrantLock lock = list.lock;
 			lock.lock();
 			try {
 				checkSubRange(from);
@@ -1358,16 +1353,15 @@ public class CopyOnWriteBooleanArrayList extends AbstractBooleanList implements 
 		@Override
 		public boolean getBoolean(int index) {
 			checkSubRange(index);
-			return list.getBoolean(offset+index);
+			return list.getBoolean(parentOffset+index);
 		}
 
 		@Override
 		public boolean set(int index, boolean element) {
-			ReentrantLock lock = list.lock;
 			lock.lock();
 			try {
 				checkSubRange(index);
-				return list.set(offset+index, element);
+				return list.set(parentOffset+index, element);
 			}
 			finally {
 				lock.unlock();
@@ -1376,7 +1370,6 @@ public class CopyOnWriteBooleanArrayList extends AbstractBooleanList implements 
 		
 		@Override
 		public boolean swapRemove(int index) {
-			ReentrantLock lock = list.lock;
 			lock.lock();
 			try {
 				checkSubRange(index);
@@ -1391,7 +1384,6 @@ public class CopyOnWriteBooleanArrayList extends AbstractBooleanList implements 
 		
 		@Override
 		public boolean removeBoolean(int index) {
-			ReentrantLock lock = list.lock;
 			lock.lock();
 			try {
 				checkSubRange(index);
@@ -1412,10 +1404,9 @@ public class CopyOnWriteBooleanArrayList extends AbstractBooleanList implements 
 		@Override
 		public void clear() {
 			if(size == 0) return;
-			ReentrantLock lock = list.lock;
 			lock.lock();
 			try {
-				list.removeElements(offset, offset+size);
+				list.removeElements(parentOffset, parentOffset+size);
 				size = 0;
 			}
 			finally {
@@ -1435,7 +1426,7 @@ public class CopyOnWriteBooleanArrayList extends AbstractBooleanList implements 
 		@Override
 		public BooleanList subList(int fromIndex, int toIndex) {
 			SanityChecks.checkArrayCapacity(size, fromIndex, toIndex-fromIndex);
-			return new COWSubList(list, offset, fromIndex, toIndex);
+			return new COWSubList(this, lock, offset, fromIndex, toIndex);
 		}
 		
 		protected void checkSubRange(int index) {
@@ -1453,6 +1444,7 @@ public class CopyOnWriteBooleanArrayList extends AbstractBooleanList implements 
 	{
 		AbstractBooleanList list;
 		int index;
+		int lastReturned = -1;
 		
 		COWSubListIterator(AbstractBooleanList list, int index) {
 			this.list = list;
@@ -1467,7 +1459,8 @@ public class CopyOnWriteBooleanArrayList extends AbstractBooleanList implements 
 		@Override
 		public boolean nextBoolean() {
 			if(!hasNext()) throw new NoSuchElementException();
-			return list.getBoolean(index++);
+			int i = index++;
+			return list.getBoolean((lastReturned = i));
 		}
 		
 		@Override
@@ -1478,7 +1471,8 @@ public class CopyOnWriteBooleanArrayList extends AbstractBooleanList implements 
 		@Override
 		public boolean previousBoolean() {
 			if(!hasPrevious()) throw new NoSuchElementException();
-			return list.getBoolean(--index);
+			--index;
+			return list.getBoolean((lastReturned = index));
 		}
 		
 		@Override
@@ -1492,19 +1486,31 @@ public class CopyOnWriteBooleanArrayList extends AbstractBooleanList implements 
 		}
 		
 		@Override
-		public void remove() { throw new UnsupportedOperationException(); }
+		public void remove() {
+			if(lastReturned == -1) throw new IllegalStateException();
+			list.removeBoolean(lastReturned);
+			index = lastReturned;
+			lastReturned = -1;
+		}
 		
 		@Override
-		public void set(boolean e) { throw new UnsupportedOperationException(); }
+		public void set(boolean e) {
+			if(lastReturned == -1) throw new IllegalStateException();
+			list.set(lastReturned, e);
+		}
 		
 		@Override
-		public void add(boolean e) { throw new UnsupportedOperationException(); }
+		public void add(boolean e) {
+			list.add(index++, e);
+			lastReturned = -1;
+		}
 		
 		@Override
 		public int skip(int amount) {
 			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
 			int steps = Math.min(amount, list.size() - index);
 			index += steps;
+			if(steps > 0) lastReturned = Math.min(index-1, list.size()-1);
 			return steps;
 		}
 		
@@ -1513,6 +1519,7 @@ public class CopyOnWriteBooleanArrayList extends AbstractBooleanList implements 
 			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
 			int steps = Math.min(amount, index);
 			index -= steps;
+			if(steps > 0) lastReturned = Math.min(index, list.size()-1);
 			return steps;
 		}
 	}

@@ -277,7 +277,7 @@ public abstract class AbstractCharList extends AbstractCharCollection implements
 		public char[] getElements(int from, char[] a, int offset, int length) {
 			SanityChecks.checkArrayCapacity(size, from, length);
 			SanityChecks.checkArrayCapacity(a.length, offset, length);
-			return list.getElements(from+this.offset, a, offset, length);
+			return list.getElements(from+parentOffset, a, offset, length);
 		}
 		
 		@Override
@@ -301,13 +301,13 @@ public abstract class AbstractCharList extends AbstractCharCollection implements
 		@Override
 		public char getChar(int index) {
 			checkSubRange(index);
-			return list.getChar(offset+index);
+			return list.getChar(parentOffset+index);
 		}
 
 		@Override
 		public char set(int index, char element) {
 			checkSubRange(index);
-			return list.set(offset+index, element);
+			return list.set(parentOffset+index, element);
 		}
 		
 		@Override
@@ -343,7 +343,7 @@ public abstract class AbstractCharList extends AbstractCharCollection implements
 		@Override
 		public CharList subList(int fromIndex, int toIndex) {
 			SanityChecks.checkArrayCapacity(size, fromIndex, toIndex-fromIndex);
-			return new SubList(list, offset, fromIndex, toIndex);
+			return new SubList(this, offset, fromIndex, toIndex);
 		}
 		
 		protected void checkSubRange(int index) {
@@ -417,15 +417,17 @@ public abstract class AbstractCharList extends AbstractCharCollection implements
 			
 			@Override
 			public void add(char e) {
-				list.add(index++, e);
+				list.add(index, e);
+				index++;
 				lastReturned = -1;
 			}
 			
 			@Override
 			public int skip(int amount) {
 				if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
-				int steps = Math.min(amount, (list.size() - 1) - index);
+				int steps = Math.min(amount, size() - index);
 				index += steps;
+				if(steps > 0) lastReturned = Math.min(index-1, size()-1);
 				return steps;
 			}
 			
@@ -434,6 +436,7 @@ public abstract class AbstractCharList extends AbstractCharCollection implements
 				if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
 				int steps = Math.min(amount, index);
 				index -= steps;
+				if(steps > 0) lastReturned = Math.min(index, size()-1);
 				return steps;
 			}
 		}

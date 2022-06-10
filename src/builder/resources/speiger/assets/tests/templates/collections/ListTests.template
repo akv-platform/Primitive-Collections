@@ -8,9 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.collect.testing.features.CollectionSize;
-#if TYPE_OBJECT
 import com.google.common.collect.testing.features.CollectionFeature;
-#endif
 import com.google.common.collect.testing.features.ListFeature;
 import com.google.common.collect.testing.features.Feature;
 
@@ -99,25 +97,34 @@ public class LIST_TESTS extends TestCase
 		suite.addTest(listSuite("IMMUTABLE_LIST", T -> new IMMUTABLE_LISTBRACES(T), getImmutableFeatures(), -1));
 		suite.addTest(listSuite("Synchronized ARRAY_LIST", T -> new ARRAY_LISTBRACES(T).synchronize(), getFeatures(), -1));
 		suite.addTest(listSuite("Unmodifiable ARRAY_LIST", T -> new ARRAY_LISTBRACES(T).unmodifiable(), getImmutableFeatures(), -1));
-		suite.addTest(emptylistSuite("Empty LIST", T -> LISTS.empty(), getImmutableFeatures(), 0));
-		suite.addTest(listSuite("Singleton LIST", T -> LISTS.singleton(T[0]), getImmutableFeatures(), 1));
+		suite.addTest(emptylistSuite("Empty LIST", T -> LISTS.empty(), getImmutableWrapperFeatures(), 0));
+		suite.addTest(listSuite("Singleton LIST", T -> LISTS.singleton(T[0]), getImmutableWrapperFeatures(), 1));
 	}
 	
 	private static Test listSuite(String name, Function<KEY_STRING_TYPE[], LIST KEY_STRING_GENERIC_TYPE> factory, Collection<Feature<?>> features, int size) {
-		return LIST_TEST_BUILDER.using((TEST_LIST_GENERATOR KEY_STRING_GENERIC_TYPE)new SIMPLE_TEST_GENERATOR.Lists KEY_STRING_GENERIC_TYPE(factory).setElements(createStrings())).named(name).withFeatures(getSizes(size)).withFeatures(features).createTestSuite();
+		return LIST_TEST_BUILDER.using((TEST_LIST_GENERATOR KEY_STRING_GENERIC_TYPE)new SIMPLE_TEST_GENERATOR.Lists KEY_STRING_GENERIC_TYPE(factory).setElements(createStrings())).setPrefixes(createPrefixes()).setSuffixes(createSuffixes()).named(name).withFeatures(getSizes(size)).withFeatures(features).createTestSuite();
 	}
 	
 	private static Test copyOnWritelistSuite(String name, Function<KEY_STRING_TYPE[], LIST KEY_STRING_GENERIC_TYPE> factory, Collection<Feature<?>> features, int size) {
-		return LIST_TEST_BUILDER.using((TEST_LIST_GENERATOR KEY_STRING_GENERIC_TYPE)new SIMPLE_TEST_GENERATOR.Lists KEY_STRING_GENERIC_TYPE(factory).setElements(createStrings())).named(name).withFeatures(getSizes(size)).withFeatures(features).suppressing(getCopyOnWriteMethods()).createTestSuite();
+		return LIST_TEST_BUILDER.using((TEST_LIST_GENERATOR KEY_STRING_GENERIC_TYPE)new SIMPLE_TEST_GENERATOR.Lists KEY_STRING_GENERIC_TYPE(factory).setElements(createStrings())).setPrefixes(createPrefixes()).setSuffixes(createSuffixes()).named(name).withFeatures(getSizes(size)).withFeatures(features).suppressing(getCopyOnWriteMethods()).createTestSuite();
 	}
 	
 	private static Test emptylistSuite(String name, Function<KEY_STRING_TYPE[], LIST KEY_STRING_GENERIC_TYPE> factory, Collection<Feature<?>> features, int size) {
-		return LIST_TEST_BUILDER.using((TEST_LIST_GENERATOR KEY_STRING_GENERIC_TYPE)new SIMPLE_TEST_GENERATOR.Lists KEY_STRING_GENERIC_TYPE(factory).setElements(createStrings())).named(name).withFeatures(getSizes(size)).suppressing(TestUtils.getSurpession(ListSubListTester.class)).suppressing(TestUtils.getSurpession(FILE_KEY_TYPEListSubListTester.class)).withFeatures(features).createTestSuite();
+		return LIST_TEST_BUILDER.using((TEST_LIST_GENERATOR KEY_STRING_GENERIC_TYPE)new SIMPLE_TEST_GENERATOR.Lists KEY_STRING_GENERIC_TYPE(factory).setElements(createStrings())).setPrefixes(createPrefixes()).setSuffixes(createSuffixes()).named(name).withFeatures(getSizes(size)).suppressing(TestUtils.getSurpession(ListSubListTester.class)).suppressing(TestUtils.getSurpession(FILE_KEY_TYPEListSubListTester.class)).withFeatures(features).createTestSuite();
 	}
 	
 	private static String[] createStrings() {
 		return new String[]{"a", "b", "c", "d", "e"};
 	}
+	
+	private static String[] createPrefixes() {
+		return new String[]{"^", "_", "`"};
+	}
+	
+	private static String[] createSuffixes() {
+		return new String[]{"f", "g", "h"};
+	}
+	
 #else if !TYPE_BOOLEAN
 	public static void suite(TestSuite suite) {
 		suite.addTest(listSuite("ARRAY_LIST", ARRAY_LIST::new, getFeatures(), -1));
@@ -126,8 +133,8 @@ public class LIST_TESTS extends TestCase
 		suite.addTest(listSuite("IMMUTABLE_LIST", IMMUTABLE_LIST::new, getImmutableFeatures(), -1));
 		suite.addTest(listSuite("Synchronized ARRAY_LIST", T -> new ARRAY_LISTBRACES(T).synchronize(), getFeatures(), -1));
 		suite.addTest(listSuite("Unmodifiable ARRAY_LIST", T -> new ARRAY_LISTBRACES(T).unmodifiable(), getImmutableFeatures(), -1));
-		suite.addTest(emptylistSuite("Empty LIST", T -> LISTS.empty(), getImmutableFeatures(), 0));
-		suite.addTest(listSuite("Singleton LIST", T -> LISTS.singleton(T[0]), getImmutableFeatures(), 1));
+		suite.addTest(emptylistSuite("Empty LIST", T -> LISTS.empty(), getImmutableWrapperFeatures(), 0));
+		suite.addTest(listSuite("Singleton LIST", T -> LISTS.singleton(T[0]), getImmutableWrapperFeatures(), 1));
 	}
 	
 	private static Test listSuite(String name, Function<KEY_TYPE[], LIST KEY_GENERIC_TYPE> factory, Collection<Feature<?>> features, int size) {
@@ -319,7 +326,22 @@ public class LIST_TESTS extends TestCase
 #endignore
 #endif
 	}
+	
+#if !TYPE_BOOLEAN
+	private static Collection<Feature<?>> getImmutableWrapperFeatures() {
 
+#if TYPE_OBJECT
+#ignore
+		return Arrays.asList(SpecialFeature.COPYING, CollectionFeature.ALLOWS_NULL_VALUES, CollectionFeature.SUBSET_VIEW);
+#endignore
+#else
+#ignore
+		return Arrays.asList(SpecialFeature.COPYING, CollectionFeature.SUBSET_VIEW);
+#endignore
+#endif
+	}
+	
+#endif
 	private static Collection<Feature<?>> getFeatures() {
 
 #if TYPE_OBJECT

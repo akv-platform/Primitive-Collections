@@ -581,7 +581,7 @@ public class CopyOnWriteDoubleArrayList extends AbstractDoubleList implements IT
 	@Override
 	public DoubleList subList(int fromIndex, int toIndex) {
 		SanityChecks.checkArrayCapacity(data.length, fromIndex, toIndex-fromIndex);
-		return new COWSubList(this, 0, fromIndex, toIndex);
+		return new COWSubList(this, lock, 0, fromIndex, toIndex);
 	}
 	
 	/**
@@ -1281,13 +1281,15 @@ public class CopyOnWriteDoubleArrayList extends AbstractDoubleList implements IT
 	
 	private static class COWSubList extends AbstractDoubleList
 	{
-		final CopyOnWriteDoubleArrayList list;
+		final AbstractDoubleList list;
+		final ReentrantLock lock;
 		final int parentOffset;
 		final int offset;
 		int size;
 		
-		public COWSubList(CopyOnWriteDoubleArrayList list, int offset, int from, int to) {
+		public COWSubList(AbstractDoubleList list, ReentrantLock lock, int offset, int from, int to) {
 			this.list = list;
+			this.lock = lock;
 			this.parentOffset = from;
 			this.offset = offset + from;
 			this.size = to - from;
@@ -1295,7 +1297,6 @@ public class CopyOnWriteDoubleArrayList extends AbstractDoubleList implements IT
 		
 		@Override
 		public void add(int index, double element) {
-			ReentrantLock lock = list.lock;
 			lock.lock();
 			try {
 				checkAddSubRange(index);
@@ -1311,7 +1312,6 @@ public class CopyOnWriteDoubleArrayList extends AbstractDoubleList implements IT
 		public boolean addAll(int index, Collection<? extends Double> c) {
 			int add = c.size();
 			if(add <= 0) return false;
-			ReentrantLock lock = list.lock;
 			lock.lock();
 			try {
 				checkAddSubRange(index);
@@ -1328,7 +1328,6 @@ public class CopyOnWriteDoubleArrayList extends AbstractDoubleList implements IT
 		public boolean addAll(int index, DoubleCollection c) {
 			int add = c.size();
 			if(add <= 0) return false;
-			ReentrantLock lock = list.lock;
 			lock.lock();
 			try {
 				checkAddSubRange(index);
@@ -1345,7 +1344,6 @@ public class CopyOnWriteDoubleArrayList extends AbstractDoubleList implements IT
 		public boolean addAll(int index, DoubleList c) {
 			int add = c.size();
 			if(add <= 0) return false;
-			ReentrantLock lock = list.lock;
 			lock.lock();
 			try {
 				checkAddSubRange(index);
@@ -1361,7 +1359,6 @@ public class CopyOnWriteDoubleArrayList extends AbstractDoubleList implements IT
 		@Override
 		public void addElements(int from, double[] a, int offset, int length) {
 			if(length <= 0) return;
-			ReentrantLock lock = list.lock;
 			lock.lock();
 			try {
 				checkAddSubRange(from);
@@ -1377,13 +1374,12 @@ public class CopyOnWriteDoubleArrayList extends AbstractDoubleList implements IT
 		public double[] getElements(int from, double[] a, int offset, int length) {
 			SanityChecks.checkArrayCapacity(size, from, length);
 			SanityChecks.checkArrayCapacity(a.length, offset, length);
-			return list.getElements(from+this.offset, a, offset, length);
+			return list.getElements(from+parentOffset, a, offset, length);
 		}
 		
 		@Override
 		public void removeElements(int from, int to) {
 			if(to-from <= 0) return;
-			ReentrantLock lock = list.lock;
 			lock.lock();
 			try {
 				checkSubRange(from);
@@ -1398,7 +1394,6 @@ public class CopyOnWriteDoubleArrayList extends AbstractDoubleList implements IT
 		
 		@Override
 		public double[] extractElements(int from, int to) {
-			ReentrantLock lock = list.lock;
 			lock.lock();
 			try {
 				checkSubRange(from);
@@ -1415,16 +1410,15 @@ public class CopyOnWriteDoubleArrayList extends AbstractDoubleList implements IT
 		@Override
 		public double getDouble(int index) {
 			checkSubRange(index);
-			return list.getDouble(offset+index);
+			return list.getDouble(parentOffset+index);
 		}
 
 		@Override
 		public double set(int index, double element) {
-			ReentrantLock lock = list.lock;
 			lock.lock();
 			try {
 				checkSubRange(index);
-				return list.set(offset+index, element);
+				return list.set(parentOffset+index, element);
 			}
 			finally {
 				lock.unlock();
@@ -1433,7 +1427,6 @@ public class CopyOnWriteDoubleArrayList extends AbstractDoubleList implements IT
 		
 		@Override
 		public double swapRemove(int index) {
-			ReentrantLock lock = list.lock;
 			lock.lock();
 			try {
 				checkSubRange(index);
@@ -1448,7 +1441,6 @@ public class CopyOnWriteDoubleArrayList extends AbstractDoubleList implements IT
 		
 		@Override
 		public double removeDouble(int index) {
-			ReentrantLock lock = list.lock;
 			lock.lock();
 			try {
 				checkSubRange(index);
@@ -1469,10 +1461,9 @@ public class CopyOnWriteDoubleArrayList extends AbstractDoubleList implements IT
 		@Override
 		public void clear() {
 			if(size == 0) return;
-			ReentrantLock lock = list.lock;
 			lock.lock();
 			try {
-				list.removeElements(offset, offset+size);
+				list.removeElements(parentOffset, parentOffset+size);
 				size = 0;
 			}
 			finally {
@@ -1492,7 +1483,7 @@ public class CopyOnWriteDoubleArrayList extends AbstractDoubleList implements IT
 		@Override
 		public DoubleList subList(int fromIndex, int toIndex) {
 			SanityChecks.checkArrayCapacity(size, fromIndex, toIndex-fromIndex);
-			return new COWSubList(list, offset, fromIndex, toIndex);
+			return new COWSubList(this, lock, offset, fromIndex, toIndex);
 		}
 		
 		protected void checkSubRange(int index) {
@@ -1510,6 +1501,7 @@ public class CopyOnWriteDoubleArrayList extends AbstractDoubleList implements IT
 	{
 		AbstractDoubleList list;
 		int index;
+		int lastReturned = -1;
 		
 		COWSubListIterator(AbstractDoubleList list, int index) {
 			this.list = list;
@@ -1524,7 +1516,8 @@ public class CopyOnWriteDoubleArrayList extends AbstractDoubleList implements IT
 		@Override
 		public double nextDouble() {
 			if(!hasNext()) throw new NoSuchElementException();
-			return list.getDouble(index++);
+			int i = index++;
+			return list.getDouble((lastReturned = i));
 		}
 		
 		@Override
@@ -1535,7 +1528,8 @@ public class CopyOnWriteDoubleArrayList extends AbstractDoubleList implements IT
 		@Override
 		public double previousDouble() {
 			if(!hasPrevious()) throw new NoSuchElementException();
-			return list.getDouble(--index);
+			--index;
+			return list.getDouble((lastReturned = index));
 		}
 		
 		@Override
@@ -1549,19 +1543,31 @@ public class CopyOnWriteDoubleArrayList extends AbstractDoubleList implements IT
 		}
 		
 		@Override
-		public void remove() { throw new UnsupportedOperationException(); }
+		public void remove() {
+			if(lastReturned == -1) throw new IllegalStateException();
+			list.removeDouble(lastReturned);
+			index = lastReturned;
+			lastReturned = -1;
+		}
 		
 		@Override
-		public void set(double e) { throw new UnsupportedOperationException(); }
+		public void set(double e) {
+			if(lastReturned == -1) throw new IllegalStateException();
+			list.set(lastReturned, e);
+		}
 		
 		@Override
-		public void add(double e) { throw new UnsupportedOperationException(); }
+		public void add(double e) {
+			list.add(index++, e);
+			lastReturned = -1;
+		}
 		
 		@Override
 		public int skip(int amount) {
 			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
 			int steps = Math.min(amount, list.size() - index);
 			index += steps;
+			if(steps > 0) lastReturned = Math.min(index-1, list.size()-1);
 			return steps;
 		}
 		
@@ -1570,6 +1576,7 @@ public class CopyOnWriteDoubleArrayList extends AbstractDoubleList implements IT
 			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
 			int steps = Math.min(amount, index);
 			index -= steps;
+			if(steps > 0) lastReturned = Math.min(index, list.size()-1);
 			return steps;
 		}
 	}

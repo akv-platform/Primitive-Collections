@@ -553,7 +553,7 @@ public class CopyOnWriteObjectArrayList<T> extends AbstractObjectList<T> impleme
 	@Override
 	public ObjectList<T> subList(int fromIndex, int toIndex) {
 		SanityChecks.checkArrayCapacity(data.length, fromIndex, toIndex-fromIndex);
-		return new COWSubList<>(this, 0, fromIndex, toIndex);
+		return new COWSubList<>(this, lock, 0, fromIndex, toIndex);
 	}
 	
 	/**
@@ -1186,13 +1186,15 @@ public class CopyOnWriteObjectArrayList<T> extends AbstractObjectList<T> impleme
 	
 	private static class COWSubList<T> extends AbstractObjectList<T>
 	{
-		final CopyOnWriteObjectArrayList<T> list;
+		final AbstractObjectList<T> list;
+		final ReentrantLock lock;
 		final int parentOffset;
 		final int offset;
 		int size;
 		
-		public COWSubList(CopyOnWriteObjectArrayList<T> list, int offset, int from, int to) {
+		public COWSubList(AbstractObjectList<T> list, ReentrantLock lock, int offset, int from, int to) {
 			this.list = list;
+			this.lock = lock;
 			this.parentOffset = from;
 			this.offset = offset + from;
 			this.size = to - from;
@@ -1200,7 +1202,6 @@ public class CopyOnWriteObjectArrayList<T> extends AbstractObjectList<T> impleme
 		
 		@Override
 		public void add(int index, T element) {
-			ReentrantLock lock = list.lock;
 			lock.lock();
 			try {
 				checkAddSubRange(index);
@@ -1216,7 +1217,6 @@ public class CopyOnWriteObjectArrayList<T> extends AbstractObjectList<T> impleme
 		public boolean addAll(int index, Collection<? extends T> c) {
 			int add = c.size();
 			if(add <= 0) return false;
-			ReentrantLock lock = list.lock;
 			lock.lock();
 			try {
 				checkAddSubRange(index);
@@ -1233,7 +1233,6 @@ public class CopyOnWriteObjectArrayList<T> extends AbstractObjectList<T> impleme
 		public boolean addAll(int index, ObjectCollection<T> c) {
 			int add = c.size();
 			if(add <= 0) return false;
-			ReentrantLock lock = list.lock;
 			lock.lock();
 			try {
 				checkAddSubRange(index);
@@ -1250,7 +1249,6 @@ public class CopyOnWriteObjectArrayList<T> extends AbstractObjectList<T> impleme
 		public boolean addAll(int index, ObjectList<T> c) {
 			int add = c.size();
 			if(add <= 0) return false;
-			ReentrantLock lock = list.lock;
 			lock.lock();
 			try {
 				checkAddSubRange(index);
@@ -1266,7 +1264,6 @@ public class CopyOnWriteObjectArrayList<T> extends AbstractObjectList<T> impleme
 		@Override
 		public void addElements(int from, T[] a, int offset, int length) {
 			if(length <= 0) return;
-			ReentrantLock lock = list.lock;
 			lock.lock();
 			try {
 				checkAddSubRange(from);
@@ -1282,13 +1279,12 @@ public class CopyOnWriteObjectArrayList<T> extends AbstractObjectList<T> impleme
 		public T[] getElements(int from, T[] a, int offset, int length) {
 			SanityChecks.checkArrayCapacity(size, from, length);
 			SanityChecks.checkArrayCapacity(a.length, offset, length);
-			return list.getElements(from+this.offset, a, offset, length);
+			return list.getElements(from+parentOffset, a, offset, length);
 		}
 		
 		@Override
 		public void removeElements(int from, int to) {
 			if(to-from <= 0) return;
-			ReentrantLock lock = list.lock;
 			lock.lock();
 			try {
 				checkSubRange(from);
@@ -1303,7 +1299,6 @@ public class CopyOnWriteObjectArrayList<T> extends AbstractObjectList<T> impleme
 		
 		@Override
 		public <K> K[] extractElements(int from, int to, Class<K> type) {
-			ReentrantLock lock = list.lock;
 			lock.lock();
 			try {
 				checkSubRange(from);
@@ -1320,16 +1315,15 @@ public class CopyOnWriteObjectArrayList<T> extends AbstractObjectList<T> impleme
 		@Override
 		public T get(int index) {
 			checkSubRange(index);
-			return list.get(offset+index);
+			return list.get(parentOffset+index);
 		}
 
 		@Override
 		public T set(int index, T element) {
-			ReentrantLock lock = list.lock;
 			lock.lock();
 			try {
 				checkSubRange(index);
-				return list.set(offset+index, element);
+				return list.set(parentOffset+index, element);
 			}
 			finally {
 				lock.unlock();
@@ -1338,7 +1332,6 @@ public class CopyOnWriteObjectArrayList<T> extends AbstractObjectList<T> impleme
 		
 		@Override
 		public T swapRemove(int index) {
-			ReentrantLock lock = list.lock;
 			lock.lock();
 			try {
 				checkSubRange(index);
@@ -1353,7 +1346,6 @@ public class CopyOnWriteObjectArrayList<T> extends AbstractObjectList<T> impleme
 		
 		@Override
 		public T remove(int index) {
-			ReentrantLock lock = list.lock;
 			lock.lock();
 			try {
 				checkSubRange(index);
@@ -1374,10 +1366,9 @@ public class CopyOnWriteObjectArrayList<T> extends AbstractObjectList<T> impleme
 		@Override
 		public void clear() {
 			if(size == 0) return;
-			ReentrantLock lock = list.lock;
 			lock.lock();
 			try {
-				list.removeElements(offset, offset+size);
+				list.removeElements(parentOffset, parentOffset+size);
 				size = 0;
 			}
 			finally {
@@ -1397,7 +1388,7 @@ public class CopyOnWriteObjectArrayList<T> extends AbstractObjectList<T> impleme
 		@Override
 		public ObjectList<T> subList(int fromIndex, int toIndex) {
 			SanityChecks.checkArrayCapacity(size, fromIndex, toIndex-fromIndex);
-			return new COWSubList<>(list, offset, fromIndex, toIndex);
+			return new COWSubList<>(this, lock, offset, fromIndex, toIndex);
 		}
 		
 		protected void checkSubRange(int index) {
@@ -1415,6 +1406,7 @@ public class CopyOnWriteObjectArrayList<T> extends AbstractObjectList<T> impleme
 	{
 		AbstractObjectList<T> list;
 		int index;
+		int lastReturned = -1;
 		
 		COWSubListIterator(AbstractObjectList<T> list, int index) {
 			this.list = list;
@@ -1429,7 +1421,8 @@ public class CopyOnWriteObjectArrayList<T> extends AbstractObjectList<T> impleme
 		@Override
 		public T next() {
 			if(!hasNext()) throw new NoSuchElementException();
-			return list.get(index++);
+			int i = index++;
+			return list.get((lastReturned = i));
 		}
 		
 		@Override
@@ -1440,7 +1433,8 @@ public class CopyOnWriteObjectArrayList<T> extends AbstractObjectList<T> impleme
 		@Override
 		public T previous() {
 			if(!hasPrevious()) throw new NoSuchElementException();
-			return list.get(--index);
+			--index;
+			return list.get((lastReturned = index));
 		}
 		
 		@Override
@@ -1454,19 +1448,31 @@ public class CopyOnWriteObjectArrayList<T> extends AbstractObjectList<T> impleme
 		}
 		
 		@Override
-		public void remove() { throw new UnsupportedOperationException(); }
+		public void remove() {
+			if(lastReturned == -1) throw new IllegalStateException();
+			list.remove(lastReturned);
+			index = lastReturned;
+			lastReturned = -1;
+		}
 		
 		@Override
-		public void set(T e) { throw new UnsupportedOperationException(); }
+		public void set(T e) {
+			if(lastReturned == -1) throw new IllegalStateException();
+			list.set(lastReturned, e);
+		}
 		
 		@Override
-		public void add(T e) { throw new UnsupportedOperationException(); }
+		public void add(T e) {
+			list.add(index++, e);
+			lastReturned = -1;
+		}
 		
 		@Override
 		public int skip(int amount) {
 			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
 			int steps = Math.min(amount, list.size() - index);
 			index += steps;
+			if(steps > 0) lastReturned = Math.min(index-1, list.size()-1);
 			return steps;
 		}
 		
@@ -1475,6 +1481,7 @@ public class CopyOnWriteObjectArrayList<T> extends AbstractObjectList<T> impleme
 			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
 			int steps = Math.min(amount, index);
 			index -= steps;
+			if(steps > 0) lastReturned = Math.min(index, list.size()-1);
 			return steps;
 		}
 	}
