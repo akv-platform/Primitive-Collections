@@ -202,21 +202,10 @@ task testObjects(type: Test) {
 	maxParallelForks = 2
 }
 
-task testGeneral(type: Test) {
-	group 'tests'
-	description 'Tests General Unit Tests'
+test {
 	filter {
 		excludeTestsMatching "speiger.src.testers.**.*"
 		excludeTestsMatching "speiger.src.tests.**.*"
-		excludeTestsMatching "tests.**.*"
-	}
-	useJUnit()
-	maxHeapSize = "1024m"
-}
-
-test {
-	filter {
-		excludeTestsMatching "speiger.**.*"
 		excludeTestsMatching "tests.**.*"
 	}
 	useJUnit()
