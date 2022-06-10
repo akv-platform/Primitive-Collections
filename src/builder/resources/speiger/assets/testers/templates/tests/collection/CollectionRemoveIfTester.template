@@ -2,7 +2,6 @@ package speiger.src.testers.PACKAGE.tests.collection;
 
 #ignore
 import static com.google.common.collect.testing.features.CollectionFeature.FAILS_FAST_ON_CONCURRENT_MODIFICATION;
-import static com.google.common.collect.testing.features.CollectionFeature.SUPPORTS_ITERATOR_REMOVE;
 import static com.google.common.collect.testing.features.CollectionFeature.SUPPORTS_REMOVE;
 import static com.google.common.collect.testing.features.CollectionSize.SEVERAL;
 import static com.google.common.collect.testing.features.CollectionSize.ZERO;
@@ -26,7 +25,7 @@ import speiger.src.testers.PACKAGE.tests.base.ABSTRACT_COLLECTION_TESTER;
 public class FILE_KEY_TYPECollectionRemoveIfTester KEY_GENERIC_TYPE extends ABSTRACT_COLLECTION_TESTER KEY_GENERIC_TYPE
 {
 #ignore
-	@CollectionFeature.Require(SUPPORTS_ITERATOR_REMOVE)
+	@CollectionFeature.Require(SUPPORTS_REMOVE)
 #endignore
 	public void testRemoveIf_alwaysFalse() {
 #if TYPE_OBJECT
@@ -38,7 +37,7 @@ public class FILE_KEY_TYPECollectionRemoveIfTester KEY_GENERIC_TYPE extends ABST
 	}
 
 #ignore
-	@CollectionFeature.Require(SUPPORTS_ITERATOR_REMOVE)
+	@CollectionFeature.Require(SUPPORTS_REMOVE)
 	@CollectionSize.Require(absent = ZERO)
 #endignore
 	public void testRemoveIf_sometimesTrue() {
@@ -52,7 +51,7 @@ public class FILE_KEY_TYPECollectionRemoveIfTester KEY_GENERIC_TYPE extends ABST
 	}
 
 #ignore
-	@CollectionFeature.Require(SUPPORTS_ITERATOR_REMOVE)
+	@CollectionFeature.Require(SUPPORTS_REMOVE)
 	@CollectionSize.Require(absent = ZERO)
 #endignore
 	public void testRemoveIf_allPresent() {
@@ -65,7 +64,7 @@ public class FILE_KEY_TYPECollectionRemoveIfTester KEY_GENERIC_TYPE extends ABST
 	}
 
 #ignore
-	@CollectionFeature.Require({ SUPPORTS_ITERATOR_REMOVE, FAILS_FAST_ON_CONCURRENT_MODIFICATION })
+	@CollectionFeature.Require({ SUPPORTS_REMOVE, FAILS_FAST_ON_CONCURRENT_MODIFICATION })
 	@CollectionSize.Require(SEVERAL)
 #endignore
 	public void testRemoveIfSomeMatchesConcurrentWithIteration() {

@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 import java.util.function.IntPredicate;
@@ -109,6 +111,14 @@ public class CopyOnWriteShortArrayList extends AbstractShortList implements ITri
 		System.arraycopy(a, offset, data, 0, length);
 	}
 	
+	
+	private void setArray(short[] data) {
+		this.data = data;
+	}
+	
+	private short[] getArray() {
+		return data;
+	}
 	
 	/**
 	 * Appends the specified element to the end of this list.
@@ -581,7 +591,7 @@ public class CopyOnWriteShortArrayList extends AbstractShortList implements ITri
 	@Override
 	public ShortList subList(int fromIndex, int toIndex) {
 		SanityChecks.checkArrayCapacity(data.length, fromIndex, toIndex-fromIndex);
-		return new COWSubList(this, lock, 0, fromIndex, toIndex);
+		return new COWSubList(this, lock, this::setArray, this::getArray, 0, fromIndex, toIndex);
 	}
 	
 	/**
@@ -1283,13 +1293,17 @@ public class CopyOnWriteShortArrayList extends AbstractShortList implements ITri
 	{
 		final AbstractShortList list;
 		final ReentrantLock lock;
+		final Consumer<short[]> setter;
+		final Supplier<short[]> getter;
 		final int parentOffset;
 		final int offset;
 		int size;
 		
-		public COWSubList(AbstractShortList list, ReentrantLock lock, int offset, int from, int to) {
+		public COWSubList(AbstractShortList list, ReentrantLock lock, Consumer<short[]> setter, Supplier<short[]> getter, int offset, int from, int to) {
 			this.list = list;
 			this.lock = lock;
+			this.setter = setter;
+			this.getter = getter;
 			this.parentOffset = from;
 			this.offset = offset + from;
 			this.size = to - from;
@@ -1427,10 +1441,18 @@ public class CopyOnWriteShortArrayList extends AbstractShortList implements ITri
 		
 		@Override
 		public short swapRemove(int index) {
+			if(index < 0 || index >= size) throw new IndexOutOfBoundsException();
+			ReentrantLock lock = this.lock;
 			lock.lock();
 			try {
-				checkSubRange(index);
-				short result = list.swapRemove(index+parentOffset);
+				short[] data = getter.get();
+				short result = data[offset+index];
+				short[] newElements = new short[data.length-1];
+				int end = offset+size-1;
+				System.arraycopy(data, 0, newElements, 0, end);
+				if(end != newElements.length) System.arraycopy(data, end+1, newElements, end, data.length-end-1);
+				if(index+offset != end) newElements[index+offset] = data[end];
+				setter.accept(newElements);
 				size--;
 				return result;
 			}
@@ -1447,6 +1469,297 @@ public class CopyOnWriteShortArrayList extends AbstractShortList implements ITri
 				short result = list.removeShort(index+parentOffset);
 				size--;
 				return result;
+			}
+			finally {
+				lock.unlock();
+			}
+		}
+		
+		@Override
+		public boolean remShort(short type) {
+			int index = indexOf(type);
+			if(index == -1) return false;
+			removeShort(index);
+			return true;
+		}
+		
+		
+		@Override
+		public void sort(ShortComparator c) {
+			ReentrantLock lock = this.lock;
+			lock.lock();
+			try {
+				short[] data = getter.get();
+				short[] newData = Arrays.copyOf(data, data.length);
+				if(c != null) ShortArrays.stableSort(newData, offset, offset+size, c);
+				else ShortArrays.stableSort(newData, offset, offset+size);
+				setter.accept(newData);
+			}
+			finally {
+				lock.unlock();
+			}
+		}
+		
+		@Override
+		public void unstableSort(ShortComparator c) {
+			ReentrantLock lock = this.lock;
+			lock.lock();
+			try {
+				short[] data = getter.get();
+				short[] newData = Arrays.copyOf(data, data.length);
+				if(c != null) ShortArrays.unstableSort(newData, offset, offset+size, c);
+				else ShortArrays.unstableSort(newData, offset, offset+size);
+				setter.accept(newData);
+			}
+			finally {
+				lock.unlock();
+			}	
+		}
+		
+		
+		@Override
+		@Deprecated
+		public boolean removeAll(Collection<?> c) {
+			if(c.isEmpty()) return false;
+			ReentrantLock lock = this.lock;
+			lock.lock();
+			try {
+				short[] data = getter.get();
+				short[] newElements = new short[data.length];
+				int j = 0;
+				for(int i= 0,m=data.length;i<m;i++) {
+					if(i < offset || i >= offset+size) newElements[j++] = data[i];
+					else if(!c.contains(Short.valueOf(data[i]))) newElements[j++] = data[i];
+				}
+				if(data.length != j) {
+					setter.accept(Arrays.copyOf(newElements, j));
+					size -= data.length - j;
+					return true;
+				}
+				return false;
+			}
+			finally {
+				lock.unlock();
+			}
+		}
+		
+		@Override
+		@Deprecated
+		public boolean retainAll(Collection<?> c) {
+			ReentrantLock lock = this.lock;
+			lock.lock();
+			try {
+				short[] data = getter.get();
+				if(c.isEmpty()) {
+					if(size > 0) {
+						clear();
+						return true;
+					}
+					return false;
+				}
+				short[] newElements = new short[data.length];
+				int j = 0;
+				for(int i= 0,m=data.length;i<m;i++) {
+					if(i < offset || i >= offset+size) newElements[j++] = data[i];
+					else if(c.contains(Short.valueOf(data[i]))) newElements[j++] = data[i];
+				}
+				if(data.length != j) {
+					setter.accept(Arrays.copyOf(newElements, j));
+					size -= data.length - j;
+					return true;
+				}
+				return false;
+			}
+			finally {
+				lock.unlock();
+			}
+		}
+		
+		@Override
+		@Deprecated
+		public boolean removeIf(Predicate<? super Short> filter) {
+			Objects.requireNonNull(filter);
+			ReentrantLock lock = this.lock;
+			lock.lock();
+			try {
+				short[] data = getter.get();
+				short[] newElements = new short[data.length];
+				int j = 0;
+				for(int i= 0,m=data.length;i<m;i++) {
+					if(i < offset || i >= offset+size) newElements[j++] = data[i];
+					else if(!filter.test(Short.valueOf(data[i]))) newElements[j++] = data[i];
+				}
+				if(data.length != j) {
+					setter.accept(Arrays.copyOf(newElements, j));
+					size -= data.length - j;
+					return true;
+				}
+				return false;
+			}
+			finally {
+				lock.unlock();
+			}
+		}
+		
+		@Override
+		public boolean removeAll(ShortCollection c) {
+			if(c.isEmpty()) return false;
+			ReentrantLock lock = this.lock;
+			lock.lock();
+			try {
+				short[] data = getter.get();
+				short[] newElements = new short[data.length];
+				int j = 0;
+				for(int i= 0,m=data.length;i<m;i++) {
+					if(i < offset || i >= offset+size) newElements[j++] = data[i];
+					else if(!c.contains(data[i])) newElements[j++] = data[i];
+				}
+				if(data.length != j) {
+					setter.accept(Arrays.copyOf(newElements, j));
+					size -= data.length - j;
+					return true;
+				}
+				return false;
+			}
+			finally {
+				lock.unlock();
+			}
+		}
+		
+		@Override
+		public boolean removeAll(ShortCollection c, ShortConsumer r) {
+			if(c.isEmpty()) return false;
+			ReentrantLock lock = this.lock;
+			lock.lock();
+			try {
+				short[] data = getter.get();
+				short[] newElements = new short[data.length];
+				int j = 0;
+				for(int i= 0,m=data.length;i<m;i++) {
+					if(i < offset || i >= offset+size) newElements[j++] = data[i];
+					else if(!c.contains(data[i])) newElements[j++] = data[i];
+					else r.accept(data[i]);
+				}
+				if(data.length != j) {
+					setter.accept(Arrays.copyOf(newElements, j));
+					size -= data.length - j;
+					return true;
+				}
+				return false;
+			}
+			finally {
+				lock.unlock();
+			}
+		}
+		
+		@Override
+		public boolean retainAll(ShortCollection c) {
+			ReentrantLock lock = this.lock;
+			lock.lock();
+			try {
+				short[] data = getter.get();
+				if(c.isEmpty()) {
+					if(size > 0) {
+						clear();
+						return true;
+					}
+					return false;
+				}
+				short[] newElements = new short[data.length];
+				int j = 0;
+				for(int i= 0,m=data.length;i<m;i++) {
+					if(i < offset || i >= offset+size) newElements[j++] = data[i];
+					else if(c.contains(data[i])) newElements[j++] = data[i];
+				}
+				if(data.length != j) {
+					setter.accept(Arrays.copyOf(newElements, j));;
+					size -= data.length - j;
+					return true;
+				}
+				return false;
+			}
+			finally {
+				lock.unlock();
+			}
+		}
+		
+		@Override
+		public boolean retainAll(ShortCollection c, ShortConsumer r) {
+			ReentrantLock lock = this.lock;
+			lock.lock();
+			try {
+				short[] data = getter.get();
+				if(c.isEmpty()) {
+					if(size > 0) {
+						forEach(r);
+						clear();
+						return true;
+					}
+					return false;
+				}
+				short[] newElements = new short[data.length];
+				int j = 0;
+				for(int i= 0,m=data.length;i<m;i++) {
+					if(i < offset || i >= offset+size) newElements[j++] = data[i];
+					else if(c.contains(data[i])) newElements[j++] = data[i];
+					else r.accept(data[i]);
+				}
+				if(data.length != j) {
+					setter.accept(Arrays.copyOf(newElements, j));
+					size -= data.length - j;
+					return true;
+				}
+				return false;
+			}
+			finally {
+				lock.unlock();
+			}
+		}
+		
+		@Override
+		public boolean remIf(IntPredicate filter) {
+			Objects.requireNonNull(filter);
+			ReentrantLock lock = this.lock;
+			lock.lock();
+			try {
+				short[] data = getter.get();
+				short[] newElements = new short[data.length];
+				int j = 0;
+				for(int i=0,m=data.length;i<m;i++) {
+					if(i < offset || i >= offset+size) newElements[j++] = data[i];
+					else if(!filter.test(data[i])) newElements[j++] = data[i];
+				}
+				if(data.length != j) {
+					setter.accept(Arrays.copyOf(newElements, j));
+					size -= data.length - j;
+					return true;
+				}
+				return false;
+			}
+			finally {
+				lock.unlock();
+			}
+		}
+		
+		
+		@Override
+		@Deprecated
+		public void replaceAll(UnaryOperator<Short> o) {
+			Objects.requireNonNull(o);
+			replaceShorts(T -> o.apply(Short.valueOf(SanityChecks.castToShort(T))).shortValue());
+		}
+		
+		@Override
+		public void replaceShorts(IntUnaryOperator o) {
+			Objects.requireNonNull(o);
+			ReentrantLock lock = this.lock;
+			lock.lock();
+			try {
+				short[] data = getter.get();
+				short[] newData = Arrays.copyOf(data, data.length);
+				for(int i = 0,m=size;i<m;i++)
+					newData[i+offset] = SanityChecks.castToShort(o.applyAsInt(newData[i+offset]));
+				setter.accept(newData);
 			}
 			finally {
 				lock.unlock();
@@ -1483,7 +1796,7 @@ public class CopyOnWriteShortArrayList extends AbstractShortList implements ITri
 		@Override
 		public ShortList subList(int fromIndex, int toIndex) {
 			SanityChecks.checkArrayCapacity(size, fromIndex, toIndex-fromIndex);
-			return new COWSubList(this, lock, offset, fromIndex, toIndex);
+			return new COWSubList(this, lock, setter, getter, offset, fromIndex, toIndex);
 		}
 		
 		protected void checkSubRange(int index) {
@@ -1501,7 +1814,6 @@ public class CopyOnWriteShortArrayList extends AbstractShortList implements ITri
 	{
 		AbstractShortList list;
 		int index;
-		int lastReturned = -1;
 		
 		COWSubListIterator(AbstractShortList list, int index) {
 			this.list = list;
@@ -1516,8 +1828,7 @@ public class CopyOnWriteShortArrayList extends AbstractShortList implements ITri
 		@Override
 		public short nextShort() {
 			if(!hasNext()) throw new NoSuchElementException();
-			int i = index++;
-			return list.getShort((lastReturned = i));
+			return list.getShort(index++);
 		}
 		
 		@Override
@@ -1528,8 +1839,7 @@ public class CopyOnWriteShortArrayList extends AbstractShortList implements ITri
 		@Override
 		public short previousShort() {
 			if(!hasPrevious()) throw new NoSuchElementException();
-			--index;
-			return list.getShort((lastReturned = index));
+			return list.getShort(--index);
 		}
 		
 		@Override
@@ -1543,31 +1853,19 @@ public class CopyOnWriteShortArrayList extends AbstractShortList implements ITri
 		}
 		
 		@Override
-		public void remove() {
-			if(lastReturned == -1) throw new IllegalStateException();
-			list.removeShort(lastReturned);
-			index = lastReturned;
-			lastReturned = -1;
-		}
+		public void remove() { throw new UnsupportedOperationException(); }
 		
 		@Override
-		public void set(short e) {
-			if(lastReturned == -1) throw new IllegalStateException();
-			list.set(lastReturned, e);
-		}
+		public void set(short e) { throw new UnsupportedOperationException(); }
 		
 		@Override
-		public void add(short e) {
-			list.add(index++, e);
-			lastReturned = -1;
-		}
+		public void add(short e) { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public int skip(int amount) {
 			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
 			int steps = Math.min(amount, list.size() - index);
 			index += steps;
-			if(steps > 0) lastReturned = Math.min(index-1, list.size()-1);
 			return steps;
 		}
 		
@@ -1576,7 +1874,6 @@ public class CopyOnWriteShortArrayList extends AbstractShortList implements ITri
 			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
 			int steps = Math.min(amount, index);
 			index -= steps;
-			if(steps > 0) lastReturned = Math.min(index, list.size()-1);
 			return steps;
 		}
 	}

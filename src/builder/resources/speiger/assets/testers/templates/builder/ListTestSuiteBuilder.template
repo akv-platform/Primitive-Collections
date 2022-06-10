@@ -32,7 +32,6 @@ import com.google.common.collect.testing.testers.ListGetTester;
 import com.google.common.collect.testing.testers.ListHashCodeTester;
 import com.google.common.collect.testing.testers.ListIndexOfTester;
 import com.google.common.collect.testing.testers.ListLastIndexOfTester;
-import com.google.common.collect.testing.testers.ListListIteratorTester;
 import com.google.common.collect.testing.testers.ListRemoveAllTester;
 import com.google.common.collect.testing.testers.ListRemoveAtIndexTester;
 import com.google.common.collect.testing.testers.ListRemoveTester;
@@ -46,9 +45,7 @@ import com.google.common.testing.SerializableTester;
 import junit.framework.TestSuite;
 import speiger.src.collections.PACKAGE.collections.ITERABLE;
 import speiger.src.collections.PACKAGE.lists.LIST;
-#if TYPE_OBJECT
-import speiger.src.collections.PACKAGE.utils.ARRAYS;
-#endif
+import speiger.src.testers.base.tests.list.JavaListListIteratorTester;
 import speiger.src.testers.PACKAGE.generators.TEST_LIST_GENERATOR;
 import speiger.src.testers.PACKAGE.tests.list.FILE_KEY_TYPEListAbsentTester;
 import speiger.src.testers.PACKAGE.tests.list.FILE_KEY_TYPEListAddAllArrayAtIndexTester;
@@ -84,7 +81,9 @@ import speiger.src.testers.PACKAGE.tests.list.FILE_KEY_TYPEListSwapRemoveAtIndex
 import speiger.src.testers.PACKAGE.tests.list.FILE_KEY_TYPEListSwapRemoveTester;
 import speiger.src.testers.PACKAGE.tests.list.FILE_KEY_TYPEListToArrayTester;
 import speiger.src.testers.PACKAGE.utils.SAMPLE_ELEMENTS;
+#if !TYPE_BOOLEAN
 import speiger.src.testers.utils.SpecialFeature;
+#endif
 
 @SuppressWarnings("javadoc")
 public class LIST_TEST_BUILDER KEY_GENERIC_TYPE extends COLLECTION_TEST_BUILDER KEY_GENERIC_TYPE {
@@ -157,7 +156,7 @@ public class LIST_TEST_BUILDER KEY_GENERIC_TYPE extends COLLECTION_TEST_BUILDER 
 		testers.add(ListHashCodeTester.class);
 		testers.add(ListIndexOfTester.class);
 		testers.add(ListLastIndexOfTester.class);
-		testers.add(ListListIteratorTester.class);
+		testers.add(JavaListListIteratorTester.class);
 		testers.add(ListRemoveAllTester.class);
 		testers.add(ListRemoveAtIndexTester.class);
 		testers.add(ListRemoveTester.class);
@@ -228,21 +227,21 @@ public class LIST_TEST_BUILDER KEY_GENERIC_TYPE extends COLLECTION_TEST_BUILDER 
 #endignore
 #if !TYPE_BOOLEAN
 			if(prefixes != null) {
-				derivedSuites.add(ListTestSuiteBuilder.using(new SubListListGeneratorBRACES(parentBuilder.getSubjectGenerator(), prefixes, null))
+				derivedSuites.add(LIST_TEST_BUILDER.using(new SubListListGeneratorBRACES(parentBuilder.getSubjectGenerator(), prefixes, null))
 						.named(getName() + " subSet_prefix")
 						.withFeatures(computeSubListFeatures(parentBuilder.getFeatures()))
 						.suppressing(parentBuilder.getSuppressedTests()).withSetUp(parentBuilder.getSetUp())
 						.withTearDown(parentBuilder.getTearDown()).createTestSuite());
 			}
 			if(suffixes != null) {
-				derivedSuites.add(ListTestSuiteBuilder.using(new SubListListGeneratorBRACES(parentBuilder.getSubjectGenerator(), null, suffixes))
+				derivedSuites.add(LIST_TEST_BUILDER.using(new SubListListGeneratorBRACES(parentBuilder.getSubjectGenerator(), null, suffixes))
 					.named(getName() + " subSet_suffixes")
 					.withFeatures(computeSubListFeatures(parentBuilder.getFeatures()))
 					.suppressing(parentBuilder.getSuppressedTests()).withSetUp(parentBuilder.getSetUp())
 					.withTearDown(parentBuilder.getTearDown()).createTestSuite());
 			}
 			if(prefixes != null && suffixes != null) {
-				derivedSuites.add(ListTestSuiteBuilder.using(new SubListListGeneratorBRACES(parentBuilder.getSubjectGenerator(), prefixes, suffixes))
+				derivedSuites.add(LIST_TEST_BUILDER.using(new SubListListGeneratorBRACES(parentBuilder.getSubjectGenerator(), prefixes, suffixes))
 						.named(getName() + " subSet")
 						.withFeatures(computeSubListFeatures(parentBuilder.getFeatures()))
 						.suppressing(parentBuilder.getSuppressedTests()).withSetUp(parentBuilder.getSetUp())
@@ -362,6 +361,7 @@ public class LIST_TEST_BUILDER KEY_GENERIC_TYPE extends COLLECTION_TEST_BUILDER 
 		}
 	}
 	
+#if !TYPE_BOOLEAN
 	private static Set<Feature<?>> computeSubListFeatures(Set<Feature<?>> features) {
 		Set<Feature<?>> derivedFeatures = new HashSet<>(features);
 #ignore
@@ -372,6 +372,7 @@ public class LIST_TEST_BUILDER KEY_GENERIC_TYPE extends COLLECTION_TEST_BUILDER 
 		return derivedFeatures;
 	}
 
+#endif
 	private static Set<Feature<?>> computeReserializedCollectionFeatures(Set<Feature<?>> features) {
 		Set<Feature<?>> derivedFeatures = new HashSet<>(features);
 #ignore

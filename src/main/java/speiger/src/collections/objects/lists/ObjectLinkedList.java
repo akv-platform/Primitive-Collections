@@ -567,7 +567,7 @@ public class ObjectLinkedList<T> extends AbstractObjectList<T> implements Object
 			}
 			return;
 		}
-		Entry<T> entry = getNode(to);
+		Entry<T> entry = getNode(to-1);
 		while(length > 0) {
 			Entry<T> prev = entry.prev;
 			unlink(entry);
@@ -592,7 +592,7 @@ public class ObjectLinkedList<T> extends AbstractObjectList<T> implements Object
 			}
 			return a;
 		}
-		Entry<T> entry = getNode(to);
+		Entry<T> entry = getNode(to-1);
 		for(int i = length-1;length > 0;i--, length--) {
 			Entry<T> prev = entry.prev;
 			a[i] = (K)unlink(entry);

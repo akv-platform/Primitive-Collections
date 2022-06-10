@@ -313,7 +313,13 @@ public abstract class AbstractCharList extends AbstractCharCollection implements
 		@Override
 		public char swapRemove(int index) {
 			checkSubRange(index);
-			char result = list.swapRemove(index+parentOffset);
+			if(index == size-1) {
+				char result = list.removeChar(parentOffset+size-1);
+				size--;
+				return result;
+			}
+			char result = list.set(index+parentOffset, list.getChar(parentOffset+size-1));
+			list.removeChar(parentOffset+size-1);
 			size--;
 			return result;
 		}

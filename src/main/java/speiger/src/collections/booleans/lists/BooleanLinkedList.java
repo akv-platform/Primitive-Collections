@@ -587,7 +587,7 @@ public class BooleanLinkedList extends AbstractBooleanList implements BooleanPri
 			}
 			return;
 		}
-		Entry entry = getNode(to);
+		Entry entry = getNode(to-1);
 		while(length > 0) {
 			Entry prev = entry.prev;
 			unlink(entry);
@@ -612,7 +612,7 @@ public class BooleanLinkedList extends AbstractBooleanList implements BooleanPri
 			}
 			return d;
 		}
-		Entry entry = getNode(to);
+		Entry entry = getNode(to-1);
 		for(int i = length-1;length > 0;i--, length--) {
 			Entry prev = entry.prev;
 			d[i] = unlink(entry);

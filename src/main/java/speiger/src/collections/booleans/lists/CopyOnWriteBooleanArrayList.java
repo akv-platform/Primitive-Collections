@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
@@ -104,6 +106,14 @@ public class CopyOnWriteBooleanArrayList extends AbstractBooleanList implements 
 		System.arraycopy(a, offset, data, 0, length);
 	}
 	
+	
+	private void setArray(boolean[] data) {
+		this.data = data;
+	}
+	
+	private boolean[] getArray() {
+		return data;
+	}
 	
 	/**
 	 * Appends the specified element to the end of this list.
@@ -571,7 +581,7 @@ public class CopyOnWriteBooleanArrayList extends AbstractBooleanList implements 
 	@Override
 	public BooleanList subList(int fromIndex, int toIndex) {
 		SanityChecks.checkArrayCapacity(data.length, fromIndex, toIndex-fromIndex);
-		return new COWSubList(this, lock, 0, fromIndex, toIndex);
+		return new COWSubList(this, lock, this::setArray, this::getArray, 0, fromIndex, toIndex);
 	}
 	
 	/**
@@ -1226,13 +1236,17 @@ public class CopyOnWriteBooleanArrayList extends AbstractBooleanList implements 
 	{
 		final AbstractBooleanList list;
 		final ReentrantLock lock;
+		final Consumer<boolean[]> setter;
+		final Supplier<boolean[]> getter;
 		final int parentOffset;
 		final int offset;
 		int size;
 		
-		public COWSubList(AbstractBooleanList list, ReentrantLock lock, int offset, int from, int to) {
+		public COWSubList(AbstractBooleanList list, ReentrantLock lock, Consumer<boolean[]> setter, Supplier<boolean[]> getter, int offset, int from, int to) {
 			this.list = list;
 			this.lock = lock;
+			this.setter = setter;
+			this.getter = getter;
 			this.parentOffset = from;
 			this.offset = offset + from;
 			this.size = to - from;
@@ -1370,10 +1384,18 @@ public class CopyOnWriteBooleanArrayList extends AbstractBooleanList implements 
 		
 		@Override
 		public boolean swapRemove(int index) {
+			if(index < 0 || index >= size) throw new IndexOutOfBoundsException();
+			ReentrantLock lock = this.lock;
 			lock.lock();
 			try {
-				checkSubRange(index);
-				boolean result = list.swapRemove(index+parentOffset);
+				boolean[] data = getter.get();
+				boolean result = data[offset+index];
+				boolean[] newElements = new boolean[data.length-1];
+				int end = offset+size-1;
+				System.arraycopy(data, 0, newElements, 0, end);
+				if(end != newElements.length) System.arraycopy(data, end+1, newElements, end, data.length-end-1);
+				if(index+offset != end) newElements[index+offset] = data[end];
+				setter.accept(newElements);
 				size--;
 				return result;
 			}
@@ -1390,6 +1412,266 @@ public class CopyOnWriteBooleanArrayList extends AbstractBooleanList implements 
 				boolean result = list.removeBoolean(index+parentOffset);
 				size--;
 				return result;
+			}
+			finally {
+				lock.unlock();
+			}
+		}
+		
+		@Override
+		public boolean remBoolean(boolean type) {
+			int index = indexOf(type);
+			if(index == -1) return false;
+			removeBoolean(index);
+			return true;
+		}
+		
+		
+		@Override
+		public void sort(BooleanComparator c) {
+			ReentrantLock lock = this.lock;
+			lock.lock();
+			try {
+				boolean[] data = getter.get();
+				boolean[] newData = Arrays.copyOf(data, data.length);
+				if(c != null) BooleanArrays.stableSort(newData, offset, offset+size, c);
+				else BooleanArrays.stableSort(newData, offset, offset+size);
+				setter.accept(newData);
+			}
+			finally {
+				lock.unlock();
+			}
+		}
+		
+		@Override
+		public void unstableSort(BooleanComparator c) {
+			ReentrantLock lock = this.lock;
+			lock.lock();
+			try {
+				boolean[] data = getter.get();
+				boolean[] newData = Arrays.copyOf(data, data.length);
+				if(c != null) BooleanArrays.unstableSort(newData, offset, offset+size, c);
+				else BooleanArrays.unstableSort(newData, offset, offset+size);
+				setter.accept(newData);
+			}
+			finally {
+				lock.unlock();
+			}	
+		}
+		
+		
+		@Override
+		@Deprecated
+		public boolean removeAll(Collection<?> c) {
+			if(c.isEmpty()) return false;
+			ReentrantLock lock = this.lock;
+			lock.lock();
+			try {
+				boolean[] data = getter.get();
+				boolean[] newElements = new boolean[data.length];
+				int j = 0;
+				for(int i= 0,m=data.length;i<m;i++) {
+					if(i < offset || i >= offset+size) newElements[j++] = data[i];
+					else if(!c.contains(Boolean.valueOf(data[i]))) newElements[j++] = data[i];
+				}
+				if(data.length != j) {
+					setter.accept(Arrays.copyOf(newElements, j));
+					size -= data.length - j;
+					return true;
+				}
+				return false;
+			}
+			finally {
+				lock.unlock();
+			}
+		}
+		
+		@Override
+		@Deprecated
+		public boolean retainAll(Collection<?> c) {
+			ReentrantLock lock = this.lock;
+			lock.lock();
+			try {
+				boolean[] data = getter.get();
+				if(c.isEmpty()) {
+					if(size > 0) {
+						clear();
+						return true;
+					}
+					return false;
+				}
+				boolean[] newElements = new boolean[data.length];
+				int j = 0;
+				for(int i= 0,m=data.length;i<m;i++) {
+					if(i < offset || i >= offset+size) newElements[j++] = data[i];
+					else if(c.contains(Boolean.valueOf(data[i]))) newElements[j++] = data[i];
+				}
+				if(data.length != j) {
+					setter.accept(Arrays.copyOf(newElements, j));
+					size -= data.length - j;
+					return true;
+				}
+				return false;
+			}
+			finally {
+				lock.unlock();
+			}
+		}
+		
+		@Override
+		@Deprecated
+		public boolean removeIf(Predicate<? super Boolean> filter) {
+			Objects.requireNonNull(filter);
+			ReentrantLock lock = this.lock;
+			lock.lock();
+			try {
+				boolean[] data = getter.get();
+				boolean[] newElements = new boolean[data.length];
+				int j = 0;
+				for(int i= 0,m=data.length;i<m;i++) {
+					if(i < offset || i >= offset+size) newElements[j++] = data[i];
+					else if(!filter.test(Boolean.valueOf(data[i]))) newElements[j++] = data[i];
+				}
+				if(data.length != j) {
+					setter.accept(Arrays.copyOf(newElements, j));
+					size -= data.length - j;
+					return true;
+				}
+				return false;
+			}
+			finally {
+				lock.unlock();
+			}
+		}
+		
+		@Override
+		public boolean removeAll(BooleanCollection c) {
+			if(c.isEmpty()) return false;
+			ReentrantLock lock = this.lock;
+			lock.lock();
+			try {
+				boolean[] data = getter.get();
+				boolean[] newElements = new boolean[data.length];
+				int j = 0;
+				for(int i= 0,m=data.length;i<m;i++) {
+					if(i < offset || i >= offset+size) newElements[j++] = data[i];
+					else if(!c.contains(data[i])) newElements[j++] = data[i];
+				}
+				if(data.length != j) {
+					setter.accept(Arrays.copyOf(newElements, j));
+					size -= data.length - j;
+					return true;
+				}
+				return false;
+			}
+			finally {
+				lock.unlock();
+			}
+		}
+		
+		@Override
+		public boolean removeAll(BooleanCollection c, BooleanConsumer r) {
+			if(c.isEmpty()) return false;
+			ReentrantLock lock = this.lock;
+			lock.lock();
+			try {
+				boolean[] data = getter.get();
+				boolean[] newElements = new boolean[data.length];
+				int j = 0;
+				for(int i= 0,m=data.length;i<m;i++) {
+					if(i < offset || i >= offset+size) newElements[j++] = data[i];
+					else if(!c.contains(data[i])) newElements[j++] = data[i];
+					else r.accept(data[i]);
+				}
+				if(data.length != j) {
+					setter.accept(Arrays.copyOf(newElements, j));
+					size -= data.length - j;
+					return true;
+				}
+				return false;
+			}
+			finally {
+				lock.unlock();
+			}
+		}
+		
+		@Override
+		public boolean retainAll(BooleanCollection c) {
+			ReentrantLock lock = this.lock;
+			lock.lock();
+			try {
+				boolean[] data = getter.get();
+				if(c.isEmpty()) {
+					if(size > 0) {
+						clear();
+						return true;
+					}
+					return false;
+				}
+				boolean[] newElements = new boolean[data.length];
+				int j = 0;
+				for(int i= 0,m=data.length;i<m;i++) {
+					if(i < offset || i >= offset+size) newElements[j++] = data[i];
+					else if(c.contains(data[i])) newElements[j++] = data[i];
+				}
+				if(data.length != j) {
+					setter.accept(Arrays.copyOf(newElements, j));;
+					size -= data.length - j;
+					return true;
+				}
+				return false;
+			}
+			finally {
+				lock.unlock();
+			}
+		}
+		
+		@Override
+		public boolean retainAll(BooleanCollection c, BooleanConsumer r) {
+			ReentrantLock lock = this.lock;
+			lock.lock();
+			try {
+				boolean[] data = getter.get();
+				if(c.isEmpty()) {
+					if(size > 0) {
+						forEach(r);
+						clear();
+						return true;
+					}
+					return false;
+				}
+				boolean[] newElements = new boolean[data.length];
+				int j = 0;
+				for(int i= 0,m=data.length;i<m;i++) {
+					if(i < offset || i >= offset+size) newElements[j++] = data[i];
+					else if(c.contains(data[i])) newElements[j++] = data[i];
+					else r.accept(data[i]);
+				}
+				if(data.length != j) {
+					setter.accept(Arrays.copyOf(newElements, j));
+					size -= data.length - j;
+					return true;
+				}
+				return false;
+			}
+			finally {
+				lock.unlock();
+			}
+		}
+		
+		
+		@Override
+		@Deprecated
+		public void replaceAll(UnaryOperator<Boolean> o) {
+			Objects.requireNonNull(o);
+			ReentrantLock lock = this.lock;
+			lock.lock();
+			try {
+				boolean[] data = getter.get();
+				boolean[] newData = Arrays.copyOf(data, data.length);
+				for(int i = 0,m=size;i<m;i++)
+					newData[i+offset] = o.apply(Boolean.valueOf(newData[i+offset])).booleanValue();
+				setter.accept(newData);
 			}
 			finally {
 				lock.unlock();
@@ -1426,7 +1708,7 @@ public class CopyOnWriteBooleanArrayList extends AbstractBooleanList implements 
 		@Override
 		public BooleanList subList(int fromIndex, int toIndex) {
 			SanityChecks.checkArrayCapacity(size, fromIndex, toIndex-fromIndex);
-			return new COWSubList(this, lock, offset, fromIndex, toIndex);
+			return new COWSubList(this, lock, setter, getter, offset, fromIndex, toIndex);
 		}
 		
 		protected void checkSubRange(int index) {
@@ -1444,7 +1726,6 @@ public class CopyOnWriteBooleanArrayList extends AbstractBooleanList implements 
 	{
 		AbstractBooleanList list;
 		int index;
-		int lastReturned = -1;
 		
 		COWSubListIterator(AbstractBooleanList list, int index) {
 			this.list = list;
@@ -1459,8 +1740,7 @@ public class CopyOnWriteBooleanArrayList extends AbstractBooleanList implements 
 		@Override
 		public boolean nextBoolean() {
 			if(!hasNext()) throw new NoSuchElementException();
-			int i = index++;
-			return list.getBoolean((lastReturned = i));
+			return list.getBoolean(index++);
 		}
 		
 		@Override
@@ -1471,8 +1751,7 @@ public class CopyOnWriteBooleanArrayList extends AbstractBooleanList implements 
 		@Override
 		public boolean previousBoolean() {
 			if(!hasPrevious()) throw new NoSuchElementException();
-			--index;
-			return list.getBoolean((lastReturned = index));
+			return list.getBoolean(--index);
 		}
 		
 		@Override
@@ -1486,31 +1765,19 @@ public class CopyOnWriteBooleanArrayList extends AbstractBooleanList implements 
 		}
 		
 		@Override
-		public void remove() {
-			if(lastReturned == -1) throw new IllegalStateException();
-			list.removeBoolean(lastReturned);
-			index = lastReturned;
-			lastReturned = -1;
-		}
+		public void remove() { throw new UnsupportedOperationException(); }
 		
 		@Override
-		public void set(boolean e) {
-			if(lastReturned == -1) throw new IllegalStateException();
-			list.set(lastReturned, e);
-		}
+		public void set(boolean e) { throw new UnsupportedOperationException(); }
 		
 		@Override
-		public void add(boolean e) {
-			list.add(index++, e);
-			lastReturned = -1;
-		}
+		public void add(boolean e) { throw new UnsupportedOperationException(); }
 		
 		@Override
 		public int skip(int amount) {
 			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
 			int steps = Math.min(amount, list.size() - index);
 			index += steps;
-			if(steps > 0) lastReturned = Math.min(index-1, list.size()-1);
 			return steps;
 		}
 		
@@ -1519,7 +1786,6 @@ public class CopyOnWriteBooleanArrayList extends AbstractBooleanList implements 
 			if(amount < 0) throw new IllegalStateException("Negative Numbers are not allowed");
 			int steps = Math.min(amount, index);
 			index -= steps;
-			if(steps > 0) lastReturned = Math.min(index, list.size()-1);
 			return steps;
 		}
 	}

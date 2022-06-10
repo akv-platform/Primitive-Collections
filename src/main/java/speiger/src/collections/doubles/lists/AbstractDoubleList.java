@@ -313,7 +313,13 @@ public abstract class AbstractDoubleList extends AbstractDoubleCollection implem
 		@Override
 		public double swapRemove(int index) {
 			checkSubRange(index);
-			double result = list.swapRemove(index+parentOffset);
+			if(index == size-1) {
+				double result = list.removeDouble(parentOffset+size-1);
+				size--;
+				return result;
+			}
+			double result = list.set(index+parentOffset, list.getDouble(parentOffset+size-1));
+			list.removeDouble(parentOffset+size-1);
 			size--;
 			return result;
 		}

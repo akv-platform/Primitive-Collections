@@ -313,7 +313,13 @@ public abstract class AbstractFloatList extends AbstractFloatCollection implemen
 		@Override
 		public float swapRemove(int index) {
 			checkSubRange(index);
-			float result = list.swapRemove(index+parentOffset);
+			if(index == size-1) {
+				float result = list.removeFloat(parentOffset+size-1);
+				size--;
+				return result;
+			}
+			float result = list.set(index+parentOffset, list.getFloat(parentOffset+size-1));
+			list.removeFloat(parentOffset+size-1);
 			size--;
 			return result;
 		}

@@ -15,6 +15,7 @@ public enum SpecialFeature implements Feature<Collection> {
 	COPYING,
 	CHILDREN_COPY(COPYING),
 	MODIFIABLE,
+	ITERATOR_MODIFIABLE,
 	MAP_ENTRY,
 	DESCENDING,
 	SUBMAP;

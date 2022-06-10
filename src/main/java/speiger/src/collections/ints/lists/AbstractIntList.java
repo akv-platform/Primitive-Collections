@@ -313,7 +313,13 @@ public abstract class AbstractIntList extends AbstractIntCollection implements I
 		@Override
 		public int swapRemove(int index) {
 			checkSubRange(index);
-			int result = list.swapRemove(index+parentOffset);
+			if(index == size-1) {
+				int result = list.removeInt(parentOffset+size-1);
+				size--;
+				return result;
+			}
+			int result = list.set(index+parentOffset, list.getInt(parentOffset+size-1));
+			list.removeInt(parentOffset+size-1);
 			size--;
 			return result;
 		}

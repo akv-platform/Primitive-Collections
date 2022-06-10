@@ -313,7 +313,13 @@ public abstract class AbstractBooleanList extends AbstractBooleanCollection impl
 		@Override
 		public boolean swapRemove(int index) {
 			checkSubRange(index);
-			boolean result = list.swapRemove(index+parentOffset);
+			if(index == size-1) {
+				boolean result = list.removeBoolean(parentOffset+size-1);
+				size--;
+				return result;
+			}
+			boolean result = list.set(index+parentOffset, list.getBoolean(parentOffset+size-1));
+			list.removeBoolean(parentOffset+size-1);
 			size--;
 			return result;
 		}

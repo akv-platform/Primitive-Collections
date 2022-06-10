@@ -274,7 +274,13 @@ public abstract class AbstractObjectList<T> extends AbstractObjectCollection<T> 
 		@Override
 		public T swapRemove(int index) {
 			checkSubRange(index);
-			T result = list.swapRemove(index+parentOffset);
+			if(index == size-1) {
+				T result = list.remove(parentOffset+size-1);
+				size--;
+				return result;
+			}
+			T result = list.set(index+parentOffset, list.get(parentOffset+size-1));
+			list.remove(parentOffset+size-1);
 			size--;
 			return result;
 		}

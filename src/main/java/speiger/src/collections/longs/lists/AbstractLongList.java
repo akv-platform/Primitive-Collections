@@ -313,7 +313,13 @@ public abstract class AbstractLongList extends AbstractLongCollection implements
 		@Override
 		public long swapRemove(int index) {
 			checkSubRange(index);
-			long result = list.swapRemove(index+parentOffset);
+			if(index == size-1) {
+				long result = list.removeLong(parentOffset+size-1);
+				size--;
+				return result;
+			}
+			long result = list.set(index+parentOffset, list.getLong(parentOffset+size-1));
+			list.removeLong(parentOffset+size-1);
 			size--;
 			return result;
 		}

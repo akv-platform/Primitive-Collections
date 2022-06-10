@@ -84,7 +84,6 @@ public class FILE_KEY_TYPEListSubListTester KEY_GENERIC_TYPE extends ABSTRACT_LI
 
 #ignore
 	@ListFeature.Require(SUPPORTS_ADD_WITH_INDEX)
-	@CollectionFeature.Require(absent = CollectionFeature.SUBSET_VIEW)
 #endignore
 	public void testSubList_subListAddAffectsOriginal() {
 		LIST KEY_GENERIC_TYPE subList = getList().subList(0, 0);
@@ -92,16 +91,6 @@ public class FILE_KEY_TYPEListSubListTester KEY_GENERIC_TYPE extends ABSTRACT_LI
 		expectAddedIndex(0, e3());
 	}
 
-#ignore
-	@ListFeature.Require(SUPPORTS_ADD_WITH_INDEX)
-	@CollectionFeature.Require(CollectionFeature.SUBSET_VIEW)
-#endignore
-	public void testSubList_subListAddNotAffectingOriginal() {
-		LIST KEY_GENERIC_TYPE subList = getList().subList(0, 0);
-		subList.add(e3());
-		expectUnchanged();
-	}
-	
 #ignore
 	@ListFeature.Require(SUPPORTS_SET)
 	@CollectionSize.Require(absent = ZERO)

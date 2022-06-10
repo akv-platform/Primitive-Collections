@@ -313,7 +313,13 @@ public abstract class AbstractByteList extends AbstractByteCollection implements
 		@Override
 		public byte swapRemove(int index) {
 			checkSubRange(index);
-			byte result = list.swapRemove(index+parentOffset);
+			if(index == size-1) {
+				byte result = list.removeByte(parentOffset+size-1);
+				size--;
+				return result;
+			}
+			byte result = list.set(index+parentOffset, list.getByte(parentOffset+size-1));
+			list.removeByte(parentOffset+size-1);
 			size--;
 			return result;
 		}

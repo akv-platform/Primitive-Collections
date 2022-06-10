@@ -313,7 +313,13 @@ public abstract class AbstractShortList extends AbstractShortCollection implemen
 		@Override
 		public short swapRemove(int index) {
 			checkSubRange(index);
-			short result = list.swapRemove(index+parentOffset);
+			if(index == size-1) {
+				short result = list.removeShort(parentOffset+size-1);
+				size--;
+				return result;
+			}
+			short result = list.set(index+parentOffset, list.getShort(parentOffset+size-1));
+			list.removeShort(parentOffset+size-1);
 			size--;
 			return result;
 		}

@@ -5,7 +5,9 @@ import java.util.List;
 import com.google.common.collect.testing.AbstractTester;
 import com.google.common.collect.testing.CollectionTestSuiteBuilder;
 import com.google.common.collect.testing.Helpers;
+import com.google.common.collect.testing.testers.CollectionRemoveIfTester;
 
+import speiger.src.testers.base.tests.collection.JavaCollectionRemoveIfTester;
 import speiger.src.testers.PACKAGE.generators.TEST_COLLECTION_GENERATOR;
 import speiger.src.testers.PACKAGE.tests.collection.FILE_KEY_TYPECollectionAddAllArrayTester;
 import speiger.src.testers.PACKAGE.tests.collection.FILE_KEY_TYPECollectionAddAllTester;
@@ -50,6 +52,8 @@ public class COLLECTION_TEST_BUILDER KEY_GENERIC_TYPE extends CollectionTestSuit
 	@SuppressWarnings("rawtypes")
 	protected List<Class<? extends AbstractTester>> getTesters() {
 		List<Class<? extends AbstractTester>> testers = Helpers.copyToList(super.getTesters());
+		testers.remove(CollectionRemoveIfTester.class);
+		testers.add(JavaCollectionRemoveIfTester.class);
 #if !TYPE_BOOLEAN
 		testers.add(FILE_KEY_TYPEIterableMapTester.class);
 		testers.add(FILE_KEY_TYPEIterableFilterTester.class);
