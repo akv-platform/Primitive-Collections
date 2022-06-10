@@ -25,7 +25,6 @@ import speiger.src.collections.PACKAGE.lists.LIST;
 import speiger.src.collections.PACKAGE.sets.NAVIGABLE_SET;
 import speiger.src.collections.PACKAGE.utils.LISTS;
 import speiger.src.testers.PACKAGE.generators.TEST_NAVIGABLE_SET_GENERATOR;
-import speiger.src.testers.PACKAGE.generators.TEST_SET_GENERATOR;
 import speiger.src.testers.PACKAGE.generators.TEST_SORTED_SET_GENERATOR;
 import speiger.src.testers.PACKAGE.impl.SUB_SORTED_SET_CLASS_GENERATOR.SUB_NAVIGABLE_SET_CLASS_GENERATOR;
 import speiger.src.testers.PACKAGE.tests.set.FILE_KEY_TYPENavigableSetNavigationTester;
@@ -85,7 +84,7 @@ public class NAVIGABLE_SET_TEST_BUILDER KEY_GENERIC_TYPE extends SORTED_SET_TEST
 		features.remove(SpecialFeature.CHILDREN_COPY);
 #endignore
 
-		return NAVIGABLE_SET_TEST_BUILDER.using(new TEST_SET_GENERATOR KEY_GENERIC_TYPE() {
+		return NAVIGABLE_SET_TEST_BUILDER.using(new TEST_NAVIGABLE_SET_GENERATOR KEY_GENERIC_TYPE() {
 
 			@Override
 			public SampleElements<CLASS_TYPE> samples() {
@@ -115,6 +114,14 @@ public class NAVIGABLE_SET_TEST_BUILDER KEY_GENERIC_TYPE extends SORTED_SET_TEST
 				LISTS.reverse(list);
 				return list;
 			}
+			@Override
+			public KEY_TYPE belowSamplesLesser() { return delegate.aboveSamplesGreater(); }
+			@Override
+			public KEY_TYPE belowSamplesGreater() { return delegate.aboveSamplesLesser(); }
+			@Override
+			public KEY_TYPE aboveSamplesLesser() { return delegate.belowSamplesGreater(); }
+			@Override
+			public KEY_TYPE aboveSamplesGreater() { return delegate.belowSamplesLesser(); }
 			
 #if !TYPE_OBJECT
 			@Override
