@@ -16,6 +16,7 @@ import speiger.src.collections.PACKAGE.lists.LIST;
 import speiger.src.collections.PACKAGE.sets.NAVIGABLE_SET;
 import speiger.src.collections.PACKAGE.sets.SORTED_SET;
 import speiger.src.testers.PACKAGE.generators.TEST_SORTED_SET_GENERATOR;
+import speiger.src.testers.PACKAGE.generators.TEST_NAVIGABLE_SET_GENERATOR;
 import speiger.src.testers.PACKAGE.utils.SAMPLE_ELEMENTS;
 
 @SuppressWarnings("javadoc")
@@ -140,9 +141,21 @@ public class SUB_SORTED_SET_CLASS_GENERATOR KEY_GENERIC_TYPE implements TEST_SOR
 	}
 
 #endif
-	public static final class SUB_NAVIGABLE_SET_CLASS_GENERATOR KEY_GENERIC_TYPE extends SUB_SORTED_SET_CLASS_GENERATOR KEY_GENERIC_TYPE {
+	public static final class SUB_NAVIGABLE_SET_CLASS_GENERATOR KEY_GENERIC_TYPE extends SUB_SORTED_SET_CLASS_GENERATOR KEY_GENERIC_TYPE implements TEST_NAVIGABLE_SET_GENERATOR KEY_GENERIC_TYPE {
 		public SUB_NAVIGABLE_SET_CLASS_GENERATOR(TEST_SORTED_SET_GENERATOR KEY_GENERIC_TYPE delegate, Bound to, Bound from) {
 			super(delegate, to, from);
+		}
+		
+#if !TYPE_OBJECT
+		@Override
+		public NAVIGABLE_SET KEY_GENERIC_TYPE create(KEY_TYPE... elements) {
+			return (NAVIGABLE_SET KEY_GENERIC_TYPE)super.create(elements);
+		}
+		
+#endif
+		@Override
+		public NAVIGABLE_SET KEY_GENERIC_TYPE create(Object... elements) {
+			return (NAVIGABLE_SET KEY_GENERIC_TYPE)super.create(elements);
 		}
 		
 		@Override
