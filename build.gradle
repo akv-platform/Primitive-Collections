@@ -202,6 +202,18 @@ task testObjects(type: Test) {
 	maxParallelForks = 2
 }
 
+task testGeneral(type: Test) {
+	group 'tests'
+	description 'Tests General Unit Tests'
+	filter {
+		excludeTestsMatching "speiger.src.testers.**.*"
+		excludeTestsMatching "speiger.src.tests.**.*"
+		excludeTestsMatching "tests.**.*"
+	}
+	useJUnit()
+	maxHeapSize = "1024m"
+}
+
 test.dependsOn testBooleans
 test.dependsOn testBytes
 test.dependsOn testShorts
@@ -211,11 +223,11 @@ test.dependsOn testLongs
 test.dependsOn testFloats
 test.dependsOn testDoubles
 test.dependsOn testObjects
+test.dependsOn testGeneral
 
 test {
 	filter {
-		excludeTestsMatching "speiger.src.testers.**.*"
-		excludeTestsMatching "speiger.src.tests.**.*"
+		excludeTestsMatching "speiger.**.*"
 		excludeTestsMatching "tests.**.*"
 	}
 	useJUnit()
