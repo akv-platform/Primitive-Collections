@@ -51,7 +51,7 @@ public class SIMPLE_TEST_GENERATOR KKS_GENERIC_TYPE<E extends COLLECTION KEY_GEN
 #else if TYPE_SHORT
 		return new SAMPLE_ELEMENTS((short)0, (short)1, (short)2, (short)3, (short)4);
 #else if TYPE_CHAR
-		return new SAMPLE_ELEMENTS('a', 'b', 'c', 'd', 'e');
+		return new SAMPLE_ELEMENTS((char)0, (char)1, (char)2, (char)3, (char)4);
 #else if TYPE_OBJECT
 		return new SAMPLE_ELEMENTSBRACES(keys[0], keys[1], keys[2], keys[3], keys[4]);
 #else
@@ -188,6 +188,7 @@ public class SIMPLE_TEST_GENERATOR KKS_GENERIC_TYPE<E extends COLLECTION KEY_GEN
 		}
 		
 #if TYPE_CHAR
+		public SAMPLE_ELEMENTS KEY_GENERIC_TYPE getSamples() { return new SAMPLE_ELEMENTS('a', 'b', 'c', 'd', 'e'); }
 		@Override
 		public KEY_TYPE belowSamplesLesser() { return '_'; }
 		@Override

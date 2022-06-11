@@ -34,7 +34,7 @@ public class SIMPLE_MAP_TEST_GENERATOR KEY_VALUE_SPECIAL_GENERIC_TYPE<E extends 
 #else if TYPE_SHORT
 	KEY_TYPE[] keys = new KEY_TYPE[]{(short)0, (short)1, (short)2, (short)3, (short)4, (short)-2, (short)-1, (short)5, (short)6};
 #else if TYPE_CHAR
-	KEY_TYPE[] keys = new KEY_TYPE[]{'a', 'b', 'c', 'd', 'e', '_', '`', 'f', 'g'};
+	KEY_TYPE[] keys = new KEY_TYPE[]{(char)0, (char)1, (char)2, (char)3, (char)4};
 #else if TYPE_OBJECT
 	KEY_TYPE[] keys;
 #else
@@ -47,7 +47,7 @@ public class SIMPLE_MAP_TEST_GENERATOR KEY_VALUE_SPECIAL_GENERIC_TYPE<E extends 
 #else if VALUE_SHORT
 	VALUE_TYPE[] values = new VALUE_TYPE[]{(short)0, (short)1, (short)2, (short)3, (short)4, (short)-2, (short)-1, (short)5, (short)6};
 #else if VALUE_CHAR
-	VALUE_TYPE[] values = new VALUE_TYPE[]{'a', 'b', 'c', 'd', 'e', '_', '`', 'f', 'g'};
+	VALUE_TYPE[] values = new VALUE_TYPE[]{(char)0, (char)1, (char)2, (char)3, (char)4};
 #else if VALUE_OBJECT
 	VALUE_TYPE[] values;
 #else
@@ -58,13 +58,13 @@ public class SIMPLE_MAP_TEST_GENERATOR KEY_VALUE_SPECIAL_GENERIC_TYPE<E extends 
 		this.mapper = mapper;
 	}
 	
-#if TYPE_OBJECT
+#if TYPE_OBJECT || TYPE_CHAR
 	public void setKeys(KEY_TYPE... keys) {
 		this.keys = keys;
 	}
 	
 #endif
-#if VALUE_OBJECT
+#if VALUE_OBJECT || VALUE_CHAR
 	public void setValues(VALUE_TYPE... values) {
 		this.values = values;
 	}
@@ -161,6 +161,13 @@ public class SIMPLE_MAP_TEST_GENERATOR KEY_VALUE_SPECIAL_GENERIC_TYPE<E extends 
 	{
 		public SortedMaps(BiFunction<KEY_TYPE[], VALUE_TYPE[], SORTED_MAP KEY_VALUE_GENERIC_TYPE> mapper) {
 			super(mapper);
+#if TYPE_CHAR
+			setKeys(new KEY_TYPE[]{'a', 'b', 'c', 'd', 'e', '_', '`', 'f', 'g'});
+#endif
+#if VALUE_CHAR
+			setValues(new VALUE_TYPE[]{'a', 'b', 'c', 'd', 'e', '_', '`', 'f', 'g'});
+#endif
+
 		}
 		
 		public Iterable<Map.Entry<CLASS_TYPE, CLASS_VALUE_TYPE>> order(List<Map.Entry<CLASS_TYPE, CLASS_VALUE_TYPE>> insertionOrder) {
