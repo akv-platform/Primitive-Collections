@@ -251,7 +251,11 @@ public abstract class AbstractObject2FloatMap<T> extends AbstractMap<T, Float> i
 		return new AbstractObjectSet<T>() {
 			@Override
 			public boolean remove(Object o) {
-				return Float.floatToIntBits(AbstractObject2FloatMap.this.remove(o)) != Float.floatToIntBits(getDefaultReturnValue());
+				if(AbstractObject2FloatMap.this.containsKey(o)) {
+					AbstractObject2FloatMap.this.remove(o);
+					return true;
+				}
+				return false;
 			}
 			
 			@Override

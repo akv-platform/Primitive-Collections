@@ -251,7 +251,11 @@ public abstract class AbstractObject2ShortMap<T> extends AbstractMap<T, Short> i
 		return new AbstractObjectSet<T>() {
 			@Override
 			public boolean remove(Object o) {
-				return AbstractObject2ShortMap.this.remove(o) != getDefaultReturnValue();
+				if(AbstractObject2ShortMap.this.containsKey(o)) {
+					AbstractObject2ShortMap.this.remove(o);
+					return true;
+				}
+				return false;
 			}
 			
 			@Override

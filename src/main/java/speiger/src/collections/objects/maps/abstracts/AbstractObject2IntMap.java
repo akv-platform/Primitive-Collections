@@ -251,7 +251,11 @@ public abstract class AbstractObject2IntMap<T> extends AbstractMap<T, Integer> i
 		return new AbstractObjectSet<T>() {
 			@Override
 			public boolean remove(Object o) {
-				return AbstractObject2IntMap.this.remove(o) != getDefaultReturnValue();
+				if(AbstractObject2IntMap.this.containsKey(o)) {
+					AbstractObject2IntMap.this.remove(o);
+					return true;
+				}
+				return false;
 			}
 			
 			@Override

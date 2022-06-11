@@ -245,7 +245,11 @@ public abstract class AbstractObject2BooleanMap<T> extends AbstractMap<T, Boolea
 		return new AbstractObjectSet<T>() {
 			@Override
 			public boolean remove(Object o) {
-				return AbstractObject2BooleanMap.this.remove(o) != getDefaultReturnValue();
+				if(AbstractObject2BooleanMap.this.containsKey(o)) {
+					AbstractObject2BooleanMap.this.remove(o);
+					return true;
+				}
+				return false;
 			}
 			
 			@Override

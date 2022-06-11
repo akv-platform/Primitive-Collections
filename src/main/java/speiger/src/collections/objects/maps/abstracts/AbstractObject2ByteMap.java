@@ -251,7 +251,11 @@ public abstract class AbstractObject2ByteMap<T> extends AbstractMap<T, Byte> imp
 		return new AbstractObjectSet<T>() {
 			@Override
 			public boolean remove(Object o) {
-				return AbstractObject2ByteMap.this.remove(o) != getDefaultReturnValue();
+				if(AbstractObject2ByteMap.this.containsKey(o)) {
+					AbstractObject2ByteMap.this.remove(o);
+					return true;
+				}
+				return false;
 			}
 			
 			@Override

@@ -251,7 +251,11 @@ public abstract class AbstractObject2CharMap<T> extends AbstractMap<T, Character
 		return new AbstractObjectSet<T>() {
 			@Override
 			public boolean remove(Object o) {
-				return AbstractObject2CharMap.this.remove(o) != getDefaultReturnValue();
+				if(AbstractObject2CharMap.this.containsKey(o)) {
+					AbstractObject2CharMap.this.remove(o);
+					return true;
+				}
+				return false;
 			}
 			
 			@Override

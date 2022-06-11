@@ -251,7 +251,11 @@ public abstract class AbstractObject2LongMap<T> extends AbstractMap<T, Long> imp
 		return new AbstractObjectSet<T>() {
 			@Override
 			public boolean remove(Object o) {
-				return AbstractObject2LongMap.this.remove(o) != getDefaultReturnValue();
+				if(AbstractObject2LongMap.this.containsKey(o)) {
+					AbstractObject2LongMap.this.remove(o);
+					return true;
+				}
+				return false;
 			}
 			
 			@Override

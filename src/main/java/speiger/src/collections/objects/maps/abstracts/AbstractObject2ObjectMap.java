@@ -231,7 +231,11 @@ public abstract class AbstractObject2ObjectMap<T, V> extends AbstractMap<T, V> i
 		return new AbstractObjectSet<T>() {
 			@Override
 			public boolean remove(Object o) {
-				return !Objects.equals(AbstractObject2ObjectMap.this.remove(o), getDefaultReturnValue());
+				if(AbstractObject2ObjectMap.this.containsKey(o)) {
+					AbstractObject2ObjectMap.this.remove(o);
+					return true;
+				}
+				return false;
 			}
 			
 			@Override

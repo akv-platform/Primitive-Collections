@@ -251,7 +251,11 @@ public abstract class AbstractObject2DoubleMap<T> extends AbstractMap<T, Double>
 		return new AbstractObjectSet<T>() {
 			@Override
 			public boolean remove(Object o) {
-				return Double.doubleToLongBits(AbstractObject2DoubleMap.this.remove(o)) != Double.doubleToLongBits(getDefaultReturnValue());
+				if(AbstractObject2DoubleMap.this.containsKey(o)) {
+					AbstractObject2DoubleMap.this.remove(o);
+					return true;
+				}
+				return false;
 			}
 			
 			@Override
