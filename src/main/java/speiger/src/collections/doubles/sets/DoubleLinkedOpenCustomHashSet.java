@@ -114,7 +114,7 @@ public class DoubleLinkedOpenCustomHashSet extends DoubleOpenCustomHashSet imple
 	 * @throws IllegalStateException if offset and length causes to step outside of the arrays range
 	 */
 	public DoubleLinkedOpenCustomHashSet(double[] array, int offset, int length, float loadFactor, DoubleStrategy strategy) {
-		this(length < 0 ? 0 : length, strategy);
+		this(length, strategy);
 		SanityChecks.checkArrayCapacity(array.length, offset, length);
 		for(int i = 0;i<length;i++) add(array[offset+i]);
 	}

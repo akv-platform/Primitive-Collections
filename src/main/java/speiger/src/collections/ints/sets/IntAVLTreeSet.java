@@ -784,10 +784,6 @@ public class IntAVLTreeSet extends AbstractIntSet implements IntNavigableSet
 		@Override
 		public IntComparator comparator() { return comparator; }
 		
-		public int getDefaultMaxValue() { return super.getDefaultMinValue(); }
-		
-		public int getDefaultMinValue() { return super.getDefaultMaxValue(); }
-		
 		@Override
 		public IntNavigableSet subSet(int fromElement, boolean fromInclusive, int toElement, boolean toInclusive) {
 			if(!inRange(fromElement, fromInclusive)) throw new IllegalArgumentException("fromElement out of range");

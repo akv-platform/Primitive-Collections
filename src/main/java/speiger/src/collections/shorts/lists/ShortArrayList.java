@@ -55,6 +55,7 @@ public class ShortArrayList extends AbstractShortList implements IShortArray, Sh
 	 * @param size the minimum initial size of the Backing array
 	 */
 	public ShortArrayList(int size) {
+		if(size < 0) throw new IllegalStateException("Size has to be 0 or greater");
 		data = new short[size];
 	}
 	

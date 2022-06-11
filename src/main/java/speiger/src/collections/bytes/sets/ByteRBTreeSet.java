@@ -845,10 +845,6 @@ public class ByteRBTreeSet extends AbstractByteSet implements ByteNavigableSet
 		@Override
 		public ByteComparator comparator() { return comparator; }
 		
-		public byte getDefaultMaxValue() { return super.getDefaultMinValue(); }
-		
-		public byte getDefaultMinValue() { return super.getDefaultMaxValue(); }
-		
 		@Override
 		public ByteNavigableSet subSet(byte fromElement, boolean fromInclusive, byte toElement, boolean toInclusive) {
 			if(!inRange(fromElement, fromInclusive)) throw new IllegalArgumentException("fromElement out of range");

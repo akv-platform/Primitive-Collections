@@ -52,6 +52,7 @@ public class ObjectArrayList<T> extends AbstractObjectList<T> implements IObject
 	 * @param size the minimum initial size of the Backing array
 	 */
 	public ObjectArrayList(int size) {
+		if(size < 0) throw new IllegalStateException("Size has to be 0 or greater");
 		data = (T[])new Object[size];
 	}
 	

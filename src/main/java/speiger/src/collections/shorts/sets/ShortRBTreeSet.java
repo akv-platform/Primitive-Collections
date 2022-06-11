@@ -845,10 +845,6 @@ public class ShortRBTreeSet extends AbstractShortSet implements ShortNavigableSe
 		@Override
 		public ShortComparator comparator() { return comparator; }
 		
-		public short getDefaultMaxValue() { return super.getDefaultMinValue(); }
-		
-		public short getDefaultMinValue() { return super.getDefaultMaxValue(); }
-		
 		@Override
 		public ShortNavigableSet subSet(short fromElement, boolean fromInclusive, short toElement, boolean toInclusive) {
 			if(!inRange(fromElement, fromInclusive)) throw new IllegalArgumentException("fromElement out of range");

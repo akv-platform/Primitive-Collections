@@ -49,6 +49,7 @@ import speiger.src.collections.PACKAGE.lists.LIST;
 import speiger.src.collections.PACKAGE.utils.LISTS;
 #endif
 import speiger.src.testers.PACKAGE.builder.LIST_TEST_BUILDER;
+import speiger.src.testers.PACKAGE.impl.COLLECTION_CONSTRUCTOR_TESTS;
 import speiger.src.testers.PACKAGE.impl.SIMPLE_TEST_GENERATOR;
 #if TYPE_OBJECT
 import speiger.src.testers.PACKAGE.generators.TEST_LIST_GENERATOR;
@@ -85,10 +86,20 @@ public class LIST_TESTS extends TestCase
 	public static Test suite() {
 		TestSuite suite = new TestSuite("LISTS");
 		suite(suite);
+		constructorSuite(suite);
 		System.out.println("Generated ["+suite.countTestCases()+"] Tests");
 		return suite;
 	}
-
+	
+	public static void constructorSuite(TestSuite suite) {
+		TestSuite constructors = new TestSuite("Constructors");
+		constructors.addTest(new TestSuite(COLLECTION_CONSTRUCTOR_TESTS.ArrayList.class));
+		constructors.addTest(new TestSuite(COLLECTION_CONSTRUCTOR_TESTS.LinkedList.class));
+		constructors.addTest(new TestSuite(COLLECTION_CONSTRUCTOR_TESTS.CopyOnWriteArrayList.class));
+		constructors.addTest(new TestSuite(COLLECTION_CONSTRUCTOR_TESTS.ImmutableList.class));
+		suite.addTest(constructors);
+	}
+	
 #if TYPE_OBJECT
 	public static void suite(TestSuite suite) {
 		suite.addTest(listSuite("ARRAY_LIST", T -> new ARRAY_LISTBRACES(T), getFeatures(), -1));

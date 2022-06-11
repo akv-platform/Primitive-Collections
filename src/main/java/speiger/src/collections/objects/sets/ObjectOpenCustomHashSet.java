@@ -304,10 +304,10 @@ public class ObjectOpenCustomHashSet<T> extends AbstractObjectSet<T> implements 
 	
 	@Override
 	public boolean trim(int size) {
-		int newSize = HashUtil.nextPowerOfTwo((int)Math.ceil(size / loadFactor));
-		if(newSize >= nullIndex || size >= Math.min((int)Math.ceil(newSize * loadFactor), newSize - 1)) return false;
+		int request = Math.max(minCapacity, HashUtil.nextPowerOfTwo((int)Math.ceil(size / loadFactor)));
+		if(request >= nullIndex || this.size >= Math.min((int)Math.ceil(request * loadFactor), request - 1)) return false;
 		try {
-			rehash(newSize);
+			rehash(request);
 		}
 		catch(OutOfMemoryError e) { return false; }
 		return true;
@@ -316,7 +316,7 @@ public class ObjectOpenCustomHashSet<T> extends AbstractObjectSet<T> implements 
 	@Override
 	public void clearAndTrim(int size) {
 		int request = Math.max(minCapacity, HashUtil.nextPowerOfTwo((int)Math.ceil(size / loadFactor)));
-		if(request >= size) {
+		if(request >= nullIndex) {
 			clear();
 			return;
 		}

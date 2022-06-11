@@ -776,10 +776,6 @@ public class ObjectAVLTreeSet<T> extends AbstractObjectSet<T> implements ObjectN
 		@Override
 		public Comparator<T> comparator() { return comparator; }
 		
-		public T getDefaultMaxValue() { return super.getDefaultMinValue(); }
-		
-		public T getDefaultMinValue() { return super.getDefaultMaxValue(); }
-		
 		@Override
 		public ObjectNavigableSet<T> subSet(T fromElement, boolean fromInclusive, T toElement, boolean toInclusive) {
 			if(!inRange(fromElement, fromInclusive)) throw new IllegalArgumentException("fromElement out of range");

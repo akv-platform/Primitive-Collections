@@ -845,10 +845,6 @@ public class CharRBTreeSet extends AbstractCharSet implements CharNavigableSet
 		@Override
 		public CharComparator comparator() { return comparator; }
 		
-		public char getDefaultMaxValue() { return super.getDefaultMinValue(); }
-		
-		public char getDefaultMinValue() { return super.getDefaultMaxValue(); }
-		
 		@Override
 		public CharNavigableSet subSet(char fromElement, boolean fromInclusive, char toElement, boolean toInclusive) {
 			if(!inRange(fromElement, fromInclusive)) throw new IllegalArgumentException("fromElement out of range");

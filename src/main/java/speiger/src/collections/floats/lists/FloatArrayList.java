@@ -55,6 +55,7 @@ public class FloatArrayList extends AbstractFloatList implements IFloatArray, Fl
 	 * @param size the minimum initial size of the Backing array
 	 */
 	public FloatArrayList(int size) {
+		if(size < 0) throw new IllegalStateException("Size has to be 0 or greater");
 		data = new float[size];
 	}
 	

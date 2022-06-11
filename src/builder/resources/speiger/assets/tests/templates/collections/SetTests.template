@@ -38,6 +38,7 @@ import speiger.src.testers.PACKAGE.generators.TEST_NAVIGABLE_SET_GENERATOR;
 import speiger.src.testers.PACKAGE.generators.TEST_ORDERED_SET_GENERATOR;
 import speiger.src.testers.PACKAGE.generators.TEST_SET_GENERATOR;
 #endif
+import speiger.src.testers.PACKAGE.impl.COLLECTION_CONSTRUCTOR_TESTS;
 import speiger.src.testers.PACKAGE.impl.SIMPLE_TEST_GENERATOR;
 #if TYPE_CHAR || TYPE_FLOAT || TYPE_DOUBLE || TYPE_OBJECT
 import speiger.src.testers.PACKAGE.tests.collection.FILE_KEY_TYPECollectionIteratorTester;
@@ -53,8 +54,24 @@ public class SET_TESTS extends TestCase
 	public static Test suite() {
 		TestSuite suite = new TestSuite("SETS");
 		suite(suite);
+		constructorSuite(suite);
 		System.out.println("Generated ["+suite.countTestCases()+"] Tests");
 		return suite;
+	}
+	
+	public static void constructorSuite(TestSuite suite) {
+		TestSuite constructors = new TestSuite("Constructors");
+		constructors.addTest(new TestSuite(COLLECTION_CONSTRUCTOR_TESTS.HashSet.class));
+		constructors.addTest(new TestSuite(COLLECTION_CONSTRUCTOR_TESTS.LinkedHashSet.class));
+		constructors.addTest(new TestSuite(COLLECTION_CONSTRUCTOR_TESTS.CustomHashSet.class));
+		constructors.addTest(new TestSuite(COLLECTION_CONSTRUCTOR_TESTS.LinkedCustomHashSet.class));
+		constructors.addTest(new TestSuite(COLLECTION_CONSTRUCTOR_TESTS.ImmutableHashSet.class));
+		constructors.addTest(new TestSuite(COLLECTION_CONSTRUCTOR_TESTS.ArraySet.class));
+		constructors.addTest(new TestSuite(COLLECTION_CONSTRUCTOR_TESTS.RBTreeSet.class));
+		constructors.addTest(new TestSuite(COLLECTION_CONSTRUCTOR_TESTS.AVLTreeSet.class));
+		constructors.addTest(new TestSuite(COLLECTION_CONSTRUCTOR_TESTS.RBTreeSetComparator.class));
+		constructors.addTest(new TestSuite(COLLECTION_CONSTRUCTOR_TESTS.AVLTreeSetComparator.class));
+		suite.addTest(constructors);
 	}
 	
 	public static void suite(TestSuite suite) {

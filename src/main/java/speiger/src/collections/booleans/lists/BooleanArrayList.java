@@ -50,6 +50,7 @@ public class BooleanArrayList extends AbstractBooleanList implements IBooleanArr
 	 * @param size the minimum initial size of the Backing array
 	 */
 	public BooleanArrayList(int size) {
+		if(size < 0) throw new IllegalStateException("Size has to be 0 or greater");
 		data = new boolean[size];
 	}
 	

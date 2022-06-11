@@ -784,10 +784,6 @@ public class DoubleAVLTreeSet extends AbstractDoubleSet implements DoubleNavigab
 		@Override
 		public DoubleComparator comparator() { return comparator; }
 		
-		public double getDefaultMaxValue() { return super.getDefaultMinValue(); }
-		
-		public double getDefaultMinValue() { return super.getDefaultMaxValue(); }
-		
 		@Override
 		public DoubleNavigableSet subSet(double fromElement, boolean fromInclusive, double toElement, boolean toInclusive) {
 			if(!inRange(fromElement, fromInclusive)) throw new IllegalArgumentException("fromElement out of range");

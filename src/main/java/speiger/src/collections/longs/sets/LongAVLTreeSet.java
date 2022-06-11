@@ -784,10 +784,6 @@ public class LongAVLTreeSet extends AbstractLongSet implements LongNavigableSet
 		@Override
 		public LongComparator comparator() { return comparator; }
 		
-		public long getDefaultMaxValue() { return super.getDefaultMinValue(); }
-		
-		public long getDefaultMinValue() { return super.getDefaultMaxValue(); }
-		
 		@Override
 		public LongNavigableSet subSet(long fromElement, boolean fromInclusive, long toElement, boolean toInclusive) {
 			if(!inRange(fromElement, fromInclusive)) throw new IllegalArgumentException("fromElement out of range");

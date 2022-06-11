@@ -55,6 +55,7 @@ public class ByteArrayList extends AbstractByteList implements IByteArray, ByteS
 	 * @param size the minimum initial size of the Backing array
 	 */
 	public ByteArrayList(int size) {
+		if(size < 0) throw new IllegalStateException("Size has to be 0 or greater");
 		data = new byte[size];
 	}
 	

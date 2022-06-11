@@ -114,7 +114,7 @@ public class CharLinkedOpenCustomHashSet extends CharOpenCustomHashSet implement
 	 * @throws IllegalStateException if offset and length causes to step outside of the arrays range
 	 */
 	public CharLinkedOpenCustomHashSet(char[] array, int offset, int length, float loadFactor, CharStrategy strategy) {
-		this(length < 0 ? 0 : length, strategy);
+		this(length, strategy);
 		SanityChecks.checkArrayCapacity(array.length, offset, length);
 		for(int i = 0;i<length;i++) add(array[offset+i]);
 	}

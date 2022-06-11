@@ -517,7 +517,7 @@ public class Object2ByteOpenHashMap<T> extends AbstractObject2ByteMap<T> impleme
 	@Override
 	public boolean trim(int size) {
 		int request = Math.max(minCapacity, HashUtil.nextPowerOfTwo((int)Math.ceil(size / loadFactor)));
-		if(request >= nullIndex || this.size > Math.min((int)Math.ceil(request * loadFactor), request - 1)) return false;
+		if(request >= nullIndex || this.size >= Math.min((int)Math.ceil(request * loadFactor), request - 1)) return false;
 		try {
 			rehash(request);
 		}

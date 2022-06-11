@@ -99,7 +99,7 @@ public class IntLinkedOpenHashSet extends IntOpenHashSet implements IntOrderedSe
 	 * @throws IllegalStateException if offset and length causes to step outside of the arrays range
 	 */
 	public IntLinkedOpenHashSet(int[] array, int offset, int length, float loadFactor) {
-		this(length < 0 ? 0 : length);
+		this(length);
 		SanityChecks.checkArrayCapacity(array.length, offset, length);
 		for(int i = 0;i<length;i++) add(array[offset+i]);
 	}

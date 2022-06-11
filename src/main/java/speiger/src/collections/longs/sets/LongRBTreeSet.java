@@ -5,16 +5,15 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
-
 import speiger.src.collections.longs.collections.LongBidirectionalIterator;
-import speiger.src.collections.longs.collections.LongCollection;
-import speiger.src.collections.longs.collections.LongIterator;
 import speiger.src.collections.longs.functions.LongComparator;
 import speiger.src.collections.longs.functions.LongConsumer;
+import speiger.src.collections.objects.functions.consumer.ObjectLongConsumer;
 import speiger.src.collections.longs.functions.function.Long2BooleanFunction;
 import speiger.src.collections.longs.functions.function.LongLongUnaryOperator;
+import speiger.src.collections.longs.collections.LongCollection;
+import speiger.src.collections.longs.collections.LongIterator;
 import speiger.src.collections.longs.utils.LongIterators;
-import speiger.src.collections.objects.functions.consumer.ObjectLongConsumer;
 import speiger.src.collections.utils.SanityChecks;
 
 /**
@@ -538,7 +537,6 @@ public class LongRBTreeSet extends AbstractLongSet implements LongNavigableSet
 		tree = null;
 	}
 	
-	@Override
 	public LongRBTreeSet copy() {
 		LongRBTreeSet set = new LongRBTreeSet();
 		set.size = size;

@@ -845,10 +845,6 @@ public class FloatRBTreeSet extends AbstractFloatSet implements FloatNavigableSe
 		@Override
 		public FloatComparator comparator() { return comparator; }
 		
-		public float getDefaultMaxValue() { return super.getDefaultMinValue(); }
-		
-		public float getDefaultMinValue() { return super.getDefaultMaxValue(); }
-		
 		@Override
 		public FloatNavigableSet subSet(float fromElement, boolean fromInclusive, float toElement, boolean toInclusive) {
 			if(!inRange(fromElement, fromInclusive)) throw new IllegalArgumentException("fromElement out of range");

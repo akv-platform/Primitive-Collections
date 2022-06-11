@@ -114,7 +114,7 @@ public class IntLinkedOpenCustomHashSet extends IntOpenCustomHashSet implements 
 	 * @throws IllegalStateException if offset and length causes to step outside of the arrays range
 	 */
 	public IntLinkedOpenCustomHashSet(int[] array, int offset, int length, float loadFactor, IntStrategy strategy) {
-		this(length < 0 ? 0 : length, strategy);
+		this(length, strategy);
 		SanityChecks.checkArrayCapacity(array.length, offset, length);
 		for(int i = 0;i<length;i++) add(array[offset+i]);
 	}

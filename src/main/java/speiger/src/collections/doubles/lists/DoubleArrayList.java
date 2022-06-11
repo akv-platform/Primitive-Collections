@@ -55,6 +55,7 @@ public class DoubleArrayList extends AbstractDoubleList implements IDoubleArray,
 	 * @param size the minimum initial size of the Backing array
 	 */
 	public DoubleArrayList(int size) {
+		if(size < 0) throw new IllegalStateException("Size has to be 0 or greater");
 		data = new double[size];
 	}
 	
