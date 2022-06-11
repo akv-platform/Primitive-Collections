@@ -54,7 +54,7 @@ import speiger.src.testers.PACKAGE.builder.maps.ORDERED_MAP_TEST_BUILDER;
 import speiger.src.testers.PACKAGE.builder.maps.NAVIGABLE_MAP_TEST_BUILDER;
 import speiger.src.testers.PACKAGE.impl.maps.SIMPLE_MAP_TEST_GENERATOR;
 import speiger.src.testers.PACKAGE.impl.maps.MAP_CONSTRUCTOR_TESTS;
-import speiger.src.testers.PACKAGE.impl.maps.TEST_MAP;
+import speiger.src.testers.PACKAGE.impl.maps.SIMPLE_TEST_MAP;
 import speiger.src.testers.objects.tests.collection.ObjectCollectionIteratorTester;
 #if !SAME_TYPE && !TYPE_OBJECT
 import speiger.src.testers.PACKAGE.tests.collection.FILE_KEY_TYPECollectionIteratorTester;
@@ -129,7 +129,7 @@ public class MAP_TESTS extends TestCase
 		suite.addTest(orderedMapSuite("UnmodifiableORDERED_MAP", (K, V) -> new LINKED_HASH_MAPKV_BRACES(K, V).unmodifiable(), getImmutableFeatures(), -1));
 		suite.addTest(mapSuite("EmptyMAP", (K, V) -> MAPS.empty(), getEmptyFeatures(), 0, false));
 		suite.addTest(mapSuite("SingletonMAP", (K, V) -> MAPS.singleton(K[0], V[0]), getEmptyFeatures(), 1, false));
-		suite.addTest(mapSuite("AbstractMap", TEST_MAP::new, getImmutableFeatures(), -1, false));
+		suite.addTest(mapSuite("AbstractMap", SIMPLE_TEST_MAP::new, getImmutableFeatures(), -1, false));
 	}
 	
 #if TYPE_OBJECT

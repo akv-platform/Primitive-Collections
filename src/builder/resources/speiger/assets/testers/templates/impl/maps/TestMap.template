@@ -19,12 +19,12 @@ import speiger.src.collections.VALUE_PACKAGE.functions.function.VALUE_UNARY_OPER
 import speiger.src.collections.VALUE_PACKAGE.functions.VALUE_SUPPLIER;
 
 @SuppressWarnings("javadoc")
-public class TEST_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE
+public class SIMPLE_TEST_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE
 {
 	KEY_TYPE[] keys;
 	VALUE_TYPE[] values;
 	
-	public TEST_MAP(KEY_TYPE[] keys, VALUE_TYPE[] values) {
+	public SIMPLE_TEST_MAP(KEY_TYPE[] keys, VALUE_TYPE[] values) {
 		this.keys = NEW_KEY_ARRAY(keys.length);
 		this.values = NEW_VALUE_ARRAY(values.length);
 		int j = 0;
@@ -85,7 +85,7 @@ public class TEST_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENE
 	@Override
 	public void REPLACE_VALUES(MAP KEY_VALUE_GENERIC_TYPE m) { throw new UnsupportedOperationException(); }
 	@Override
-	public TEST_MAP KEY_VALUE_GENERIC_TYPE copy() { return new TEST_MAPKV_BRACES(keys, values); }
+	public SIMPLE_TEST_MAP KEY_VALUE_GENERIC_TYPE copy() { return new SIMPLE_TEST_MAPKV_BRACES(keys, values); }
 	
 	@Override
 	public VALUE_TYPE GET_VALUE(KEY_TYPE key) {
@@ -140,9 +140,9 @@ public class TEST_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENE
 			}
 			
 			@Override
-			public void clear() { TEST_MAP.this.clear(); }
+			public void clear() { SIMPLE_TEST_MAP.this.clear(); }
 			@Override
-			public int size() { return TEST_MAP.this.size(); }
+			public int size() { return SIMPLE_TEST_MAP.this.size(); }
 		};
 	}
 	
