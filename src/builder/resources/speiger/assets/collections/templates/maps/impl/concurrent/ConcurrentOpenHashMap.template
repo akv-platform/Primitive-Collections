@@ -2053,7 +2053,7 @@ public class CONCURRENT_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY
 #if TYPE_OBJECT
 				if(key == null) {
 #else
-				if(key == null || KEY_EQUALS_NULL(CLASS_TO_KEY(key))) {
+				if(key == null || (key instanceof CLASS_TYPE && KEY_EQUALS_NULL(CLASS_TO_KEY(key)))) {
 #endif
 					if(containsNull && EQUALS_VALUE_TYPE(values[nullIndex], value)) {
 						removeNullIndex();
