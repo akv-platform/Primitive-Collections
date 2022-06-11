@@ -301,8 +301,7 @@ public class Object2ObjectLinkedOpenCustomHashMap<T, V> extends Object2ObjectOpe
 	public T pollFirstKey() {
 		if(size == 0) throw new NoSuchElementException();
 		int pos = firstIndex;
-		firstIndex = (int)links[pos];
-		if(0 <= firstIndex) links[firstIndex] |= 0xFFFFFFFF00000000L;
+		onNodeRemoved(pos);
 		T result = keys[pos];
 		size--;
 		if(strategy.equals(result, null)) {
@@ -325,8 +324,7 @@ public class Object2ObjectLinkedOpenCustomHashMap<T, V> extends Object2ObjectOpe
 	public T pollLastKey() {
 		if(size == 0) throw new NoSuchElementException();
 		int pos = lastIndex;
-		lastIndex = (int)(links[pos] >>> 32);
-		if(0 <= lastIndex) links[lastIndex] |= 0xFFFFFFFFL;
+		onNodeRemoved(pos);
 		T result = keys[pos];
 		size--;
 		if(strategy.equals(result, null)) {

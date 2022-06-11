@@ -341,8 +341,7 @@ public class Short2CharLinkedOpenCustomHashMap extends Short2CharOpenCustomHashM
 	public short pollFirstShortKey() {
 		if(size == 0) throw new NoSuchElementException();
 		int pos = firstIndex;
-		firstIndex = (int)links[pos];
-		if(0 <= firstIndex) links[firstIndex] |= 0xFFFFFFFF00000000L;
+		onNodeRemoved(pos);
 		short result = keys[pos];
 		size--;
 		if(strategy.equals(result, (short)0)) {
@@ -365,8 +364,7 @@ public class Short2CharLinkedOpenCustomHashMap extends Short2CharOpenCustomHashM
 	public short pollLastShortKey() {
 		if(size == 0) throw new NoSuchElementException();
 		int pos = lastIndex;
-		lastIndex = (int)(links[pos] >>> 32);
-		if(0 <= lastIndex) links[lastIndex] |= 0xFFFFFFFFL;
+		onNodeRemoved(pos);
 		short result = keys[pos];
 		size--;
 		if(strategy.equals(result, (short)0)) {

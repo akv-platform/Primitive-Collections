@@ -338,8 +338,7 @@ public class Byte2ObjectLinkedOpenCustomHashMap<V> extends Byte2ObjectOpenCustom
 	public byte pollFirstByteKey() {
 		if(size == 0) throw new NoSuchElementException();
 		int pos = firstIndex;
-		firstIndex = (int)links[pos];
-		if(0 <= firstIndex) links[firstIndex] |= 0xFFFFFFFF00000000L;
+		onNodeRemoved(pos);
 		byte result = keys[pos];
 		size--;
 		if(strategy.equals(result, (byte)0)) {
@@ -362,8 +361,7 @@ public class Byte2ObjectLinkedOpenCustomHashMap<V> extends Byte2ObjectOpenCustom
 	public byte pollLastByteKey() {
 		if(size == 0) throw new NoSuchElementException();
 		int pos = lastIndex;
-		lastIndex = (int)(links[pos] >>> 32);
-		if(0 <= lastIndex) links[lastIndex] |= 0xFFFFFFFFL;
+		onNodeRemoved(pos);
 		byte result = keys[pos];
 		size--;
 		if(strategy.equals(result, (byte)0)) {

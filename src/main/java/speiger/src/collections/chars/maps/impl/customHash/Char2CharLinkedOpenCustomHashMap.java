@@ -336,8 +336,7 @@ public class Char2CharLinkedOpenCustomHashMap extends Char2CharOpenCustomHashMap
 	public char pollFirstCharKey() {
 		if(size == 0) throw new NoSuchElementException();
 		int pos = firstIndex;
-		firstIndex = (int)links[pos];
-		if(0 <= firstIndex) links[firstIndex] |= 0xFFFFFFFF00000000L;
+		onNodeRemoved(pos);
 		char result = keys[pos];
 		size--;
 		if(strategy.equals(result, (char)0)) {
@@ -360,8 +359,7 @@ public class Char2CharLinkedOpenCustomHashMap extends Char2CharOpenCustomHashMap
 	public char pollLastCharKey() {
 		if(size == 0) throw new NoSuchElementException();
 		int pos = lastIndex;
-		lastIndex = (int)(links[pos] >>> 32);
-		if(0 <= lastIndex) links[lastIndex] |= 0xFFFFFFFFL;
+		onNodeRemoved(pos);
 		char result = keys[pos];
 		size--;
 		if(strategy.equals(result, (char)0)) {
