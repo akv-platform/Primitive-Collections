@@ -1057,6 +1057,7 @@ public interface Short2DoubleMap extends Map<Short, Double>, Short2DoubleFunctio
 		 * @param initialSize the requested start capacity
 		 */
 		public BuilderCache(int initialSize) {
+			if(initialSize < 0) throw new IllegalStateException("Minimum Capacity is negative. This is not allowed");
 			keys = new short[initialSize];
 			values = new double[initialSize];
 		}

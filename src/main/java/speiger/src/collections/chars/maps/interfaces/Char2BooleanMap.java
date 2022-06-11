@@ -1032,6 +1032,7 @@ public interface Char2BooleanMap extends Map<Character, Boolean>, Char2BooleanFu
 		 * @param initialSize the requested start capacity
 		 */
 		public BuilderCache(int initialSize) {
+			if(initialSize < 0) throw new IllegalStateException("Minimum Capacity is negative. This is not allowed");
 			keys = new char[initialSize];
 			values = new boolean[initialSize];
 		}

@@ -1837,7 +1837,7 @@ public class Byte2BooleanConcurrentOpenHashMap extends AbstractByte2BooleanMap i
 			long stamp = writeLock();
 			try
 			{
-				if(key == null || ((Byte)key).byteValue() == (byte)0) {
+				if(key == null || (key instanceof Byte && ((Byte)key).byteValue() == (byte)0)) {
 					if(containsNull && Objects.equals(value, Boolean.valueOf(values[nullIndex]))) {
 						removeNullIndex();
 						return true;

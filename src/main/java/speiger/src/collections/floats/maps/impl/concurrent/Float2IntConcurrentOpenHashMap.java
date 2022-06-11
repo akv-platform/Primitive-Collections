@@ -1881,7 +1881,7 @@ public class Float2IntConcurrentOpenHashMap extends AbstractFloat2IntMap impleme
 			long stamp = writeLock();
 			try
 			{
-				if(key == null || Float.floatToIntBits(((Float)key).floatValue()) == 0) {
+				if(key == null || (key instanceof Float && Float.floatToIntBits(((Float)key).floatValue()) == 0)) {
 					if(containsNull && Objects.equals(value, Integer.valueOf(values[nullIndex]))) {
 						removeNullIndex();
 						return true;

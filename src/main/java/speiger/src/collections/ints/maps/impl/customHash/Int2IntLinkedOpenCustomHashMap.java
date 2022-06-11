@@ -420,7 +420,7 @@ public class Int2IntLinkedOpenCustomHashMap extends Int2IntOpenCustomHashMap imp
 	@Override
 	public void clearAndTrim(int size) {
 		int request = Math.max(minCapacity, HashUtil.nextPowerOfTwo((int)Math.ceil(size / loadFactor)));
-		if(request >= size) {
+		if(request >= nullIndex) {
 			clear();
 			return;
 		}

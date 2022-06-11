@@ -1876,7 +1876,7 @@ public class Byte2ByteConcurrentOpenHashMap extends AbstractByte2ByteMap impleme
 			long stamp = writeLock();
 			try
 			{
-				if(key == null || ((Byte)key).byteValue() == (byte)0) {
+				if(key == null || (key instanceof Byte && ((Byte)key).byteValue() == (byte)0)) {
 					if(containsNull && Objects.equals(value, Byte.valueOf(values[nullIndex]))) {
 						removeNullIndex();
 						return true;

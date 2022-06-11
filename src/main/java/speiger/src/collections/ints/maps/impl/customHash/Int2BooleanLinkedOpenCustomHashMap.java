@@ -425,7 +425,7 @@ public class Int2BooleanLinkedOpenCustomHashMap extends Int2BooleanOpenCustomHas
 	@Override
 	public void clearAndTrim(int size) {
 		int request = Math.max(minCapacity, HashUtil.nextPowerOfTwo((int)Math.ceil(size / loadFactor)));
-		if(request >= size) {
+		if(request >= nullIndex) {
 			clear();
 			return;
 		}

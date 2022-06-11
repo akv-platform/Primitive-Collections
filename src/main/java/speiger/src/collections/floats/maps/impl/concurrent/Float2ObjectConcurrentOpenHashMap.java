@@ -1814,7 +1814,7 @@ public class Float2ObjectConcurrentOpenHashMap<V> extends AbstractFloat2ObjectMa
 			long stamp = writeLock();
 			try
 			{
-				if(key == null || Float.floatToIntBits(((Float)key).floatValue()) == 0) {
+				if(key == null || (key instanceof Float && Float.floatToIntBits(((Float)key).floatValue()) == 0)) {
 					if(containsNull && Objects.equals(value, values[nullIndex])) {
 						removeNullIndex();
 						return true;

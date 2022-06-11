@@ -1881,7 +1881,7 @@ public class Char2FloatConcurrentOpenHashMap extends AbstractChar2FloatMap imple
 			long stamp = writeLock();
 			try
 			{
-				if(key == null || ((Character)key).charValue() == (char)0) {
+				if(key == null || (key instanceof Character && ((Character)key).charValue() == (char)0)) {
 					if(containsNull && Objects.equals(value, Float.valueOf(values[nullIndex]))) {
 						removeNullIndex();
 						return true;

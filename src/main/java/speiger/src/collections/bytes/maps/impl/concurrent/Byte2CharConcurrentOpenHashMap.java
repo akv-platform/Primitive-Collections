@@ -1881,7 +1881,7 @@ public class Byte2CharConcurrentOpenHashMap extends AbstractByte2CharMap impleme
 			long stamp = writeLock();
 			try
 			{
-				if(key == null || ((Byte)key).byteValue() == (byte)0) {
+				if(key == null || (key instanceof Byte && ((Byte)key).byteValue() == (byte)0)) {
 					if(containsNull && Objects.equals(value, Character.valueOf(values[nullIndex]))) {
 						removeNullIndex();
 						return true;

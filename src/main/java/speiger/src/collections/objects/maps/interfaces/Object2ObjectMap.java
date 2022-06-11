@@ -951,6 +951,7 @@ public interface Object2ObjectMap<T, V> extends Map<T, V>, Object2ObjectFunction
 		 * @param initialSize the requested start capacity
 		 */
 		public BuilderCache(int initialSize) {
+			if(initialSize < 0) throw new IllegalStateException("Minimum Capacity is negative. This is not allowed");
 			keys = (T[])new Object[initialSize];
 			values = (V[])new Object[initialSize];
 		}

@@ -1881,7 +1881,7 @@ public class Float2ByteConcurrentOpenHashMap extends AbstractFloat2ByteMap imple
 			long stamp = writeLock();
 			try
 			{
-				if(key == null || Float.floatToIntBits(((Float)key).floatValue()) == 0) {
+				if(key == null || (key instanceof Float && Float.floatToIntBits(((Float)key).floatValue()) == 0)) {
 					if(containsNull && Objects.equals(value, Byte.valueOf(values[nullIndex]))) {
 						removeNullIndex();
 						return true;

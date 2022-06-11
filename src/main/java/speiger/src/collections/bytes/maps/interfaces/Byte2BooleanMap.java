@@ -1032,6 +1032,7 @@ public interface Byte2BooleanMap extends Map<Byte, Boolean>, Byte2BooleanFunctio
 		 * @param initialSize the requested start capacity
 		 */
 		public BuilderCache(int initialSize) {
+			if(initialSize < 0) throw new IllegalStateException("Minimum Capacity is negative. This is not allowed");
 			keys = new byte[initialSize];
 			values = new boolean[initialSize];
 		}

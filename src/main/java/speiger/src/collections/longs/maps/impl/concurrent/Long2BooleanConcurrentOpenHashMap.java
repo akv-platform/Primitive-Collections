@@ -1837,7 +1837,7 @@ public class Long2BooleanConcurrentOpenHashMap extends AbstractLong2BooleanMap i
 			long stamp = writeLock();
 			try
 			{
-				if(key == null || ((Long)key).longValue() == 0) {
+				if(key == null || (key instanceof Long && ((Long)key).longValue() == 0)) {
 					if(containsNull && Objects.equals(value, Boolean.valueOf(values[nullIndex]))) {
 						removeNullIndex();
 						return true;

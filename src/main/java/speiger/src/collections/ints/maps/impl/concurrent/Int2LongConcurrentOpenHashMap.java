@@ -1881,7 +1881,7 @@ public class Int2LongConcurrentOpenHashMap extends AbstractInt2LongMap implement
 			long stamp = writeLock();
 			try
 			{
-				if(key == null || ((Integer)key).intValue() == 0) {
+				if(key == null || (key instanceof Integer && ((Integer)key).intValue() == 0)) {
 					if(containsNull && Objects.equals(value, Long.valueOf(values[nullIndex]))) {
 						removeNullIndex();
 						return true;

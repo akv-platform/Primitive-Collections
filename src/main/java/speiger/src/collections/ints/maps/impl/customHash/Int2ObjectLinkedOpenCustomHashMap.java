@@ -422,7 +422,7 @@ public class Int2ObjectLinkedOpenCustomHashMap<V> extends Int2ObjectOpenCustomHa
 	@Override
 	public void clearAndTrim(int size) {
 		int request = Math.max(minCapacity, HashUtil.nextPowerOfTwo((int)Math.ceil(size / loadFactor)));
-		if(request >= size) {
+		if(request >= nullIndex) {
 			clear();
 			return;
 		}

@@ -1053,6 +1053,7 @@ public interface Double2ObjectMap<V> extends Map<Double, V>, Double2ObjectFuncti
 		 * @param initialSize the requested start capacity
 		 */
 		public BuilderCache(int initialSize) {
+			if(initialSize < 0) throw new IllegalStateException("Minimum Capacity is negative. This is not allowed");
 			keys = new double[initialSize];
 			values = (V[])new Object[initialSize];
 		}

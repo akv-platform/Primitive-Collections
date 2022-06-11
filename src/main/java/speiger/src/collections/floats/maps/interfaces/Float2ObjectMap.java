@@ -1053,6 +1053,7 @@ public interface Float2ObjectMap<V> extends Map<Float, V>, Float2ObjectFunction<
 		 * @param initialSize the requested start capacity
 		 */
 		public BuilderCache(int initialSize) {
+			if(initialSize < 0) throw new IllegalStateException("Minimum Capacity is negative. This is not allowed");
 			keys = new float[initialSize];
 			values = (V[])new Object[initialSize];
 		}

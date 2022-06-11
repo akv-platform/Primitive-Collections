@@ -415,7 +415,7 @@ public class Object2IntLinkedOpenHashMap<T> extends Object2IntOpenHashMap<T> imp
 	@Override
 	public void clearAndTrim(int size) {
 		int request = Math.max(minCapacity, HashUtil.nextPowerOfTwo((int)Math.ceil(size / loadFactor)));
-		if(request >= size) {
+		if(request >= nullIndex) {
 			clear();
 			return;
 		}

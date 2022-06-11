@@ -1032,6 +1032,7 @@ public interface Short2BooleanMap extends Map<Short, Boolean>, Short2BooleanFunc
 		 * @param initialSize the requested start capacity
 		 */
 		public BuilderCache(int initialSize) {
+			if(initialSize < 0) throw new IllegalStateException("Minimum Capacity is negative. This is not allowed");
 			keys = new short[initialSize];
 			values = new boolean[initialSize];
 		}

@@ -1876,7 +1876,7 @@ public class Char2CharConcurrentOpenHashMap extends AbstractChar2CharMap impleme
 			long stamp = writeLock();
 			try
 			{
-				if(key == null || ((Character)key).charValue() == (char)0) {
+				if(key == null || (key instanceof Character && ((Character)key).charValue() == (char)0)) {
 					if(containsNull && Objects.equals(value, Character.valueOf(values[nullIndex]))) {
 						removeNullIndex();
 						return true;

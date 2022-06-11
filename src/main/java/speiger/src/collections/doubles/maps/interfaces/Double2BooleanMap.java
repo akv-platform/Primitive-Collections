@@ -1032,6 +1032,7 @@ public interface Double2BooleanMap extends Map<Double, Boolean>, Double2BooleanF
 		 * @param initialSize the requested start capacity
 		 */
 		public BuilderCache(int initialSize) {
+			if(initialSize < 0) throw new IllegalStateException("Minimum Capacity is negative. This is not allowed");
 			keys = new double[initialSize];
 			values = new boolean[initialSize];
 		}

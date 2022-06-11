@@ -1881,7 +1881,7 @@ public class Long2ShortConcurrentOpenHashMap extends AbstractLong2ShortMap imple
 			long stamp = writeLock();
 			try
 			{
-				if(key == null || ((Long)key).longValue() == 0) {
+				if(key == null || (key instanceof Long && ((Long)key).longValue() == 0)) {
 					if(containsNull && Objects.equals(value, Short.valueOf(values[nullIndex]))) {
 						removeNullIndex();
 						return true;

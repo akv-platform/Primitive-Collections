@@ -1881,7 +1881,7 @@ public class Byte2DoubleConcurrentOpenHashMap extends AbstractByte2DoubleMap imp
 			long stamp = writeLock();
 			try
 			{
-				if(key == null || ((Byte)key).byteValue() == (byte)0) {
+				if(key == null || (key instanceof Byte && ((Byte)key).byteValue() == (byte)0)) {
 					if(containsNull && Objects.equals(value, Double.valueOf(values[nullIndex]))) {
 						removeNullIndex();
 						return true;

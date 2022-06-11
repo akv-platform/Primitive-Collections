@@ -1053,6 +1053,7 @@ public interface Long2ObjectMap<V> extends Map<Long, V>, Long2ObjectFunction<V>
 		 * @param initialSize the requested start capacity
 		 */
 		public BuilderCache(int initialSize) {
+			if(initialSize < 0) throw new IllegalStateException("Minimum Capacity is negative. This is not allowed");
 			keys = new long[initialSize];
 			values = (V[])new Object[initialSize];
 		}

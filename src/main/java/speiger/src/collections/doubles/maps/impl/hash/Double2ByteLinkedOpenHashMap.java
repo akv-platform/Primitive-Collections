@@ -423,7 +423,7 @@ public class Double2ByteLinkedOpenHashMap extends Double2ByteOpenHashMap impleme
 	@Override
 	public void clearAndTrim(int size) {
 		int request = Math.max(minCapacity, HashUtil.nextPowerOfTwo((int)Math.ceil(size / loadFactor)));
-		if(request >= size) {
+		if(request >= nullIndex) {
 			clear();
 			return;
 		}

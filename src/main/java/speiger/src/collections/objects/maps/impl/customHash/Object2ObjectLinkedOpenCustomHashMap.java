@@ -385,7 +385,7 @@ public class Object2ObjectLinkedOpenCustomHashMap<T, V> extends Object2ObjectOpe
 	@Override
 	public void clearAndTrim(int size) {
 		int request = Math.max(minCapacity, HashUtil.nextPowerOfTwo((int)Math.ceil(size / loadFactor)));
-		if(request >= size) {
+		if(request >= nullIndex) {
 			clear();
 			return;
 		}

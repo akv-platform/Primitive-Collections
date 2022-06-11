@@ -1881,7 +1881,7 @@ public class Float2LongConcurrentOpenHashMap extends AbstractFloat2LongMap imple
 			long stamp = writeLock();
 			try
 			{
-				if(key == null || Float.floatToIntBits(((Float)key).floatValue()) == 0) {
+				if(key == null || (key instanceof Float && Float.floatToIntBits(((Float)key).floatValue()) == 0)) {
 					if(containsNull && Objects.equals(value, Long.valueOf(values[nullIndex]))) {
 						removeNullIndex();
 						return true;

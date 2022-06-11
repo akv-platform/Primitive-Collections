@@ -1057,6 +1057,7 @@ public interface Double2FloatMap extends Map<Double, Float>, Double2FloatFunctio
 		 * @param initialSize the requested start capacity
 		 */
 		public BuilderCache(int initialSize) {
+			if(initialSize < 0) throw new IllegalStateException("Minimum Capacity is negative. This is not allowed");
 			keys = new double[initialSize];
 			values = new float[initialSize];
 		}

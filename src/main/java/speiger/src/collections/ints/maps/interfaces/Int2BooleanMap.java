@@ -1032,6 +1032,7 @@ public interface Int2BooleanMap extends Map<Integer, Boolean>, Int2BooleanFuncti
 		 * @param initialSize the requested start capacity
 		 */
 		public BuilderCache(int initialSize) {
+			if(initialSize < 0) throw new IllegalStateException("Minimum Capacity is negative. This is not allowed");
 			keys = new int[initialSize];
 			values = new boolean[initialSize];
 		}

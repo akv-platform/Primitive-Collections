@@ -1881,7 +1881,7 @@ public class Byte2LongConcurrentOpenHashMap extends AbstractByte2LongMap impleme
 			long stamp = writeLock();
 			try
 			{
-				if(key == null || ((Byte)key).byteValue() == (byte)0) {
+				if(key == null || (key instanceof Byte && ((Byte)key).byteValue() == (byte)0)) {
 					if(containsNull && Objects.equals(value, Long.valueOf(values[nullIndex]))) {
 						removeNullIndex();
 						return true;

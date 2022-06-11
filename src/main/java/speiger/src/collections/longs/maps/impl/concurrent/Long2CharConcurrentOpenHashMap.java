@@ -1881,7 +1881,7 @@ public class Long2CharConcurrentOpenHashMap extends AbstractLong2CharMap impleme
 			long stamp = writeLock();
 			try
 			{
-				if(key == null || ((Long)key).longValue() == 0) {
+				if(key == null || (key instanceof Long && ((Long)key).longValue() == 0)) {
 					if(containsNull && Objects.equals(value, Character.valueOf(values[nullIndex]))) {
 						removeNullIndex();
 						return true;

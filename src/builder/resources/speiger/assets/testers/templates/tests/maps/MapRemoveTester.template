@@ -38,7 +38,21 @@ public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapRemoveTester KEY_VALUE_GENERIC_TYPE
 		assertEquals("remove(present) should decrease a map's size by one.", initialSize - 1, getMap().size());
 		expectMissing(e0());
 	}
+
+#if !TYPE_OBJECT
+	enum WrongType {
+		INSTANCE;
+	}
 	
+#ignore
+	@MapFeature.Require(SUPPORTS_REMOVE)
+	@CollectionSize.Require(absent = ZERO)
+#endignore
+	public void testRemove_WrongType() {
+		assertFalse("Should return false if the wrong type is going to be removed", getMap().remove(WrongType.INSTANCE, v0()));
+	}
+	
+#endif
 #ignore
 	@MapFeature.Require(SUPPORTS_REMOVE)
 	@CollectionSize.Require(SEVERAL)
@@ -99,7 +113,7 @@ public class FILE_KEY_TYPE2FILE_VALUE_TYPEMapRemoveTester KEY_VALUE_GENERIC_TYPE
 			// success
 		}
 	}
-
+	
 #if !TYPE_OBJECT
 #ignore
 	@MapFeature.Require({ FAILS_FAST_ON_CONCURRENT_MODIFICATION, SUPPORTS_REMOVE })

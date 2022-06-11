@@ -1837,7 +1837,7 @@ public class Char2BooleanConcurrentOpenHashMap extends AbstractChar2BooleanMap i
 			long stamp = writeLock();
 			try
 			{
-				if(key == null || ((Character)key).charValue() == (char)0) {
+				if(key == null || (key instanceof Character && ((Character)key).charValue() == (char)0)) {
 					if(containsNull && Objects.equals(value, Boolean.valueOf(values[nullIndex]))) {
 						removeNullIndex();
 						return true;

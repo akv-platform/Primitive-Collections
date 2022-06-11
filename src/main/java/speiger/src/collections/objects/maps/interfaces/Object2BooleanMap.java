@@ -1168,6 +1168,7 @@ public interface Object2BooleanMap<T> extends Map<T, Boolean>, Object2BooleanFun
 		 * @param initialSize the requested start capacity
 		 */
 		public BuilderCache(int initialSize) {
+			if(initialSize < 0) throw new IllegalStateException("Minimum Capacity is negative. This is not allowed");
 			keys = (T[])new Object[initialSize];
 			values = new boolean[initialSize];
 		}

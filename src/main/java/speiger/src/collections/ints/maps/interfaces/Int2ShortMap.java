@@ -1057,6 +1057,7 @@ public interface Int2ShortMap extends Map<Integer, Short>, Int2ShortFunction
 		 * @param initialSize the requested start capacity
 		 */
 		public BuilderCache(int initialSize) {
+			if(initialSize < 0) throw new IllegalStateException("Minimum Capacity is negative. This is not allowed");
 			keys = new int[initialSize];
 			values = new short[initialSize];
 		}

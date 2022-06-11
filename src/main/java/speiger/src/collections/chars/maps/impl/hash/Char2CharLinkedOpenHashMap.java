@@ -418,7 +418,7 @@ public class Char2CharLinkedOpenHashMap extends Char2CharOpenHashMap implements 
 	@Override
 	public void clearAndTrim(int size) {
 		int request = Math.max(minCapacity, HashUtil.nextPowerOfTwo((int)Math.ceil(size / loadFactor)));
-		if(request >= size) {
+		if(request >= nullIndex) {
 			clear();
 			return;
 		}

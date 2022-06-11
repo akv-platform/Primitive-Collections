@@ -1814,7 +1814,7 @@ public class Long2ObjectConcurrentOpenHashMap<V> extends AbstractLong2ObjectMap<
 			long stamp = writeLock();
 			try
 			{
-				if(key == null || ((Long)key).longValue() == 0) {
+				if(key == null || (key instanceof Long && ((Long)key).longValue() == 0)) {
 					if(containsNull && Objects.equals(value, values[nullIndex])) {
 						removeNullIndex();
 						return true;

@@ -1057,6 +1057,7 @@ public interface Byte2LongMap extends Map<Byte, Long>, Byte2LongFunction
 		 * @param initialSize the requested start capacity
 		 */
 		public BuilderCache(int initialSize) {
+			if(initialSize < 0) throw new IllegalStateException("Minimum Capacity is negative. This is not allowed");
 			keys = new byte[initialSize];
 			values = new long[initialSize];
 		}

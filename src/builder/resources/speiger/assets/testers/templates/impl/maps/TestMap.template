@@ -1,149 +1,92 @@
 package speiger.src.testers.PACKAGE.impl.maps;
 
-#if TYPE_OBJECT
-import java.util.Objects;
-#endif
-import java.util.Arrays;
-import java.util.NoSuchElementException;
-
-import speiger.src.collections.PACKAGE.functions.function.FUNCTION;
-import speiger.src.collections.PACKAGE.functions.function.UNARY_OPERATOR;
 import speiger.src.collections.PACKAGE.maps.abstracts.ABSTRACT_MAP;
 import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
+import speiger.src.collections.PACKAGE.maps.impl.misc.ARRAY_MAP;
 import speiger.src.collections.objects.collections.ObjectIterator;
 import speiger.src.collections.objects.sets.AbstractObjectSet;
 import speiger.src.collections.objects.sets.ObjectSet;
-#if !SAME_TYPE
-import speiger.src.collections.VALUE_PACKAGE.functions.function.VALUE_UNARY_OPERATOR;
-#endif
-import speiger.src.collections.VALUE_PACKAGE.functions.VALUE_SUPPLIER;
 
 @SuppressWarnings("javadoc")
 public class SIMPLE_TEST_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE
 {
-	KEY_TYPE[] keys;
-	VALUE_TYPE[] values;
+	MAP KEY_VALUE_GENERIC_TYPE map;
 	
 	public SIMPLE_TEST_MAP(KEY_TYPE[] keys, VALUE_TYPE[] values) {
-		this.keys = NEW_KEY_ARRAY(keys.length);
-		this.values = NEW_VALUE_ARRAY(values.length);
-		int j = 0;
-		for(int i = 0;i<keys.length;i++) {
-			KEY_TYPE key = keys[i];
-			int index = findIndex(key);
-			if(index >= 0 && index < j) continue;
-			this.keys[j] = key;
-			this.values[j] = values[i]; 
-			j++;
-		}
-		if(j != this.keys.length) {
-			this.keys = Arrays.copyOf(this.keys, j); 
-			this.values = Arrays.copyOf(this.values, j);
-		}
+		map = new ARRAY_MAPKV_BRACES(keys, values);
 	}
 	
 	@Override
-	public VALUE_TYPE put(KEY_TYPE key, VALUE_TYPE value) { throw new UnsupportedOperationException(); }
+	public ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE setDefaultReturnValue(VALUE_TYPE v) {
+		map.setDefaultReturnValue(v);
+		return this;
+	}
+	
 	@Override
-	public VALUE_TYPE putIfAbsent(KEY_TYPE key, VALUE_TYPE value) { throw new UnsupportedOperationException(); }
+	public VALUE_TYPE getDefaultReturnValue() { return map.getDefaultReturnValue(); }
+	
+	@Override
+	public VALUE_TYPE put(KEY_TYPE key, VALUE_TYPE value) { return map.put(key, value); }
+	@Override
+	public VALUE_TYPE putIfAbsent(KEY_TYPE key, VALUE_TYPE value) { return map.putIfAbsent(key, value); }
 #if VALUE_PRIMITIVES
 	@Override
-	public VALUE_TYPE addTo(KEY_TYPE key, VALUE_TYPE value) { throw new UnsupportedOperationException(); }
+	public VALUE_TYPE addTo(KEY_TYPE key, VALUE_TYPE value) { return map.addTo(key, value); }
 	@Override
-	public VALUE_TYPE subFrom(KEY_TYPE key, VALUE_TYPE value) { throw new UnsupportedOperationException(); }
+	public VALUE_TYPE subFrom(KEY_TYPE key, VALUE_TYPE value) { return map.subFrom(key, value); }
 #endif
 	@Override
-	public VALUE_TYPE REMOVE_VALUE(KEY_TYPE key) { throw new UnsupportedOperationException(); }
+	public VALUE_TYPE REMOVE_VALUE(KEY_TYPE key) { return map.REMOVE_VALUE(key); }
 	@Override
-	public VALUE_TYPE REMOVE_VALUEOrDefault(KEY_TYPE key, VALUE_TYPE defaultValue) { throw new UnsupportedOperationException(); }
+	public VALUE_TYPE REMOVE_VALUEOrDefault(KEY_TYPE key, VALUE_TYPE defaultValue) { return map.REMOVE_VALUEOrDefault(key, defaultValue); }
 #if !TYPE_OBJECT || !VALUE_OBJECT
 	@Override
-	public boolean remove(KEY_TYPE key, VALUE_TYPE value) { throw new UnsupportedOperationException(); }
+	public boolean remove(KEY_TYPE key, VALUE_TYPE value) { return map.remove(key, value); }
 #endif
 	@Override
-	public CLASS_VALUE_TYPE remove(Object key) { throw new UnsupportedOperationException(); }
+	public CLASS_VALUE_TYPE remove(Object key) { return map.remove(key); }
 	@Override
-	public boolean remove(Object key, Object value) { throw new UnsupportedOperationException(); }
+	public boolean remove(Object key, Object value) { return map.remove(key, value); }
 	@Override
-	public void clear() { throw new UnsupportedOperationException(); }
+	public VALUE_TYPE GET_VALUE(KEY_TYPE key) { return map.GET_VALUE(key); }
+#if TYPE_OBJECT && !VALUE_OBJECT
 	@Override
-	public int size() { return keys.length; }
-	@Override
-	public VALUE_TYPE COMPUTE(KEY_TYPE key, UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
-	public VALUE_TYPE COMPUTE_IF_ABSENT(KEY_TYPE key, FUNCTION KEY_VALUE_GENERIC_TYPE mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
-	public VALUE_TYPE COMPUTE_IF_PRESENT(KEY_TYPE key, UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
-	public VALUE_TYPE SUPPLY_IF_ABSENT(KEY_TYPE key, VALUE_SUPPLIER VALUE_GENERIC_TYPE valueProvider) { throw new UnsupportedOperationException(); }
-	@Override
-	public VALUE_TYPE MERGE(KEY_TYPE key, VALUE_TYPE value, VALUE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
-	public void BULK_MERGE(MAP KEY_VALUE_GENERIC_TYPE m, VALUE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
-	public void REPLACE_VALUES(UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction) { throw new UnsupportedOperationException(); }
-	@Override
-	public void REPLACE_VALUES(MAP KEY_VALUE_GENERIC_TYPE m) { throw new UnsupportedOperationException(); }
-	@Override
-	public SIMPLE_TEST_MAP KEY_VALUE_GENERIC_TYPE copy() { return new SIMPLE_TEST_MAPKV_BRACES(keys, values); }
-	
-	@Override
-	public VALUE_TYPE GET_VALUE(KEY_TYPE key) {
-		int index = findIndex(key);
-		return index < 0 ? getDefaultReturnValue() : values[index];
-	}
-	
-#if TYPE_OBJECT
-	@Override
-	public VALUE_TYPE getOrDefault(Object key, VALUE_TYPE defaultValue) {
-		int index = findIndex(key);
-		return index < 0 ? defaultValue : values[index];
-	}
-	
-#else
-	@Override
-	public VALUE_TYPE getOrDefault(KEY_TYPE key, VALUE_TYPE defaultValue) {
-		int index = findIndex(key);
-		return index < 0 ? defaultValue : values[index];
-	}
-	
+	public VALUE_TYPE getOrDefault(KEY_TYPE key, VALUE_TYPE defaultValue) { return map.getOrDefault(key, defaultValue); }
 #endif
-	
-	private int findIndex(KEY_OBJECT_TYPE key) {
-		for(int i = 0;i<keys.length;i++) {
-			if(KEY_EQUALS(keys[i], key)) return i;
-		}
-		return -1;
-	}
-	
 	@Override
-	public ObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> ENTRY_SET()
-	{
+	public ObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> ENTRY_SET() {
 		return new AbstractObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE>() {
 			@Override
 			public ObjectIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> iterator() {
 				return new ObjectIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE>() {
-					int index = 0;
+					ObjectIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> iter = map.ENTRY_SET().iterator();
 					@Override
 					public boolean hasNext() {
-						return index < keys.length;
+						return iter.hasNext();
 					}
-
+					
 					@Override
 					public MAP.Entry KEY_VALUE_GENERIC_TYPE next() {
-						if(!hasNext()) throw new NoSuchElementException();
-						MAP.Entry KEY_VALUE_GENERIC_TYPE entry = new ABSTRACT_MAP.BasicEntryKV_BRACES(keys[index], values[index]);
-						index++;
-						return entry;
+						MAP.Entry KEY_VALUE_GENERIC_TYPE entry = iter.next();
+						return new ABSTRACT_MAP.BasicEntry KEY_VALUE_GENERIC_TYPE(entry.ENTRY_KEY(), entry.ENTRY_VALUE()) {
+							@Override
+							public VALUE_TYPE setValue(VALUE_TYPE value) {
+								return entry.setValue(value);
+							}
+						};
+					}
+					
+					@Override
+					public void remove() {
+						iter.remove();
 					}
 				};
 			}
 			
 			@Override
-			public void clear() { SIMPLE_TEST_MAP.this.clear(); }
-			@Override
-			public int size() { return SIMPLE_TEST_MAP.this.size(); }
+			public int size() {
+				return map.size();
+			}
 		};
 	}
-	
 }

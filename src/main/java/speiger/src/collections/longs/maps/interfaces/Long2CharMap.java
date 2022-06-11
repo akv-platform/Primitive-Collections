@@ -1057,6 +1057,7 @@ public interface Long2CharMap extends Map<Long, Character>, Long2CharFunction
 		 * @param initialSize the requested start capacity
 		 */
 		public BuilderCache(int initialSize) {
+			if(initialSize < 0) throw new IllegalStateException("Minimum Capacity is negative. This is not allowed");
 			keys = new long[initialSize];
 			values = new char[initialSize];
 		}

@@ -1056,6 +1056,7 @@ public interface Long2LongMap extends Map<Long, Long>, Long2LongFunction
 		 * @param initialSize the requested start capacity
 		 */
 		public BuilderCache(int initialSize) {
+			if(initialSize < 0) throw new IllegalStateException("Minimum Capacity is negative. This is not allowed");
 			keys = new long[initialSize];
 			values = new long[initialSize];
 		}

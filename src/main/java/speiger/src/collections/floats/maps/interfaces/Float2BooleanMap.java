@@ -1032,6 +1032,7 @@ public interface Float2BooleanMap extends Map<Float, Boolean>, Float2BooleanFunc
 		 * @param initialSize the requested start capacity
 		 */
 		public BuilderCache(int initialSize) {
+			if(initialSize < 0) throw new IllegalStateException("Minimum Capacity is negative. This is not allowed");
 			keys = new float[initialSize];
 			values = new boolean[initialSize];
 		}

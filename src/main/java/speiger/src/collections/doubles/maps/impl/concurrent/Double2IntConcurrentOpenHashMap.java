@@ -1881,7 +1881,7 @@ public class Double2IntConcurrentOpenHashMap extends AbstractDouble2IntMap imple
 			long stamp = writeLock();
 			try
 			{
-				if(key == null || Double.doubleToLongBits(((Double)key).doubleValue()) == 0) {
+				if(key == null || (key instanceof Double && Double.doubleToLongBits(((Double)key).doubleValue()) == 0)) {
 					if(containsNull && Objects.equals(value, Integer.valueOf(values[nullIndex]))) {
 						removeNullIndex();
 						return true;

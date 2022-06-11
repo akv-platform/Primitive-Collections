@@ -423,7 +423,7 @@ public class Float2ShortLinkedOpenHashMap extends Float2ShortOpenHashMap impleme
 	@Override
 	public void clearAndTrim(int size) {
 		int request = Math.max(minCapacity, HashUtil.nextPowerOfTwo((int)Math.ceil(size / loadFactor)));
-		if(request >= size) {
+		if(request >= nullIndex) {
 			clear();
 			return;
 		}

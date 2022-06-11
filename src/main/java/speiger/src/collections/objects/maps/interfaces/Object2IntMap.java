@@ -1193,6 +1193,7 @@ public interface Object2IntMap<T> extends Map<T, Integer>, Object2IntFunction<T>
 		 * @param initialSize the requested start capacity
 		 */
 		public BuilderCache(int initialSize) {
+			if(initialSize < 0) throw new IllegalStateException("Minimum Capacity is negative. This is not allowed");
 			keys = (T[])new Object[initialSize];
 			values = new int[initialSize];
 		}

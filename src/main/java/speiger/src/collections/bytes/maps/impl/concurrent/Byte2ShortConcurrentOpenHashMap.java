@@ -1881,7 +1881,7 @@ public class Byte2ShortConcurrentOpenHashMap extends AbstractByte2ShortMap imple
 			long stamp = writeLock();
 			try
 			{
-				if(key == null || ((Byte)key).byteValue() == (byte)0) {
+				if(key == null || (key instanceof Byte && ((Byte)key).byteValue() == (byte)0)) {
 					if(containsNull && Objects.equals(value, Short.valueOf(values[nullIndex]))) {
 						removeNullIndex();
 						return true;

@@ -1881,7 +1881,7 @@ public class Short2IntConcurrentOpenHashMap extends AbstractShort2IntMap impleme
 			long stamp = writeLock();
 			try
 			{
-				if(key == null || ((Short)key).shortValue() == (short)0) {
+				if(key == null || (key instanceof Short && ((Short)key).shortValue() == (short)0)) {
 					if(containsNull && Objects.equals(value, Integer.valueOf(values[nullIndex]))) {
 						removeNullIndex();
 						return true;

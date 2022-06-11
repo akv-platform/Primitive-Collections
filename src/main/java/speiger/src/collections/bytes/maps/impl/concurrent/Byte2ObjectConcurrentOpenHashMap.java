@@ -1814,7 +1814,7 @@ public class Byte2ObjectConcurrentOpenHashMap<V> extends AbstractByte2ObjectMap<
 			long stamp = writeLock();
 			try
 			{
-				if(key == null || ((Byte)key).byteValue() == (byte)0) {
+				if(key == null || (key instanceof Byte && ((Byte)key).byteValue() == (byte)0)) {
 					if(containsNull && Objects.equals(value, values[nullIndex])) {
 						removeNullIndex();
 						return true;

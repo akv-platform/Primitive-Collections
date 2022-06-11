@@ -3,6 +3,9 @@ package speiger.src.testers.PACKAGE.tests.maps;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
+#if VALUE_OBJECT && !TYPE_OBJECT
+import java.util.Objects;
+#endif
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.IntFunction;
@@ -15,6 +18,10 @@ import junit.framework.TestCase;
 
 #if !VALUE_OBJECT
 import speiger.src.collections.VALUE_PACKAGE.utils.VALUE_ARRAYS;
+#endif
+#if !TYPE_OBJECT
+import speiger.src.collections.PACKAGE.maps.impl.hash.HASH_MAP;
+import speiger.src.collections.PACKAGE.maps.impl.customHash.CUSTOM_HASH_MAP;
 #endif
 import speiger.src.collections.PACKAGE.maps.impl.hash.LINKED_HASH_MAP;
 import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
@@ -171,6 +178,47 @@ public abstract class FILE_KEY_TYPE2FILE_VALUE_TYPEMapConstructorTester KEY_VALU
 		}
 	}
 	
+#if !TYPE_OBJECT
+	public void testHashCollisions() {
+		if(simpleConstructor == null) return;
+		MAP KEY_VALUE_GENERIC_TYPE map = simpleConstructor.get();
+		if(map instanceof HASH_MAP) {
+			fillMap(map);
+			for(int i = 2;i<100;i+=16) {
+				Assert.assertTrue(VALUE_EQUALS(values[i], map.remove(keys[i])));
+			}
+			fillMap(map);
+			for(int i = 2;i<100;i+=16) {
+				Assert.assertTrue(map.remove(keys[i], values[i]));
+			}
+			fillMap(map);
+			for(int i = 2;i<100;i+=16) {
+				Assert.assertTrue(map.remove(KEY_TO_OBJ(keys[i]), VALUE_TO_OBJ(values[i])));
+			}
+		}
+		else if(map instanceof CUSTOM_HASH_MAP) {
+			fillMap(map);
+			for(int i = 2;i<100;i+=16) {
+				Assert.assertTrue(VALUE_EQUALS(values[i], map.remove(keys[i])));
+			}
+			fillMap(map);
+			for(int i = 2;i<100;i+=16) {
+				Assert.assertTrue(map.remove(keys[i], values[i]));
+			}
+			fillMap(map);
+			for(int i = 2;i<100;i+=16) {
+				Assert.assertTrue(map.remove(KEY_TO_OBJ(keys[i]), VALUE_TO_OBJ(values[i])));
+			}
+		}
+	}
+	
+	private void fillMap(MAP KEY_VALUE_GENERIC_TYPE map) {
+		for(int i = 2;i<100;i+=16) {
+			map.put(keys[i], values[i]);
+		}
+	}
+	
+#endif		
 	@Test
 	public void testSizeConstructor_InvalidSize() {
 		if(sizeConstructor == null) return;

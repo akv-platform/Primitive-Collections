@@ -1057,6 +1057,7 @@ public interface Float2ByteMap extends Map<Float, Byte>, Float2ByteFunction
 		 * @param initialSize the requested start capacity
 		 */
 		public BuilderCache(int initialSize) {
+			if(initialSize < 0) throw new IllegalStateException("Minimum Capacity is negative. This is not allowed");
 			keys = new float[initialSize];
 			values = new byte[initialSize];
 		}

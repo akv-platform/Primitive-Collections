@@ -425,7 +425,7 @@ public class Byte2BooleanLinkedOpenCustomHashMap extends Byte2BooleanOpenCustomH
 	@Override
 	public void clearAndTrim(int size) {
 		int request = Math.max(minCapacity, HashUtil.nextPowerOfTwo((int)Math.ceil(size / loadFactor)));
-		if(request >= size) {
+		if(request >= nullIndex) {
 			clear();
 			return;
 		}

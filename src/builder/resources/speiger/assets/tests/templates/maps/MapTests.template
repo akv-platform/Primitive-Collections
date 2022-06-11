@@ -105,6 +105,18 @@ public class MAP_TESTS extends TestCase
 		constructors.addTest(new TestSuite(MAP_CONSTRUCTOR_TESTS.AVLTreeMap.class));
 		constructors.addTest(new TestSuite(MAP_CONSTRUCTOR_TESTS.RBTreeMapComparator.class));
 		constructors.addTest(new TestSuite(MAP_CONSTRUCTOR_TESTS.AVLTreeMapComparator.class));
+		
+		constructors.addTest(new TestSuite(MAP_CONSTRUCTOR_TESTS.HashMapBuilder.class));
+		constructors.addTest(new TestSuite(MAP_CONSTRUCTOR_TESTS.LinkedHashMapBuilder.class));
+		constructors.addTest(new TestSuite(MAP_CONSTRUCTOR_TESTS.CustomHashMapBuilder.class));
+		constructors.addTest(new TestSuite(MAP_CONSTRUCTOR_TESTS.LinkedCustomHashMapBuilder.class));
+		constructors.addTest(new TestSuite(MAP_CONSTRUCTOR_TESTS.ImmutableHashMapBuilder.class));
+		constructors.addTest(new TestSuite(MAP_CONSTRUCTOR_TESTS.ConcurrentHashMapBuilder.class));
+		constructors.addTest(new TestSuite(MAP_CONSTRUCTOR_TESTS.ArrayMapBuilder.class));
+		constructors.addTest(new TestSuite(MAP_CONSTRUCTOR_TESTS.RBTreeMapBuilder.class));
+		constructors.addTest(new TestSuite(MAP_CONSTRUCTOR_TESTS.AVLTreeMapBuilder.class));
+		constructors.addTest(new TestSuite(MAP_CONSTRUCTOR_TESTS.RBTreeMapComparatorBuilder.class));
+		constructors.addTest(new TestSuite(MAP_CONSTRUCTOR_TESTS.AVLTreeMapComparatorBuilder.class));
 		suite.addTest(constructors);
 	}
 	
@@ -129,7 +141,7 @@ public class MAP_TESTS extends TestCase
 		suite.addTest(orderedMapSuite("UnmodifiableORDERED_MAP", (K, V) -> new LINKED_HASH_MAPKV_BRACES(K, V).unmodifiable(), getImmutableFeatures(), -1));
 		suite.addTest(mapSuite("EmptyMAP", (K, V) -> MAPS.empty(), getEmptyFeatures(), 0, false));
 		suite.addTest(mapSuite("SingletonMAP", (K, V) -> MAPS.singleton(K[0], V[0]), getEmptyFeatures(), 1, false));
-		suite.addTest(mapSuite("AbstractMap", SIMPLE_TEST_MAP::new, getImmutableFeatures(), -1, false));
+		suite.addTest(mapSuite("AbstractMap", SIMPLE_TEST_MAP::new, getTestFeatures(), -1, false));
 	}
 	
 #if TYPE_OBJECT
@@ -314,6 +326,10 @@ public class MAP_TESTS extends TestCase
 	
 	private static Collection<Feature<?>> getFeatures() {
 		return Arrays.asList(MapFeature.GENERAL_PURPOSE, CollectionFeature.SUPPORTS_ITERATOR_REMOVE, SpecialFeature.COPYING, SpecialFeature.MODIFIABLE);
+	}
+	
+	private static Collection<Feature<?>> getTestFeatures() {
+		return Arrays.asList(MapFeature.GENERAL_PURPOSE, CollectionFeature.SUPPORTS_ITERATOR_REMOVE, SpecialFeature.MODIFIABLE);
 	}
 	
 	private static Collection<Feature<?>> getEmptyFeatures() {

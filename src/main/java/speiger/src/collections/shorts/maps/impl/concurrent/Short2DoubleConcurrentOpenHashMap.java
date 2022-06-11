@@ -1881,7 +1881,7 @@ public class Short2DoubleConcurrentOpenHashMap extends AbstractShort2DoubleMap i
 			long stamp = writeLock();
 			try
 			{
-				if(key == null || ((Short)key).shortValue() == (short)0) {
+				if(key == null || (key instanceof Short && ((Short)key).shortValue() == (short)0)) {
 					if(containsNull && Objects.equals(value, Double.valueOf(values[nullIndex]))) {
 						removeNullIndex();
 						return true;

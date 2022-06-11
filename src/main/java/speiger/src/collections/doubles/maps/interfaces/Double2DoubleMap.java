@@ -1056,6 +1056,7 @@ public interface Double2DoubleMap extends Map<Double, Double>, Double2DoubleFunc
 		 * @param initialSize the requested start capacity
 		 */
 		public BuilderCache(int initialSize) {
+			if(initialSize < 0) throw new IllegalStateException("Minimum Capacity is negative. This is not allowed");
 			keys = new double[initialSize];
 			values = new double[initialSize];
 		}

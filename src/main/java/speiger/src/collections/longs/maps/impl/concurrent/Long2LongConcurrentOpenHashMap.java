@@ -1876,7 +1876,7 @@ public class Long2LongConcurrentOpenHashMap extends AbstractLong2LongMap impleme
 			long stamp = writeLock();
 			try
 			{
-				if(key == null || ((Long)key).longValue() == 0) {
+				if(key == null || (key instanceof Long && ((Long)key).longValue() == 0)) {
 					if(containsNull && Objects.equals(value, Long.valueOf(values[nullIndex]))) {
 						removeNullIndex();
 						return true;
