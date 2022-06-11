@@ -123,7 +123,7 @@ public class LINKED_CUSTOM_HASH_SET KEY_GENERIC_TYPE extends CUSTOM_HASH_SET KEY
 	 * @throws IllegalStateException if offset and length causes to step outside of the arrays range
 	 */
 	public LINKED_CUSTOM_HASH_SET(KEY_TYPE[] array, int offset, int length, float loadFactor, STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
-		this(length < 0 ? 0 : length, strategy);
+		this(length, strategy);
 		SanityChecks.checkArrayCapacity(array.length, offset, length);
 		for(int i = 0;i<length;i++) add(array[offset+i]);
 	}
