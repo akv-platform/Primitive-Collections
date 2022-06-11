@@ -868,16 +868,12 @@ public class LongAVLTreeSet extends AbstractLongSet implements LongNavigableSet
 		
 		@Override
 		public void setDefaultMaxValue(long value) { set.setDefaultMaxValue(value); }
-		
 		@Override
 		public long getDefaultMaxValue() { return set.getDefaultMaxValue(); }
-		
 		@Override
 		public void setDefaultMinValue(long value) { set.setDefaultMinValue(value); }
-		
 		@Override
 		public long getDefaultMinValue() { return set.getDefaultMinValue(); }
-		
 		@Override
 		public abstract	LongBidirectionalIterator iterator();
 		

@@ -929,16 +929,12 @@ public class FloatRBTreeSet extends AbstractFloatSet implements FloatNavigableSe
 		
 		@Override
 		public void setDefaultMaxValue(float value) { set.setDefaultMaxValue(value); }
-		
 		@Override
 		public float getDefaultMaxValue() { return set.getDefaultMaxValue(); }
-		
 		@Override
 		public void setDefaultMinValue(float value) { set.setDefaultMinValue(value); }
-		
 		@Override
 		public float getDefaultMinValue() { return set.getDefaultMinValue(); }
-		
 		@Override
 		public abstract	FloatBidirectionalIterator iterator();
 		

@@ -868,16 +868,12 @@ public class CharAVLTreeSet extends AbstractCharSet implements CharNavigableSet
 		
 		@Override
 		public void setDefaultMaxValue(char value) { set.setDefaultMaxValue(value); }
-		
 		@Override
 		public char getDefaultMaxValue() { return set.getDefaultMaxValue(); }
-		
 		@Override
 		public void setDefaultMinValue(char value) { set.setDefaultMinValue(value); }
-		
 		@Override
 		public char getDefaultMinValue() { return set.getDefaultMinValue(); }
-		
 		@Override
 		public abstract	CharBidirectionalIterator iterator();
 		

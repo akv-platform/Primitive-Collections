@@ -868,16 +868,12 @@ public class IntAVLTreeSet extends AbstractIntSet implements IntNavigableSet
 		
 		@Override
 		public void setDefaultMaxValue(int value) { set.setDefaultMaxValue(value); }
-		
 		@Override
 		public int getDefaultMaxValue() { return set.getDefaultMaxValue(); }
-		
 		@Override
 		public void setDefaultMinValue(int value) { set.setDefaultMinValue(value); }
-		
 		@Override
 		public int getDefaultMinValue() { return set.getDefaultMinValue(); }
-		
 		@Override
 		public abstract	IntBidirectionalIterator iterator();
 		

@@ -859,9 +859,7 @@ public class ObjectAVLTreeSet<T> extends AbstractObjectSet<T> implements ObjectN
 		}
 		
 		public T getDefaultMaxValue() { return null; }
-		
 		public T getDefaultMinValue() { return null; }
-		
 		@Override
 		public abstract	ObjectBidirectionalIterator<T> iterator();
 		

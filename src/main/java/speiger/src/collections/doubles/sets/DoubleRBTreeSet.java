@@ -929,16 +929,12 @@ public class DoubleRBTreeSet extends AbstractDoubleSet implements DoubleNavigabl
 		
 		@Override
 		public void setDefaultMaxValue(double value) { set.setDefaultMaxValue(value); }
-		
 		@Override
 		public double getDefaultMaxValue() { return set.getDefaultMaxValue(); }
-		
 		@Override
 		public void setDefaultMinValue(double value) { set.setDefaultMinValue(value); }
-		
 		@Override
 		public double getDefaultMinValue() { return set.getDefaultMinValue(); }
-		
 		@Override
 		public abstract	DoubleBidirectionalIterator iterator();
 		

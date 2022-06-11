@@ -929,16 +929,12 @@ public class ByteRBTreeSet extends AbstractByteSet implements ByteNavigableSet
 		
 		@Override
 		public void setDefaultMaxValue(byte value) { set.setDefaultMaxValue(value); }
-		
 		@Override
 		public byte getDefaultMaxValue() { return set.getDefaultMaxValue(); }
-		
 		@Override
 		public void setDefaultMinValue(byte value) { set.setDefaultMinValue(value); }
-		
 		@Override
 		public byte getDefaultMinValue() { return set.getDefaultMinValue(); }
-		
 		@Override
 		public abstract	ByteBidirectionalIterator iterator();
 		

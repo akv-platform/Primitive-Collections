@@ -868,16 +868,12 @@ public class ShortAVLTreeSet extends AbstractShortSet implements ShortNavigableS
 		
 		@Override
 		public void setDefaultMaxValue(short value) { set.setDefaultMaxValue(value); }
-		
 		@Override
 		public short getDefaultMaxValue() { return set.getDefaultMaxValue(); }
-		
 		@Override
 		public void setDefaultMinValue(short value) { set.setDefaultMinValue(value); }
-		
 		@Override
 		public short getDefaultMinValue() { return set.getDefaultMinValue(); }
-		
 		@Override
 		public abstract	ShortBidirectionalIterator iterator();
 		
