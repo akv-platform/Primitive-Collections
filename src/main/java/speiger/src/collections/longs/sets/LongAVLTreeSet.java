@@ -792,7 +792,7 @@ public class LongAVLTreeSet extends AbstractLongSet implements LongNavigableSet
 		public LongNavigableSet subSet(long fromElement, boolean fromInclusive, long toElement, boolean toInclusive) {
 			if(!inRange(fromElement, fromInclusive)) throw new IllegalArgumentException("fromElement out of range");
 			if(!inRange(toElement, toInclusive)) throw new IllegalArgumentException("toElement out of range");
-			return new DescendingSubSet(set, false, fromElement, fromInclusive, false, toElement, toInclusive);
+			return new DescendingSubSet(set, false, toElement, toInclusive, false, fromElement, fromInclusive);
 		}
 		
 		@Override

@@ -853,7 +853,7 @@ public class FloatRBTreeSet extends AbstractFloatSet implements FloatNavigableSe
 		public FloatNavigableSet subSet(float fromElement, boolean fromInclusive, float toElement, boolean toInclusive) {
 			if(!inRange(fromElement, fromInclusive)) throw new IllegalArgumentException("fromElement out of range");
 			if(!inRange(toElement, toInclusive)) throw new IllegalArgumentException("toElement out of range");
-			return new DescendingSubSet(set, false, fromElement, fromInclusive, false, toElement, toInclusive);
+			return new DescendingSubSet(set, false, toElement, toInclusive, false, fromElement, fromInclusive);
 		}
 		
 		@Override

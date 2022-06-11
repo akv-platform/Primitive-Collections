@@ -4,6 +4,7 @@ import org.junit.Ignore;
 
 #ignore
 import static com.google.common.collect.testing.features.CollectionFeature.SUPPORTS_REMOVE;
+import static com.google.common.collect.testing.features.CollectionFeature.DESCENDING_VIEW;
 import static com.google.common.collect.testing.features.CollectionSize.ONE;
 import static com.google.common.collect.testing.features.CollectionSize.SEVERAL;
 import static com.google.common.collect.testing.features.CollectionSize.ZERO;
@@ -45,7 +46,7 @@ public class FILE_KEY_TYPESortedSetNaviationTester KEY_GENERIC_TYPE extends ABST
 	}
 	
 #ignore
-	@CollectionFeature.Require(SUPPORTS_REMOVE)
+	@CollectionFeature.Require(value = SUPPORTS_REMOVE, absent = DESCENDING_VIEW)
 	@CollectionSize.Require(ZERO)
 #endignore
 	public void testEmptySetPollFirst() {
@@ -55,9 +56,21 @@ public class FILE_KEY_TYPESortedSetNaviationTester KEY_GENERIC_TYPE extends ABST
 		assertEquals(CLASS_TYPE.MAX_VALUE, sortedSet.POLL_FIRST_KEY());
 #endif
 	}
+
+#ignore
+	@CollectionFeature.Require({SUPPORTS_REMOVE, DESCENDING_VIEW})
+	@CollectionSize.Require(ZERO)
+#endignore
+	public void testEmptySetPollFirstDecending() {
+#if TYPE_OBJECT
+		assertEquals(null, sortedSet.POLL_FIRST_KEY());
+#else
+		assertEquals(CLASS_TYPE.MIN_VALUE, sortedSet.POLL_FIRST_KEY());
+#endif
+	}
 	
 #ignore
-	@CollectionFeature.Require(SUPPORTS_REMOVE)
+	@CollectionFeature.Require(value = SUPPORTS_REMOVE, absent = DESCENDING_VIEW)
 	@CollectionSize.Require(ZERO)
 #endignore
 	public void testEmptySetPollLast() {
@@ -65,6 +78,18 @@ public class FILE_KEY_TYPESortedSetNaviationTester KEY_GENERIC_TYPE extends ABST
 		assertEquals(null, sortedSet.POLL_LAST_KEY());
 #else
 		assertEquals(CLASS_TYPE.MIN_VALUE, sortedSet.POLL_LAST_KEY());
+#endif
+	}
+
+#ignore
+	@CollectionFeature.Require({SUPPORTS_REMOVE, DESCENDING_VIEW})
+	@CollectionSize.Require(ZERO)
+#endignore
+	public void testEmptySetPollLastDecending() {
+#if TYPE_OBJECT
+		assertEquals(null, sortedSet.POLL_LAST_KEY());
+#else
+		assertEquals(CLASS_TYPE.MAX_VALUE, sortedSet.POLL_LAST_KEY());
 #endif
 	}
 	
