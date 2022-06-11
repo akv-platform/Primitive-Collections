@@ -215,6 +215,7 @@ public class GlobalVariables
 		addClassMapper("RB_TREE_SET", "RBTreeSet");
 		addClassMapper("AVL_TREE_SET", "AVLTreeSet");
 		addClassMapper("ARRAY_SET", "ArraySet");
+		addAbstractBiMapper("TEST_MAP", "Test%sMap", "2");
 		
 		//Final UnitTest Classes
 		addAbstractMapper("MINIMAL_COLLECTION", "Minimal%sCollection");

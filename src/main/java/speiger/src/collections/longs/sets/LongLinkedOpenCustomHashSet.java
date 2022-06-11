@@ -268,7 +268,7 @@ public class LongLinkedOpenCustomHashSet extends LongOpenCustomHashSet implement
 	
 	@Override
 	public boolean moveToFirst(long o) {
-		if(strategy.equals(firstLong(), o)) return false;
+		if(isEmpty() || strategy.equals(firstLong(), o)) return false;
 		if(strategy.equals(o, 0L)) {
 			if(containsNull) {
 				moveToFirstIndex(nullIndex);
@@ -290,7 +290,7 @@ public class LongLinkedOpenCustomHashSet extends LongOpenCustomHashSet implement
 	
 	@Override
 	public boolean moveToLast(long o) {
-		if(strategy.equals(lastLong(), o)) return false;
+		if(isEmpty() || strategy.equals(lastLong(), o)) return false;
 		if(strategy.equals(o, 0L)) {
 			if(containsNull) {
 				moveToLastIndex(nullIndex);
@@ -356,8 +356,7 @@ public class LongLinkedOpenCustomHashSet extends LongOpenCustomHashSet implement
 	public long pollFirstLong() {
 		if(size == 0) throw new NoSuchElementException();
 		int pos = firstIndex;
-		firstIndex = (int)links[pos];
-		if(0 <= firstIndex) links[firstIndex] |= 0xFFFFFFFF00000000L;
+		onNodeRemoved(pos);
 		long result = keys[pos];
 		size--;
 		if(strategy.equals(result, 0L)) {
@@ -379,8 +378,7 @@ public class LongLinkedOpenCustomHashSet extends LongOpenCustomHashSet implement
 	public long pollLastLong() {
 		if(size == 0) throw new NoSuchElementException();
 		int pos = lastIndex;
-		lastIndex = (int)(links[pos] >>> 32);
-		if(0 <= lastIndex) links[lastIndex] |= 0xFFFFFFFFL;
+		onNodeRemoved(pos);
 		long result = keys[pos];
 		size--;
 		if(strategy.equals(result, 0L)) {

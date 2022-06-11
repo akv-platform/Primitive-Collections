@@ -237,7 +237,7 @@ public class CharLinkedOpenHashSet extends CharOpenHashSet implements CharOrdere
 	
 	@Override
 	public boolean moveToFirst(char o) {
-		if(firstChar() == o) return false;
+		if(isEmpty() || firstChar() == o) return false;
 		if(o == (char)0) {
 			if(containsNull) {
 				moveToFirstIndex(nullIndex);
@@ -259,7 +259,7 @@ public class CharLinkedOpenHashSet extends CharOpenHashSet implements CharOrdere
 	
 	@Override
 	public boolean moveToLast(char o) {
-		if(lastChar() == o) return false;
+		if(isEmpty() || lastChar() == o) return false;
 		if(o == (char)0) {
 			if(containsNull) {
 				moveToLastIndex(nullIndex);
@@ -325,8 +325,7 @@ public class CharLinkedOpenHashSet extends CharOpenHashSet implements CharOrdere
 	public char pollFirstChar() {
 		if(size == 0) throw new NoSuchElementException();
 		int pos = firstIndex;
-		firstIndex = (int)links[pos];
-		if(0 <= firstIndex) links[firstIndex] |= 0xFFFFFFFF00000000L;
+		onNodeRemoved(pos);
 		char result = keys[pos];
 		size--;
 		if(result == (char)0) {
@@ -348,8 +347,7 @@ public class CharLinkedOpenHashSet extends CharOpenHashSet implements CharOrdere
 	public char pollLastChar() {
 		if(size == 0) throw new NoSuchElementException();
 		int pos = lastIndex;
-		lastIndex = (int)(links[pos] >>> 32);
-		if(0 <= lastIndex) links[lastIndex] |= 0xFFFFFFFFL;
+		onNodeRemoved(pos);
 		char result = keys[pos];
 		size--;
 		if(result == (char)0) {

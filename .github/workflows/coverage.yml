@@ -5,19 +5,6 @@ on:
     branches: [ debug ]
 jobs:
   build:
-    strategy:
-      fail-fast: false
-      matrix:
-        tests:
-          - testBooleans
-          - testBytes
-          - testShorts
-          - testChars
-          - testInts
-          - testLongs
-          - testFloats
-          - testDoubles
-          - testObjects
     name: Code Quality Check
     runs-on: ubuntu-latest
     steps:
@@ -35,7 +22,7 @@ jobs:
       - name: Build and analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-        run: ./gradlew ${{ matrix.tests }} test jacocoTestReport --info
+        run: ./gradlew test jacocoTestReport --info
       - name: Upload to CodeCov
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

@@ -8,7 +8,7 @@ public class Tests {
 	
 	public static Test suite() {
 		TestSuite suite = new TestSuite("Tests");
-//		TestSuite lists = new TestSuite("Lists");
+		TestSuite lists = new TestSuite("Lists");
 //		lists.addTest(BooleanListTests.suite());
 //		lists.addTest(ByteListTests.suite());
 //		lists.addTest(ShortListTests.suite());
@@ -18,8 +18,8 @@ public class Tests {
 //		lists.addTest(ObjectListTests.suite());
 //		lists.addTest(FloatListTests.suite());
 //		lists.addTest(DoubleListTests.suite());
-//		suite.addTest(lists);
-//		TestSuite sets = new TestSuite("Sets");
+		suite.addTest(lists);
+		TestSuite sets = new TestSuite("Sets");
 //		sets.addTest(ByteSetTests.suite());
 //		sets.addTest(ShortSetTests.suite());
 //		sets.addTest(CharSetTests.suite());
@@ -28,7 +28,7 @@ public class Tests {
 //		sets.addTest(ObjectSetTests.suite());
 //		sets.addTest(FloatSetTests.suite());
 //		sets.addTest(DoubleSetTests.suite());
-//		suite.addTest(sets);
+		suite.addTest(sets);
 		TestSuite maps = new TestSuite("Maps");
 		System.out.println("Start");
 		byteSuite(maps);

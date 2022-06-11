@@ -325,8 +325,7 @@ public class Double2ObjectLinkedOpenHashMap<V> extends Double2ObjectOpenHashMap<
 	public double pollFirstDoubleKey() {
 		if(size == 0) throw new NoSuchElementException();
 		int pos = firstIndex;
-		firstIndex = (int)links[pos];
-		if(0 <= firstIndex) links[firstIndex] |= 0xFFFFFFFF00000000L;
+		onNodeRemoved(pos);
 		double result = keys[pos];
 		size--;
 		if(Double.doubleToLongBits(result) == 0) {
@@ -349,8 +348,7 @@ public class Double2ObjectLinkedOpenHashMap<V> extends Double2ObjectOpenHashMap<
 	public double pollLastDoubleKey() {
 		if(size == 0) throw new NoSuchElementException();
 		int pos = lastIndex;
-		lastIndex = (int)(links[pos] >>> 32);
-		if(0 <= lastIndex) links[lastIndex] |= 0xFFFFFFFFL;
+		onNodeRemoved(pos);
 		double result = keys[pos];
 		size--;
 		if(Double.doubleToLongBits(result) == 0) {

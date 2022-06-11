@@ -149,7 +149,7 @@ public class LongArraySet extends AbstractLongSet implements LongOrderedSet
 		}
 		else if(index != size - 1) {
 			o = data[index];
-			System.arraycopy(data, index+1, data, index, size - index);
+			System.arraycopy(data, index+1, data, index, size - index - 1);
 			data[size-1] = o;
 		}
 		return false;

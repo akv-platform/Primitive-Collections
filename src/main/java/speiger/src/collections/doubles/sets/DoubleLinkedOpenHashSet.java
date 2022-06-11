@@ -237,7 +237,7 @@ public class DoubleLinkedOpenHashSet extends DoubleOpenHashSet implements Double
 	
 	@Override
 	public boolean moveToFirst(double o) {
-		if(Double.doubleToLongBits(firstDouble()) == Double.doubleToLongBits(o)) return false;
+		if(isEmpty() || Double.doubleToLongBits(firstDouble()) == Double.doubleToLongBits(o)) return false;
 		if(Double.doubleToLongBits(o) == 0) {
 			if(containsNull) {
 				moveToFirstIndex(nullIndex);
@@ -259,7 +259,7 @@ public class DoubleLinkedOpenHashSet extends DoubleOpenHashSet implements Double
 	
 	@Override
 	public boolean moveToLast(double o) {
-		if(Double.doubleToLongBits(lastDouble()) == Double.doubleToLongBits(o)) return false;
+		if(isEmpty() || Double.doubleToLongBits(lastDouble()) == Double.doubleToLongBits(o)) return false;
 		if(Double.doubleToLongBits(o) == 0) {
 			if(containsNull) {
 				moveToLastIndex(nullIndex);
@@ -325,8 +325,7 @@ public class DoubleLinkedOpenHashSet extends DoubleOpenHashSet implements Double
 	public double pollFirstDouble() {
 		if(size == 0) throw new NoSuchElementException();
 		int pos = firstIndex;
-		firstIndex = (int)links[pos];
-		if(0 <= firstIndex) links[firstIndex] |= 0xFFFFFFFF00000000L;
+		onNodeRemoved(pos);
 		double result = keys[pos];
 		size--;
 		if(Double.doubleToLongBits(result) == 0) {
@@ -348,8 +347,7 @@ public class DoubleLinkedOpenHashSet extends DoubleOpenHashSet implements Double
 	public double pollLastDouble() {
 		if(size == 0) throw new NoSuchElementException();
 		int pos = lastIndex;
-		lastIndex = (int)(links[pos] >>> 32);
-		if(0 <= lastIndex) links[lastIndex] |= 0xFFFFFFFFL;
+		onNodeRemoved(pos);
 		double result = keys[pos];
 		size--;
 		if(Double.doubleToLongBits(result) == 0) {

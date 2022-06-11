@@ -244,7 +244,7 @@ public class ObjectLinkedOpenCustomHashSet<T> extends ObjectOpenCustomHashSet<T>
 	
 	@Override
 	public boolean moveToFirst(T o) {
-		if(strategy.equals(first(), o)) return false;
+		if(isEmpty() || strategy.equals(first(), o)) return false;
 		if(strategy.equals(o, null)) {
 			if(containsNull) {
 				moveToFirstIndex(nullIndex);
@@ -266,7 +266,7 @@ public class ObjectLinkedOpenCustomHashSet<T> extends ObjectOpenCustomHashSet<T>
 	
 	@Override
 	public boolean moveToLast(T o) {
-		if(strategy.equals(last(), o)) return false;
+		if(isEmpty() || strategy.equals(last(), o)) return false;
 		if(strategy.equals(o, null)) {
 			if(containsNull) {
 				moveToLastIndex(nullIndex);
@@ -332,8 +332,7 @@ public class ObjectLinkedOpenCustomHashSet<T> extends ObjectOpenCustomHashSet<T>
 	public T pollFirst() {
 		if(size == 0) throw new NoSuchElementException();
 		int pos = firstIndex;
-		firstIndex = (int)links[pos];
-		if(0 <= firstIndex) links[firstIndex] |= 0xFFFFFFFF00000000L;
+		onNodeRemoved(pos);
 		T result = keys[pos];
 		size--;
 		if(strategy.equals(result, null)) {
@@ -355,8 +354,7 @@ public class ObjectLinkedOpenCustomHashSet<T> extends ObjectOpenCustomHashSet<T>
 	public T pollLast() {
 		if(size == 0) throw new NoSuchElementException();
 		int pos = lastIndex;
-		lastIndex = (int)(links[pos] >>> 32);
-		if(0 <= lastIndex) links[lastIndex] |= 0xFFFFFFFFL;
+		onNodeRemoved(pos);
 		T result = keys[pos];
 		size--;
 		if(strategy.equals(result, null)) {

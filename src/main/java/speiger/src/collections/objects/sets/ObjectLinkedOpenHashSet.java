@@ -217,7 +217,7 @@ public class ObjectLinkedOpenHashSet<T> extends ObjectOpenHashSet<T> implements 
 	
 	@Override
 	public boolean moveToFirst(T o) {
-		if(Objects.equals(first(), o)) return false;
+		if(isEmpty() || Objects.equals(first(), o)) return false;
 		if(o == null) {
 			if(containsNull) {
 				moveToFirstIndex(nullIndex);
@@ -239,7 +239,7 @@ public class ObjectLinkedOpenHashSet<T> extends ObjectOpenHashSet<T> implements 
 	
 	@Override
 	public boolean moveToLast(T o) {
-		if(Objects.equals(last(), o)) return false;
+		if(isEmpty() || Objects.equals(last(), o)) return false;
 		if(o == null) {
 			if(containsNull) {
 				moveToLastIndex(nullIndex);
@@ -305,8 +305,7 @@ public class ObjectLinkedOpenHashSet<T> extends ObjectOpenHashSet<T> implements 
 	public T pollFirst() {
 		if(size == 0) throw new NoSuchElementException();
 		int pos = firstIndex;
-		firstIndex = (int)links[pos];
-		if(0 <= firstIndex) links[firstIndex] |= 0xFFFFFFFF00000000L;
+		onNodeRemoved(pos);
 		T result = keys[pos];
 		size--;
 		if(result == null) {
@@ -328,8 +327,7 @@ public class ObjectLinkedOpenHashSet<T> extends ObjectOpenHashSet<T> implements 
 	public T pollLast() {
 		if(size == 0) throw new NoSuchElementException();
 		int pos = lastIndex;
-		lastIndex = (int)(links[pos] >>> 32);
-		if(0 <= lastIndex) links[lastIndex] |= 0xFFFFFFFFL;
+		onNodeRemoved(pos);
 		T result = keys[pos];
 		size--;
 		if(result == null) {

@@ -268,7 +268,7 @@ public class ByteLinkedOpenCustomHashSet extends ByteOpenCustomHashSet implement
 	
 	@Override
 	public boolean moveToFirst(byte o) {
-		if(strategy.equals(firstByte(), o)) return false;
+		if(isEmpty() || strategy.equals(firstByte(), o)) return false;
 		if(strategy.equals(o, (byte)0)) {
 			if(containsNull) {
 				moveToFirstIndex(nullIndex);
@@ -290,7 +290,7 @@ public class ByteLinkedOpenCustomHashSet extends ByteOpenCustomHashSet implement
 	
 	@Override
 	public boolean moveToLast(byte o) {
-		if(strategy.equals(lastByte(), o)) return false;
+		if(isEmpty() || strategy.equals(lastByte(), o)) return false;
 		if(strategy.equals(o, (byte)0)) {
 			if(containsNull) {
 				moveToLastIndex(nullIndex);
@@ -356,8 +356,7 @@ public class ByteLinkedOpenCustomHashSet extends ByteOpenCustomHashSet implement
 	public byte pollFirstByte() {
 		if(size == 0) throw new NoSuchElementException();
 		int pos = firstIndex;
-		firstIndex = (int)links[pos];
-		if(0 <= firstIndex) links[firstIndex] |= 0xFFFFFFFF00000000L;
+		onNodeRemoved(pos);
 		byte result = keys[pos];
 		size--;
 		if(strategy.equals(result, (byte)0)) {
@@ -379,8 +378,7 @@ public class ByteLinkedOpenCustomHashSet extends ByteOpenCustomHashSet implement
 	public byte pollLastByte() {
 		if(size == 0) throw new NoSuchElementException();
 		int pos = lastIndex;
-		lastIndex = (int)(links[pos] >>> 32);
-		if(0 <= lastIndex) links[lastIndex] |= 0xFFFFFFFFL;
+		onNodeRemoved(pos);
 		byte result = keys[pos];
 		size--;
 		if(strategy.equals(result, (byte)0)) {

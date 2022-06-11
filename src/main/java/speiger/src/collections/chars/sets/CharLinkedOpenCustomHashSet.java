@@ -268,7 +268,7 @@ public class CharLinkedOpenCustomHashSet extends CharOpenCustomHashSet implement
 	
 	@Override
 	public boolean moveToFirst(char o) {
-		if(strategy.equals(firstChar(), o)) return false;
+		if(isEmpty() || strategy.equals(firstChar(), o)) return false;
 		if(strategy.equals(o, (char)0)) {
 			if(containsNull) {
 				moveToFirstIndex(nullIndex);
@@ -290,7 +290,7 @@ public class CharLinkedOpenCustomHashSet extends CharOpenCustomHashSet implement
 	
 	@Override
 	public boolean moveToLast(char o) {
-		if(strategy.equals(lastChar(), o)) return false;
+		if(isEmpty() || strategy.equals(lastChar(), o)) return false;
 		if(strategy.equals(o, (char)0)) {
 			if(containsNull) {
 				moveToLastIndex(nullIndex);
@@ -356,8 +356,7 @@ public class CharLinkedOpenCustomHashSet extends CharOpenCustomHashSet implement
 	public char pollFirstChar() {
 		if(size == 0) throw new NoSuchElementException();
 		int pos = firstIndex;
-		firstIndex = (int)links[pos];
-		if(0 <= firstIndex) links[firstIndex] |= 0xFFFFFFFF00000000L;
+		onNodeRemoved(pos);
 		char result = keys[pos];
 		size--;
 		if(strategy.equals(result, (char)0)) {
@@ -379,8 +378,7 @@ public class CharLinkedOpenCustomHashSet extends CharOpenCustomHashSet implement
 	public char pollLastChar() {
 		if(size == 0) throw new NoSuchElementException();
 		int pos = lastIndex;
-		lastIndex = (int)(links[pos] >>> 32);
-		if(0 <= lastIndex) links[lastIndex] |= 0xFFFFFFFFL;
+		onNodeRemoved(pos);
 		char result = keys[pos];
 		size--;
 		if(strategy.equals(result, (char)0)) {

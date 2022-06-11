@@ -334,8 +334,7 @@ public class Float2FloatLinkedOpenHashMap extends Float2FloatOpenHashMap impleme
 	public float pollFirstFloatKey() {
 		if(size == 0) throw new NoSuchElementException();
 		int pos = firstIndex;
-		firstIndex = (int)links[pos];
-		if(0 <= firstIndex) links[firstIndex] |= 0xFFFFFFFF00000000L;
+		onNodeRemoved(pos);
 		float result = keys[pos];
 		size--;
 		if(Float.floatToIntBits(result) == 0) {
@@ -358,8 +357,7 @@ public class Float2FloatLinkedOpenHashMap extends Float2FloatOpenHashMap impleme
 	public float pollLastFloatKey() {
 		if(size == 0) throw new NoSuchElementException();
 		int pos = lastIndex;
-		lastIndex = (int)(links[pos] >>> 32);
-		if(0 <= lastIndex) links[lastIndex] |= 0xFFFFFFFFL;
+		onNodeRemoved(pos);
 		float result = keys[pos];
 		size--;
 		if(Float.floatToIntBits(result) == 0) {

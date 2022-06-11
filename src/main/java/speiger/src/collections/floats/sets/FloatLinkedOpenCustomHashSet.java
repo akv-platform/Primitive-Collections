@@ -268,7 +268,7 @@ public class FloatLinkedOpenCustomHashSet extends FloatOpenCustomHashSet impleme
 	
 	@Override
 	public boolean moveToFirst(float o) {
-		if(strategy.equals(firstFloat(), o)) return false;
+		if(isEmpty() || strategy.equals(firstFloat(), o)) return false;
 		if(strategy.equals(o, 0F)) {
 			if(containsNull) {
 				moveToFirstIndex(nullIndex);
@@ -290,7 +290,7 @@ public class FloatLinkedOpenCustomHashSet extends FloatOpenCustomHashSet impleme
 	
 	@Override
 	public boolean moveToLast(float o) {
-		if(strategy.equals(lastFloat(), o)) return false;
+		if(isEmpty() || strategy.equals(lastFloat(), o)) return false;
 		if(strategy.equals(o, 0F)) {
 			if(containsNull) {
 				moveToLastIndex(nullIndex);
@@ -356,8 +356,7 @@ public class FloatLinkedOpenCustomHashSet extends FloatOpenCustomHashSet impleme
 	public float pollFirstFloat() {
 		if(size == 0) throw new NoSuchElementException();
 		int pos = firstIndex;
-		firstIndex = (int)links[pos];
-		if(0 <= firstIndex) links[firstIndex] |= 0xFFFFFFFF00000000L;
+		onNodeRemoved(pos);
 		float result = keys[pos];
 		size--;
 		if(strategy.equals(result, 0F)) {
@@ -379,8 +378,7 @@ public class FloatLinkedOpenCustomHashSet extends FloatOpenCustomHashSet impleme
 	public float pollLastFloat() {
 		if(size == 0) throw new NoSuchElementException();
 		int pos = lastIndex;
-		lastIndex = (int)(links[pos] >>> 32);
-		if(0 <= lastIndex) links[lastIndex] |= 0xFFFFFFFFL;
+		onNodeRemoved(pos);
 		float result = keys[pos];
 		size--;
 		if(strategy.equals(result, 0F)) {

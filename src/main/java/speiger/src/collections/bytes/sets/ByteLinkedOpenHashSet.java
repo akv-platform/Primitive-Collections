@@ -237,7 +237,7 @@ public class ByteLinkedOpenHashSet extends ByteOpenHashSet implements ByteOrdere
 	
 	@Override
 	public boolean moveToFirst(byte o) {
-		if(firstByte() == o) return false;
+		if(isEmpty() || firstByte() == o) return false;
 		if(o == (byte)0) {
 			if(containsNull) {
 				moveToFirstIndex(nullIndex);
@@ -259,7 +259,7 @@ public class ByteLinkedOpenHashSet extends ByteOpenHashSet implements ByteOrdere
 	
 	@Override
 	public boolean moveToLast(byte o) {
-		if(lastByte() == o) return false;
+		if(isEmpty() || lastByte() == o) return false;
 		if(o == (byte)0) {
 			if(containsNull) {
 				moveToLastIndex(nullIndex);
@@ -325,8 +325,7 @@ public class ByteLinkedOpenHashSet extends ByteOpenHashSet implements ByteOrdere
 	public byte pollFirstByte() {
 		if(size == 0) throw new NoSuchElementException();
 		int pos = firstIndex;
-		firstIndex = (int)links[pos];
-		if(0 <= firstIndex) links[firstIndex] |= 0xFFFFFFFF00000000L;
+		onNodeRemoved(pos);
 		byte result = keys[pos];
 		size--;
 		if(result == (byte)0) {
@@ -348,8 +347,7 @@ public class ByteLinkedOpenHashSet extends ByteOpenHashSet implements ByteOrdere
 	public byte pollLastByte() {
 		if(size == 0) throw new NoSuchElementException();
 		int pos = lastIndex;
-		lastIndex = (int)(links[pos] >>> 32);
-		if(0 <= lastIndex) links[lastIndex] |= 0xFFFFFFFFL;
+		onNodeRemoved(pos);
 		byte result = keys[pos];
 		size--;
 		if(result == (byte)0) {
