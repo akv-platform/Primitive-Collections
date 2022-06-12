@@ -263,13 +263,13 @@ public class FloatLinkedList extends AbstractFloatList implements FloatPriorityD
 	
 	@Override
 	public float first() {
-		if(first == null) throw new IllegalStateException();
+		if(first == null) throw new NoSuchElementException();
 		return first.value;
 	}
 	
 	@Override
 	public float last() {
-		if(last == null) throw new IllegalStateException();
+		if(last == null) throw new NoSuchElementException();
 		return last.value;
 	}
 	
@@ -479,13 +479,13 @@ public class FloatLinkedList extends AbstractFloatList implements FloatPriorityD
 	
 	@Override
 	public float dequeue() {
-		if(first == null) throw new IllegalStateException();
+		if(first == null) throw new NoSuchElementException();
 		return unlinkFirst(first);
 	}
 	
 	@Override
 	public float dequeueLast() {
-		if(last == null) throw new IllegalStateException();
+		if(last == null) throw new NoSuchElementException();
 		return unlinkLast(last);
 	}
 	

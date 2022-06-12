@@ -19,10 +19,6 @@ import junit.framework.TestCase;
 #if !VALUE_OBJECT
 import speiger.src.collections.VALUE_PACKAGE.utils.VALUE_ARRAYS;
 #endif
-#if !TYPE_OBJECT
-import speiger.src.collections.PACKAGE.maps.impl.hash.HASH_MAP;
-import speiger.src.collections.PACKAGE.maps.impl.customHash.CUSTOM_HASH_MAP;
-#endif
 import speiger.src.collections.PACKAGE.maps.impl.hash.LINKED_HASH_MAP;
 import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
 #if !SAME_TYPE && !TYPE_OBJECT

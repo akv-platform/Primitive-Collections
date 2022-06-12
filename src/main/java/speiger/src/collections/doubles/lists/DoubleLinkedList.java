@@ -263,13 +263,13 @@ public class DoubleLinkedList extends AbstractDoubleList implements DoublePriori
 	
 	@Override
 	public double first() {
-		if(first == null) throw new IllegalStateException();
+		if(first == null) throw new NoSuchElementException();
 		return first.value;
 	}
 	
 	@Override
 	public double last() {
-		if(last == null) throw new IllegalStateException();
+		if(last == null) throw new NoSuchElementException();
 		return last.value;
 	}
 	
@@ -479,13 +479,13 @@ public class DoubleLinkedList extends AbstractDoubleList implements DoublePriori
 	
 	@Override
 	public double dequeue() {
-		if(first == null) throw new IllegalStateException();
+		if(first == null) throw new NoSuchElementException();
 		return unlinkFirst(first);
 	}
 	
 	@Override
 	public double dequeueLast() {
-		if(last == null) throw new IllegalStateException();
+		if(last == null) throw new NoSuchElementException();
 		return unlinkLast(last);
 	}
 	

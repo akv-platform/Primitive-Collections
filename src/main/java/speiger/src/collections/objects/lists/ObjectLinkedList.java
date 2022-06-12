@@ -257,13 +257,13 @@ public class ObjectLinkedList<T> extends AbstractObjectList<T> implements Object
 	
 	@Override
 	public T first() {
-		if(first == null) throw new IllegalStateException();
+		if(first == null) throw new NoSuchElementException();
 		return first.value;
 	}
 	
 	@Override
 	public T last() {
-		if(last == null) throw new IllegalStateException();
+		if(last == null) throw new NoSuchElementException();
 		return last.value;
 	}
 	
@@ -427,13 +427,13 @@ public class ObjectLinkedList<T> extends AbstractObjectList<T> implements Object
 	
 	@Override
 	public T dequeue() {
-		if(first == null) throw new IllegalStateException();
+		if(first == null) throw new NoSuchElementException();
 		return unlinkFirst(first);
 	}
 	
 	@Override
 	public T dequeueLast() {
-		if(last == null) throw new IllegalStateException();
+		if(last == null) throw new NoSuchElementException();
 		return unlinkLast(last);
 	}
 	

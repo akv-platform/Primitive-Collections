@@ -263,13 +263,13 @@ public class IntLinkedList extends AbstractIntList implements IntPriorityDequeue
 	
 	@Override
 	public int first() {
-		if(first == null) throw new IllegalStateException();
+		if(first == null) throw new NoSuchElementException();
 		return first.value;
 	}
 	
 	@Override
 	public int last() {
-		if(last == null) throw new IllegalStateException();
+		if(last == null) throw new NoSuchElementException();
 		return last.value;
 	}
 	
@@ -479,13 +479,13 @@ public class IntLinkedList extends AbstractIntList implements IntPriorityDequeue
 	
 	@Override
 	public int dequeue() {
-		if(first == null) throw new IllegalStateException();
+		if(first == null) throw new NoSuchElementException();
 		return unlinkFirst(first);
 	}
 	
 	@Override
 	public int dequeueLast() {
-		if(last == null) throw new IllegalStateException();
+		if(last == null) throw new NoSuchElementException();
 		return unlinkLast(last);
 	}
 	

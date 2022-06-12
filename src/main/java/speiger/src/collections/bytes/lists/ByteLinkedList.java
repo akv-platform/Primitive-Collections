@@ -263,13 +263,13 @@ public class ByteLinkedList extends AbstractByteList implements BytePriorityDequ
 	
 	@Override
 	public byte first() {
-		if(first == null) throw new IllegalStateException();
+		if(first == null) throw new NoSuchElementException();
 		return first.value;
 	}
 	
 	@Override
 	public byte last() {
-		if(last == null) throw new IllegalStateException();
+		if(last == null) throw new NoSuchElementException();
 		return last.value;
 	}
 	
@@ -479,13 +479,13 @@ public class ByteLinkedList extends AbstractByteList implements BytePriorityDequ
 	
 	@Override
 	public byte dequeue() {
-		if(first == null) throw new IllegalStateException();
+		if(first == null) throw new NoSuchElementException();
 		return unlinkFirst(first);
 	}
 	
 	@Override
 	public byte dequeueLast() {
-		if(last == null) throw new IllegalStateException();
+		if(last == null) throw new NoSuchElementException();
 		return unlinkLast(last);
 	}
 	

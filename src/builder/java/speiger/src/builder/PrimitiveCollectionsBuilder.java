@@ -146,6 +146,7 @@ public class PrimitiveCollectionsBuilder extends TemplateProcessor
 		nameRemapper.put("MinimalCollection", "Minimal%sCollection");
 		nameRemapper.put("MinimalSet", "Minimal%sSet");
 		nameRemapper.put("TestCollectionGenerator", "Test%sCollectionGenerator");
+		nameRemapper.put("TestQueueGenerator", "Test%sQueueGenerator");
 		nameRemapper.put("TestListGenerator", "Test%sListGenerator");
 		nameRemapper.put("TestNavigableSetGenerator", "Test%sNavigableSetGenerator");
 		nameRemapper.put("TestSortedSetGenerator", "Test%sSortedSetGenerator");
@@ -153,10 +154,12 @@ public class PrimitiveCollectionsBuilder extends TemplateProcessor
 		nameRemapper.put("TestSetGenerator", "Test%sSetGenerator");
 		nameRemapper.put("AbstractContainerTester", "Abstract%sContainerTester");
 		nameRemapper.put("AbstractCollectionTester", "Abstract%sCollectionTester");
+		nameRemapper.put("AbstractQueueTester", "Abstract%sQueueTester");
 		nameRemapper.put("AbstractListTester", "Abstract%sListTester");
 		nameRemapper.put("AbstractListIndexOfTester", "Abstract%sListIndexOfTester");
 		nameRemapper.put("AbstractSetTester", "Abstract%sSetTester");
 		nameRemapper.put("SimpleTestGenerator", "Simple%sTestGenerator");
+		nameRemapper.put("SimpleQueueTestGenerator", "Simple%sQueueTestGenerator");
 		nameRemapper.put("TestMapGenerator", "Test%sMapGenerator");
 		nameRemapper.put("TestSortedMapGenerator", "Test%sSortedMapGenerator");
 		nameRemapper.put("TestOrderedMapGenerator", "Test%sOrderedMapGenerator");
@@ -172,7 +175,7 @@ public class PrimitiveCollectionsBuilder extends TemplateProcessor
 			"NavigableMapNavigationTester", "SortedMapNavigationTester", "OrderedMapNavigationTester", "OrderedMapMoveTester", "MapConstructorTester");
 		
 		addBlockage(ClassType.OBJECT, "CollectionStreamTester", "ListFillBufferTester");
-		addBlockage(ClassType.BOOLEAN, "TestOrderedSetGenerator", "TestSortedSetGenerator", "TestNavigableSetGenerator", "CollectionRemoveIfTester", "CollectionStreamTester", "ListFillBufferTester", "ListReplaceAllTester", "NavigableSetNavigationTester", "SetTests", "MapConstructorTests", "TestMap");
+		addBlockage(ClassType.BOOLEAN, "TestOrderedSetGenerator", "TestSortedSetGenerator", "TestNavigableSetGenerator", "CollectionRemoveIfTester", "CollectionStreamTester", "ListFillBufferTester", "ListReplaceAllTester", "NavigableSetNavigationTester", "SetTests", "MapConstructorTests", "TestMap", "QueueTests");
 		addBlockage(ClassType.BOOLEAN, "OrderedSetMoveTester", "OrderedSetNavigationTester", "SortedSetNaviationTester", "SetTestSuiteBuilder", "OrderedSetTestSuiteBuilder", "SortedSetTestSuiteBuilder", "NavigableSetTestSuiteBuilder", "SortedSetSubsetTestSetGenerator", "OrderedMapNavigationTester", "OrderedMapTestSuiteBuilder", "OrderedSetIterationTester", "SortedSetIterationTester");
 		addBlockage(ClassType.BOOLEAN, "TestMapGenerator", "TestSortedMapGenerator", "TestOrderedMapGenerator", "SimpleMapTestGenerator", "DerivedMapGenerators", "AbstractMapTester", "MapTestSuiteBuilder", "SortedMapTestSuiteBuilder", "NavigableMapTestSuiteBuilder", "MapTests");
 		addBlockage(ClassType.BOOLEAN, T -> T.endsWith("Tester") && (T.startsWith("Iterable") ||T.startsWith("Map") || T.startsWith("OrderedMap") || T.startsWith("SortedMap") || T.startsWith("NavigableMap")));

@@ -222,6 +222,7 @@ public class GlobalVariables
 		addAbstractMapper("MINIMAL_SET", "Minimal%sSet");
 		addAbstractMapper("ABSTRACT_CONTAINER_TESTER", "Abstract%sContainerTester");
 		addAbstractMapper("ABSTRACT_COLLECTION_TESTER", "Abstract%sCollectionTester");
+		addAbstractMapper("ABSTRACT_QUEUE_TESTER", "Abstract%sQueueTester");
 		addAbstractMapper("ABSTRACT_LIST_INDEX_OF_TESTER", "Abstract%sListIndexOfTester");
 		addAbstractMapper("ABSTRACT_LIST_TESTER", "Abstract%sListTester");
 		addAbstractMapper("ABSTRACT_SET_TESTER", "Abstract%sSetTester");
@@ -231,6 +232,8 @@ public class GlobalVariables
 		addClassMapper("BIDIRECTIONAL_ITERATOR_TESTER", "BidirectionalteratorTester");
 		addClassMapper("ITERATOR_TESTER", "IteratorTester");
 		addClassMapper("COLLECTION_TEST_BUILDER", "CollectionTestSuiteBuilder");
+		addClassMapper("DEQUEUE_TEST_BUILDER", "DequeueTestSuiteBuilder");
+		addClassMapper("QUEUE_TEST_BUILDER", "QueueTestSuiteBuilder");
 		addClassMapper("LIST_TEST_BUILDER", "ListTestSuiteBuilder");
 		addClassMapper("ORDERED_SET_TEST_BUILDER", "OrderedSetTestSuiteBuilder");
 		addClassMapper("SORTED_SET_TEST_BUILDER", "SortedSetTestSuiteBuilder");
@@ -246,6 +249,7 @@ public class GlobalVariables
 		addClassMapper("SUB_NAVIGABLE_SET_CLASS_GENERATOR", "NavigableSetSubsetTestSetGenerator");
 		addClassMapper("LIST_TESTS", "ListTests");
 		addClassMapper("SET_TESTS", "SetTests");
+		addClassMapper("QUEUE_TESTS", "QueueTests");
 		addBiClassMapper("MAP_TESTS", "MapTests", "2");
 
 		//Abstract Classes
@@ -272,12 +276,14 @@ public class GlobalVariables
 		//UnitTest Helper Classes
 		addClassMapper("HELPERS", "Helpers");
 		addAbstractMapper("TEST_COLLECTION_GENERATOR", "Test%sCollectionGenerator");
+		addAbstractMapper("TEST_QUEUE_GENERATOR", "Test%sQueueGenerator");
 		addAbstractMapper("TEST_LIST_GENERATOR", "Test%sListGenerator");
 		addAbstractMapper("TEST_NAVIGABLE_SET_GENERATOR", "Test%sNavigableSetGenerator");
 		addAbstractMapper("TEST_SORTED_SET_GENERATOR", "Test%sSortedSetGenerator");
 		addAbstractMapper("TEST_ORDERED_SET_GENERATOR", "Test%sOrderedSetGenerator");
 		addAbstractMapper("TEST_SET_GENERATOR", "Test%sSetGenerator");
 		addAbstractMapper("SIMPLE_TEST_GENERATOR", "Simple%sTestGenerator");
+		addAbstractMapper("SIMPLE_QUEUE_TEST_GENERATOR", "Simple%sQueueTestGenerator");
 		addAbstractBiMapper("SIMPLE_MAP_TEST_GENERATOR", "Simple%sMapTestGenerator", "2");
 		addAbstractBiMapper("DERIVED_MAP_GENERATORS", "Derived%sMapGenerators", "2");
 		addAbstractBiMapper("TEST_ORDERED_MAP_GENERATOR", "Test%sOrderedMapGenerator", "2");
