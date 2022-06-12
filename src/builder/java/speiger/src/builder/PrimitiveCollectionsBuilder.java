@@ -167,6 +167,7 @@ public class PrimitiveCollectionsBuilder extends TemplateProcessor
 		nameRemapper.put("DerivedMapGenerators", "Derived%sMapGenerators");
 		nameRemapper.put("AbstractMapTester", "Abstract%sMapTester");
 		nameRemapper.put("TestMap", "Test%sMap");
+		biRequired.put("PairTester", "");
 		
 		addBiClass("TestMapGenerator", "TestSortedMapGenerator", "TestOrderedMapGenerator", "SimpleMapTestGenerator", "DerivedMapGenerators", "AbstractMapTester", "MapTestSuiteBuilder", "SortedMapTestSuiteBuilder", "NavigableMapTestSuiteBuilder", "OrderedMapTestSuiteBuilder", "MapTests", "MapConstructorTests", "TestMap");
 		addBiClass("MapAddToTester", "MapSubFromTester", "MapClearTester", "MapComputeIfAbsentTester", "MapComputeIfPresentTester", "MapComputeTester", "MapCopyTester", "MapContainsTester", "MapContainsKeyTester", "MapContainsValueTester", "MapCreatorTester", "MapEntrySetTester",

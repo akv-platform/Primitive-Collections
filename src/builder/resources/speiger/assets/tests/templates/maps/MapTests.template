@@ -62,6 +62,7 @@ import speiger.src.testers.PACKAGE.tests.collection.FILE_KEY_TYPECollectionItera
 #if !VALUE_OBJECT
 import speiger.src.testers.VALUE_PACKAGE.tests.collection.FILE_VALUE_TYPECollectionIteratorTester;
 #endif
+import speiger.src.testers.PACKAGE.tests.misc.PAIRTester;
 #if VALUE_BOOLEAN
 import speiger.src.testers.booleans.tests.collection.BooleanCollectionAddAllArrayTester;
 import speiger.src.testers.booleans.tests.collection.BooleanCollectionAddAllTester;
@@ -82,10 +83,18 @@ public class MAP_TESTS extends TestCase
 {
 	public static Test suite() {
 		TestSuite suite = new TestSuite("MAPS");
-		suite(suite);
-		constructorSuite(suite);
+//		suite(suite);
+//		constructorSuite(suite);
+		pairSuite(suite);
 		System.out.println("Generated ["+suite.countTestCases()+"] Tests");
 		return suite;
+	}
+	
+	public static void pairSuite(TestSuite suite) {
+		TestSuite pairs = new TestSuite("Constructors");
+		pairs.addTest(new TestSuite(PAIRTester.Mutable.class));
+		pairs.addTest(new TestSuite(PAIRTester.Immutable.class));
+		suite.addTest(pairs);
 	}
 	
 	public static void constructorSuite(TestSuite suite) {
