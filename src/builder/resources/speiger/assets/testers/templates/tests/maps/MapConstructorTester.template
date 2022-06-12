@@ -182,40 +182,27 @@ public abstract class FILE_KEY_TYPE2FILE_VALUE_TYPEMapConstructorTester KEY_VALU
 	public void testHashCollisions() {
 		if(simpleConstructor == null) return;
 		MAP KEY_VALUE_GENERIC_TYPE map = simpleConstructor.get();
-		if(map instanceof HASH_MAP) {
-			fillMap(map);
-			for(int i = 2;i<100;i+=16) {
-				Assert.assertTrue(VALUE_EQUALS(values[i], map.remove(keys[i])));
-			}
-			fillMap(map);
-			for(int i = 2;i<100;i+=16) {
-				Assert.assertTrue(map.remove(keys[i], values[i]));
-			}
-			fillMap(map);
-			for(int i = 2;i<100;i+=16) {
-				Assert.assertTrue(map.remove(KEY_TO_OBJ(keys[i]), VALUE_TO_OBJ(values[i])));
-			}
+		int value = fillMap(map);
+		for(int i = value;i>=0;i-=16) {
+			Assert.assertTrue(VALUE_EQUALS(values[i], map.remove(keys[i])));
 		}
-		else if(map instanceof CUSTOM_HASH_MAP) {
-			fillMap(map);
-			for(int i = 2;i<100;i+=16) {
-				Assert.assertTrue(VALUE_EQUALS(values[i], map.remove(keys[i])));
-			}
-			fillMap(map);
-			for(int i = 2;i<100;i+=16) {
-				Assert.assertTrue(map.remove(keys[i], values[i]));
-			}
-			fillMap(map);
-			for(int i = 2;i<100;i+=16) {
-				Assert.assertTrue(map.remove(KEY_TO_OBJ(keys[i]), VALUE_TO_OBJ(values[i])));
-			}
+		value = fillMap(map);
+		for(int i = value;i>=0;i-=16) {
+			Assert.assertTrue(map.remove(keys[i], values[i]));
+		}
+		value = fillMap(map);
+		for(int i = value;i>=0;i-=16) {
+			Assert.assertTrue(map.remove(KEY_TO_OBJ(keys[i]), VALUE_TO_OBJ(values[i])));
 		}
 	}
 	
-	private void fillMap(MAP KEY_VALUE_GENERIC_TYPE map) {
+	private int fillMap(MAP KEY_VALUE_GENERIC_TYPE map) {
+		int result = 0;
 		for(int i = 2;i<100;i+=16) {
 			map.put(keys[i], values[i]);
+			result = i;
 		}
+		return result;
 	}
 	
 #endif		

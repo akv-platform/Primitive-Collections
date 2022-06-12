@@ -468,7 +468,7 @@ public class ObjectLinkedOpenCustomHashSet<T> extends ObjectOpenCustomHashSet<T>
 	@Override
 	public void clearAndTrim(int size) {
 		int request = Math.max(minCapacity, HashUtil.nextPowerOfTwo((int)Math.ceil(size / loadFactor)));
-		if(request >= size) {
+		if(request >= nullIndex) {
 			clear();
 			return;
 		}
@@ -668,6 +668,7 @@ public class ObjectLinkedOpenCustomHashSet<T> extends ObjectOpenCustomHashSet<T>
 				next = (int)(links[current]);
 				result++;
 			}
+			if(index >= 0) index+=result;
 			return result;
 		}
 		
@@ -679,6 +680,7 @@ public class ObjectLinkedOpenCustomHashSet<T> extends ObjectOpenCustomHashSet<T>
 				previous = (int)(links[current] >> 32);
 				result++;
 			}
+			if(index >= 0) index-=result;
 			return result;
 		}
 		

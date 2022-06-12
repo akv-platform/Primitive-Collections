@@ -458,6 +458,7 @@ public class ImmutableObjectOpenHashSet<T> extends AbstractObjectSet<T> implemen
 				next = (int)(links[current]);
 				result++;
 			}
+			if(index >= 0) index+=result;
 			return result;
 		}
 		
@@ -469,6 +470,7 @@ public class ImmutableObjectOpenHashSet<T> extends AbstractObjectSet<T> implemen
 				previous = (int)(links[current] >> 32);
 				result++;
 			}
+			if(index >= 0) index-=result;
 			return result;
 		}
 		

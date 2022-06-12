@@ -474,6 +474,7 @@ public class ImmutableLongOpenHashSet extends AbstractLongSet implements LongOrd
 				next = (int)(links[current]);
 				result++;
 			}
+			if(index >= 0) index+=result;
 			return result;
 		}
 		
@@ -485,6 +486,7 @@ public class ImmutableLongOpenHashSet extends AbstractLongSet implements LongOrd
 				previous = (int)(links[current] >> 32);
 				result++;
 			}
+			if(index >= 0) index-=result;
 			return result;
 		}
 		

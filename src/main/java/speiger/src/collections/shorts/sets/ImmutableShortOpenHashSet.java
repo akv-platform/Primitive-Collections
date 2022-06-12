@@ -474,6 +474,7 @@ public class ImmutableShortOpenHashSet extends AbstractShortSet implements Short
 				next = (int)(links[current]);
 				result++;
 			}
+			if(index >= 0) index+=result;
 			return result;
 		}
 		
@@ -485,6 +486,7 @@ public class ImmutableShortOpenHashSet extends AbstractShortSet implements Short
 				previous = (int)(links[current] >> 32);
 				result++;
 			}
+			if(index >= 0) index-=result;
 			return result;
 		}
 		

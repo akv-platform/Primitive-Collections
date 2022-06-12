@@ -474,6 +474,7 @@ public class ImmutableIntOpenHashSet extends AbstractIntSet implements IntOrdere
 				next = (int)(links[current]);
 				result++;
 			}
+			if(index >= 0) index+=result;
 			return result;
 		}
 		
@@ -485,6 +486,7 @@ public class ImmutableIntOpenHashSet extends AbstractIntSet implements IntOrdere
 				previous = (int)(links[current] >> 32);
 				result++;
 			}
+			if(index >= 0) index-=result;
 			return result;
 		}
 		

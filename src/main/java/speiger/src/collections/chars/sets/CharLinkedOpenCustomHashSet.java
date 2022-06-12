@@ -492,7 +492,7 @@ public class CharLinkedOpenCustomHashSet extends CharOpenCustomHashSet implement
 	@Override
 	public void clearAndTrim(int size) {
 		int request = Math.max(minCapacity, HashUtil.nextPowerOfTwo((int)Math.ceil(size / loadFactor)));
-		if(request >= size) {
+		if(request >= nullIndex) {
 			clear();
 			return;
 		}
@@ -692,6 +692,7 @@ public class CharLinkedOpenCustomHashSet extends CharOpenCustomHashSet implement
 				next = (int)(links[current]);
 				result++;
 			}
+			if(index >= 0) index+=result;
 			return result;
 		}
 		
@@ -703,6 +704,7 @@ public class CharLinkedOpenCustomHashSet extends CharOpenCustomHashSet implement
 				previous = (int)(links[current] >> 32);
 				result++;
 			}
+			if(index >= 0) index-=result;
 			return result;
 		}
 		

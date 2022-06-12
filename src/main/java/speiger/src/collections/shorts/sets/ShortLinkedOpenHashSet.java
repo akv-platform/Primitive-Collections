@@ -566,7 +566,7 @@ public class ShortLinkedOpenHashSet extends ShortOpenHashSet implements ShortOrd
 	@Override
 	public void clearAndTrim(int size) {
 		int request = Math.max(minCapacity, HashUtil.nextPowerOfTwo((int)Math.ceil(size / loadFactor)));
-		if(request >= size) {
+		if(request >= nullIndex) {
 			clear();
 			return;
 		}
@@ -651,6 +651,7 @@ public class ShortLinkedOpenHashSet extends ShortOpenHashSet implements ShortOrd
 				next = (int)(links[current]);
 				result++;
 			}
+			if(index >= 0) index+=result;
 			return result;
 		}
 		
@@ -662,6 +663,7 @@ public class ShortLinkedOpenHashSet extends ShortOpenHashSet implements ShortOrd
 				previous = (int)(links[current] >> 32);
 				result++;
 			}
+			if(index >= 0) index-=result;
 			return result;
 		}
 		
