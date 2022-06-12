@@ -293,13 +293,13 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 	
 	@Override
 	public KEY_TYPE first() {
-		if(first == null) throw new IllegalStateException();
+		if(first == null) throw new NoSuchElementException();
 		return first.value;
 	}
 	
 	@Override
 	public KEY_TYPE last() {
-		if(last == null) throw new IllegalStateException();
+		if(last == null) throw new NoSuchElementException();
 		return last.value;
 	}
 	
@@ -532,13 +532,13 @@ public class LINKED_LIST KEY_GENERIC_TYPE extends ABSTRACT_LIST KEY_GENERIC_TYPE
 	
 	@Override
 	public KEY_TYPE dequeue() {
-		if(first == null) throw new IllegalStateException();
+		if(first == null) throw new NoSuchElementException();
 		return unlinkFirst(first);
 	}
 	
 	@Override
 	public KEY_TYPE dequeueLast() {
-		if(last == null) throw new IllegalStateException();
+		if(last == null) throw new NoSuchElementException();
 		return unlinkLast(last);
 	}
 	

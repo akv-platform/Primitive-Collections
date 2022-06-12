@@ -19,6 +19,16 @@ public class Tests {
 //		lists.addTest(FloatListTests.suite());
 //		lists.addTest(DoubleListTests.suite());
 		suite.addTest(lists);
+		TestSuite queues = new TestSuite("Queues");
+//		queues.addTest(ByteQueueTests.suite());
+//		queues.addTest(ShortQueueTests.suite());
+//		queues.addTest(CharQueueTests.suite());
+//		queues.addTest(IntQueueTests.suite());
+//		queues.addTest(LongQueueTests.suite());
+//		queues.addTest(ObjectQueueTests.suite());
+//		queues.addTest(FloatQueueTests.suite());
+//		queues.addTest(DoubleQueueTests.suite());
+		suite.addTest(queues);
 		TestSuite sets = new TestSuite("Sets");
 //		sets.addTest(ByteSetTests.suite());
 //		sets.addTest(ShortSetTests.suite());
