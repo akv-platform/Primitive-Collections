@@ -83,8 +83,8 @@ public class MAP_TESTS extends TestCase
 {
 	public static Test suite() {
 		TestSuite suite = new TestSuite("MAPS");
-//		suite(suite);
-//		constructorSuite(suite);
+		suite(suite);
+		constructorSuite(suite);
 		pairSuite(suite);
 		System.out.println("Generated ["+suite.countTestCases()+"] Tests");
 		return suite;

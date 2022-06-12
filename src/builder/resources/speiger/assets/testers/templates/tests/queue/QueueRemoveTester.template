@@ -32,7 +32,7 @@ public class FILE_KEY_TYPEQueueRemoveTester KEY_GENERIC_TYPE extends ABSTRACT_QU
 	@CollectionFeature.Require(CollectionFeature.SUPPORTS_REMOVE)
 #endignore
 	public void testRemoveLast_Missing() {
-		assertFalse("Queue.removeLast(missing) should return false", queue.removeFirst(e3()));
+		assertFalse("Queue.removeLast(missing) should return false", queue.removeLast(e3()));
 		expectUnchanged();
 	}
 	
@@ -41,7 +41,7 @@ public class FILE_KEY_TYPEQueueRemoveTester KEY_GENERIC_TYPE extends ABSTRACT_QU
 	@CollectionSize.Require(absent = CollectionSize.ZERO)
 #endignore
 	public void testRemoveLast_Present() {
-		assertTrue("Queue.removeLast(present) should return true", queue.removeFirst(e0()));
+		assertTrue("Queue.removeLast(present) should return true", queue.removeLast(e0()));
 		expectMissing(e0());
 	}
 	

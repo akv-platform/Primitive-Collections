@@ -2,6 +2,9 @@ package speiger.src.tests.PACKAGE.collections;
 
 import java.util.Arrays;
 import java.util.Collection;
+#if TYPE_OBJECT
+import java.util.Comparator;
+#endif
 import java.util.function.Function;
 
 import com.google.common.collect.testing.features.CollectionFeature;
@@ -34,6 +37,13 @@ public class QUEUE_TESTS extends TestCase
 	public static void suite(TestSuite suite) {
 		suite.addTest(dequeueSuite("ARRAY_FIFO_QUEUE", T -> new ARRAY_FIFO_QUEUEBRACES(T), getFeatures(), -1));
 		suite.addTest(queueSuite("HEAP_PRIORITY_QUEUE", T -> new HEAP_PRIORITY_QUEUEBRACES(T), getFeatures(), -1));
+#if TYPE_OBJECT
+		suite.addTest(queueSuite("HEAP_PRIORITY_QUEUEComparator", T -> new HEAP_PRIORITY_QUEUEBRACES(T, Comparator.naturalOrder()), getFeatures(), -1));
+		suite.addTest(queueSuite("ARRAY_PRIORITY_QUEUEComparator", T -> new ARRAY_PRIORITY_QUEUEBRACES(T, Comparator.naturalOrder()), getFeatures(), -1));
+#else
+		suite.addTest(queueSuite("HEAP_PRIORITY_QUEUEComparator", T -> new HEAP_PRIORITY_QUEUEBRACES(T, CLASS_TYPE::compare), getFeatures(), -1));
+		suite.addTest(queueSuite("ARRAY_PRIORITY_QUEUEComparator", T -> new ARRAY_PRIORITY_QUEUEBRACES(T, CLASS_TYPE::compare), getFeatures(), -1));
+#endif
 		suite.addTest(queueSuite("ARRAY_PRIORITY_QUEUE", T -> new ARRAY_PRIORITY_QUEUEBRACES(T), getFeatures(), -1));
 		suite.addTest(dequeueSuite("LINKED_LIST", T -> new LINKED_LISTBRACES(T), getFeatures(), -1));
 	}

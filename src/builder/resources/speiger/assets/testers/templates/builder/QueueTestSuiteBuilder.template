@@ -20,6 +20,7 @@ import speiger.src.testers.PACKAGE.tests.queue.iterators.FILE_KEY_TYPEQueueLimit
 import speiger.src.testers.PACKAGE.tests.queue.iterators.FILE_KEY_TYPEQueueMapTester;
 import speiger.src.testers.PACKAGE.tests.queue.iterators.FILE_KEY_TYPEQueueMatchesTester;
 import speiger.src.testers.PACKAGE.tests.queue.iterators.FILE_KEY_TYPEQueuePeekTester;
+import speiger.src.testers.PACKAGE.tests.queue.iterators.FILE_KEY_TYPEQueueForEachTester;
 import speiger.src.testers.PACKAGE.tests.queue.iterators.FILE_KEY_TYPEQueueReduceTester;
 import speiger.src.testers.PACKAGE.tests.queue.iterators.FILE_KEY_TYPEQueueSortedTester;
 
@@ -50,6 +51,7 @@ public class QUEUE_TEST_BUILDER KEY_GENERIC_TYPE extends PerCollectionSizeTestSu
 		testers.add(FILE_KEY_TYPEQueueMapTester.class);
 		testers.add(FILE_KEY_TYPEQueueMatchesTester.class);
 		testers.add(FILE_KEY_TYPEQueuePeekTester.class);
+		testers.add(FILE_KEY_TYPEQueueForEachTester.class);
 		testers.add(FILE_KEY_TYPEQueueReduceTester.class);
 		testers.add(FILE_KEY_TYPEQueueSortedTester.class);
 		return testers;
