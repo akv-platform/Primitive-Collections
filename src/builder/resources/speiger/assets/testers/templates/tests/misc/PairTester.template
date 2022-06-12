@@ -136,6 +136,8 @@ public class PAIRTester KEY_VALUE_GENERIC_TYPE extends TestCase
 			assertEquals(pair.ENTRY_VALUE(), copy.ENTRY_VALUE());
 		}
 		assertTrue(pair.equals(copy));
+		assertFalse(pair.equals(null));
+		assertFalse(pair.equals(PAIR.of(getKey(), getValue())));
 		assertEquals(KEY_TO_STRING(pair.ENTRY_KEY())+"->"+VALUE_TO_STRING(pair.ENTRY_VALUE()), pair.toString());
 		assertEquals(KEY_TO_HASH(pair.ENTRY_KEY()) ^ VALUE_TO_HASH(pair.ENTRY_VALUE()), pair.hashCode());
 	}
