@@ -1,0 +1,1500 @@
+package speiger.src.collections.PACKAGE.maps.impl.customHash;
+
+import java.util.Arrays;
+import java.util.ConcurrentModificationException;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Objects;
+import java.util.function.Consumer;
+import java.util.function.BiFunction;
+
+#if !TYPE_OBJECT
+import speiger.src.collections.PACKAGE.collections.ITERATOR;
+import speiger.src.collections.PACKAGE.functions.CONSUMER;
+import speiger.src.collections.objects.functions.consumer.BI_FROM_OBJECT_CONSUMER;
+#endif
+import speiger.src.collections.PACKAGE.functions.consumer.BI_CONSUMER;
+import speiger.src.collections.PACKAGE.functions.function.FUNCTION;
+import speiger.src.collections.PACKAGE.functions.function.UNARY_OPERATOR;
+#if !SAME_TYPE
+import speiger.src.collections.PACKAGE.functions.function.SINGLE_UNARY_OPERATOR;
+#endif
+#if !TYPE_OBJECT && !VALUE_BOOLEAN
+import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
+#endif
+import speiger.src.collections.PACKAGE.lists.ARRAY_LIST;
+import speiger.src.collections.PACKAGE.lists.LIST;
+import speiger.src.collections.PACKAGE.maps.abstracts.ABSTRACT_MAP;
+import speiger.src.collections.PACKAGE.maps.interfaces.MAP;
+import speiger.src.collections.PACKAGE.utils.maps.MAPS;
+#if !TYPE_OBJECT
+import speiger.src.collections.PACKAGE.sets.ABSTRACT_SET;
+import speiger.src.collections.PACKAGE.sets.SET;
+#endif
+import speiger.src.collections.PACKAGE.utils.STRATEGY;
+import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_ABSTRACT_COLLECTION;
+import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_COLLECTION;
+import speiger.src.collections.VALUE_PACKAGE.functions.VALUE_SUPPLIER;
+#if !SAME_TYPE
+import speiger.src.collections.VALUE_PACKAGE.functions.function.VALUE_UNARY_OPERATOR;
+
+#if !VALUE_OBJECT
+#if !TYPE_OBJECT
+import speiger.src.collections.objects.functions.function.ObjectObjectUnaryOperator;
+#endif
+import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_ITERATOR;
+import speiger.src.collections.VALUE_PACKAGE.functions.VALUE_CONSUMER;
+#endif
+#else if !VALUE_OBJECT
+import speiger.src.collections.objects.functions.function.ObjectObjectUnaryOperator;
+
+#endif
+#if !TYPE_OBJECT && !VALUE_OBJECT || !VALUE_OBJECT
+import speiger.src.collections.objects.functions.consumer.ObjectObjectConsumer;
+#endif
+#if !TYPE_OBJECT || !VALUE_BOOLEAN
+#if !VALUE_OBJECT || SAME_TYPE
+import speiger.src.collections.objects.functions.function.Object2BooleanFunction;
+#endif
+#endif
+#if !SAME_TYPE
+#if !TYPE_OBJECT
+import speiger.src.collections.objects.functions.consumer.VALUE_BI_FROM_OBJECT_CONSUMER;
+
+#endif
+import speiger.src.collections.VALUE_PACKAGE.functions.function.VALUE_PREDICATE;
+#endif
+import speiger.src.collections.objects.collections.ObjectIterator;
+import speiger.src.collections.objects.sets.AbstractObjectSet;
+import speiger.src.collections.objects.sets.ObjectSet;
+import speiger.src.collections.utils.HashUtil;
+import speiger.src.collections.utils.ITrimmable;
+
+/**
+ * A Type Specific HashMap that allows for custom HashControl.
+ * For cases where Objects/primitive do not allow hashcoding this can be really useful and provide a lot of control.
+ * @Type(T)
+ * @ValueType(V) 
+ */
+public class CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE extends ABSTRACT_MAP KEY_VALUE_GENERIC_TYPE implements ITrimmable
+{
+	/** The Backing keys array */
+	protected transient KEY_TYPE[] keys;
+	/** The Backing values array */
+	protected transient VALUE_TYPE[] values;
+	/** If a null value is present */
+	protected transient boolean containsNull;
+	/** Minimum array size the HashMap will be */
+	protected transient int minCapacity;
+	/** Index of the Null Value */
+	protected transient int nullIndex;
+	/** Maximum amount of Values that can be stored before the array gets expanded usually 75% */
+	protected transient int maxFill;
+	/** Max Index that is allowed to be searched through nullIndex - 1 */
+	protected transient int mask;
+	/** EntrySet cache */
+	protected transient FastEntrySet KEY_VALUE_GENERIC_TYPE entrySet;
+	/** KeySet cache */
+	protected transient SET KEY_GENERIC_TYPE keySet;
+	/** Values cache */
+	protected transient VALUE_COLLECTION VALUE_GENERIC_TYPE valuesC;
+	
+	/** Amount of Elements stored in the HashMap */
+	protected int size;
+	/** How full the Arrays are allowed to get before resize */
+	protected final float loadFactor;
+	/** Strategy that allows to control the Hash Generation and equals comparason */
+	protected final STRATEGY KEY_SUPER_GENERIC_TYPE strategy;
+	
+	/**
+	 * Default Contstructor
+	 * @param strategy the strategy that allows hash control.
+	 * @throws NullPointerException if Strategy is null
+	 */
+	public CUSTOM_HASH_MAP(STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
+		this(HashUtil.DEFAULT_MIN_CAPACITY, HashUtil.DEFAULT_LOAD_FACTOR, strategy);
+	}
+	
+	/**
+	 * Constructor that defines the minimum capacity
+	 * @param minCapacity the minimum capacity the HashMap is allowed to be.
+	 * @param strategy the strategy that allows hash control.
+	 * @throws NullPointerException if Strategy is null
+	 * @throws IllegalStateException if the minimum capacity is negative
+	 */
+	public CUSTOM_HASH_MAP(int minCapacity, STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
+		this(minCapacity, HashUtil.DEFAULT_LOAD_FACTOR, strategy);
+	}
+	
+	/**
+	 * Constructor that defines the minimum capacity and load factor
+	 * @param minCapacity the minimum capacity the HashMap is allowed to be.
+	 * @param loadFactor the percentage of how full the backing array can be before they resize
+	 * @param strategy the strategy that allows hash control.
+	 * @throws NullPointerException if Strategy is null
+	 * @throws IllegalStateException if the minimum capacity is negative
+	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
+	 */
+	public CUSTOM_HASH_MAP(int minCapacity, float loadFactor, STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
+		if(minCapacity < 0)	throw new IllegalStateException("Minimum Capacity is negative. This is not allowed");
+		if(loadFactor <= 0 || loadFactor >= 1F) throw new IllegalStateException("Load Factor is not between 0 and 1");
+		this.loadFactor = loadFactor;
+		this.minCapacity = nullIndex = HashUtil.arraySize(minCapacity, loadFactor);
+		this.strategy = strategy;
+		mask = nullIndex - 1;
+		maxFill = Math.min((int)Math.ceil(nullIndex * loadFactor), nullIndex - 1);
+		keys = NEW_KEY_ARRAY(nullIndex + 1);
+		values = NEW_VALUE_ARRAY(nullIndex + 1);
+	}
+	
+#if !TYPE_OBJECT || !VALUE_OBJECT
+	/**
+	 * Helper constructor that allow to create a map from boxed values (it will unbox them)
+	 * @param keys the keys that should be put into the map
+	 * @param values the values that should be put into the map.
+	 * @param strategy the strategy that allows hash control.
+	 * @throws NullPointerException if Strategy is null
+	 * @throws IllegalStateException if the keys and values do not match in lenght
+	 */
+	public CUSTOM_HASH_MAP(CLASS_TYPE[] keys, CLASS_VALUE_TYPE[] values, STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
+		this(keys, values, HashUtil.DEFAULT_LOAD_FACTOR, strategy);
+	}
+	
+	/**
+	 * Helper constructor that allow to create a map from boxed values (it will unbox them)
+	 * @param keys the keys that should be put into the map
+	 * @param values the values that should be put into the map.
+	 * @param loadFactor the percentage of how full the backing array can be before they resize
+	 * @param strategy the strategy that allows hash control.
+	 * @throws NullPointerException if Strategy is null
+	 * @throws IllegalStateException if the keys and values do not match in lenght
+	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
+	 */
+	public CUSTOM_HASH_MAP(CLASS_TYPE[] keys, CLASS_VALUE_TYPE[] values, float loadFactor, STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
+		this(keys.length, loadFactor, strategy);
+		if(keys.length != values.length) throw new IllegalStateException("Input Arrays are not equal size");
+		for(int i = 0,m=keys.length;i<m;i++) put(OBJ_TO_KEY(keys[i]), OBJ_TO_VALUE(values[i]));
+	}
+	
+#endif
+	/**
+	 * Helper constructor that allow to create a map from unboxed values
+	 * @param keys the keys that should be put into the map
+	 * @param values the values that should be put into the map.
+	 * @param strategy the strategy that allows hash control.
+	 * @throws NullPointerException if Strategy is null
+	 * @throws IllegalStateException if the keys and values do not match in lenght
+	 */
+	public CUSTOM_HASH_MAP(KEY_TYPE[] keys, VALUE_TYPE[] values, STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
+		this(keys, values, HashUtil.DEFAULT_LOAD_FACTOR, strategy);
+	}
+	
+	/**
+	 * Helper constructor that allow to create a map from unboxed values
+	 * @param keys the keys that should be put into the map
+	 * @param values the values that should be put into the map.
+	 * @param loadFactor the percentage of how full the backing array can be before they resize
+	 * @param strategy the strategy that allows hash control.
+	 * @throws NullPointerException if Strategy is null
+	 * @throws IllegalStateException if the keys and values do not match in lenght
+	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
+	 */
+	public CUSTOM_HASH_MAP(KEY_TYPE[] keys, VALUE_TYPE[] values, float loadFactor, STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
+		this(keys.length, loadFactor, strategy);
+		if(keys.length != values.length) throw new IllegalStateException("Input Arrays are not equal size");
+		for(int i = 0,m=keys.length;i<m;i++) put(keys[i], values[i]);
+	}
+	
+	/**
+	 * A Helper constructor that allows to create a Map with exactly the same values as the provided map.
+	 * @param map the values that should be present in the map
+	 * @param strategy the strategy that allows hash control.
+	 * @throws NullPointerException if Strategy is null
+	 */
+	public CUSTOM_HASH_MAP(Map<? extends CLASS_TYPE, ? extends CLASS_VALUE_TYPE> map, STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
+		this(map, HashUtil.DEFAULT_LOAD_FACTOR, strategy);
+	}
+	
+	/**
+	 * A Helper constructor that allows to create a Map with exactly the same values as the provided map.
+	 * @param map the values that should be present in the map
+	 * @param loadFactor the percentage of how full the backing array can be before they resize
+	 * @param strategy the strategy that allows hash control.
+	 * @throws NullPointerException if Strategy is null
+	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
+	 */
+	public CUSTOM_HASH_MAP(Map<? extends CLASS_TYPE, ? extends CLASS_VALUE_TYPE> map, float loadFactor, STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
+		this(map.size(), loadFactor, strategy);
+		putAll(map);
+	}
+	
+	/**
+	 * A Type Specific Helper function that allows to create a new Map with exactly the same values as the provided map.
+	 * @param map the values that should be present in the map
+ 	 * @param strategy the strategy that allows hash control.
+	 * @throws NullPointerException if Strategy is null
+	 */
+	public CUSTOM_HASH_MAP(MAP KEY_VALUE_GENERIC_TYPE map, STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
+		this(map, HashUtil.DEFAULT_LOAD_FACTOR, strategy);
+	}
+	
+	/**
+	 * A Type Specific Helper function that allows to create a new Map with exactly the same values as the provided map.
+	 * @param map the values that should be present in the map
+	 * @param loadFactor the percentage of how full the backing array can be before they resize
+	 * @param strategy the strategy that allows hash control.
+	 * @throws NullPointerException if Strategy is null
+	 * @throws IllegalStateException if the loadfactor is either below/equal to 0 or above/equal to 1
+ 	 */
+	public CUSTOM_HASH_MAP(MAP KEY_VALUE_GENERIC_TYPE map, float loadFactor, STRATEGY KEY_SUPER_GENERIC_TYPE strategy) {
+		this(map.size(), loadFactor, strategy);
+		putAll(map);
+	}
+	
+	@Override
+	public VALUE_TYPE put(KEY_TYPE key, VALUE_TYPE value) {
+		int slot = findIndex(key);
+		if(slot < 0) {
+			insert(-slot-1, key, value);
+			return getDefaultReturnValue();
+		}
+		VALUE_TYPE oldValue = values[slot];
+		values[slot] = value;
+		return oldValue;
+	}
+	
+	@Override
+	public VALUE_TYPE putIfAbsent(KEY_TYPE key, VALUE_TYPE value) {
+		int slot = findIndex(key);
+		if(slot < 0) {
+			insert(-slot-1, key, value);
+			return getDefaultReturnValue();
+		}
+		return values[slot];
+	}
+	
+#if VALUE_PRIMITIVES
+	@Override
+	public VALUE_TYPE addTo(KEY_TYPE key, VALUE_TYPE value) {
+		int slot = findIndex(key);
+		if(slot < 0) {
+			insert(-slot-1, key, value);
+			return getDefaultReturnValue();
+		}
+		VALUE_TYPE oldValue = values[slot];
+		values[slot] += value;
+		return oldValue;
+	}
+	
+	@Override
+	public VALUE_TYPE subFrom(KEY_TYPE key, VALUE_TYPE value) {
+		int slot = findIndex(key);
+		if(slot < 0) return getDefaultReturnValue();
+		VALUE_TYPE oldValue = values[slot];
+		values[slot] -= value;
+		if(value < 0 ? (values[slot] >= getDefaultReturnValue()) : (values[slot] <= getDefaultReturnValue())) removeIndex(slot);
+		return oldValue;
+	}
+#endif
+#if !TYPE_OBJECT
+	@Override
+	public boolean containsKey(KEY_TYPE key) {
+		return findIndex(key) >= 0;
+	}
+	
+#endif
+	@Override
+	@Primitive
+	public boolean containsKey(Object key) {
+#if !TYPE_OBJECT
+		return key instanceof CLASS_TYPE && findIndex(CLASS_TO_KEY(key)) >= 0;
+#else
+		return findIndex(CLASS_TO_KEY(key)) >= 0;
+#endif
+	}
+	
+#if !VALUE_OBJECT
+	@Override
+	public boolean containsValue(VALUE_TYPE value) {
+		if(containsNull && VALUE_EQUALS(values[nullIndex], value)) return true;
+		for(int i = nullIndex;i >= 0;i--)
+			if(!strategy.equals(keys[i], EMPTY_KEY_VALUE) && VALUE_EQUALS(values[i], value)) return true;
+		return false;
+	}
+	
+#endif
+	@Override
+	@ValuePrimitive
+	public boolean containsValue(Object value) {
+#if VALUE_OBJECT
+		if(containsNull && VALUE_EQUALS(values[nullIndex], value)) return true;
+#else
+		if(containsNull && ((value == null && values[nullIndex] == getDefaultReturnValue()) || EQUALS_VALUE_TYPE(values[nullIndex], value))) return true;
+#endif
+		for(int i = nullIndex-1;i >= 0;i--)
+#if VALUE_OBJECT
+			if(!strategy.equals(keys[i], EMPTY_KEY_VALUE) && EQUALS_VALUE_TYPE(values[i], value)) return true;
+#else
+			if(!strategy.equals(keys[i], EMPTY_KEY_VALUE) && ((value == null && values[i] == getDefaultReturnValue()) || EQUALS_VALUE_TYPE(values[i], value))) return true;
+#endif
+		return false;
+	}
+	
+	@Override
+	public VALUE_TYPE REMOVE_VALUE(KEY_TYPE key) {
+		int slot = findIndex(key);
+		if(slot < 0) return getDefaultReturnValue();
+		return removeIndex(slot);
+	}
+	
+	@Override
+	public VALUE_TYPE REMOVE_VALUEOrDefault(KEY_TYPE key, VALUE_TYPE defaultValue) {
+		int slot = findIndex(key);
+		if(slot < 0) return defaultValue;
+		return removeIndex(slot);
+	}
+	
+	@Override
+	public CLASS_VALUE_TYPE remove(Object key) {
+#if !TYPE_OBJECT
+		if(!(key instanceof CLASS_TYPE)) return getDefaultReturnValue();
+#endif
+		int slot = findIndex(CLASS_TO_KEY(key));
+		if(slot < 0) return VALUE_TO_OBJ(getDefaultReturnValue());
+		return removeIndex(slot);
+	}
+	
+#if !TYPE_OBJECT || !VALUE_OBJECT
+	@Override
+	public boolean remove(KEY_TYPE key, VALUE_TYPE value) {
+		if(strategy.equals(key, EMPTY_KEY_VALUE)) {
+			if(containsNull && VALUE_EQUALS(value, values[nullIndex])) {
+				removeNullIndex();
+				return true;
+			}
+			return false;
+		}
+		int pos = HashUtil.mix(strategy.hashCode(key)) & mask;
+		KEY_TYPE current = keys[pos];
+		if(strategy.equals(current, EMPTY_KEY_VALUE)) return false;
+		if(strategy.equals(current, key) && VALUE_EQUALS(value, values[pos])) {
+			removeIndex(pos);
+			return true;
+		}
+		while(true) {
+			if(strategy.equals((current = keys[pos = (++pos & mask)]), EMPTY_KEY_VALUE)) return false;
+			else if(strategy.equals(current, key) && VALUE_EQUALS(value, values[pos])) {
+				removeIndex(pos);
+				return true;
+			}
+		}
+	}
+	
+#endif
+	@Override
+	public boolean remove(Object key, Object value) {
+		Objects.requireNonNull(value);
+#if TYPE_OBJECT
+		if(key == null) {
+#else
+		if(key == null || (key instanceof CLASS_TYPE && strategy.equals(CLASS_TO_KEY(key), EMPTY_KEY_VALUE))) {
+#endif
+			if(containsNull && EQUALS_VALUE_TYPE(values[nullIndex], value)) {
+				removeNullIndex();
+				return true;
+			}
+			return false;
+		}
+#if !TYPE_OBJECT
+		if(!(key instanceof CLASS_TYPE)) return false;
+#endif
+		KEY_TYPE keyType = CLASS_TO_KEY(key);
+		int pos = HashUtil.mix(strategy.hashCode(keyType)) & mask;
+		KEY_TYPE current = keys[pos];
+		if(strategy.equals(current, EMPTY_KEY_VALUE)) return false;
+		if(strategy.equals(current, keyType) && EQUALS_VALUE_TYPE(values[pos], value)) {
+			removeIndex(pos);
+			return true;
+		}
+		while(true) {
+			if(strategy.equals((current = keys[pos = (++pos & mask)]), EMPTY_KEY_VALUE)) return false;
+			else if(strategy.equals(current, keyType) && EQUALS_VALUE_TYPE(values[pos], value)){
+				removeIndex(pos);
+				return true;
+			}
+		}
+	}
+	
+	@Override
+	public VALUE_TYPE GET_VALUE(KEY_TYPE key) {
+		int slot = findIndex(key);
+		return slot < 0 ? getDefaultReturnValue() : values[slot];
+	}
+	
+	@Override
+	public CLASS_VALUE_TYPE get(Object key) {
+#if !TYPE_OBJECT
+		if(!(key instanceof CLASS_TYPE)) return getDefaultReturnValue();
+#endif
+		int slot = findIndex(CLASS_TO_KEY(key));
+		return VALUE_TO_OBJ(slot < 0 ? getDefaultReturnValue() : values[slot]);
+	}
+	
+#if TYPE_OBJECT && VALUE_OBJECT
+	@Override
+	public VALUE_TYPE getOrDefault(Object key, VALUE_TYPE defaultValue) {
+		int slot = findIndex(CLASS_TO_KEY(key));
+		return slot < 0 ? defaultValue : values[slot];
+	}
+	
+#else
+	@Override
+	public VALUE_TYPE getOrDefault(KEY_TYPE key, VALUE_TYPE defaultValue) {
+		int slot = findIndex(key);
+		return slot < 0 ? defaultValue : values[slot];
+	}
+	
+#endif
+	@Override
+	public CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE copy() {
+		CUSTOM_HASH_MAP KEY_VALUE_GENERIC_TYPE map = new CUSTOM_HASH_MAPKV_BRACES(0, loadFactor, strategy);
+		map.minCapacity = minCapacity;
+		map.mask = mask;
+		map.maxFill = maxFill;
+		map.nullIndex = nullIndex;
+		map.containsNull = containsNull;
+		map.size = size;
+		map.keys = Arrays.copyOf(keys, keys.length);
+		map.values = Arrays.copyOf(values, values.length);
+		return map;
+	}
+	
+	@Override
+	public ObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> ENTRY_SET() {
+		if(entrySet == null) entrySet = new MapEntrySet();
+		return entrySet;
+	}
+	
+	@Override
+	public SET KEY_GENERIC_TYPE keySet() {
+		if(keySet == null) keySet = new KeySet();
+		return keySet;
+	}
+	
+	@Override
+	public VALUE_COLLECTION VALUE_GENERIC_TYPE values() {
+		if(valuesC == null) valuesC = new Values();
+		return valuesC;
+	}
+	
+	@Override
+	public void forEach(BI_CONSUMER KEY_VALUE_GENERIC_TYPE action) {
+		if(size() <= 0) return;
+		if(containsNull) action.accept(keys[nullIndex], values[nullIndex]);
+		for(int i = nullIndex-1;i>=0;i--) {
+			if(!strategy.equals(keys[i], EMPTY_KEY_VALUE)) action.accept(keys[i], values[i]);
+		}
+	}
+	
+	@Override
+	public boolean replace(KEY_TYPE key, VALUE_TYPE oldValue, VALUE_TYPE newValue) {
+		int index = findIndex(key);
+		if(index < 0 || values[index] != oldValue) return false;
+		values[index] = newValue;
+		return true;
+	}
+	
+	@Override
+	public VALUE_TYPE replace(KEY_TYPE key, VALUE_TYPE value) {
+		int index = findIndex(key);
+		if(index < 0) return getDefaultReturnValue();
+		VALUE_TYPE oldValue = values[index];
+		values[index] = value;
+		return oldValue;
+	}
+	
+	@Override
+	public VALUE_TYPE COMPUTE(KEY_TYPE key, UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int index = findIndex(key);
+		if(index < 0) {
+			VALUE_TYPE newValue = mappingFunction.APPLY_VALUE(key, getDefaultReturnValue());
+			if(VALUE_EQUALS(newValue, getDefaultReturnValue())) return newValue;
+			insert(-index-1, key, newValue);
+			return newValue;
+		}
+		VALUE_TYPE newValue = mappingFunction.APPLY_VALUE(key, values[index]);
+		if(VALUE_EQUALS(newValue, getDefaultReturnValue())) {
+			removeIndex(index);
+			return newValue;
+		}
+		values[index] = newValue;
+		return newValue;
+	}
+	
+	@Override
+	public VALUE_TYPE COMPUTE_IF_ABSENT(KEY_TYPE key, FUNCTION KEY_VALUE_GENERIC_TYPE mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int index = findIndex(key);
+		if(index < 0) {
+			VALUE_TYPE newValue = mappingFunction.GET_VALUE(key);
+			if(VALUE_EQUALS(newValue, getDefaultReturnValue())) return newValue;
+			insert(-index-1, key, newValue);
+			return newValue;
+		}
+		VALUE_TYPE newValue = values[index];
+		if(VALUE_EQUALS(newValue, getDefaultReturnValue())) {
+			newValue = mappingFunction.GET_VALUE(key);
+			if(VALUE_EQUALS(newValue, getDefaultReturnValue())) return newValue;
+			values[index] = newValue;
+		}
+		return newValue;
+	}
+	
+	@Override
+	public VALUE_TYPE SUPPLY_IF_ABSENT(KEY_TYPE key, VALUE_SUPPLIER VALUE_GENERIC_TYPE valueProvider) {
+		Objects.requireNonNull(valueProvider);
+		int index = findIndex(key);
+		if(index < 0) {
+			VALUE_TYPE newValue = valueProvider.VALUE_GET_KEY();
+			if(VALUE_EQUALS(newValue, getDefaultReturnValue())) return newValue;
+			insert(-index-1, key, newValue);
+			return newValue;
+		}
+		VALUE_TYPE newValue = values[index];
+		if(VALUE_EQUALS(newValue, getDefaultReturnValue())) {
+			newValue = valueProvider.VALUE_GET_KEY();
+			if(VALUE_EQUALS(newValue, getDefaultReturnValue())) return newValue;
+			values[index] = newValue;
+		}
+		return newValue;
+	}
+
+	@Override
+	public VALUE_TYPE COMPUTE_IF_PRESENT(KEY_TYPE key, UNARY_OPERATOR KEY_VALUE_GENERIC_TYPE mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		int index = findIndex(key);
+		if(index < 0 || VALUE_EQUALS(values[index], getDefaultReturnValue())) return getDefaultReturnValue();
+		VALUE_TYPE newValue = mappingFunction.APPLY_VALUE(key, values[index]);
+		if(VALUE_EQUALS(newValue, getDefaultReturnValue())) {
+			removeIndex(index);
+			return newValue;
+		}
+		values[index] = newValue;
+		return newValue;
+	}
+	
+	@Override
+	public VALUE_TYPE MERGE(KEY_TYPE key, VALUE_TYPE value, VALUE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+#if VALUE_OBJECT
+		Objects.requireNonNull(value);
+#endif
+		int index = findIndex(key);
+		VALUE_TYPE newValue = index < 0 || VALUE_EQUALS(values[index], getDefaultReturnValue()) ? value : mappingFunction.APPLY_VALUE(values[index], value);
+		if(VALUE_EQUALS(newValue, getDefaultReturnValue())) {
+			if(index >= 0)
+				removeIndex(index);
+		}
+		else if(index < 0) insert(-index-1, key, newValue);
+		else values[index] = newValue;
+		return newValue;
+	}
+	
+	@Override
+	public void BULK_MERGE(MAP KEY_VALUE_GENERIC_TYPE m, VALUE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		for(MAP.Entry KEY_VALUE_GENERIC_TYPE entry : MAPS.fastIterable(m)) {
+			KEY_TYPE key = entry.ENTRY_KEY();
+			int index = findIndex(key);
+			VALUE_TYPE newValue = index < 0 || VALUE_EQUALS(values[index], getDefaultReturnValue()) ? entry.ENTRY_VALUE() : mappingFunction.APPLY_VALUE(values[index], entry.ENTRY_VALUE());
+			if(VALUE_EQUALS(newValue, getDefaultReturnValue())) {
+				if(index >= 0)
+					removeIndex(index);
+			}
+			else if(index < 0) insert(-index-1, key, newValue);
+			else values[index] = newValue;
+		}
+	}
+	
+	@Override
+	public int size() { return size; }
+	
+	@Override
+	public void clear() {
+		if(size == 0) return;
+		size = 0;
+		containsNull = false;
+		Arrays.fill(keys, EMPTY_KEY_VALUE);
+		Arrays.fill(values, EMPTY_VALUE);
+	}
+	
+	@Override
+	public boolean trim(int size) {
+		int request = Math.max(minCapacity, HashUtil.nextPowerOfTwo((int)Math.ceil(size / loadFactor)));
+		if(request >= nullIndex || this.size > Math.min((int)Math.ceil(request * loadFactor), request - 1)) return false;
+		try {
+			rehash(request);
+		}
+		catch(OutOfMemoryError noMemory) { return false; }
+		return true;
+	}
+	
+	@Override
+	public void clearAndTrim(int size) {
+		int request = Math.max(minCapacity, HashUtil.nextPowerOfTwo((int)Math.ceil(size / loadFactor)));
+		if(request >= nullIndex) {
+			clear();
+			return;
+		}
+		nullIndex = request;
+		mask = request-1;
+		maxFill = Math.min((int)Math.ceil(nullIndex * loadFactor), nullIndex - 1);
+		keys = NEW_KEY_ARRAY(request + 1);
+		values = NEW_VALUE_ARRAY(request + 1);
+		this.size = 0;
+		containsNull = false;
+	}
+	
+#if !TYPE_OBJECT
+	protected int findIndex(KEY_TYPE key) {
+		if(strategy.equals(key, EMPTY_KEY_VALUE)) return containsNull ? nullIndex : -(nullIndex + 1);
+		int pos = HashUtil.mix(strategy.hashCode(key)) & mask;
+		KEY_TYPE current = keys[pos];
+		if(!strategy.equals(current, EMPTY_KEY_VALUE)) {
+			if(strategy.equals(current, key)) return pos;
+			while(!strategy.equals((current = keys[pos = (++pos & mask)]), EMPTY_KEY_VALUE))
+				if(strategy.equals(current, key)) return pos;
+		}
+		return -(pos + 1);
+	}
+	
+#endif
+	protected int findIndex(CLASS_TYPE key) {
+		if(key == null) return containsNull ? nullIndex : -(nullIndex + 1);
+		KEY_TYPE keyType = CLASS_TO_KEY(key);
+#if !TYPE_OBJECT
+		if(strategy.equals(keyType, EMPTY_KEY_VALUE)) return containsNull ? nullIndex : -(nullIndex + 1);
+#endif
+		int pos = HashUtil.mix(strategy.hashCode(keyType)) & mask;
+		KEY_TYPE current = keys[pos];
+		if(!strategy.equals(current, EMPTY_KEY_VALUE)) {
+			if(strategy.equals(current, keyType)) return pos;
+			while(!strategy.equals((current = keys[pos = (++pos & mask)]), EMPTY_KEY_VALUE))
+				if(strategy.equals(current, keyType)) return pos;
+		}
+		return -(pos + 1);
+	}
+	
+	protected VALUE_TYPE removeIndex(int pos) {
+		if(pos == nullIndex) return containsNull ? removeNullIndex() : getDefaultReturnValue();
+		VALUE_TYPE value = values[pos];
+		keys[pos] = EMPTY_KEY_VALUE;
+		values[pos] = EMPTY_VALUE;
+		size--;
+		onNodeRemoved(pos);
+		shiftKeys(pos);
+		if(nullIndex > minCapacity && size < maxFill / 4 && nullIndex > HashUtil.DEFAULT_MIN_CAPACITY) rehash(nullIndex / 2);
+		return value;
+	}
+	
+	protected VALUE_TYPE removeNullIndex() {
+		VALUE_TYPE value = values[nullIndex];
+		containsNull = false;
+		keys[nullIndex] = EMPTY_KEY_VALUE;
+		values[nullIndex] = EMPTY_VALUE;
+		size--;
+		onNodeRemoved(nullIndex);
+		if(nullIndex > minCapacity && size < maxFill / 4 && nullIndex > HashUtil.DEFAULT_MIN_CAPACITY) rehash(nullIndex / 2);
+		return value;
+	}
+	
+	protected void insert(int slot, KEY_TYPE key, VALUE_TYPE value) {
+		if(slot == nullIndex) containsNull = true;
+		keys[slot] = key;
+		values[slot] = value;
+		onNodeAdded(slot);
+		if(size++ >= maxFill) rehash(HashUtil.arraySize(size+1, loadFactor));
+	}
+	
+	protected void rehash(int newSize) {
+		int newMask = newSize - 1;
+		KEY_TYPE[] newKeys = NEW_KEY_ARRAY(newSize + 1);
+		VALUE_TYPE[] newValues = NEW_VALUE_ARRAY(newSize + 1);
+		for(int i = nullIndex, pos = 0, j = (size - (containsNull ? 1 : 0));j-- != 0;) {
+			while(true) {
+				if(--i < 0) throw new ConcurrentModificationException("Map was modified during rehash");
+				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE)) break;
+			}
+			if(!strategy.equals(newKeys[pos = HashUtil.mix(strategy.hashCode(keys[i])) & newMask], EMPTY_KEY_VALUE))
+				while(!strategy.equals(newKeys[pos = (++pos & newMask)], EMPTY_KEY_VALUE));
+			newKeys[pos] = keys[i];
+			newValues[pos] = values[i];
+		}
+		newValues[newSize] = values[nullIndex];
+		nullIndex = newSize;
+		mask = newMask;
+		maxFill = Math.min((int)Math.ceil(nullIndex * loadFactor), nullIndex - 1);
+		keys = newKeys;
+		values = newValues;
+	}
+	
+	protected void onNodeAdded(int pos) {
+		
+	}
+	
+	protected void onNodeRemoved(int pos) {
+		
+	}
+	
+	protected void onNodeMoved(int from, int to) {
+		
+	}
+	
+	protected void shiftKeys(int startPos) {
+		int slot, last;
+		KEY_TYPE current;
+		while(true) {
+			startPos = ((last = startPos) + 1) & mask;
+			while(true){
+				if(strategy.equals((current = keys[startPos]), EMPTY_KEY_VALUE)) {
+					keys[last] = EMPTY_KEY_VALUE;
+					values[last] = EMPTY_VALUE;
+					return;
+				}
+				slot = HashUtil.mix(strategy.hashCode(current)) & mask;
+				if(last <= startPos ? (last >= slot || slot > startPos) : (last >= slot && slot > startPos)) break;
+				startPos = ++startPos & mask;
+			}
+			keys[last] = current;
+			values[last] = values[startPos];
+			onNodeMoved(startPos, last);
+		}
+	}
+	
+	protected class MapEntry implements MAP.Entry KEY_VALUE_GENERIC_TYPE, Map.Entry<CLASS_TYPE, CLASS_VALUE_TYPE> {
+		public int index = -1;
+		
+		public MapEntry() {}
+		public MapEntry(int index) {
+			this.index = index;
+		}
+
+		@Override
+		public KEY_TYPE ENTRY_KEY() {
+			return keys[index];
+		}
+
+		@Override
+		public VALUE_TYPE ENTRY_VALUE() {
+			return values[index];
+		}
+
+		@Override
+		public VALUE_TYPE setValue(VALUE_TYPE value) {
+			VALUE_TYPE oldValue = values[index];
+			values[index] = value;
+			return oldValue;
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			if(obj instanceof Map.Entry) {
+				if(obj instanceof MAP.Entry) {
+					MAP.Entry KEY_VALUE_GENERIC_TYPE entry = (MAP.Entry KEY_VALUE_GENERIC_TYPE)obj;
+					return KEY_EQUALS(keys[index], entry.ENTRY_KEY()) && VALUE_EQUALS(values[index], entry.ENTRY_VALUE());
+				}
+				Map.Entry<?, ?> entry = (Map.Entry<?, ?>)obj;
+				Object key = entry.getKey();
+				Object value = entry.getValue();
+#if TYPE_OBJECT && VALUE_OBJECT
+				return KEY_EQUALS(keys[index], key) && VALUE_EQUALS(values[index], value);
+#else if TYPE_OBJECT
+				return value instanceof CLASS_VALUE_TYPE && KEY_EQUALS(keys[index], key) && VALUE_EQUALS(values[index], CLASS_TO_VALUE(value));
+#else if VALUE_OBJECT
+				return key instanceof CLASS_TYPE && KEY_EQUALS(keys[index], CLASS_TO_KEY(key)) && VALUE_EQUALS(values[index], value);
+#else
+				return key instanceof CLASS_TYPE && value instanceof CLASS_VALUE_TYPE && KEY_EQUALS(keys[index], CLASS_TO_KEY(key)) && VALUE_EQUALS(values[index], CLASS_TO_VALUE(value));
+#endif
+			}
+			return false;
+		}
+		
+		@Override
+		public int hashCode() {
+			return strategy.hashCode(keys[index]) ^ VALUE_TO_HASH(values[index]);
+		}
+		
+		@Override
+		public String toString() {
+			return KEY_TO_STRING(keys[index]) + "=" + VALUE_TO_STRING(values[index]);
+		}
+	}
+	
+	private final class MapEntrySet extends AbstractObjectSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> implements MAP.FastEntrySet KEY_VALUE_GENERIC_TYPE {
+		@Override
+		public ObjectIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> fastIterator() {
+			return new FastEntryIterator();
+		}
+		
+		@Override
+		public ObjectIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> iterator() {
+			return new EntryIterator();
+		}
+		
+		@Override
+		public void forEach(Consumer<? super MAP.Entry KEY_VALUE_GENERIC_TYPE> action) {
+			if(containsNull) action.accept(new BasicEntryKV_BRACES(keys[nullIndex], values[nullIndex]));
+			for(int i = nullIndex-1;i>=0;i--)
+				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE)) action.accept(new BasicEntryKV_BRACES(keys[i], values[i]));
+		}
+		
+		@Override
+		public void fastForEach(Consumer<? super MAP.Entry KEY_VALUE_GENERIC_TYPE> action) {
+			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
+			if(containsNull) {
+				entry.set(keys[nullIndex], values[nullIndex]);
+				action.accept(entry);
+			}
+			for(int i = nullIndex-1;i>=0;i--) {
+				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE)) {
+					entry.set(keys[i], values[i]);
+					action.accept(entry);
+				}
+			}
+		}
+		
+		@Override
+		public <E> void forEach(E input, ObjectObjectConsumer<E, MAP.Entry KEY_VALUE_GENERIC_TYPE> action) {
+			Objects.requireNonNull(action);
+			if(size() <= 0) return;
+			if(containsNull) action.accept(input, new BasicEntryKV_BRACES(keys[nullIndex], values[nullIndex]));
+			for(int i = nullIndex-1;i>=0;i--) {
+				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE)) action.accept(input, new BasicEntryKV_BRACES(keys[i], values[i]));
+			}
+		}
+		
+		@Override
+		public boolean matchesAny(Object2BooleanFunction<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
+			Objects.requireNonNull(filter);
+			if(size() <= 0) return false;
+			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
+			if(containsNull) {
+				entry.set(keys[nullIndex], values[nullIndex]);
+				if(filter.getBoolean(entry)) return true;
+			}
+			for(int i = nullIndex-1;i>=0;i--) {
+				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE)) {
+					entry.set(keys[i], values[i]);
+					if(filter.getBoolean(entry)) return true;
+				}
+			}
+			return false;
+		}
+		
+		@Override
+		public boolean matchesNone(Object2BooleanFunction<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
+			Objects.requireNonNull(filter);
+			if(size() <= 0) return true;
+			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
+			if(containsNull) {
+				entry.set(keys[nullIndex], values[nullIndex]);
+				if(filter.getBoolean(entry)) return false;
+			}
+			for(int i = nullIndex-1;i>=0;i--) {
+				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE)) {
+					entry.set(keys[i], values[i]);
+					if(filter.getBoolean(entry)) return false;
+				}
+			}
+			return true;
+		}
+		
+		@Override
+		public boolean matchesAll(Object2BooleanFunction<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
+			Objects.requireNonNull(filter);
+			if(size() <= 0) return true;
+			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
+			if(containsNull) {
+				entry.set(keys[nullIndex], values[nullIndex]);
+				if(!filter.getBoolean(entry)) return false;
+			}
+			for(int i = nullIndex-1;i>=0;i--) {
+				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE)) {
+					entry.set(keys[i], values[i]);
+					if(!filter.getBoolean(entry)) return false;
+				}
+			}
+			return true;
+		}
+		
+		@Override
+		public <E> E reduce(E identity, BiFunction<E, MAP.Entry KEY_VALUE_GENERIC_TYPE, E> operator) {
+			Objects.requireNonNull(operator);
+			E state = identity;
+			if(containsNull) state = operator.apply(state, new BasicEntryKV_BRACES(keys[nullIndex], values[nullIndex]));
+			for(int i = nullIndex-1;i>=0;i--) {
+				if(strategy.equals(keys[i], EMPTY_KEY_VALUE)) continue;
+				state = operator.apply(state, new BasicEntryKV_BRACES(keys[i], values[i]));
+			}
+			return state;
+		}
+		
+		@Override
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE reduce(ObjectObjectUnaryOperator<MAP.Entry KEY_VALUE_GENERIC_TYPE, MAP.Entry KEY_VALUE_GENERIC_TYPE> operator) {
+			Objects.requireNonNull(operator);
+			MAP.Entry KEY_VALUE_GENERIC_TYPE state = null;
+			boolean empty = true;
+			if(containsNull) {
+				state = new BasicEntryKV_BRACES(keys[nullIndex], values[nullIndex]);
+				empty = false;
+			}
+			for(int i = nullIndex-1;i>=0;i--) {
+				if(strategy.equals(keys[i], EMPTY_KEY_VALUE)) continue;
+				if(empty) {
+					empty = false;
+					state = new BasicEntryKV_BRACES(keys[i], values[i]);
+					continue;
+				}
+				state = operator.apply(state, new BasicEntryKV_BRACES(keys[i], values[i]));
+			}
+			return state;
+		}
+		
+		@Override
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE findFirst(Object2BooleanFunction<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
+			Objects.requireNonNull(filter);
+			if(size() <= 0) return null;
+			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
+			if(containsNull) {
+				entry.set(keys[nullIndex], values[nullIndex]);
+				if(filter.getBoolean(entry)) return entry;
+			}
+			for(int i = nullIndex-1;i>=0;i--) {
+				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE)) {
+					entry.set(keys[i], values[i]);
+					if(filter.getBoolean(entry)) return entry;
+				}
+			}
+			return null;
+		}
+		
+		@Override
+		public int count(Object2BooleanFunction<MAP.Entry KEY_VALUE_GENERIC_TYPE> filter) {
+			Objects.requireNonNull(filter);
+			if(size() <= 0) return 0;
+			BasicEntry KEY_VALUE_GENERIC_TYPE entry = new BasicEntryKV_BRACES();
+			int result = 0;
+			if(containsNull) {
+				entry.set(keys[nullIndex], values[nullIndex]);
+				if(filter.getBoolean(entry)) result++;
+			}
+			for(int i = nullIndex-1;i>=0;i--) {
+				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE)) {
+					entry.set(keys[i], values[i]);
+					if(filter.getBoolean(entry)) result++;
+				}
+			}
+			return result;
+		}
+		
+		@Override
+		public int size() {
+			return CUSTOM_HASH_MAP.this.size();
+		}
+		
+		@Override
+		public void clear() {
+			CUSTOM_HASH_MAP.this.clear();
+		}
+		
+		@Override
+		public boolean contains(Object o) {
+			if(o instanceof Map.Entry) {
+				if(o instanceof MAP.Entry) {
+					MAP.Entry KEY_VALUE_GENERIC_TYPE entry = (MAP.Entry KEY_VALUE_GENERIC_TYPE)o;
+					int index = CUSTOM_HASH_MAP.this.findIndex(entry.ENTRY_KEY());
+					if(index >= 0) return VALUE_EQUALS(entry.ENTRY_VALUE(), CUSTOM_HASH_MAP.this.values[index]);
+				}
+				else {
+					Map.Entry<?, ?> entry = (Map.Entry<?, ?>)o;
+#if !TYPE_OBJECT
+					if(!(entry.getKey() instanceof CLASS_TYPE)) return false;
+#endif
+					int index = CUSTOM_HASH_MAP.this.findIndex((CLASS_TYPE)entry.getKey());
+					if(index >= 0) return Objects.equals(entry.getValue(), VALUE_TO_OBJ(CUSTOM_HASH_MAP.this.values[index]));
+				}
+			}
+			return false;
+		}
+		
+		@Override
+		public boolean remove(Object o) {
+			if(o instanceof Map.Entry) {
+				if(o instanceof MAP.Entry) {
+					MAP.Entry KEY_VALUE_GENERIC_TYPE entry = (MAP.Entry KEY_VALUE_GENERIC_TYPE)o;
+					return CUSTOM_HASH_MAP.this.remove(entry.ENTRY_KEY(), entry.ENTRY_VALUE());
+				}
+				Map.Entry<?, ?> entry = (Map.Entry<?, ?>)o;
+				return CUSTOM_HASH_MAP.this.remove(entry.getKey(), entry.getValue());
+			}
+			return false;
+		}
+	}
+	
+	private final class KeySet extends ABSTRACT_SET KEY_GENERIC_TYPE {
+#if TYPE_OBJECT
+		@Override
+		public boolean contains(Object e) {
+			return containsKey(e);
+		}
+		
+		@Override
+		public boolean remove(Object o) {
+			int oldSize = size;
+			CUSTOM_HASH_MAP.this.remove(o);
+			return size != oldSize;
+		}
+		
+#else
+		@Override
+		public boolean contains(KEY_TYPE e) {
+			return containsKey(e);
+		}
+		
+		@Override
+		public boolean remove(KEY_TYPE o) {
+			int oldSize = size;
+			CUSTOM_HASH_MAP.this.remove(o);
+			return size != oldSize;
+		}
+		
+#endif
+		@Override
+		public boolean add(KEY_TYPE o) {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public ITERATOR KEY_GENERIC_TYPE iterator() {
+			return new KeyIterator();
+		}
+		
+		@Override
+		public KeySet copy() { throw new UnsupportedOperationException(); }
+		
+		@Override
+		public int size() {
+			return CUSTOM_HASH_MAP.this.size();
+		}
+		
+		@Override
+		public void clear() {
+			CUSTOM_HASH_MAP.this.clear();
+		}
+		
+		@Override
+		public void forEach(CONSUMER KEY_SUPER_GENERIC_TYPE action) {
+			Objects.requireNonNull(action);
+			if(containsNull) action.accept(keys[nullIndex]);
+			for(int i = nullIndex-1;i>=0;i--)
+				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE)) action.accept(keys[i]);
+		}
+		
+		@Override
+		public <E> void forEach(E input, BI_FROM_OBJECT_CONSUMER KSK_GENERIC_TYPE<E> action) {
+			Objects.requireNonNull(action);
+			if(size() <= 0) return;
+			if(containsNull) action.accept(input, keys[nullIndex]);
+			for(int i = nullIndex-1;i>=0;i--) {
+				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE)) action.accept(input, keys[i]);
+			}
+		}
+		
+		@Override
+		public boolean matchesAny(PREDICATE KEY_GENERIC_TYPE filter) {
+			Objects.requireNonNull(filter);
+			if(size() <= 0) return false;
+			if(containsNull && filter.TEST_VALUE(keys[nullIndex])) return true;
+			for(int i = nullIndex-1;i>=0;i--) {
+				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE) && filter.TEST_VALUE(keys[i])) return true;
+			}
+			return false;
+		}
+		
+		@Override
+		public boolean matchesNone(PREDICATE KEY_GENERIC_TYPE filter) {
+			Objects.requireNonNull(filter);
+			if(size() <= 0) return true;
+			if(containsNull && filter.TEST_VALUE(keys[nullIndex])) return false;
+			for(int i = nullIndex-1;i>=0;i--) {
+				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE) && filter.TEST_VALUE(keys[i])) return false;
+			}
+			return true;
+		}
+		
+		@Override
+		public boolean matchesAll(PREDICATE KEY_GENERIC_TYPE filter) {
+			Objects.requireNonNull(filter);
+			if(size() <= 0) return true;
+			if(containsNull && !filter.TEST_VALUE(keys[nullIndex])) return false;
+			for(int i = nullIndex-1;i>=0;i--) {
+				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE) && !filter.TEST_VALUE(keys[i])) return false;
+			}
+			return true;
+		}
+		
+#if !TYPE_OBJECT
+		@Override
+		public KEY_TYPE reduce(KEY_TYPE identity, SINGLE_UNARY_OPERATOR KEY_KEY_GENERIC_TYPE operator) {
+			Objects.requireNonNull(operator);
+			KEY_TYPE state = identity;
+			if(containsNull) state = operator.APPLY_KEY_VALUE(state, keys[nullIndex]);
+			for(int i = nullIndex-1;i>=0;i--) {
+				if(strategy.equals(keys[i], EMPTY_KEY_VALUE)) continue;
+				state = operator.APPLY_KEY_VALUE(state, keys[i]);
+			}
+			return state;
+		}
+		
+#else
+		@Override
+		public <KEY_SPECIAL_TYPE> KEY_SPECIAL_TYPE reduce(KEY_SPECIAL_TYPE identity, BiFunction<KEY_SPECIAL_TYPE, KEY_TYPE, KEY_SPECIAL_TYPE> operator) {
+			Objects.requireNonNull(operator);
+			KEY_SPECIAL_TYPE state = identity;
+			if(containsNull) state = operator.apply(state, keys[nullIndex]);
+			for(int i = nullIndex-1;i>=0;i--) {
+				if(strategy.equals(keys[i], EMPTY_KEY_VALUE)) continue;
+				state = operator.apply(state, keys[i]);
+			}
+			return state;
+		}
+		
+#endif
+		@Override
+		public KEY_TYPE reduce(SINGLE_UNARY_OPERATOR KEY_KEY_GENERIC_TYPE operator) {
+			Objects.requireNonNull(operator);
+			KEY_TYPE state = EMPTY_KEY_VALUE;
+			boolean empty = true;
+			if(containsNull) {
+				state = keys[nullIndex];
+				empty = false;
+			}
+			for(int i = nullIndex-1;i>=0;i--) {
+				if(strategy.equals(keys[i], EMPTY_KEY_VALUE)) continue;
+				if(empty) {
+					empty = false;
+					state = keys[i];
+					continue;
+				}
+				state = operator.APPLY_KEY_VALUE(state, keys[i]);
+			}
+			return state;
+		}
+		
+		@Override
+		public KEY_TYPE findFirst(PREDICATE KEY_GENERIC_TYPE filter) {
+			Objects.requireNonNull(filter);
+			if(size() <= 0) return EMPTY_KEY_VALUE;
+			if(containsNull && filter.TEST_VALUE(keys[nullIndex])) return keys[nullIndex];
+			for(int i = nullIndex-1;i>=0;i--) {
+				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE) && filter.TEST_VALUE(keys[i])) return keys[i];
+			}
+			return EMPTY_KEY_VALUE;
+		}
+		
+		@Override
+		public int count(PREDICATE KEY_GENERIC_TYPE filter) {
+			Objects.requireNonNull(filter);
+			if(size() <= 0) return 0;
+			int result = 0;
+			if(containsNull && filter.TEST_VALUE(keys[nullIndex])) result++;
+			for(int i = nullIndex-1;i>=0;i--) {
+				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE) && filter.TEST_VALUE(keys[i])) result++;
+			}
+			return result;
+		}
+	}
+	
+	private class Values extends VALUE_ABSTRACT_COLLECTION VALUE_GENERIC_TYPE {
+#if VALUE_OBJECT
+		@Override
+		public boolean contains(Object e) {
+			return containsValue(e);
+		}
+		
+#else
+		@Override
+		public boolean contains(VALUE_TYPE e) {
+			return containsValue(e);
+		}
+		
+#endif
+		@Override
+		public boolean add(VALUE_TYPE o) {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public VALUE_ITERATOR VALUE_GENERIC_TYPE iterator() {
+			return new ValueIterator();
+		}
+		
+		@Override
+		public int size() {
+			return CUSTOM_HASH_MAP.this.size();
+		}
+		
+		@Override
+		public void clear() {
+			CUSTOM_HASH_MAP.this.clear();
+		}
+		
+		@Override
+		public void forEach(VALUE_CONSUMER VALUE_SUPER_GENERIC_TYPE action) {
+			if(containsNull) action.accept(values[nullIndex]);
+			for(int i = nullIndex-1;i>=0;i--)
+				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE)) action.accept(values[i]);
+		}
+		
+		@Override
+		public <E> void forEach(E input, VALUE_BI_FROM_OBJECT_CONSUMER VSV_GENERIC_TYPE<E> action) {
+			Objects.requireNonNull(action);
+			if(size() <= 0) return;
+			if(containsNull) action.accept(input, values[nullIndex]);
+			for(int i = nullIndex-1;i>=0;i--) {
+				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE)) action.accept(input, values[i]);
+			}
+		}
+		
+		@Override
+		public boolean matchesAny(VALUE_PREDICATE VALUE_GENERIC_TYPE filter) {
+			Objects.requireNonNull(filter);
+			if(size() <= 0) return false;
+			if(containsNull && filter.VALUE_TEST_VALUE(values[nullIndex])) return true;
+			for(int i = nullIndex-1;i>=0;i--) {
+				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE) && filter.VALUE_TEST_VALUE(values[i])) return true;
+			}
+			return false;
+		}
+		
+		@Override
+		public boolean matchesNone(VALUE_PREDICATE VALUE_GENERIC_TYPE filter) {
+			Objects.requireNonNull(filter);
+			if(size() <= 0) return true;
+			if(containsNull && filter.VALUE_TEST_VALUE(values[nullIndex])) return false;
+			for(int i = nullIndex-1;i>=0;i--) {
+				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE) && filter.VALUE_TEST_VALUE(values[i])) return false;
+			}
+			return true;
+		}
+		
+		@Override
+		public boolean matchesAll(VALUE_PREDICATE VALUE_GENERIC_TYPE filter) {
+			Objects.requireNonNull(filter);
+			if(size() <= 0) return true;
+			if(containsNull && !filter.VALUE_TEST_VALUE(values[nullIndex])) return false;
+			for(int i = nullIndex-1;i>=0;i--) {
+				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE) && !filter.VALUE_TEST_VALUE(values[i])) return false;
+			}
+			return true;
+		}
+		
+#if !VALUE_OBJECT
+		@Override
+		public VALUE_TYPE reduce(VALUE_TYPE identity, VALUE_SINGLE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE operator) {
+			Objects.requireNonNull(operator);
+			VALUE_TYPE state = identity;
+			if(containsNull) state = operator.APPLY_VALUE(state, values[nullIndex]);
+			for(int i = nullIndex-1;i>=0;i--) {
+				if(strategy.equals(keys[i], EMPTY_KEY_VALUE)) continue;
+				state = operator.APPLY_VALUE(state, values[i]);
+			}
+			return state;
+		}
+		
+#else
+		@Override
+		public <VALUE_SPECIAL_TYPE> VALUE_SPECIAL_TYPE reduce(VALUE_SPECIAL_TYPE identity, BiFunction<VALUE_SPECIAL_TYPE, VALUE_TYPE, VALUE_SPECIAL_TYPE> operator) {
+			Objects.requireNonNull(operator);
+			VALUE_SPECIAL_TYPE state = identity;
+			if(containsNull) state = operator.APPLY_VALUE(state, values[nullIndex]);
+			for(int i = nullIndex-1;i>=0;i--) {
+				if(strategy.equals(keys[i], EMPTY_KEY_VALUE)) continue;
+				state = operator.APPLY_VALUE(state, values[i]);
+			}
+			return state;
+		}
+		
+#endif
+		@Override
+		public VALUE_TYPE reduce(VALUE_SINGLE_UNARY_OPERATOR VALUE_VALUE_GENERIC_TYPE operator) {
+			Objects.requireNonNull(operator);
+			VALUE_TYPE state = EMPTY_VALUE;
+			boolean empty = true;
+			if(containsNull) {
+				state = values[nullIndex];
+				empty = false;
+			}
+			for(int i = nullIndex-1;i>=0;i--) {
+				if(strategy.equals(keys[i], EMPTY_KEY_VALUE)) continue;
+				if(empty) {
+					empty = false;
+					state = values[i];
+					continue;
+				}
+				state = operator.APPLY_VALUE(state, values[i]);
+			}
+			return state;
+		}
+		
+		@Override
+		public VALUE_TYPE findFirst(VALUE_PREDICATE VALUE_GENERIC_TYPE filter) {
+			Objects.requireNonNull(filter);
+			if(size() <= 0) return EMPTY_VALUE;
+			if(containsNull && filter.VALUE_TEST_VALUE(values[nullIndex])) return values[nullIndex];
+			for(int i = nullIndex-1;i>=0;i--) {
+				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE) && filter.VALUE_TEST_VALUE(values[i])) return values[i];
+			}
+			return EMPTY_VALUE;
+		}
+		
+		@Override
+		public int count(VALUE_PREDICATE VALUE_GENERIC_TYPE filter) {
+			Objects.requireNonNull(filter);
+			if(size() <= 0) return 0;
+			int result = 0;
+			if(containsNull && filter.VALUE_TEST_VALUE(values[nullIndex])) result++;
+			for(int i = nullIndex-1;i>=0;i--) {
+				if(!strategy.equals(keys[i], EMPTY_KEY_VALUE) && filter.VALUE_TEST_VALUE(values[i])) result++;
+			}
+			return result;
+		}
+	}
+	
+	private class FastEntryIterator extends MapIterator implements ObjectIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> {
+		MapEntry entry = new MapEntry();
+		@Override
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE next() {
+			entry.index = nextEntry();
+			return entry;
+		}
+	}
+	
+	private class EntryIterator extends MapIterator implements ObjectIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> {
+		MapEntry entry;
+		@Override
+		public MAP.Entry KEY_VALUE_GENERIC_TYPE next() {
+			return entry = new MapEntry(nextEntry());
+		}
+		
+		@Override
+		public void remove() {
+			super.remove();
+			entry.index = -1;
+		}
+	}
+	
+	private class KeyIterator extends MapIterator implements ITERATOR KEY_GENERIC_TYPE {
+		@Override
+		public KEY_TYPE NEXT() {
+			return keys[nextEntry()];
+		}
+	}
+	
+	private class ValueIterator extends MapIterator implements VALUE_ITERATOR VALUE_GENERIC_TYPE {
+		@Override
+		public VALUE_TYPE VALUE_NEXT() {
+			return values[nextEntry()];
+		}
+	}
+	
+	private class MapIterator {
+		int pos = nullIndex;
+		int returnedPos = -1;
+		int lastReturned = -1;
+		int nextIndex = Integer.MIN_VALUE;
+		boolean returnNull = containsNull;
+		LIST KEY_GENERIC_TYPE wrapped = null;
+		
+		public boolean hasNext() {
+			if(nextIndex == Integer.MIN_VALUE) {
+				if(returnNull) {
+					returnNull = false;
+					nextIndex = nullIndex;
+				}
+				else
+				{
+					while(true) {
+						if(--pos < 0) {
+							if(wrapped == null || wrapped.size() <= -pos - 1) break;
+							nextIndex = -pos - 1;
+							break;
+						}
+						if(!strategy.equals(keys[pos], EMPTY_KEY_VALUE)){
+							nextIndex = pos;
+							break;
+						}
+					}
+				}
+			}
+			return nextIndex != Integer.MIN_VALUE;
+		}
+		
+		public int nextEntry() {
+			if(!hasNext()) throw new NoSuchElementException();
+			returnedPos = pos;
+			if(nextIndex < 0){
+				lastReturned = Integer.MAX_VALUE;
+				int value = findIndex(wrapped.GET_KEY(nextIndex));
+				if(value < 0) throw new IllegalStateException("Entry ["+nextIndex+"] was removed during Iteration");
+				nextIndex = Integer.MIN_VALUE;
+				return value;
+			}
+			int value = (lastReturned = nextIndex);
+			nextIndex = Integer.MIN_VALUE;
+			return value;
+		}
+		
+		public void remove() {
+			if(lastReturned == -1) throw new IllegalStateException();
+			if(lastReturned == nullIndex) {
+				containsNull = false;
+				keys[nullIndex] = EMPTY_KEY_VALUE;
+				values[nullIndex] = EMPTY_VALUE;
+			}
+			else if(returnedPos >= 0) shiftKeys(returnedPos);
+			else {
+				CUSTOM_HASH_MAP.this.remove(wrapped.GET_KEY(-returnedPos - 1));
+				lastReturned = -1;
+				return;
+			}
+			size--;
+			lastReturned = -1;
+		}
+		
+		private void shiftKeys(int startPos) {
+			int slot, last;
+			KEY_TYPE current;
+			while(true) {
+				startPos = ((last = startPos) + 1) & mask;
+				while(true){
+					if(strategy.equals((current = keys[startPos]), EMPTY_KEY_VALUE)) {
+						keys[last] = EMPTY_KEY_VALUE;
+						values[last] = EMPTY_VALUE;
+						return;
+					}
+					slot = HashUtil.mix(strategy.hashCode(current)) & mask;
+					if(last <= startPos ? (last >= slot || slot > startPos) : (last >= slot && slot > startPos)) break;
+					startPos = ++startPos & mask;
+				}
+				if(startPos < last) {
+					if(wrapped == null) wrapped = new ARRAY_LISTBRACES(2);
+					wrapped.add(keys[startPos]);
+				}
+				keys[last] = current;
+				values[last] = values[startPos];
+			}
+		}
+	}
+}

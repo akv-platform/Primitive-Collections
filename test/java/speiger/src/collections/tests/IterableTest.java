@@ -1,0 +1,21 @@
+package speiger.src.collections.tests;
+
+@SuppressWarnings("javadoc")
+public enum IterableTest
+{
+	FOR_EACH,
+	ITERATOR_FOR_EACH,
+	ITERATOR_LOOP,
+	ITERATOR_REMOVAL,
+	ITERATOR_SKIP,
+	STREAM_COUNT,
+	STREAM_FILTER,
+	STREAM_FIND_FIRST,
+	STREAM_DISTINCT,
+	STREAM_LIMIT,
+	STREAM_MAP,
+	STREAM_MATCHES,
+	STREAM_PEEK,
+	STREAM_POUR,
+	STREAM_REDUCE;
+}

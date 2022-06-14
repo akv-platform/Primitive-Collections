@@ -1,0 +1,97 @@
+package speiger.src.collections.PACKAGE.sets;
+
+import java.util.Set;
+
+import speiger.src.collections.PACKAGE.collections.COLLECTION;
+import speiger.src.collections.PACKAGE.collections.ITERATOR;
+import speiger.src.collections.PACKAGE.collections.SPLIT_ITERATOR;
+#if !TYPE_BOOLEAN
+import speiger.src.collections.PACKAGE.utils.SETS;
+#endif
+import speiger.src.collections.PACKAGE.utils.SPLIT_ITERATORS;
+
+
+/**
+ * A Type Specific Set class to reduce boxing/unboxing
+ * @Type(T)
+ */
+public interface SET KEY_GENERIC_TYPE extends Set<CLASS_TYPE>, COLLECTION KEY_GENERIC_TYPE
+{	
+	@Override
+	public ITERATOR KEY_GENERIC_TYPE iterator();
+	
+	@Override
+	public SET KEY_GENERIC_TYPE copy();
+	
+#if !TYPE_OBJECT
+	/**
+	 * A Type Specific remove function to reduce boxing/unboxing
+	 * @param o the element that should be removed
+	 * @return true if the element was removed
+	 */
+	public boolean remove(KEY_TYPE o);
+	
+	@Override
+	public default boolean REMOVE_KEY(KEY_TYPE o) {
+		return remove(o);
+	}
+	
+	@Override
+	@Primitive
+	public default boolean add(CLASS_TYPE e) {
+		return COLLECTION.super.add(e);
+	}
+	
+	@Override
+	@Primitive
+	public default boolean contains(Object o) {
+		return COLLECTION.super.contains(o);
+	}
+	
+	@Override
+	@Primitive
+	public default boolean remove(Object o) {
+		return COLLECTION.super.remove(o);
+	}
+	
+#else
+	/**
+	 * A Helper method that allows to add a element or getting the already present implement.
+	 * Allowing to make unique references reuseable.
+	 * @param o the element to add
+	 * @return either the inserted element or the present element.
+	 */
+	public KEY_TYPE addOrGet(KEY_TYPE o);
+	
+#endif
+#if !TYPE_BOOLEAN
+	/**
+	 * Creates a Wrapped Set that is Synchronized
+	 * @return a new Set that is synchronized
+	 * @see SETS#synchronize
+	 */
+	public default SET KEY_GENERIC_TYPE synchronize() { return SETS.synchronize(this); }
+	
+	/**
+	 * Creates a Wrapped Set that is Synchronized
+	 * @param mutex is the controller of the synchronization block
+	 * @return a new Set Wrapper that is synchronized
+	 * @see SETS#synchronize
+	 */
+	public default SET KEY_GENERIC_TYPE synchronize(Object mutex) { return SETS.synchronize(this, mutex); }
+	
+	/**
+	 * Creates a Wrapped Set that is unmodifiable
+	 * @return a new Set Wrapper that is unmodifiable
+	 * @see SETS#unmodifiable
+	 */
+	public default SET KEY_GENERIC_TYPE unmodifiable() { return SETS.unmodifiable(this); }
+	
+#endif
+	/**
+	 * A Type Specific Type Splititerator to reduce boxing/unboxing
+	 * @return type specific splititerator
+	 */
+	@Override
+	default SPLIT_ITERATOR KEY_GENERIC_TYPE spliterator() { return SPLIT_ITERATORS.createSplititerator(this, 0); }
+}

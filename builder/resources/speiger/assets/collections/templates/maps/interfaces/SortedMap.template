@@ -1,0 +1,182 @@
+package speiger.src.collections.PACKAGE.maps.interfaces;
+
+#if TYPE_OBJECT
+import java.util.Comparator;
+#endif
+import java.util.SortedMap;
+
+import speiger.src.collections.VALUE_PACKAGE.collections.VALUE_COLLECTION;
+#if !TYPE_OBJECT
+import speiger.src.collections.PACKAGE.functions.COMPARATOR;
+#endif
+import speiger.src.collections.PACKAGE.sets.SORTED_SET;
+import speiger.src.collections.PACKAGE.utils.maps.MAPS;
+#if !TYPE_OBJECT
+import speiger.src.collections.objects.sets.ObjectSortedSet;
+#endif
+import speiger.src.collections.objects.collections.ObjectBidirectionalIterator;
+
+/**
+ * A Type Specific {@link SortedMap} interface to reduce boxing/unboxing, with a couple extra methods that allow greater control over maps.
+ * 
+ * @Type(T)
+ * @ValueType(V)
+ * @note ORDERED_MAP is only extended until 0.6.0 for Compat reasons.
+ * The supported classes already implement ORDERED_MAP directly and will remove SORTED_MAP implementations in favor of ORDERED_MAP instead
+ */
+public interface SORTED_MAP KEY_VALUE_GENERIC_TYPE extends SortedMap<CLASS_TYPE, CLASS_VALUE_TYPE>, MAP KEY_VALUE_GENERIC_TYPE
+{
+	@Override
+	public COMPARATOR KEY_GENERIC_TYPE comparator();
+	
+	@Override
+	public SORTED_MAP KEY_VALUE_GENERIC_TYPE copy();
+	
+	@Override
+	public SORTED_SET KEY_GENERIC_TYPE keySet();
+	@Override
+	public VALUE_COLLECTION VALUE_GENERIC_TYPE values();
+	
+	/**
+	 * Creates a Wrapped SortedMap that is Synchronized
+	 * @return a new SortedMap that is synchronized
+	 * @see MAPS#synchronize
+	 */
+	public default SORTED_MAP KEY_VALUE_GENERIC_TYPE synchronize() { return MAPS.synchronize(this); }
+	
+	/**
+	 * Creates a Wrapped SortedMap that is Synchronized
+	 * @param mutex is the controller of the synchronization block
+	 * @return a new SortedMap Wrapper that is synchronized
+	 * @see MAPS#synchronize
+	 */
+	public default SORTED_MAP KEY_VALUE_GENERIC_TYPE synchronize(Object mutex) { return MAPS.synchronize(this, mutex); }
+	
+	/**
+	 * Creates a Wrapped SortedMap that is unmodifiable
+	 * @return a new SortedMap Wrapper that is unmodifiable
+	 * @see MAPS#unmodifiable
+	 */
+	public default SORTED_MAP KEY_VALUE_GENERIC_TYPE unmodifiable() { return MAPS.unmodifiable(this); }
+	
+#if !TYPE_OBJECT
+	/**
+	 * A Type Specific SubMap method to reduce boxing/unboxing
+	 * @param fromKey where the submap should start
+	 * @param toKey where the subMap should end
+	 * @return a SubMap that is within the range of the desired range
+	 * @note Some implementations may not support this method.
+	 * @note Some implementations may not keep the desired range when the original is changed.
+	 */
+	public SORTED_MAP KEY_VALUE_GENERIC_TYPE subMap(KEY_TYPE fromKey, KEY_TYPE toKey);
+	/**
+	 * A Type Specific HeadMap method to reduce boxing/unboxing
+	 * @param toKey where the headMap should end
+	 * @return a HeadMap that is within the range of the desired range
+	 * @note Some implementations may not support this method.
+	 * @note Some implementations may not keep the desired range when the original is changed.
+	 */
+	public SORTED_MAP KEY_VALUE_GENERIC_TYPE headMap(KEY_TYPE toKey);
+	/**
+	 * A Type Specific TailMap method to reduce boxing/unboxing
+	 * @param fromKey where the TailMap should start
+	 * @return a TailMap that is within the range of the desired range
+	 * @note Some implementations may not support this method.
+	 * @note Some implementations may not keep the desired range when the original is changed.
+	 */
+	public SORTED_MAP KEY_VALUE_GENERIC_TYPE tailMap(KEY_TYPE fromKey);
+	
+	/**
+	 * A method to get the first Key of a Map.
+	 * @return the first key in the map
+	 */
+	public KEY_TYPE FIRST_ENTRY_KEY();
+	/**
+	 * A method to get and remove the first Key of a Map.
+	 * @return the first key in the map
+	 */
+	public KEY_TYPE POLL_FIRST_ENTRY_KEY();
+	/**
+	 * A method to get the last Key of a Map.
+	 * @return the last key in the map
+	 */
+	public KEY_TYPE LAST_ENTRY_KEY();
+	/**
+	 * A method to get and remove the last Key of a Map.
+	 * @return the last key in the map
+	 */
+	public KEY_TYPE POLL_LAST_ENTRY_KEY();
+	
+	/**
+	 * A method to get the first Value of a Map.
+	 * @return the first key in the map
+	 */
+	public VALUE_TYPE FIRST_ENTRY_VALUE();
+	/**
+	 * A method to get the last Value of a Map.
+	 * @return the last key in the map
+	 */
+	public VALUE_TYPE LAST_ENTRY_VALUE();
+	
+	@Override
+	@Deprecated
+	public default CLASS_TYPE firstKey() { return KEY_TO_OBJ(FIRST_ENTRY_KEY()); }
+	@Override
+	@Deprecated
+	public default CLASS_TYPE lastKey() { return KEY_TO_OBJ(LAST_ENTRY_KEY()); }
+	
+	@Override
+	@Deprecated
+	public default SORTED_MAP KEY_VALUE_GENERIC_TYPE subMap(CLASS_TYPE fromKey, CLASS_TYPE toKey) { return subMap(OBJ_TO_KEY(fromKey), OBJ_TO_KEY(toKey)); }
+	@Override
+	@Deprecated
+	public default SORTED_MAP KEY_VALUE_GENERIC_TYPE headMap(CLASS_TYPE toKey) { return headMap(OBJ_TO_KEY(toKey)); }
+	@Override
+	@Deprecated
+	public default SORTED_MAP KEY_VALUE_GENERIC_TYPE tailMap(CLASS_TYPE fromKey) { return tailMap(OBJ_TO_KEY(fromKey)); }
+#else
+	/**
+	 * A method to get and remove the first Key of a Map.
+	 * @return the first key in the map
+	 */
+	public KEY_TYPE POLL_FIRST_ENTRY_KEY();
+	/**
+	 * A method to get and remove the last Key of a Map.
+	 * @return the last key in the map
+	 */
+	public KEY_TYPE POLL_LAST_ENTRY_KEY();
+	/**
+	 * A method to get the first Value of a Map.
+	 * @return the first key in the map
+	 */
+	public VALUE_TYPE FIRST_ENTRY_VALUE();
+	/**
+	 * A method to get the last Value of a Map.
+	 * @return the last key in the map
+	 */
+	public VALUE_TYPE LAST_ENTRY_VALUE();
+	
+	@Override
+	public SORTED_MAP KEY_VALUE_GENERIC_TYPE subMap(CLASS_TYPE fromKey, CLASS_TYPE toKey);
+	@Override
+	public SORTED_MAP KEY_VALUE_GENERIC_TYPE headMap(CLASS_TYPE toKey);
+	@Override
+	public SORTED_MAP KEY_VALUE_GENERIC_TYPE tailMap(CLASS_TYPE fromKey);
+#endif
+	
+	/**
+	 * Fast Sorted Entry Set that allows for a faster Entry Iterator by recycling the Entry Object and just exchanging 1 internal value
+	 * @Type(T)
+	 * @ValueType(V)
+	 */
+	interface FastSortedSet KEY_VALUE_GENERIC_TYPE extends MAP.FastEntrySet KEY_VALUE_GENERIC_TYPE, ObjectSortedSet<MAP.Entry KEY_VALUE_GENERIC_TYPE> {
+		@Override
+		public ObjectBidirectionalIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> fastIterator();
+		/**
+		 * Fast iterator that recycles the given Entry object to improve speed and reduce object allocation
+		 * @param fromElement that is going to be started from.
+		 * @return a improved iterator that starts from the desired element
+		 */
+		public ObjectBidirectionalIterator<MAP.Entry KEY_VALUE_GENERIC_TYPE> fastIterator(KEY_TYPE fromElement);
+	}
+}
