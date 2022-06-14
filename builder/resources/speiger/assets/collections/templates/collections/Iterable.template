@@ -1,0 +1,331 @@
+package speiger.src.collections.PACKAGE.collections;
+
+import java.util.Objects;
+import java.util.function.Consumer;
+#if !TYPE_OBJECT
+
+import speiger.src.collections.PACKAGE.functions.CONSUMER;
+import speiger.src.collections.PACKAGE.functions.COMPARATOR;
+import speiger.src.collections.objects.collections.ObjectIterable;
+#else
+import java.util.function.BiFunction;
+import java.util.Comparator;
+
+#endif
+import speiger.src.collections.PACKAGE.functions.function.TO_OBJECT_FUNCTION;
+import speiger.src.collections.objects.functions.consumer.BI_FROM_OBJECT_CONSUMER;
+import speiger.src.collections.PACKAGE.functions.function.PREDICATE;
+import speiger.src.collections.PACKAGE.functions.function.UNARY_OPERATOR;
+import speiger.src.collections.PACKAGE.lists.LIST;
+import speiger.src.collections.PACKAGE.lists.ARRAY_LIST;
+#if !TYPE_BOOLEAN
+import speiger.src.collections.PACKAGE.sets.SET;
+import speiger.src.collections.PACKAGE.sets.LINKED_HASH_SET;
+#endif
+import speiger.src.collections.PACKAGE.utils.ASYNC_BUILDER;
+import speiger.src.collections.PACKAGE.utils.SPLIT_ITERATORS;
+import speiger.src.collections.PACKAGE.utils.ITERABLES;
+import speiger.src.collections.PACKAGE.utils.ITERATORS;
+
+/**
+ * A Type-Specific {@link Iterable} that reduces (un)boxing
+ * @Type(T)
+ */
+public interface ITERABLE KEY_GENERIC_TYPE extends Iterable<CLASS_TYPE>
+{
+	/**
+	 * Returns an iterator over elements of type {@code T}.
+	 *
+	 * @return an Iterator.
+	 */
+	@Override
+	ITERATOR KEY_GENERIC_TYPE iterator();
+	
+#if !TYPE_OBJECT
+	/**
+	 * A Type Specific foreach function that reduces (un)boxing
+	 * 
+	 * @implSpec
+	 * <p>The default implementation behaves as if:
+	 * <pre>{@code
+	 *	iterator().forEachRemaining(action);
+	 * }</pre>
+	 *
+	 * @param action The action to be performed for each element
+	 * @throws NullPointerException if the specified action is null
+	 * @see Iterable#forEach(Consumer)
+	 */
+	default void forEach(CONSUMER action) {
+		Objects.requireNonNull(action);
+		iterator().forEachRemaining(action);
+	}
+	
+	/** {@inheritDoc}
+	* <p>This default implementation delegates to the corresponding type-specific function.
+	* @deprecated Please use the corresponding type-specific function instead. 
+	*/
+	@Deprecated
+	@Override
+	default void forEach(Consumer<? super CLASS_TYPE> action) {
+		Objects.requireNonNull(action);
+		iterator().forEachRemaining(action);
+	}
+	
+#endif
+	/**
+	 * Helper function to reduce Lambda usage and allow for more method references, since these are faster/cleaner.
+	 * @param input the object that should be included
+	 * @param action The action to be performed for each element
+	 * @param <E> the generic type of the Object
+	 * @throws java.lang.NullPointerException if the specified action is null
+	 */
+	default <E> void forEach(E input, BI_FROM_OBJECT_CONSUMER KSK_GENERIC_TYPE<E> action) {
+		Objects.requireNonNull(action);
+		iterator().forEachRemaining(input, action);
+	}
+	
+	/**
+	 * A Type Specific Type Splititerator to reduce boxing/unboxing
+	 * @return type specific splititerator
+	 */
+	@Override
+	default SPLIT_ITERATOR KEY_GENERIC_TYPE spliterator() { return SPLIT_ITERATORS.createUnknownSplititerator(iterator(), 0); }
+	
+	/**
+	 * Creates a Async Builder for moving work of the thread.
+	 * It is not designed to split the work to multithreaded work, so using this keep it singlethreaded, but it allows to be moved to another thread.
+	 * @see ASYNC_BUILDER
+	 * @return a AsyncBuilder
+	 */
+	default ASYNC_BUILDER KEY_GENERIC_TYPE asAsync() {
+		return new ASYNC_BUILDERBRACES(this);
+	}
+
+	/**
+	 * A Helper function to reduce the usage of Streams and allows to convert a Iterable to something else.
+	 * @param mapper the mapping function
+	 * @param <E> The return type.
+	 * @return a new Iterable that returns the desired result
+	 */
+	default <E> ObjectIterable<E> map(TO_OBJECT_FUNCTION KKS_GENERIC_TYPE<E> mapper) {
+		return ITERABLES.map(this, mapper);
+	}
+	
+	/**
+	 * A Helper function to reduce the usage of Streams and allows to convert a Iterable to something else.
+	 * @param mapper the flatMapping function
+	 * @param <V> The return type supplier.
+	 * @param <E> The return type.
+	 * @return a new Iterable that returns the desired result
+	 */
+	default <E, V extends Iterable<E>> ObjectIterable<E> flatMap(TO_OBJECT_FUNCTION KKS_GENERIC_TYPE<V> mapper) {
+		return ITERABLES.flatMap(this, mapper);
+	}
+	
+	/**
+	 * A Helper function to reduce the usage of Streams and allows to convert a Iterable to something else.
+	 * @param mapper the flatMapping function
+	 * @param <E> The return type.
+	 * @return a new Iterable that returns the desired result
+	 */
+	default <E> ObjectIterable<E> arrayflatMap(TO_OBJECT_FUNCTION KKS_GENERIC_TYPE<E[]> mapper) {
+		return ITERABLES.arrayFlatMap(this, mapper);
+	}
+	
+	/**
+	 * A Helper function to reduce the usage of Streams and allows to filter out unwanted elements
+	 * @param filter the elements that should be kept.
+	 * @return a Iterable that filtered out all unwanted elements
+	 */
+	default ITERABLE KEY_GENERIC_TYPE filter(PREDICATE KEY_GENERIC_TYPE filter) {
+		return ITERABLES.filter(this, filter);
+	}
+	
+	/**
+	 * A Helper function to reduce the usage of Streams and allows to filter out duplicated elements
+	 * @return a Iterable that filtered out all duplicated elements
+	 */
+	default ITERABLE KEY_GENERIC_TYPE distinct() {
+		return ITERABLES.distinct(this);
+	}
+	
+	/**
+	 * A Helper function to reduce the usage of Streams and allows to limit the amount of elements
+	 * @param limit the amount of elements it should be limited to
+	 * @return a Iterable that is limited in length
+	 */
+	default ITERABLE KEY_GENERIC_TYPE limit(long limit) {
+		return ITERABLES.limit(this, limit);
+	}
+	
+	/**
+	 * A Helper function to reduce the usage of Streams and allows to sort the elements
+	 * @param sorter that sorts the elements.
+	 * @return a Iterable that is sorted
+	 */
+	default ITERABLE KEY_GENERIC_TYPE sorted(COMPARATOR KEY_GENERIC_TYPE sorter) {
+		return ITERABLES.sorted(this, sorter);
+	}
+	
+	/**
+	 * A Helper function to reduce the usage of Streams and allows to preview elements before they are iterated through
+	 * @param action the action that should be applied
+	 * @return a Peeked Iterable
+	 */
+	default ITERABLE KEY_GENERIC_TYPE peek(CONSUMER KEY_GENERIC_TYPE action) {
+		return ITERABLES.peek(this, action);
+	}
+	
+	/**
+	 * A Helper function to reduce the usage of Streams and allows to collect all elements
+	 * @param collection that the elements should be inserted to
+	 * @param <E> the collection type
+	 * @return the input with the desired elements
+	 */
+	default <E extends COLLECTION KEY_GENERIC_TYPE> E pour(E collection) {
+		ITERATORS.pour(iterator(), collection);
+		return collection;
+	}
+	
+	/**
+	 * A Helper function that reduces the usage of streams and allows to collect all elements as a ArrayList
+	 * @return a new ArrayList of all elements
+	 */
+	default LIST KEY_GENERIC_TYPE pourAsList() {
+		return pour(new ARRAY_LISTBRACES()); 
+	}
+	
+#if !TYPE_BOOLEAN
+	/**
+	 * A Helper function that reduces the usage of streams and allows to collect all elements as a LinkedHashSet
+	 * @return a new LinkedHashSet of all elements
+	 */
+	default SET KEY_GENERIC_TYPE pourAsSet() { 
+		return pour(new LINKED_HASH_SETBRACES()); 		
+	}
+	
+#endif
+	/**
+	 * Helper function to reduce stream usage that allows to filter for any matches.
+	 * @param filter that should be applied
+	 * @return true if any matches were found
+	 */
+	default boolean matchesAny(PREDICATE KEY_GENERIC_TYPE filter) {
+		Objects.requireNonNull(filter);
+		for(ITERATOR KEY_GENERIC_TYPE iter = iterator();iter.hasNext();) {
+			if(filter.TEST_VALUE(iter.NEXT())) return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * Helper function to reduce stream usage that allows to filter for no matches.
+	 * @param filter that should be applied
+	 * @return true if no matches were found
+	 */
+	default boolean matchesNone(PREDICATE KEY_GENERIC_TYPE filter) {
+		Objects.requireNonNull(filter);
+		for(ITERATOR KEY_GENERIC_TYPE iter = iterator();iter.hasNext();) {
+			if(filter.TEST_VALUE(iter.NEXT())) return false;
+		}
+		return true;
+	}
+	
+	/**
+	 * Helper function to reduce stream usage that allows to filter for all matches.
+	 * @param filter that should be applied
+	 * @return true if all matches.
+	 */
+	default boolean matchesAll(PREDICATE KEY_GENERIC_TYPE filter) {
+		Objects.requireNonNull(filter);
+		for(ITERATOR KEY_GENERIC_TYPE iter = iterator();iter.hasNext();) {
+			if(!filter.TEST_VALUE(iter.NEXT())) return false;
+		}
+		return true;
+	}
+	
+	/**
+	 * Helper function to reduce stream usage that allows to filter for the first match.
+	 * @param filter that should be applied
+	 * @return the found value or the null equivalent variant.
+	 */
+	default KEY_TYPE findFirst(PREDICATE KEY_GENERIC_TYPE filter) {
+		Objects.requireNonNull(filter);
+		for(ITERATOR KEY_GENERIC_TYPE iter = iterator();iter.hasNext();) {
+			KEY_TYPE entry = iter.NEXT();
+			if(filter.TEST_VALUE(entry)) return entry;
+		}
+		return EMPTY_VALUE;
+	}
+	
+#if !TYPE_OBJECT
+	/**
+	 * Performs a <a href="package-summary.html#Reduction">reduction</a> on the
+     * elements of this Iterable
+	 * @param operator the operation that should be applied
+	 * @param identity the start value
+	 * @return the reduction result, returns identity if nothing was found
+	 */
+	default KEY_TYPE reduce(KEY_TYPE identity, UNARY_OPERATOR KEY_KEY_GENERIC_TYPE operator) {
+		Objects.requireNonNull(operator);
+		KEY_TYPE state = identity;
+		for(ITERATOR KEY_GENERIC_TYPE iter = iterator();iter.hasNext();) {
+			state = operator.APPLY_VALUE(state, iter.NEXT());
+		}
+		return state;
+	}
+	
+#else
+	/**
+	 * Performs a <a href="package-summary.html#Reduction">reduction</a> on the
+     * elements of this Iterable
+	 * @param operator the operation that should be applied
+	 * @param identity the start value
+	 * @Type(E)
+	 * @return the reduction result, returns identity if nothing was found
+	 */
+	default <KEY_SPECIAL_TYPE> KEY_SPECIAL_TYPE reduce(KEY_SPECIAL_TYPE identity, BiFunction<KEY_SPECIAL_TYPE, KEY_TYPE, KEY_SPECIAL_TYPE> operator) {
+		Objects.requireNonNull(operator);
+		KEY_SPECIAL_TYPE state = identity;
+		for(ITERATOR KEY_GENERIC_TYPE iter = iterator();iter.hasNext();) {
+			state = operator.APPLY_VALUE(state, iter.NEXT());
+		}
+		return state;
+	}
+	
+#endif
+	/**
+	 * Performs a <a href="package-summary.html#Reduction">reduction</a> on the
+	 * elements of this Iterable
+	 * @param operator the operation that should be applied
+	 * @return the reduction result, returns null value if nothing was found
+	 */
+	default KEY_TYPE reduce(UNARY_OPERATOR KEY_KEY_GENERIC_TYPE operator) {
+		Objects.requireNonNull(operator);
+		KEY_TYPE state = EMPTY_VALUE;
+		boolean empty = true;
+		for(ITERATOR KEY_GENERIC_TYPE iter = iterator();iter.hasNext();) {
+			if(empty) {
+				empty = false;
+				state = iter.NEXT();
+				continue;
+			}
+			state = operator.APPLY_VALUE(state, iter.NEXT());
+		}
+		return state;
+	}	
+	
+	/**
+	 * Helper function to reduce stream usage that allows to count the valid elements.
+	 * @param filter that should be applied
+	 * @return the amount of Valid Elements
+	 */
+	default int count(PREDICATE KEY_GENERIC_TYPE filter) {
+		Objects.requireNonNull(filter);
+		int result = 0;
+		for(ITERATOR KEY_GENERIC_TYPE iter = iterator();iter.hasNext();) {
+			if(filter.TEST_VALUE(iter.NEXT())) result++;
+		}
+		return result;
+	}
+}
