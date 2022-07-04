@@ -27,4 +27,6 @@ jobs:
          run: ./gradlew generateTestSource test jacocoTestReport --info -Dfull_test_suite=true --no-daemon
          
       -  name: show java process
-         run: ps aux|grep java
+         run: |
+           sleep 60
+           ps aux|grep java
