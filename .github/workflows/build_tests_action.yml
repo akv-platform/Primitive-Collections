@@ -25,7 +25,7 @@ jobs:
          
       -  name: Build and Test
          run: |
-           ./gradlew generateTestSource test jacocoTestReport --info -Dfull_test_suite=true --no-daemon
+           ./gradlew generateTestSource test jacocoTestReport --info -Dfull_test_suite=true
            ./gradlew --stop
      
       -  name: show java process
