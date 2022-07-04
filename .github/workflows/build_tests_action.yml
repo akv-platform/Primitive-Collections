@@ -24,9 +24,15 @@ jobs:
          run: chmod +x ./gradlew
          
       -  name: Build and Test
-         run: ./gradlew generateTestSource test jacocoTestReport --info -Dfull_test_suite=true --no-daemon
-         
+         run: |
+           ./gradlew generateTestSource test jacocoTestReport --info -Dfull_test_suite=true --no-daemon
+           ./gradlew --stop
+     
       -  name: show java process
+         run: |
+           ps aux|grep java
+         
+      -  name: show java process 2
          run: |
            sleep 60
            ps aux|grep java
